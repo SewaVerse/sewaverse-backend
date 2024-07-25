@@ -1,16 +1,41 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Document } from "mongoose";
 
-const serviceProviderSchema = new Schema(
+// Define an interface representing a document in MongoDB.
+interface IServiceProvider extends Document {
+  fullname: string;
+  profession: string;
+  dob: string;
+  gender: string;
+  address: string;
+  email: string;
+  password: string;
+  isVerified?: boolean;
+  joinedDate?: Date;
+  // forgotPasswordToken?: string;
+  // forgotPasswordTokenExpiry?: Date;
+  // verifyToken?: string;
+  // verifyTokenExpiry?: Date;
+  // deviceToken?: string;
+}
+
+// Create a Schema corresponding to the document interface.
+const serviceProviderSchema = new Schema<IServiceProvider>(
   {
     fullname: {
       type: String,
       required: [true, "Fullname is required"],
-      unique: false,
     },
-    contact: {
+    profession: {
       type: String,
-      required: [true, "Contact is required"],
-      unique: true,
+      required: [true, "Profession is required"],
+    },
+    dob: {
+      type: String,
+      required: [true, "Date Of Birth is required"],
+    },
+    gender: {
+      type: String,
+      required: [true, "Gender is required"],
     },
     address: {
       type: String,
@@ -25,9 +50,7 @@ const serviceProviderSchema = new Schema(
       type: String,
       required: [true, "Password is required"],
     },
-    userType: {
-      type: String,
-    },
+
     isVerified: {
       type: Boolean,
       default: false,
@@ -45,8 +68,9 @@ const serviceProviderSchema = new Schema(
   { strict: false }
 );
 
+// Create a Model.
 const ServiceProvider =
   models.ServiceProviderUsers ||
-  model("ServiceProviderUsers", serviceProviderSchema, "ServiceProviderUsers");
+  model<IServiceProvider>("ServiceProviderUsers", serviceProviderSchema);
 
 export default ServiceProvider;
