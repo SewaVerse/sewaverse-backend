@@ -7,8 +7,8 @@ interface ICompany extends Document {
   contactPersonPosition: string;
   companyAddress: string;
   secondaryContact?: string;
-  emailAddress: string;
-  password: string;
+  companyEmail: string;
+  companyPassword: string;
 }
 
 const companySchema = new Schema<ICompany>(
@@ -38,12 +38,12 @@ const companySchema = new Schema<ICompany>(
     secondaryContact: {
       type: String,
     },
-    emailAddress: {
+    companyEmail: {
       type: String,
       required: [true, "Email Address is required"],
       unique: true,
     },
-    password: {
+    companyPassword: {
       type: String,
       required: [true, "Password is required"],
     },

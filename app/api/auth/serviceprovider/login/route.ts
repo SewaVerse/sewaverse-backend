@@ -9,6 +9,7 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { email, password } = reqBody;
     console.log(reqBody);
+    
 
     await connectMongo();
     console.log("MongoDB Connected");
@@ -16,15 +17,15 @@ export async function POST(request: NextRequest) {
     const serviceProviderUser = await ServiceProvider.findOne({ email });
     if (!serviceProviderUser) {
       return new NextResponse(
-        JSON.stringify({ status: 404, message: "Service Provider not found" })
+        JSON.stringify({ status: 404, message: "User not found" })
       );
     }
 
-    const validaPassword = await bcrypt.compare(
+    const validPassword = await bcrypt.compare(
       password,
       serviceProviderUser.password
     );
-    if (!validaPassword) {
+    if (!validPassword) {
       return new NextResponse(
         JSON.stringify({ status: 400, message: "Invalid Credentials" })
       );
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.log("Error Occured", error);
     return new NextResponse(
-      JSON.stringify({ status: 400, message: "Error Occured", error })
+      JSON.stringify({ status: 500, message: "Error Occured", error })
     );
   }
 }

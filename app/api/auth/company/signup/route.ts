@@ -17,8 +17,8 @@ const companySchema = z.object({
     .min(1, { message: "Contact Person Position is required" }),
   companyAddress: z.string().min(1, { message: "Company Address is required" }),
   secondaryContact: z.string().optional(), // Optional field
-  emailAddress: z.string().email({ message: "Invalid email address" }),
-  password: z
+  companyEmail: z.string().email({ message: "Invalid email address" }),
+  companyPassword: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long" }),
 });
@@ -38,8 +38,8 @@ export async function POST(request: NextRequest) {
       contactPersonPosition,
       companyAddress,
       secondaryContact,
-      emailAddress,
-      password,
+      companyEmail,
+      companyPassword,
     } = await request.json();
 
     // Validate input with Zod schema
@@ -50,13 +50,13 @@ export async function POST(request: NextRequest) {
       contactPersonPosition,
       companyAddress,
       secondaryContact,
-      emailAddress,
-      password,
+      companyEmail,
+      companyPassword,
     });
 
     await connectMongo();
     console.log("MongoDB Connected");
-    const lowerCaseEmail = emailAddress.toLowerCase();
+    const lowerCaseEmail = companyEmail.toLowerCase();
 
     const existingUser = await Company.findOne({
       email: lowerCaseEmail,
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(companyPassword, 10);
 
     const newUser = new Company({
       companyName,
@@ -77,15 +77,15 @@ export async function POST(request: NextRequest) {
       contactPersonPosition,
       companyAddress,
       secondaryContact,
-      emailAddress: emailAddress.toLowerCase(),
-      password: hashedPassword,
+      companyEmail: companyEmail.toLowerCase(),
+      companyPassword: hashedPassword,
     });
 
     const savedUser = await newUser.save();
     console.log(savedUser);
 
     return new NextResponse(
-      JSON.stringify({ status: "201", message: msg_success, savedUser })
+      JSON.stringify({ status: "201", message: msg_success })
     );
   } catch (error: any) {
     // Handle Zod validation errors

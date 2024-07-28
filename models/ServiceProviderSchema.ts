@@ -62,7 +62,7 @@ const serviceProviderSchema = new Schema<IServiceProvider>(
     },
     joinedDate: {
       type: Date,
-      default: Date.now,
+      default: Date.now(),
     },
     // forgotPasswordToken: String,
     // forgotPasswordTokenExpiry: Date,
