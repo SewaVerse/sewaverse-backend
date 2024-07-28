@@ -3,21 +3,7 @@ import bcrypt from "bcrypt";
 import connectMongo from "@/lib/connectMongo";
 import ServiceProvider from "@/models/ServiceProviderSchema";
 import { z } from "zod";
-
-const serviceProviderSchema = z.object({
-  fullname: z
-    .string()
-    .min(5, { message: "Minimum 5 characters" })
-    .max(25, { message: "Exceeds 25 characters" }),
-  profession: z.string({ message: "Invalid profession" }),
-  dob: z.string({ message: "Invalid Date of birth" }),
-  gender: z.string({ message: "invalid gender" }),
-  address: z.string({ message: "invalid address" }),
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters long" }),
-});
+import { serviceProviderSchema } from "@/schema/index";
 
 export const dynamic = "force-dynamic";
 
@@ -27,8 +13,16 @@ export async function POST(request: NextRequest) {
   const msg_invalidUser = "User already exists";
 
   try {
-    const { fullname, profession, dob, gender, address, email, password } =
-      await request.json();
+    const {
+      fullname,
+      profession,
+      dob,
+      gender,
+      address,
+      contact,
+      email,
+      password,
+    } = await request.json();
 
     // Validate input with Zod schema
     serviceProviderSchema.parse({
@@ -37,6 +31,7 @@ export async function POST(request: NextRequest) {
       dob,
       gender,
       address,
+      contact,
       email,
       password,
     });
@@ -63,7 +58,8 @@ export async function POST(request: NextRequest) {
       gender,
       profession,
       address,
-      email: email.toLowerCase(),
+      contact,
+      email: lowerCaseEmail,
       password: hashedPassword,
     });
 
@@ -71,19 +67,19 @@ export async function POST(request: NextRequest) {
     console.log(savedUser);
 
     return new NextResponse(
-      JSON.stringify({ status: "201", message: msg_success, savedUser })
+      JSON.stringify({ status: "201", message: msg_success })
     );
   } catch (error: any) {
     // Handle Zod validation errors
     if (error instanceof z.ZodError) {
       return new NextResponse(JSON.stringify({ error: error.errors }), {
-        status: 400,
+        status: 500,
       });
     }
 
     console.error(error);
     return new NextResponse(JSON.stringify({ error: "Invalid request body" }), {
-      status: 400,
+      status: 500,
     });
   }
 }
