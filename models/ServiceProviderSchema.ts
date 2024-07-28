@@ -7,6 +7,7 @@ interface IServiceProvider extends Document {
   dob: string;
   gender: string;
   address: string;
+  contact: string;
   email: string;
   password: string;
   isVerified?: boolean;
@@ -40,6 +41,10 @@ const serviceProviderSchema = new Schema<IServiceProvider>(
     address: {
       type: String,
       required: [true, "Address is required"],
+    },
+    contact: {
+      type: String,
+      unique: true,
     },
     email: {
       type: String,
