@@ -11,6 +11,7 @@ export async function POST(request: NextRequest) {
     console.log(reqBody);
 
     await connectMongo();
+    console.log("MongoDB Connected");
     //Check if user exists
     const serviceProviderUser = await ServiceProvider.findOne({ email });
     if (!serviceProviderUser) {

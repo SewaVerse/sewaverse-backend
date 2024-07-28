@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import connectMongo from "@/lib/connectMongo";
-import ServiceProvider from "@/models/ServiceProviderSchema";
+import Company from "@/models/CompanyServiceSchema";
 import { z } from "zod";
 
-const serviceProviderSchema = z.object({
-  fullname: z
+const companySchema = z.object({
+  companyName: z.string().min(5, { message: "Company Name is required" }),
+  registrationNumber: z
     .string()
-    .min(5, { message: "Minimum 5 characters" })
-    .max(25, { message: "Exceeds 25 characters" }),
-  profession: z.string({ message: "Invalid profession" }),
-  dob: z.string({ message: "Invalid Date of birth" }),
-  gender: z.string({ message: "invalid gender" }),
-  address: z.string({ message: "invalid address" }),
-  email: z.string().email({ message: "Invalid email address" }),
+    .min(1, { message: "Registration Number is required" }),
+  contactPersonName: z
+    .string()
+    .min(1, { message: "Contact Person Name is required" }),
+  contactPersonPosition: z
+    .string()
+    .min(1, { message: "Contact Person Position is required" }),
+  companyAddress: z.string().min(1, { message: "Company Address is required" }),
+  secondaryContact: z.string().optional(), // Optional field
+  emailAddress: z.string().email({ message: "Invalid email address" }),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long" }),
@@ -27,25 +31,34 @@ export async function POST(request: NextRequest) {
   const msg_invalidUser = "User already exists";
 
   try {
-    const { fullname, profession, dob, gender, address, email, password } =
-      await request.json();
+    const {
+      companyName,
+      registrationNumber,
+      contactPersonName,
+      contactPersonPosition,
+      companyAddress,
+      secondaryContact,
+      emailAddress,
+      password,
+    } = await request.json();
 
     // Validate input with Zod schema
-    serviceProviderSchema.parse({
-      fullname,
-      profession,
-      dob,
-      gender,
-      address,
-      email,
+    companySchema.parse({
+      companyName,
+      registrationNumber,
+      contactPersonName,
+      contactPersonPosition,
+      companyAddress,
+      secondaryContact,
+      emailAddress,
       password,
     });
 
     await connectMongo();
     console.log("MongoDB Connected");
-    const lowerCaseEmail = email.toLowerCase();
+    const lowerCaseEmail = emailAddress.toLowerCase();
 
-    const existingUser = await ServiceProvider.findOne({
+    const existingUser = await Company.findOne({
       email: lowerCaseEmail,
     });
     if (existingUser) {
@@ -57,13 +70,14 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new ServiceProvider({
-      fullname,
-      dob,
-      gender,
-      profession,
-      address,
-      email: email.toLowerCase(),
+    const newUser = new Company({
+      companyName,
+      registrationNumber,
+      contactPersonName,
+      contactPersonPosition,
+      companyAddress,
+      secondaryContact,
+      emailAddress: emailAddress.toLowerCase(),
       password: hashedPassword,
     });
 
