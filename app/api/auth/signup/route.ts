@@ -5,6 +5,8 @@ import UserModel from "@/models/User";
 import ServiceProviderModel from "@/models/ServiceProvider";
 import CompanyModel from "@/models/Company";
 import { UserRole } from "@/types/roles";
+import { sendEmail } from "@/lib/nodemailer";
+import { generateOTP } from "@/lib/otp";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +32,6 @@ export const POST = async (request: NextRequest) => {
   } = await request.json();
 
   try {
-    // Check if the user already exists
     let existingUser;
     if (role === UserRole.SERVICE_PROVIDER) {
       existingUser = await ServiceProviderModel.findOne({ email });
@@ -41,9 +42,30 @@ export const POST = async (request: NextRequest) => {
     }
 
     if (existingUser) {
+      if (!existingUser.isVerified) {
+        // Generate and send OTP
+        const otp = generateOTP();
+        existingUser.otp = otp; // Save OTP to user record
+        await existingUser.save();
+
+        await sendEmail(
+          existingUser.email,
+          "Your OTP Code",
+          `Your OTP code is: ${otp}\n\nPlease use this code to verify your email.`
+        );
+        return new NextResponse(
+          JSON.stringify({
+            message:
+              "OTP has been sent to your email. Please verify your account.",
+            status: 200,
+          }),
+          { status: 200 }
+        );
+      }
+
       return new NextResponse(
         JSON.stringify({
-          message: "User already exists.",
+          message: "User already exists and is verified.",
           status: 400,
         }),
         { status: 400 }
@@ -87,12 +109,21 @@ export const POST = async (request: NextRequest) => {
     // user.generateVerificationToken(); // Uncomment if you use a verification token
 
     const newUser = await user.save();
+    const otp = generateOTP(); // Generate OTP
+    newUser.otp = otp; // Save OTP to user record
+    await newUser.save();
 
-    // TODO: Send verification email with user.verifyToken
-    console.log(newUser);
+    await sendEmail(
+      newUser.email,
+      "Welcome! Verify Your Email",
+      `Hello ${
+        newUser.fullname || ""
+      },\n\nThank you for registering with us. Your OTP code is: ${otp}\n\nPlease use this code to verify your email.\n\nBest regards,\nThe Team`
+    );
     return new NextResponse(
       JSON.stringify({
-        message: "User registered successfully. Please verify your email.",
+        message:
+          "User registered successfully. OTP has been sent to your email.",
         status: 201,
       }),
       { status: 201 }
