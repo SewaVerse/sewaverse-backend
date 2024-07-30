@@ -11,9 +11,9 @@ const CompanySchema = new Schema<ICompany>({
   secondaryContact: { type: String },
 });
 
-const CompanyModel = UserModel.discriminator<ICompany>(
-  "Company",
-  CompanySchema
-);
+// Ensure the name is unique and does not conflict with other discriminators
+const CompanyModel =
+  mongoose.models.Company ||
+  UserModel.discriminator<ICompany>("Company", CompanySchema);
 
 export default CompanyModel;
