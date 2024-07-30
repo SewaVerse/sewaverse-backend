@@ -1,18 +1,17 @@
 import { Document } from "mongoose";
-import { UserRole } from "./roles";
 
 export interface IUser extends Document {
   email: string;
   password: string;
-  role: UserRole;
-  createdAt: Date;
+  role: string;
+  contact: string;
   isVerified?: boolean;
   joinedDate?: Date;
-  verifyToken: string;
-  verifyTokenExpiry: Date;
-  forgotPasswordToken: string;
-  forgotPasswordTokenExpiry: Date;
-  comparePassword: (password: string) => Promise<boolean>;
+  otp?: string;
+  verifyToken?: string;
+  verifyTokenExpiry?: Date;
+  forgotPasswordToken?: string;
+  forgotPasswordTokenExpiry?: Date;
 }
 
 export interface IServiceProvider extends IUser {
@@ -21,7 +20,6 @@ export interface IServiceProvider extends IUser {
   dob: string;
   gender: string;
   address: string;
-  contact: string;
 }
 
 export interface ICompany extends IUser {
@@ -32,5 +30,3 @@ export interface ICompany extends IUser {
   companyAddress: string;
   secondaryContact?: string;
 }
-
-
