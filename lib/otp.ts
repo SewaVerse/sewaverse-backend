@@ -1,11 +1,21 @@
-// Utility functions for OTP generation and verification
+import crypto from "crypto";
 
-export const generateOTP = (): string => {
-  // Generate a 6-digit OTP
-  return Math.floor(100000 + Math.random() * 900000).toString();
+export const generateOTP = (): { otp: string; expiresAt: number } => {
+  const otp = crypto.randomInt(100000, 999999).toString();
+  const expiresAt = Date.now() + 300000; // 5 minutes in milliseconds
+
+  return { otp, expiresAt };
 };
 
-export const verifyOTP = (savedOTP: string, inputOTP: string): boolean => {
-  // Verify if the input OTP matches the saved OTP
+export const verifyOTP = (
+  savedOTP: string,
+  inputOTP: string,
+  expiresAt: number
+): boolean => {
+  const currentTime = Date.now();
+  if (currentTime > expiresAt) {
+    return false;
+  }
+
   return savedOTP === inputOTP;
 };
