@@ -12,13 +12,13 @@ const UserSchema = new Schema<IUser>({
     enum: ["user", "service_provider", "company"],
   },
   isVerified: { type: Boolean, default: false },
-  otp: {
-    code: String,
-    expiresAt: Date,
-  },
+  // otp: {
+  //   code: String,
+  //   expiresAt: Date,
+  // },
+  verifyCode: { type: String },
+  verifyCodeExpiry: { type: Date },
   joinedDate: { type: Date, default: Date.now },
-  verifyToken: { type: String },
-  verifyTokenExpiry: { type: Date },
   forgotPasswordToken: { type: String },
   forgotPasswordTokenExpiry: { type: Date },
 });

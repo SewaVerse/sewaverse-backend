@@ -14,21 +14,21 @@ export const sendEmail = async ({
   userId: string;
   name: string;
 }) => {
-
-  const { code:otp, expiresAt } = generateOTP();
+  const { generatedCode, expiresAt } = generateOTP();
+  console.log("Otp form nodemailer", generatedCode);
 
   try {
-    const hashedToken = await bcrypt.hash(userId.toString(), 10);
+    //const hashedToken = await bcrypt.hash(userId.toString(), 10);
 
     if (emailType === "VERIFY") {
       await Users.findByIdAndUpdate(userId, {
-        verifyToken: hashedToken,
-        verifyTokenExpiry: expiresAt,
+        verifyCode: generatedCode,
+        verifyCodeExpiry: expiresAt,
       });
     } else if (emailType === "RESET") {
       await Users.findByIdAndUpdate(userId, {
-        forgotPasswordToken: hashedToken,
-        forgotPasswordTokenExpiry: expiresAt,
+        // forgotPasswordToken: hashedToken,
+        // forgotPasswordTokenExpiry: expiresAt,
       });
     }
     const transporter = nodemailer.createTransport({
@@ -52,11 +52,11 @@ export const sendEmail = async ({
             ? "registering with us"
             : "requesting a password reset"
         }.</p>
-        <p>Your OTP code is: <strong>${otp}</strong></p>
+        <p>Your verification code is: <strong>${generatedCode}</strong></p>
         <p>Please use this code to ${
           emailType === "VERIFY" ? "verify your email" : "reset your password"
         }.</p>
-        <p>This OTP will expire in 5 minutes.</p>
+        <p>This Code will expire in 1 hour.</p>
         <p>If you did not initiate this request, please ignore this email.</p>
         <p>Best regards,<br>The SewaVerse Team</p>
       `,

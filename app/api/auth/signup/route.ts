@@ -5,7 +5,7 @@ import ServiceProviderModel from "@/models/ServiceProvider";
 import CompanyModel from "@/models/Company";
 import { UserRole } from "@/types/roles";
 import { sendEmail } from "@/lib/nodemailer";
-import { generateOTP } from "@/lib/otp";
+//import { generateOTP } from "@/lib/otp";
 import {
   serviceProviderSchema,
   companySchema,
@@ -37,7 +37,6 @@ export const POST = async (request: NextRequest) => {
       JSON.stringify({
         message: "Validation error",
         errors: validationResult.error.errors,
-        
       }),
       { status: 400 }
     );
@@ -73,7 +72,6 @@ export const POST = async (request: NextRequest) => {
         return new NextResponse(
           JSON.stringify({
             message: "Email or contact is already registered as a company.",
-           
           }),
           { status: 400 }
         );
@@ -87,7 +85,6 @@ export const POST = async (request: NextRequest) => {
           JSON.stringify({
             message:
               "Email or contact is already registered as a service provider.",
-           
           }),
           { status: 400 }
         );
@@ -113,7 +110,6 @@ export const POST = async (request: NextRequest) => {
         return new NextResponse(
           JSON.stringify({
             message: "User already exists and is verified. Please log in.",
-            
           }),
           { status: 400 }
         );
@@ -140,8 +136,10 @@ export const POST = async (request: NextRequest) => {
         existingUser.secondaryContact = secondaryContact;
       }
 
-      const { code: otp, expiresAt } = generateOTP();
-      existingUser.otp = { code: otp, expiresAt };
+      // const { generatedCode, expiresAt } = generateOTP();
+      // existingUser.verifyCode = { generatedCode };
+      // existingUser.verifyCodeExpiry = { expiresAt };
+      // console.log("Updated database otp", existingUser.verifyCode);
       await existingUser.save();
 
       await sendEmail({
@@ -155,7 +153,6 @@ export const POST = async (request: NextRequest) => {
         JSON.stringify({
           message:
             "User exists but is not verified. OTP has been sent to your email. Please verify your account.",
-          
         }),
         { status: 200 }
       );
@@ -199,9 +196,10 @@ export const POST = async (request: NextRequest) => {
 
     try {
       const newUser = await user.save();
-      const { code: otp, expiresAt } = generateOTP();
-      newUser.otp = { code: otp, expiresAt };
-      await newUser.save();
+      // const { generatedCode, expiresAt } = generateOTP();
+      // newUser.verifyCode = { generatedCode };
+      // newUser.verifyCodeExpiry = { expiresAt };
+      // await newUser.save();
 
       await sendEmail({
         email: newUser.email,
@@ -214,7 +212,6 @@ export const POST = async (request: NextRequest) => {
         JSON.stringify({
           message:
             "User registered successfully. OTP has been sent to your email.",
-         
         }),
         { status: 201 }
       );
@@ -224,7 +221,6 @@ export const POST = async (request: NextRequest) => {
         return new NextResponse(
           JSON.stringify({
             message: "A user with this email or contact already exists.",
-         
           }),
           { status: 400 }
         );
