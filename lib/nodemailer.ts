@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import bcrypt from "bcrypt";
 import Users from "@/models/User";
 import { generateOTP } from "./otp";
+import UserModel from "@/models/User";
 
 export const sendEmail = async ({
   email,
@@ -11,8 +12,8 @@ export const sendEmail = async ({
 }: {
   email: string;
   emailType: string;
-  userId: string;
-  name: string;
+  userId?: string;
+  name?: string;
 }) => {
   const { generatedCode, expiresAt } = generateOTP();
   console.log("Otp form nodemailer", generatedCode);
@@ -21,15 +22,18 @@ export const sendEmail = async ({
     //const hashedToken = await bcrypt.hash(userId.toString(), 10);
 
     if (emailType === "VERIFY") {
-      await Users.findByIdAndUpdate(userId, {
+      await UserModel.findByIdAndUpdate(userId, {
         verifyCode: generatedCode,
         verifyCodeExpiry: expiresAt,
       });
     } else if (emailType === "RESET") {
-      await Users.findByIdAndUpdate(userId, {
-        // forgotPasswordToken: hashedToken,
-        // forgotPasswordTokenExpiry: expiresAt,
-      });
+      await UserModel.findOneAndUpdate(
+        { email },
+        {
+          forgotPasswordToken: generatedCode,
+          forgotPasswordTokenExpiry: expiresAt,
+        }
+      );
     }
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
