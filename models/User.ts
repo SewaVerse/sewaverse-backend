@@ -12,29 +12,25 @@ const UserSchema = new Schema<IUser>({
     enum: ["user", "service_provider", "company"],
   },
   isVerified: { type: Boolean, default: false },
-  otp: {
-    code: String,
-    expiresAt: Date,
-  },
+  verifyCode: { type: String },
+  verifyCodeExpiry: { type: Date },
   joinedDate: { type: Date, default: Date.now },
-  verifyToken: { type: String },
-  verifyTokenExpiry: { type: Date },
   forgotPasswordToken: { type: String },
   forgotPasswordTokenExpiry: { type: Date },
 });
 
-UserSchema.pre<IUser>("save", async function (next) {
-  if (!this.isModified("password")) return next();
+// UserSchema.pre<IUser>("save", async function (next) {
+//   if (!this.isModified("password")) return next();
 
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(this.password, salt);
-    this.password = hashedPassword;
-    next();
-  } catch (error: any) {
-    next(error);
-  }
-});
+//   try {
+//     const salt = await bcrypt.genSalt(10);
+//     const hashedPassword = await bcrypt.hash(this.password, salt);
+//     this.password = hashedPassword;
+//     next();
+//   } catch (error: any) {
+//     next(error);
+//   }
+// });
 
 // Use a unique model name for the base User model
 const UserModel =

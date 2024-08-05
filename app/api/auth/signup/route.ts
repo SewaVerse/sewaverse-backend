@@ -5,20 +5,18 @@ import ServiceProviderModel from "@/models/ServiceProvider";
 import CompanyModel from "@/models/Company";
 import { UserRole } from "@/types/roles";
 import { sendEmail } from "@/lib/nodemailer";
-import { generateOTP } from "@/lib/otp";
 import {
   serviceProviderSchema,
   companySchema,
   userSchema,
 } from "@/schema/index";
+import bcrypt from "bcrypt";
 
 export const dynamic = "force-dynamic";
 
 export const POST = async (request: NextRequest) => {
-  await connectMongo();
-
+  console.log("Running POST request: Signup ServiceProvider ");
   const requestData = await request.json();
-  console.log("Request Data:", requestData);
 
   let validationResult;
 
@@ -30,14 +28,11 @@ export const POST = async (request: NextRequest) => {
     validationResult = userSchema.safeParse(requestData);
   }
 
-  console.log("Validation Result:", validationResult);
-
   if (!validationResult.success) {
     return new NextResponse(
       JSON.stringify({
         message: "Validation error",
         errors: validationResult.error.errors,
-        
       }),
       { status: 400 }
     );
@@ -61,7 +56,11 @@ export const POST = async (request: NextRequest) => {
     secondaryContact,
   } = requestData;
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   try {
+    await connectMongo();
+    console.log("MongoDB Connected");
     // Check for existing user in the other schema if role is SERVICE_PROVIDER or COMPANY
     let existingUser;
 
@@ -73,7 +72,6 @@ export const POST = async (request: NextRequest) => {
         return new NextResponse(
           JSON.stringify({
             message: "Email or contact is already registered as a company.",
-           
           }),
           { status: 400 }
         );
@@ -87,7 +85,6 @@ export const POST = async (request: NextRequest) => {
           JSON.stringify({
             message:
               "Email or contact is already registered as a service provider.",
-           
           }),
           { status: 400 }
         );
@@ -104,7 +101,9 @@ export const POST = async (request: NextRequest) => {
         $or: [{ email }, { contact }],
       });
     } else {
-      existingUser = await UserModel.findOne({ $or: [{ email }, { contact }] });
+      existingUser = await UserModel.findOne({
+        $or: [{ email }, { contact }],
+      });
     }
 
     if (existingUser) {
@@ -113,7 +112,6 @@ export const POST = async (request: NextRequest) => {
         return new NextResponse(
           JSON.stringify({
             message: "User already exists and is verified. Please log in.",
-            
           }),
           { status: 400 }
         );
@@ -121,7 +119,7 @@ export const POST = async (request: NextRequest) => {
 
       // Case 2: Existing user is not verified
       existingUser.email = email;
-      existingUser.password = password;
+      existingUser.password = hashedPassword;
       existingUser.role = role;
       existingUser.contact = contact;
 
@@ -140,8 +138,6 @@ export const POST = async (request: NextRequest) => {
         existingUser.secondaryContact = secondaryContact;
       }
 
-      const { code: otp, expiresAt } = generateOTP();
-      existingUser.otp = { code: otp, expiresAt };
       await existingUser.save();
 
       await sendEmail({
@@ -155,7 +151,6 @@ export const POST = async (request: NextRequest) => {
         JSON.stringify({
           message:
             "User exists but is not verified. OTP has been sent to your email. Please verify your account.",
-          
         }),
         { status: 200 }
       );
@@ -166,7 +161,7 @@ export const POST = async (request: NextRequest) => {
     if (role === UserRole.SERVICE_PROVIDER) {
       user = new ServiceProviderModel({
         email,
-        password,
+        password: hashedPassword,
         contact,
         role,
         fullname,
@@ -178,7 +173,7 @@ export const POST = async (request: NextRequest) => {
     } else if (role === UserRole.COMPANY) {
       user = new CompanyModel({
         email,
-        password,
+        password: hashedPassword,
         contact,
         role,
         companyName,
@@ -191,7 +186,7 @@ export const POST = async (request: NextRequest) => {
     } else {
       user = new UserModel({
         email,
-        password,
+        password: hashedPassword,
         contact,
         role,
       });
@@ -199,9 +194,6 @@ export const POST = async (request: NextRequest) => {
 
     try {
       const newUser = await user.save();
-      const { code: otp, expiresAt } = generateOTP();
-      newUser.otp = { code: otp, expiresAt };
-      await newUser.save();
 
       await sendEmail({
         email: newUser.email,
@@ -214,7 +206,6 @@ export const POST = async (request: NextRequest) => {
         JSON.stringify({
           message:
             "User registered successfully. OTP has been sent to your email.",
-         
         }),
         { status: 201 }
       );
@@ -224,7 +215,6 @@ export const POST = async (request: NextRequest) => {
         return new NextResponse(
           JSON.stringify({
             message: "A user with this email or contact already exists.",
-         
           }),
           { status: 400 }
         );

@@ -7,9 +7,8 @@ export interface IUser extends Document {
   contact: string;
   isVerified?: boolean;
   joinedDate?: Date;
-  otp?: string;
-  verifyToken?: string;
-  verifyTokenExpiry?: Date;
+  verifyCode?: string;
+  verifyCodeExpiry?: Date;
   forgotPasswordToken?: string;
   forgotPasswordTokenExpiry?: Date;
 }
