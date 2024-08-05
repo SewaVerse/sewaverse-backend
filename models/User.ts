@@ -1,6 +1,5 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IUser } from "../types/user";
-import bcrypt from "bcrypt";
 
 const UserSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
@@ -19,18 +18,6 @@ const UserSchema = new Schema<IUser>({
   forgotPasswordTokenExpiry: { type: Date },
 });
 
-// UserSchema.pre<IUser>("save", async function (next) {
-//   if (!this.isModified("password")) return next();
-
-//   try {
-//     const salt = await bcrypt.genSalt(10);
-//     const hashedPassword = await bcrypt.hash(this.password, salt);
-//     this.password = hashedPassword;
-//     next();
-//   } catch (error: any) {
-//     next(error);
-//   }
-// });
 
 // Use a unique model name for the base User model
 const UserModel =

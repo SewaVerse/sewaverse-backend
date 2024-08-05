@@ -7,10 +7,10 @@ export default function Home() {
 
       <div className="mt-4">
         <Link
-          href="/serviceproviders/sendotp"
+          href="/serviceproviders/login"
           className="border-2 rounded-lg p-2"
         >
-          Go to send otp
+          Login
         </Link>
       </div>
     </main>
