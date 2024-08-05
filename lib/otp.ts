@@ -7,8 +7,6 @@ export const generateOTP = (): {
   const generatedCode = crypto.randomInt(100000, 999999).toString();
   const expiresAt = Date.now() + 3600000; // 1 hour in milliseconds
 
-  console.log("Code generated:", generatedCode);
-
   return { generatedCode, expiresAt };
 };
 

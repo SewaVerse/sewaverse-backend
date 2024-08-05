@@ -8,7 +8,7 @@ export const POST = async (request: NextRequest) => {
     await connectMongo();
 
     const requestBody = await request.json();
-    console.log(requestBody);
+    // console.log(requestBody);
     const { userId, code } = requestBody;
     try {
       const user = await UserModel.findById(userId);

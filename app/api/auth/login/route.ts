@@ -10,14 +10,14 @@ export const dynamic = "force-dynamic";
 
 export const POST = async (request: NextRequest) => {
   await connectMongo();
-  console.log("Database Connected");
+  console.log("MongoDB Connected");
 
   const { email, password } = await request.json();
 
   try {
-    const user = await UserModel.findOne({ email });
+    const existingUser = await UserModel.findOne({ email });
 
-    if (!user) {
+    if (!existingUser) {
       return new NextResponse(
         JSON.stringify({
           message: "User not found. Please check your credentials.",
@@ -26,7 +26,7 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    if (!user.isVerified) {
+    if (!existingUser.isVerified) {
       return new NextResponse(
         JSON.stringify({
           message: "Account not verified. Please verify your account first.",
@@ -35,7 +35,10 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
     if (!isPasswordCorrect) {
       return new NextResponse(
         JSON.stringify({
@@ -45,11 +48,11 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    const token = jwt.sign(
+    const tokenData = jwt.sign(
       {
-        id: user._id,
-        email: user.email,
-        role: user.role,
+        id: existingUser._id,
+        email: existingUser.email,
+        role: existingUser.role,
       },
       JWT_SECRET,
       { expiresIn: "1d" }
@@ -58,7 +61,7 @@ export const POST = async (request: NextRequest) => {
     return new NextResponse(
       JSON.stringify({
         message: "Login successful.",
-        token,
+        tokenData,
       }),
       { status: 200 }
     );

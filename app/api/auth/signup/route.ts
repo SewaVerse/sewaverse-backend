@@ -5,20 +5,18 @@ import ServiceProviderModel from "@/models/ServiceProvider";
 import CompanyModel from "@/models/Company";
 import { UserRole } from "@/types/roles";
 import { sendEmail } from "@/lib/nodemailer";
-//import { generateOTP } from "@/lib/otp";
 import {
   serviceProviderSchema,
   companySchema,
   userSchema,
 } from "@/schema/index";
+import bcrypt from "bcrypt";
 
 export const dynamic = "force-dynamic";
 
 export const POST = async (request: NextRequest) => {
-  await connectMongo();
-
+  console.log("Running POST request: Signup ServiceProvider ");
   const requestData = await request.json();
-  console.log("Request Data:", requestData);
 
   let validationResult;
 
@@ -29,8 +27,6 @@ export const POST = async (request: NextRequest) => {
   } else {
     validationResult = userSchema.safeParse(requestData);
   }
-
-  console.log("Validation Result:", validationResult);
 
   if (!validationResult.success) {
     return new NextResponse(
@@ -60,7 +56,11 @@ export const POST = async (request: NextRequest) => {
     secondaryContact,
   } = requestData;
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   try {
+    await connectMongo();
+    console.log("MongoDB Connected");
     // Check for existing user in the other schema if role is SERVICE_PROVIDER or COMPANY
     let existingUser;
 
@@ -101,7 +101,9 @@ export const POST = async (request: NextRequest) => {
         $or: [{ email }, { contact }],
       });
     } else {
-      existingUser = await UserModel.findOne({ $or: [{ email }, { contact }] });
+      existingUser = await UserModel.findOne({
+        $or: [{ email }, { contact }],
+      });
     }
 
     if (existingUser) {
@@ -117,7 +119,7 @@ export const POST = async (request: NextRequest) => {
 
       // Case 2: Existing user is not verified
       existingUser.email = email;
-      existingUser.password = password;
+      existingUser.password = hashedPassword;
       existingUser.role = role;
       existingUser.contact = contact;
 
@@ -136,10 +138,6 @@ export const POST = async (request: NextRequest) => {
         existingUser.secondaryContact = secondaryContact;
       }
 
-      // const { generatedCode, expiresAt } = generateOTP();
-      // existingUser.verifyCode = { generatedCode };
-      // existingUser.verifyCodeExpiry = { expiresAt };
-      // console.log("Updated database otp", existingUser.verifyCode);
       await existingUser.save();
 
       await sendEmail({
@@ -163,7 +161,7 @@ export const POST = async (request: NextRequest) => {
     if (role === UserRole.SERVICE_PROVIDER) {
       user = new ServiceProviderModel({
         email,
-        password,
+        password: hashedPassword,
         contact,
         role,
         fullname,
@@ -175,7 +173,7 @@ export const POST = async (request: NextRequest) => {
     } else if (role === UserRole.COMPANY) {
       user = new CompanyModel({
         email,
-        password,
+        password: hashedPassword,
         contact,
         role,
         companyName,
@@ -188,7 +186,7 @@ export const POST = async (request: NextRequest) => {
     } else {
       user = new UserModel({
         email,
-        password,
+        password: hashedPassword,
         contact,
         role,
       });
@@ -196,10 +194,6 @@ export const POST = async (request: NextRequest) => {
 
     try {
       const newUser = await user.save();
-      // const { generatedCode, expiresAt } = generateOTP();
-      // newUser.verifyCode = { generatedCode };
-      // newUser.verifyCodeExpiry = { expiresAt };
-      // await newUser.save();
 
       await sendEmail({
         email: newUser.email,

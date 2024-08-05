@@ -8,7 +8,7 @@ export interface IUser extends Document {
   isVerified?: boolean;
   joinedDate?: Date;
   verifyCode?: string;
-  verifyCodeExpiry: Date;
+  verifyCodeExpiry?: Date;
   forgotPasswordToken?: string;
   forgotPasswordTokenExpiry?: Date;
 }
