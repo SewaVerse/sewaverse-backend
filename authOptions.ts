@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
           const user = await UserModel.findOne({ email: credentials.email });
 
           if (!user) {
-            throw new Error("No user found with email");
+            throw new Error("Invalid Credentials");
           }
           if (!user.isVerified) {
             throw new Error(
@@ -30,12 +30,13 @@ export const authOptions: NextAuthOptions = {
             user.password
           );
           if (!passwordMatch) {
-            throw new Error("Incorrect Password");
+            throw new Error("Invalid Credentials");
           }
           return {
             id: user._id,
             email: user.email,
             role: user.role,
+            name: user.name,
           };
         } catch (error: any) {
           throw new Error(error);
@@ -44,27 +45,28 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({token, user}) {
-      // Add user ID and role to the token
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
         token.email = user.email;
+        token.name = user.name;
       }
       return token;
     },
-    async session({session, token}) {
-      // Add user ID and role to the session object
+    async session({ session, token }) {
       if (token) {
         session.user.id = token.id;
         session.user.role = token.role;
         session.user.email = token.email;
+        session.user.name = token.name;
       }
       return session;
     },
   },
   pages: {
-    signIn: "/login",
+    signIn: "/serviceproviders/login",
+    signOut: "/",
   },
   session: {
     strategy: "jwt",

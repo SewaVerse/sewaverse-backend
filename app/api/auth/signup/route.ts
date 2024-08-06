@@ -39,20 +39,19 @@ export const POST = async (request: NextRequest) => {
   }
 
   const {
+    name,
+    address,
     email,
     password,
     role,
     contact,
-    fullname,
     profession,
     dob,
     gender,
-    address,
     companyName,
     registrationNumber,
     contactPersonName,
     contactPersonPosition,
-    companyAddress,
     secondaryContact,
   } = requestData;
 
@@ -122,19 +121,18 @@ export const POST = async (request: NextRequest) => {
       existingUser.password = hashedPassword;
       existingUser.role = role;
       existingUser.contact = contact;
+      existingUser.address = address;
 
       if (role === UserRole.SERVICE_PROVIDER) {
-        existingUser.fullname = fullname;
+        existingUser.name = name;
         existingUser.profession = profession;
         existingUser.dob = dob;
         existingUser.gender = gender;
-        existingUser.address = address;
       } else if (role === UserRole.COMPANY) {
         existingUser.companyName = companyName;
         existingUser.registrationNumber = registrationNumber;
         existingUser.contactPersonName = contactPersonName;
         existingUser.contactPersonPosition = contactPersonPosition;
-        existingUser.companyAddress = companyAddress;
         existingUser.secondaryContact = secondaryContact;
       }
 
@@ -160,11 +158,11 @@ export const POST = async (request: NextRequest) => {
     let user;
     if (role === UserRole.SERVICE_PROVIDER) {
       user = new ServiceProviderModel({
+        name,
         email,
         password: hashedPassword,
         contact,
         role,
-        fullname,
         profession,
         dob,
         gender,
@@ -172,6 +170,8 @@ export const POST = async (request: NextRequest) => {
       });
     } else if (role === UserRole.COMPANY) {
       user = new CompanyModel({
+        name,
+        address,
         email,
         password: hashedPassword,
         contact,
@@ -180,11 +180,12 @@ export const POST = async (request: NextRequest) => {
         registrationNumber,
         contactPersonName,
         contactPersonPosition,
-        companyAddress,
         secondaryContact,
       });
     } else {
       user = new UserModel({
+        name,
+        address,
         email,
         password: hashedPassword,
         contact,
