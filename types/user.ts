@@ -3,8 +3,10 @@ import { Document } from "mongoose";
 export interface IUser extends Document {
   email: string;
   password: string;
+  name: string;
   role: string;
   contact: string;
+  address: string;
   isVerified?: boolean;
   joinedDate?: Date;
   verifyCode?: string;
@@ -14,18 +16,18 @@ export interface IUser extends Document {
 }
 
 export interface IServiceProvider extends IUser {
-  fullname: string;
+  //fullname: string;
   profession: string;
   dob: string;
   gender: string;
-  address: string;
+  //address: string;
 }
 
 export interface ICompany extends IUser {
-  companyName: string;
+  //companyName: string;
   registrationNumber: string;
   contactPersonName: string;
   contactPersonPosition: string;
-  companyAddress: string;
+  //companyAddress: string;
   secondaryContact?: string;
 }
