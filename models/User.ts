@@ -2,9 +2,11 @@ import mongoose, { Schema } from "mongoose";
 import { IUser } from "../types/user";
 
 const UserSchema = new Schema<IUser>({
+  name:  {type: String, required: true},
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   contact: { type: String, required: true },
+  address: { type: String, required: true },
   role: {
     type: String,
     required: true,
