@@ -39,7 +39,7 @@ export const sendEmail = async ({
 
       await UserModel.findByIdAndUpdate(userId, {
         forgotPasswordToken: hashedToken,
-        forgotPasswordTokenExpiry: Date.now() + 3600000, 
+        forgotPasswordTokenExpiry: Date.now() + 3600000,
       });
 
       messageContent = `

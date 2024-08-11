@@ -11,6 +11,7 @@ import {
   userSchema,
 } from "@/schema/index";
 import bcrypt from "bcrypt";
+import { clear } from "console";
 
 export const dynamic = "force-dynamic";
 
@@ -157,11 +158,14 @@ export const POST = async (request: NextRequest) => {
         name: existingUser.fullname || existingUser.companyName,
       });
 
-      return new NextResponse(
-        JSON.stringify({
+      // console.log(existingUser._id);
+
+      return NextResponse.json(
+        {
           message:
             "User exists but is not verified. OTP has been sent to your email. Please verify your account.",
-        }),
+          userId: existingUser._id,
+        },
         { status: 200 }
       );
     }
@@ -215,11 +219,12 @@ export const POST = async (request: NextRequest) => {
         name: newUser.fullname || newUser.companyName,
       });
 
-      return new NextResponse(
-        JSON.stringify({
+      return NextResponse.json(
+        {
           message:
             "User registered successfully. OTP has been sent to your email.",
-        }),
+          userId: newUser._id,
+        },
         { status: 201 }
       );
     } catch (error: any) {
