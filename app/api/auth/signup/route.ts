@@ -88,6 +88,18 @@ export const POST = async (request: NextRequest) => {
           { status: 400 }
         );
       }
+    } else if (role === UserRole.USER) {
+      existingUser = await ServiceProviderModel.findOne({
+        $or: [{ email }, { contact }],
+      });
+      if (existingUser) {
+        return new NextResponse(
+          JSON.stringify({
+            message: "Email or contact already taken.",
+          }),
+          { status: 400 }
+        );
+      }
     }
 
     // Check if the user exists in the same schema
