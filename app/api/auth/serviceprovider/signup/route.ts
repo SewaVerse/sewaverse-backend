@@ -27,8 +27,16 @@ export async function POST(request: NextRequest) {
   const msg_invalidUser = "User already exists";
 
   try {
-    const { fullname, profession, dob, gender, address, email, password } =
-      await request.json();
+    const {
+      fullname,
+      profession,
+      dob,
+      gender,
+      address,
+      email,
+      password,
+      contact,
+    } = await request.json();
 
     // Validate input with Zod schema
     serviceProviderSchema.parse({
@@ -39,6 +47,7 @@ export async function POST(request: NextRequest) {
       address,
       email,
       password,
+      contact,
     });
 
     await connectMongo();
@@ -65,6 +74,7 @@ export async function POST(request: NextRequest) {
       address,
       email: email.toLowerCase(),
       password: hashedPassword,
+      contact,
     });
 
     const savedUser = await newUser.save();

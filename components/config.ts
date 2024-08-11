@@ -1,10 +1,12 @@
-import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from "firebase/auth";
+// Import the functions you need from the SDKs you need
 
+//here you must add your configs form Firebase website :https://firebase.google.com/
+
+import { initializeApp } from "firebase/app";
+import "firebase/auth";
+// Import the functions you need from the SDKs you need
+
+//copy and Paste
 const firebaseConfig = {
   apiKey: "AIzaSyACpIFgw8u5TeWGxa_WcIQxcXnrpA2klvQ",
   authDomain: "sewaverse-542ac.firebaseapp.com",
@@ -15,7 +17,6 @@ const firebaseConfig = {
   measurementId: "G-BBHGCX1HEN",
 };
 
-// Initialize Firebase
+//IT MUST BE LIKE THIS  DONT CHANGE IT
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-export { auth };
+export { app };
