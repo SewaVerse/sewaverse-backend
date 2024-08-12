@@ -17,7 +17,7 @@ export interface IUser extends Document {
 
 export interface IServiceProvider extends IUser {
   //fullname: string;
-  profession: string;
+  profession: string[];
   dob: string;
   gender: string;
   //address: string;
