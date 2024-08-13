@@ -11,7 +11,6 @@ import {
   userSchema,
 } from "@/schema/index";
 import bcrypt from "bcrypt";
-import { clear } from "console";
 
 export const dynamic = "force-dynamic";
 
