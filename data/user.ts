@@ -6,17 +6,19 @@ export const getUserByEmail = async (email: string) => {
     await connectMongo();
     const user = await UserModel.findOne({ email });
     return user;
-  } catch {
+  } catch (error: any) {
+    console.log("Error finding user by email", error);
     return null;
   }
 };
 
-export const getUserById = async (id: string) => {
+export const getUserById = async (userId: string) => {
   try {
     await connectMongo();
-    const user = await UserModel.findOne({ _id: id });
+    const user = await UserModel.findById(userId);
     return user;
-  } catch {
+  } catch (error: any) {
+    console.error("Error finding user by ID:", error);
     return null;
   }
 };
