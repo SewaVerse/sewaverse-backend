@@ -1,4 +1,4 @@
-import { IService, PricingType, Status } from "@/types/Service";
+import { IService } from "@/types/Service";
 import mongoose, { Schema } from "mongoose";
 
 const ServiceSchema: Schema<IService> = new Schema<IService>(
@@ -8,7 +8,7 @@ const ServiceSchema: Schema<IService> = new Schema<IService>(
     serviceCategory: { type: String, required: true },
     pricingType: {
       type: String,
-      enum: Object.values(PricingType),
+      // enum: Object.values(PricingType),
       required: true,
     },
     price: { type: String, required: true },

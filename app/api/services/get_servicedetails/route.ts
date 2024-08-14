@@ -1,12 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import ServiceModel from "@/models/Service";
 import connectMongo from "@/lib/connectMongo";
-import { getServerSession } from "next-auth/next"; 
-import { authOptions } from "@/authOptions"; 
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/authOptions";
 
-export const POST = async (request: NextRequest) => {
-  console.log("POST Request Running: Add Service");
-
+export const GET = async () => {
+  console.log("Running GET Request: Get Service Details");
   try {
     await connectMongo();
     console.log("MongoDB Connected");
@@ -26,22 +25,19 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    const data = await request.json();
-
-    const newService = new ServiceModel({ ...data, userId: userId });
-
-    const savedService = await newService.save();
-
-    //console.log("Service saved:", savedService);
+    const userServices = await ServiceModel.find({ userId });
+    if (userServices.length === 0) {
+      return NextResponse.json({ message: "No services" }, { status: 200 });
+    }
 
     return NextResponse.json(
-      { message: "Saved Data", data: savedService },
+      { message: "User Services", userServices },
       { status: 200 }
     );
   } catch (error: any) {
-    console.log("Something went wrong", error);
+    console.log("Error getting service details", error);
     return NextResponse.json(
-      { message: "Something went wrong", error: error.message },
+      { message: "Error getting service details" },
       { status: 500 }
     );
   }

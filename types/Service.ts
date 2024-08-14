@@ -1,12 +1,12 @@
 import { Document } from "mongoose";
 
-export enum PricingType {
-  PER_UNIT = "Per Unit",
-  PER_HOUR = "Per Hour",
-  PER_DAY = "Per Day",
-  FLAT_RATE = "Flat Rate",
-  OTHER = "",
-}
+// export enum PricingType {
+//   PER_UNIT = "Per Unit",
+//   PER_HOUR = "Per Hour",
+//   PER_DAY = "Per Day",
+//   FLAT_RATE = "Flat Rate",
+//   OTHER = "",
+// }
 
 export enum Status {
   AVAILABLE = "Available",
@@ -17,7 +17,7 @@ export interface IService extends Document {
   serviceName: string;
   description: string;
   serviceCategory: string;
-  pricingType: PricingType;
+  pricingType: string;
   price: string;
   location: string;
   image: string;
