@@ -16,18 +16,15 @@ export interface IUser extends Document {
 }
 
 export interface IServiceProvider extends IUser {
-  //fullname: string;
-  profession: string;
+  profession: string[];
   dob: string;
   gender: string;
-  //address: string;
 }
 
 export interface ICompany extends IUser {
-  //companyName: string;
   registrationNumber: string;
   contactPersonName: string;
   contactPersonPosition: string;
-  //companyAddress: string;
+
   secondaryContact?: string;
 }
