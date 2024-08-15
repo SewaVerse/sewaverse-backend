@@ -30,8 +30,6 @@ export const PUT = async (
     }
     const serviceId = params.service_id;
 
-    console.log(serviceId);
-
     if (!serviceId) {
       return NextResponse.json(
         { message: "No serviceId found in URL" },
