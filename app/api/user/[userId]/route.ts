@@ -10,7 +10,6 @@ export const GET = async (
   console.log("Running GET Request: Get User By ID");
 
   const { userId } = params;
-  // console.log(userId);
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     return NextResponse.json(
