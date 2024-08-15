@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import connectMongo from "@/lib/connectMongo";
 import UserModel from "@/models/User";
 import mongoose from "mongoose";
-import { UserRole } from "@/types/roles";
 
 export const GET = async (
   request: NextRequest,
@@ -24,7 +23,7 @@ export const GET = async (
     await connectMongo();
     console.log("MongoDB Connected");
 
-    const user = await UserModel.findById(userId).exec();
+    const user = await UserModel.findById(userId);
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
@@ -63,7 +62,6 @@ export const PUT = async (
     const rawData = await request.text();
 
     const updatedData = JSON.parse(rawData);
-    console.log("FrontEnd Data", updatedData);
 
     const updatedUser = await UserModel.findByIdAndUpdate(userId, updatedData, {
       new: true,
