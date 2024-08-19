@@ -1,10 +1,19 @@
-import mongoose, { Schema } from "mongoose";
-import UserModel from "./User";
-import { ICompany } from "../types/user";
+import { Schema, model, models } from "mongoose";
 
-const CompanySchema = new Schema<ICompany>(
+const CompanySchema = new Schema(
   {
-   
+    linkedUserId: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: [true, "Linked user ID is required"],
+    },
+    name: { type: String, required: true },
+    email: String,
+    password: String,
+    contact: String,
+    address: String,
+    isAdmin: { type: Boolean, default: false },
+    isVerified: { type: Boolean, default: false },
     registrationNumber: { type: String, required: true, unique: true },
     contactPersonName: { type: String, required: true },
     contactPersonPosition: { type: String, required: true },
@@ -15,9 +24,7 @@ const CompanySchema = new Schema<ICompany>(
   }
 );
 
-// Ensure the name is unique and does not conflict with other discriminators
 const CompanyModel =
-  mongoose.models.Company ||
-  UserModel.discriminator<ICompany>("Company", CompanySchema);
+  models.Company || model("Company", CompanySchema, "Company");
 
 export default CompanyModel;

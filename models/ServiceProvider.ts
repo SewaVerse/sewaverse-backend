@@ -1,15 +1,26 @@
-import mongoose, { Schema } from "mongoose";
-import UserModel from "./User";
-import { IServiceProvider } from "../types/user";
+import { Schema, models, model } from "mongoose";
 
-const ServiceProviderSchema = new Schema<IServiceProvider>(
+const ServiceProviderSchema = new Schema(
   {
+    linkedUserId: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: [true, "Linked user ID is required"],
+    },
+    name: { type: String, required: true },
+    email: String,
+    password: String,
+    contact: String,
+    address: String,
+    isAdmin: { type: Boolean, default: false },
+    isVerified: { type: Boolean, default: false },
     profession: {
       type: [String],
       required: true,
     },
     dob: { type: String, required: true },
     gender: { type: String, required: true },
+    joinedDate: Date,
   },
   {
     strict: false,
@@ -17,10 +28,7 @@ const ServiceProviderSchema = new Schema<IServiceProvider>(
 );
 
 const ServiceProviderModel =
-  mongoose.models.ServiceProvider ||
-  UserModel.discriminator<IServiceProvider>(
-    "ServiceProvider",
-    ServiceProviderSchema
-  );
+  models.ServiceProvider ||
+  model("ServiceProvider", ServiceProviderSchema, "ServiceProvider");
 
 export default ServiceProviderModel;

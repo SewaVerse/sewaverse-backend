@@ -1,13 +1,20 @@
-import mongoose, { Schema } from "mongoose";
-import { IUser } from "../types/user";
+import { Schema, model, models } from "mongoose";
 
-const UserSchema = new Schema<IUser>(
+const userSchema = new Schema(
   {
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+    },
     contact: { type: String, required: true },
     address: { type: String, required: true },
+    isAdmin: { type: Boolean, default: false },
     role: {
       type: String,
       required: true,
@@ -16,7 +23,7 @@ const UserSchema = new Schema<IUser>(
     isVerified: { type: Boolean, default: false },
     verifyCode: { type: String },
     verifyCodeExpiry: { type: Date },
-    joinedDate: { type: Date, default: Date.now },
+    joinedDate: { type: Date },
     forgotPasswordToken: { type: String },
     forgotPasswordTokenExpiry: { type: Date },
   },
@@ -25,8 +32,6 @@ const UserSchema = new Schema<IUser>(
   }
 );
 
-// Use a unique model name for the base User model
-const UserModel =
-  mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
+const UserModel = models.Users || model("Users", userSchema, "Users");
 
 export default UserModel;
