@@ -33,6 +33,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col items-center text-xl font-bold">
       <h1>{session.user?.name}'s Dashboard</h1>
+      <h1>User id {session.user?.id}</h1>
       <h1>Welcome {session.user?.email}</h1>
       <p>Role: {session.user?.role}</p>
 

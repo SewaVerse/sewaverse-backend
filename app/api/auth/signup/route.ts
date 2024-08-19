@@ -1,25 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import connectMongo from "@/lib/connectMongo";
 import UserModel from "@/models/User";
 import ServiceProviderModel from "@/models/ServiceProvider";
 import CompanyModel from "@/models/Company";
+import { userSchema, serviceProviderSchema, companySchema } from "@/schema/zod";
+import bcrypt from "bcrypt";
+import connectMongo from "@/lib/connectMongo";
 import { UserRole } from "@/types/roles";
 import { sendEmail } from "@/lib/nodemailer";
-import {
-  serviceProviderSchema,
-  companySchema,
-  userSchema,
-} from "@/schema/index";
-import bcrypt from "bcrypt";
-
-export const dynamic = "force-dynamic";
 
 export const POST = async (request: NextRequest) => {
-  console.log("Running POST request: Signup ServiceProvider ");
-  const requestData = await request.json();
+  console.log("Running POST Request: Signup");
 
+  const requestData = await request.json();
   let validationResult;
 
+  // Validation based on role
   if (requestData.role === UserRole.SERVICE_PROVIDER) {
     validationResult = serviceProviderSchema.safeParse(requestData);
   } else if (requestData.role === UserRole.COMPANY) {
@@ -38,220 +33,182 @@ export const POST = async (request: NextRequest) => {
     );
   }
 
-  const {
-    name,
-    address,
-    email,
-    password,
-    role,
-    contact,
-    profession,
-    dob,
-    gender,
-    companyName,
-    registrationNumber,
-    contactPersonName,
-    contactPersonPosition,
-    secondaryContact,
-  } = requestData;
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
   try {
+    const {
+      name,
+      email,
+      password,
+      role,
+      contact,
+      address,
+      profession,
+      dob,
+      gender,
+      registrationNumber,
+      contactPersonName,
+      contactPersonPosition,
+      secondaryContact,
+    } = requestData;
+
+    // Convert email to lowercase
+    const lowerCaseEmail = email.toLowerCase();
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     await connectMongo();
     console.log("MongoDB Connected");
-    // Check for existing user in the other schema if role is SERVICE_PROVIDER or COMPANY
-    let existingUser;
 
-    if (role === UserRole.SERVICE_PROVIDER) {
-      existingUser = await CompanyModel.findOne({
-        $or: [{ email }, { contact }],
-      });
-      if (existingUser) {
+    // Check if the user already exists based on email or contact
+    let existingUser = await UserModel.findOne({
+      $or: [{ email: lowerCaseEmail }, { contact }],
+    });
+
+    if (existingUser) {
+      // If the user exists and is verified, prompt them to log in
+      if (existingUser.isVerified) {
         return new NextResponse(
           JSON.stringify({
-            message: "Email or contact is already registered as a company.",
+            message: "User is already verified. Please log in.",
           }),
           { status: 400 }
         );
-      }
-    } else if (role === UserRole.COMPANY) {
-      existingUser = await ServiceProviderModel.findOne({
-        $or: [{ email }, { contact }],
-      });
-      if (existingUser) {
+      } else {
+        // If the user exists but is not verified, update the user data and resend the verification code
+        existingUser.name = name;
+        existingUser.password = hashedPassword;
+        existingUser.contact = contact;
+        existingUser.address = address;
+        existingUser.role = role;
+
+        await existingUser.save();
+
+        if (role === UserRole.SERVICE_PROVIDER) {
+          await ServiceProviderModel.updateOne(
+            { linkedUserId: existingUser._id },
+            {
+              $set: {
+                email: lowerCaseEmail,
+                password: hashedPassword,
+                name: name,
+                address: address,
+                role,
+                contact,
+                profession,
+                dob,
+                gender,
+                isVerified: false,
+                joinedDate: new Date(),
+              },
+            }
+          );
+        } else if (role === UserRole.COMPANY) {
+          await CompanyModel.updateOne(
+            { linkedUserId: existingUser._id },
+            {
+              $set: {
+                email: lowerCaseEmail,
+                password: hashedPassword,
+                name: name,
+                address: address,
+                role,
+                contact,
+                registrationNumber,
+                contactPersonName,
+                contactPersonPosition,
+                secondaryContact,
+                isVerified: false,
+                joinedDate: new Date(),
+              },
+            }
+          );
+        }
+
+        await sendEmail({
+          email: existingUser.email,
+          emailType: "VERIFY",
+          userId: existingUser._id,
+          name: existingUser.name,
+        });
+
         return new NextResponse(
           JSON.stringify({
             message:
-              "Email or contact is already registered as a service provider.",
+              "User exists but not verified. Verification code sent again.",
+            userId: existingUser._id,
           }),
-          { status: 400 }
-        );
-      }
-    } else if (role === UserRole.USER) {
-      existingUser = await ServiceProviderModel.findOne({
-        $or: [{ email }, { contact }],
-      });
-      if (existingUser) {
-        return new NextResponse(
-          JSON.stringify({
-            message: "Email or contact already taken.",
-          }),
-          { status: 400 }
+          { status: 200 }
         );
       }
     }
 
-    // Check if the user exists in the same schema
+    // If the user does not exist, create a new user
+    const newUser = new UserModel({
+      name,
+      email: lowerCaseEmail,
+      password: hashedPassword,
+      contact,
+      address,
+      role,
+      joinedDate: new Date(),
+    });
+
+    const savedUser = await newUser.save();
+
+    // Depending on the role, register as ServiceProvider or Company
     if (role === UserRole.SERVICE_PROVIDER) {
-      existingUser = await ServiceProviderModel.findOne({
-        $or: [{ email }, { contact }],
-      });
-    } else if (role === UserRole.COMPANY) {
-      existingUser = await CompanyModel.findOne({
-        $or: [{ email }, { contact }],
-      });
-    } else {
-      existingUser = await UserModel.findOne({
-        $or: [{ email }, { contact }],
-      });
-    }
-
-    if (existingUser) {
-      if (existingUser.isVerified) {
-        // Case 4: User is already verified
-        return new NextResponse(
-          JSON.stringify({
-            message: "User already exists and is verified. Please log in.",
-          }),
-          { status: 400 }
-        );
-      }
-
-      // Case 2: Existing user is not verified
-      existingUser.email = email;
-      existingUser.password = hashedPassword;
-      existingUser.role = role;
-      existingUser.contact = contact;
-      existingUser.address = address;
-
-      if (role === UserRole.SERVICE_PROVIDER) {
-        existingUser.name = name;
-        existingUser.profession = profession;
-        existingUser.dob = dob;
-        existingUser.gender = gender;
-      } else if (role === UserRole.COMPANY) {
-        existingUser.companyName = companyName;
-        existingUser.registrationNumber = registrationNumber;
-        existingUser.contactPersonName = contactPersonName;
-        existingUser.contactPersonPosition = contactPersonPosition;
-        existingUser.secondaryContact = secondaryContact;
-      }
-
-      await existingUser.save();
-
-      await sendEmail({
-        email: existingUser.email,
-        emailType: "VERIFY",
-        userId: existingUser._id,
-        name: existingUser.fullname || existingUser.companyName,
-      });
-
-      // console.log(existingUser._id);
-
-      return NextResponse.json(
-        {
-          message:
-            "User exists but is not verified. OTP has been sent to your email. Please verify your account.",
-          userId: existingUser._id,
-        },
-        { status: 200 }
-      );
-    }
-
-    // Case 3: Register new user if no existing user matches
-    let user;
-    if (role === UserRole.SERVICE_PROVIDER) {
-      user = new ServiceProviderModel({
-        name,
-        email,
+      const serviceProvider = new ServiceProviderModel({
+        linkedUserId: savedUser._id,
+        email: lowerCaseEmail,
         password: hashedPassword,
-        contact,
+        name,
+        address,
         role,
+        contact,
         profession,
         dob,
         gender,
-        address,
+        isVerified: false,
+        joinedDate: new Date(),
       });
+      await serviceProvider.save();
     } else if (role === UserRole.COMPANY) {
-      user = new CompanyModel({
+      const company = new CompanyModel({
+        linkedUserId: savedUser._id,
+        email: lowerCaseEmail,
+        password: hashedPassword,
         name,
         address,
-        email,
-        password: hashedPassword,
-        contact,
         role,
-        companyName,
+        contact,
         registrationNumber,
         contactPersonName,
         contactPersonPosition,
         secondaryContact,
+        isVerified: false,
+        joinedDate: new Date(),
       });
-    } else {
-      user = new UserModel({
-        name,
-        address,
-        email,
-        password: hashedPassword,
-        contact,
-        role,
-      });
+      await company.save();
     }
 
-    try {
-      const newUser = await user.save();
+    await sendEmail({
+      email: savedUser.email,
+      emailType: "VERIFY",
+      userId: savedUser._id,
+      name: savedUser.name,
+    });
 
-      await sendEmail({
-        email: newUser.email,
-        emailType: "VERIFY",
-        userId: newUser._id,
-        name: newUser.fullname || newUser.companyName,
-      });
-
-      return NextResponse.json(
-        {
-          message:
-            "User registered successfully. OTP has been sent to your email.",
-          userId: newUser._id,
-        },
-        { status: 201 }
-      );
-    } catch (error: any) {
-      if (error.code === 11000) {
-        // Duplicate key error
-        return new NextResponse(
-          JSON.stringify({
-            message: "A user with this email or contact already exists.",
-          }),
-          { status: 400 }
-        );
-      }
-
-      console.error("Error:", error);
-      return new NextResponse(
-        JSON.stringify({
-          message: "Error registering user.",
-          status: 500,
-        }),
-        { status: 500 }
-      );
-    }
-  } catch (error: any) {
-    console.error("Error:", error);
     return new NextResponse(
       JSON.stringify({
-        message: "Error registering user.",
-        status: 500,
+        message: "User registered successfully. Please verify your email",
+        userId: savedUser._id,
+      }),
+      { status: 201 }
+    );
+  } catch (error: any) {
+    console.log("Error Occurred", error);
+    return new NextResponse(
+      JSON.stringify({
+        message: "Error Occurred",
+        error: error.message,
       }),
       { status: 500 }
     );

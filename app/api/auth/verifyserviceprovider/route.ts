@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import connectMongo from "@/lib/connectMongo";
 import UserModel from "@/models/User";
 import { verifyOTP } from "@/lib/otp";
+import { UserRole } from "@/types/roles";
+import ServiceProviderModel from "@/models/ServiceProvider";
+import CompanyModel from "@/models/Company";
 
 export const POST = async (request: NextRequest) => {
   try {
@@ -37,6 +40,19 @@ export const POST = async (request: NextRequest) => {
       user.verifyCode = null;
       user.verifyCodeExpiry = null;
       await user.save();
+
+      // Update the isVerified field in ServiceProvider or Company
+      if (user.role === UserRole.SERVICE_PROVIDER) {
+        await ServiceProviderModel.updateOne(
+          { linkedUserId: userId },
+          { $set: { isVerified: true } }
+        );
+      } else if (user.role === UserRole.COMPANY) {
+        await CompanyModel.updateOne(
+          { linkedUserId: userId },
+          { $set: { isVerified: true } }
+        );
+      }
 
       return NextResponse.json(
         { message: "Code verified successfully." },
