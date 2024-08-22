@@ -12,7 +12,6 @@ const CompanySchema = new Schema(
     password: String,
     contact: String,
     address: String,
-    isAdmin: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
     registrationNumber: { type: String, required: true, unique: true },
     contactPersonName: { type: String, required: true },

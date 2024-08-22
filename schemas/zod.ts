@@ -9,7 +9,7 @@ export const userSchema = z.object({
     .string()
     .min(6, { message: "Password must be at least 6 characters long" }),
   address: z.string(),
-  role: z.enum(["user", "service_provider", "company"], {
+  role: z.enum(["USER", "SERVICE_PROVIDER", "COMPANY", "ADMIN"], {
     message: "Invalid role",
   }),
   isVerified: z.boolean().optional(),

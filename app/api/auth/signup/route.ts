@@ -2,11 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import UserModel from "@/models/User";
 import ServiceProviderModel from "@/models/ServiceProvider";
 import CompanyModel from "@/models/Company";
-import { userSchema, serviceProviderSchema, companySchema } from "@/schema/zod";
+import {
+  userSchema,
+  serviceProviderSchema,
+  companySchema,
+} from "@/schemas/zod";
 import bcrypt from "bcrypt";
 import connectMongo from "@/lib/connectMongo";
-import { UserRole } from "@/types/roles";
 import { sendEmail } from "@/lib/nodemailer";
+import { UserRole } from "@/schemas";
 
 export const POST = async (request: NextRequest) => {
   console.log("Running POST Request: Signup");
@@ -63,7 +67,6 @@ export const POST = async (request: NextRequest) => {
     });
 
     if (existingUser) {
-      // If the user exists and is verified, prompt them to log in
       if (existingUser.isVerified) {
         return new NextResponse(
           JSON.stringify({
@@ -72,12 +75,12 @@ export const POST = async (request: NextRequest) => {
           { status: 400 }
         );
       } else {
-        // If the user exists but is not verified, update the user data and resend the verification code
+        // Update user data and resend verification code
         existingUser.name = name;
         existingUser.password = hashedPassword;
         existingUser.contact = contact;
         existingUser.address = address;
-        existingUser.role = role;
+        existingUser.userRole = role; // Corrected from 'role' to 'userRole'
 
         await existingUser.save();
 
@@ -88,9 +91,8 @@ export const POST = async (request: NextRequest) => {
               $set: {
                 email: lowerCaseEmail,
                 password: hashedPassword,
-                name: name,
-                address: address,
-                role,
+                name,
+                address,
                 contact,
                 profession,
                 dob,
@@ -107,9 +109,8 @@ export const POST = async (request: NextRequest) => {
               $set: {
                 email: lowerCaseEmail,
                 password: hashedPassword,
-                name: name,
-                address: address,
-                role,
+                name,
+                address,
                 contact,
                 registrationNumber,
                 contactPersonName,
@@ -147,7 +148,7 @@ export const POST = async (request: NextRequest) => {
       password: hashedPassword,
       contact,
       address,
-      role,
+      userRole: role, // Corrected from 'role' to 'userRole'
       joinedDate: new Date(),
     });
 
@@ -161,7 +162,6 @@ export const POST = async (request: NextRequest) => {
         password: hashedPassword,
         name,
         address,
-        role,
         contact,
         profession,
         dob,
@@ -177,7 +177,6 @@ export const POST = async (request: NextRequest) => {
         password: hashedPassword,
         name,
         address,
-        role,
         contact,
         registrationNumber,
         contactPersonName,
