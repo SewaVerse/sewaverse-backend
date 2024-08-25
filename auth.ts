@@ -1,12 +1,9 @@
 import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
-import { getUserByEmail, getUserById } from "./data/user";
+import { getUserByEmail } from "./data/user";
 import bcrypt from "bcryptjs";
-import ServiceProviderModel from "./models/ServiceProvider";
-import CompanyModel from "./models/Company";
 import connectMongo from "./lib/connectMongo";
 import UserModel from "./models/User";
-import { NextResponse } from "next/server";
 
 export const {
   handlers: { GET, POST },
