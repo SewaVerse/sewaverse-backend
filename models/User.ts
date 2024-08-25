@@ -11,14 +11,13 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
     },
-    contact: { type: String, required: true },
-    address: { type: String, required: true },
+    contact: { type: String },
+    address: { type: String },
     userRole: {
       type: String,
-      enum: Object.values(UserRole),
-      default: UserRole.USER,
+      enum: UserRole,
+      default: "USER",
     },
     isVerified: { type: Boolean, default: false },
     verifyCode: { type: String },

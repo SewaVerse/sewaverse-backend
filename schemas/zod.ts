@@ -5,16 +5,16 @@ export const userSchema = z.object({
     .min(5, { message: "Minimum 5 characters" })
     .max(25, { message: "Exceeds 25 characters" }),
   email: z.string().email({ message: "Invalid email address" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters long" }),
-  address: z.string(),
-  role: z.enum(["USER", "SERVICE_PROVIDER", "COMPANY", "ADMIN"], {
-    message: "Invalid role",
-  }),
+  // password: z
+  //   .string()
+  //   .min(6, { message: "Password must be at least 6 characters long" }),
+  // address: z.string(),
+  // contact: z.string(),
+  // role: z.enum(["USER", "SERVICE_PROVIDER", "COMPANY", "ADMIN"], {
+  //   message: "Invalid role",
+  // }),
   isVerified: z.boolean().optional(),
   joinedDate: z.date().optional(),
-  otp: z.string().optional(),
   verifyToken: z.string().optional(),
   verifyTokenExpiry: z.date().optional(),
   forgotPasswordToken: z.string().optional(),

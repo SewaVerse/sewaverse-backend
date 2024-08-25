@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { LoginSchema } from "@/schemas";
 import { login } from "@/actions/login";
+import Social from "@/components/social";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -75,6 +76,7 @@ const LoginPage = () => {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
+      <Social />
     </div>
   );
 };

@@ -2,6 +2,11 @@ import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
 import { getUserByEmail, getUserById } from "./data/user";
 import bcrypt from "bcryptjs";
+import ServiceProviderModel from "./models/ServiceProvider";
+import CompanyModel from "./models/Company";
+import connectMongo from "./lib/connectMongo";
+import UserModel from "./models/User";
+import { NextResponse } from "next/server";
 
 export const {
   handlers: { GET, POST },
@@ -10,25 +15,65 @@ export const {
   signOut,
 } = NextAuth({
   pages: {
-    signIn: "/login",
-    error: "/error",
+    signIn: "/auth/login",
+    signOut: "/",
+    error: "/auth/error",
   },
   callbacks: {
-    async signIn({ credentials }: any) {
-      const user = await getUserByEmail(credentials.email);
-      if (!user || !user.password) return false;
-      const passwordsMatch = await bcrypt.compare(
-        credentials.password,
-        user.password
-      );
-      if (!passwordsMatch) return false;
+    async signIn({ user, account }: any) {
+      const existingUser = await getUserByEmail(user.email);
+      if (account?.provider !== "credentials") {
+        // if (account?.provider == "google") {
+        //const existingUser = await getUserByEmail(user.email);
+        await connectMongo();
+        if (existingUser) {
+          if (existingUser.userRole === "USER") return true;
+          else return false;
+        }
 
-      if (!user?.isVerified) return false;
-      return true;
+        if (!existingUser) {
+          const newUser = await UserModel.create({
+            name: user.name,
+            email: user.email,
+            isVerified: true,
+          });
+          console.log("New User ", newUser);
+        }
+      }
+
+      if (account?.provider === "credentials") {
+        if (!existingUser || !existingUser.password) return false;
+        const passwordsMatch = await bcrypt.compare(
+          user.password,
+          existingUser.password as string
+        );
+        if (!passwordsMatch) return false;
+        if (!existingUser?.isVerified) return false;
+
+        return true;
+      }
+
+      // if (existingUser) console.log("UserModel Details:", existingUser);
+
+      // if (existingUser.userRole === "SERVICE_PROVIDER") {
+      //   const userDetails = await ServiceProviderModel.findOne({
+      //     linkedUserId: existingUser._id,
+      //   });
+      //   console.log("ServiceProvider", userDetails);
+      // }
+
+      // if (existingUser.userRole === "COMPANY") {
+      //   const userDetails = await CompanyModel.findOne({
+      //     linkedUserId: existingUser._id,
+      //   });
+      //   console.log("Comapny", userDetails);
+      // }
+
+      return false;
     },
     //@ts-ignore
     async session({ session, token }) {
-      // console.log({ sessionToken: token });
+      //console.log({ sessionToken: token });
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
@@ -44,7 +89,7 @@ export const {
       return session;
     },
     async jwt({ token }: any) {
-      // console.log({ token });
+      //console.log({ token });
       if (!token.sub) return token;
       const existingUser = await getUserByEmail(token.email);
       if (!existingUser) return token;
@@ -52,7 +97,6 @@ export const {
       token.role = existingUser.userRole;
       token.email = existingUser.email;
       token.sub = existingUser._id;
-      token.CustomField = "Nigga";
 
       return token;
     },

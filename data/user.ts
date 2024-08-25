@@ -22,3 +22,8 @@ export const getUserById = async (userId: string) => {
     return null;
   }
 };
+
+export const createUser = async (userData: any) => {
+  const user = new UserModel(userData);
+  return await user.save();
+};
