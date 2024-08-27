@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import UserModel from "@/models/User";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import connectMongo from "@/lib/connectMongo";
 
 export const dynamic = "force-dynamic";

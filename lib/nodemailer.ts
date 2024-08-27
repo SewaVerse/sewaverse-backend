@@ -1,41 +1,49 @@
 import nodemailer from "nodemailer";
-import bcrypt from "bcrypt";
-import { generateOTP } from "./otp";
+import bcrypt from "bcryptjs";
 import UserModel from "@/models/User";
 
-export const sendEmail = async ({
-  email,
-  emailType,
-  userId,
-  name,
-}: {
-  email: string;
+interface EmailType {
+  recipientEmail: string;
   emailType: string;
   userId: string;
   name?: string;
-}) => {
-  const { generatedCode, expiresAt } = generateOTP();
+}
+
+export const sendEmail = async ({
+  recipientEmail,
+  emailType,
+  userId,
+  name,
+}: EmailType) => {
   let messageContent = "";
+
+  const hashedToken = await bcrypt.hash(userId.toString(), 10);
 
   try {
     if (emailType === "VERIFY") {
-      await UserModel.findByIdAndUpdate(userId, {
-        verifyCode: generatedCode,
-        verifyCodeExpiry: expiresAt,
+      const existingUser = await UserModel.findOne({
+        _id: userId,
       });
+
+      const updateData = {
+        verifyEmailToken: hashedToken,
+        verifyEmailTokenExpiry: Date.now() + 3600000,
+      };
+      await existingUser.updateOne(updateData);
+
+      const verifyEmailLink = `${process.env.DOMAIN}/auth/verify?id=${userId}&token=${hashedToken}`;
 
       messageContent = `
         <p>Greetings ${name || ""},</p>
         <p>Thank you for registering with us.</p>
-        <p>Your verification code is: <strong>${generatedCode}</strong></p>
-        <p>Please use this code to verify your email.</p>
-        <p>This code will expire in 1 hour.</p>
+        <p>Click the  <a href="${verifyEmailLink}">BUTTON</a> to verify your email.</p>
+        <p>Please use this button to verify your email.</p>
+        <p>This link will expire in 1 hour.</p>
         <p>If you did not initiate this request, please ignore this email.</p>
         <p>Best regards,<br>The SewaVerse Team</p>
       `;
     } else if (emailType === "RESET") {
-      const hashedToken = await bcrypt.hash(process.env.JWT_SECRET_KEY!, 10);
-      const resetLink = `${process.env.DOMAIN}/api/auth/serviceproviderresetpassword?token=${hashedToken}`;
+      const resetLink = `${process.env.DOMAIN}/auth/resetpassword?id=${userId}&token=${hashedToken}`;
 
       await UserModel.findByIdAndUpdate(userId, {
         forgotPasswordToken: hashedToken,
@@ -64,7 +72,7 @@ export const sendEmail = async ({
     });
 
     const mailOptions = {
-      to: email,
+      to: recipientEmail,
       subject:
         emailType === "VERIFY" ? "Verify Your Email" : "Reset Your Password",
       html: messageContent,

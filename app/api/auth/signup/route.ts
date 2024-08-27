@@ -7,7 +7,7 @@ import {
   serviceProviderSchema,
   companySchema,
 } from "@/schemas/zod";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import connectMongo from "@/lib/connectMongo";
 import { sendEmail } from "@/lib/nodemailer";
 import { UserRole } from "@/schemas";
@@ -16,9 +16,9 @@ export const POST = async (request: NextRequest) => {
   console.log("Running POST Request: Signup");
 
   const requestData = await request.json();
+
   let validationResult;
 
-  // Validation based on role
   if (requestData.role === UserRole.SERVICE_PROVIDER) {
     validationResult = serviceProviderSchema.safeParse(requestData);
   } else if (requestData.role === UserRole.COMPANY) {
@@ -28,11 +28,11 @@ export const POST = async (request: NextRequest) => {
   }
 
   if (!validationResult.success) {
-    return new NextResponse(
-      JSON.stringify({
+    return NextResponse.json(
+      {
         message: "Validation error",
         errors: validationResult.error.errors,
-      }),
+      },
       { status: 400 }
     );
   }
@@ -54,7 +54,6 @@ export const POST = async (request: NextRequest) => {
       secondaryContact,
     } = requestData;
 
-    // Convert email to lowercase
     const lowerCaseEmail = email.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -68,19 +67,18 @@ export const POST = async (request: NextRequest) => {
 
     if (existingUser) {
       if (existingUser.isVerified) {
-        return new NextResponse(
-          JSON.stringify({
+        return NextResponse.json(
+          {
             message: "User is already verified. Please log in.",
-          }),
-          { status: 400 }
+          },
+          { status: 201 }
         );
       } else {
-        // Update user data and resend verification code
         existingUser.name = name;
         existingUser.password = hashedPassword;
         existingUser.contact = contact;
         existingUser.address = address;
-        existingUser.userRole = role; // Corrected from 'role' to 'userRole'
+        existingUser.userRole = role;
 
         await existingUser.save();
 
@@ -124,19 +122,18 @@ export const POST = async (request: NextRequest) => {
         }
 
         await sendEmail({
-          email: existingUser.email,
+          recipientEmail: existingUser.email,
           emailType: "VERIFY",
           userId: existingUser._id,
           name: existingUser.name,
         });
 
-        return new NextResponse(
-          JSON.stringify({
+        return NextResponse.json(
+          {
             message:
-              "User exists but not verified. Verification code sent again.",
-            userId: existingUser._id,
-          }),
-          { status: 200 }
+              "User exists but not verified. Verification link has been sent again.",
+          },
+          { status: 201 }
         );
       }
     }
@@ -148,7 +145,7 @@ export const POST = async (request: NextRequest) => {
       password: hashedPassword,
       contact,
       address,
-      userRole: role, // Corrected from 'role' to 'userRole'
+      userRole: role,
       joinedDate: new Date(),
     });
 
@@ -189,26 +186,24 @@ export const POST = async (request: NextRequest) => {
     }
 
     await sendEmail({
-      email: savedUser.email,
+      recipientEmail: savedUser.email,
       emailType: "VERIFY",
       userId: savedUser._id,
       name: savedUser.name,
     });
 
-    return new NextResponse(
-      JSON.stringify({
+    return NextResponse.json(
+      {
         message: "User registered successfully. Please verify your email",
-        userId: savedUser._id,
-      }),
+      },
       { status: 201 }
     );
   } catch (error: any) {
-    console.log("Error Occurred", error);
-    return new NextResponse(
-      JSON.stringify({
-        message: "Error Occurred",
+    return NextResponse.json(
+      {
+        message: "Something went wrong",
         error: error.message,
-      }),
+      },
       { status: 500 }
     );
   }

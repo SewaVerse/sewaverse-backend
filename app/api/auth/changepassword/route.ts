@@ -1,20 +1,26 @@
 import { NextResponse, NextRequest } from "next/server";
 import { hashPassword } from "@/lib/hashpassword";
 import connectMongo from "@/lib/connectMongo";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { getUserById } from "@/data/user";
+import { currentUser } from "@/lib/auth";
+import { auth } from "@/auth";
+import UserModel from "@/models/User";
 
 export const POST = async (request: NextRequest) => {
   console.log("Running POST: Change Password");
+  const user = await currentUser();
+
   try {
     const data = await request.json();
-    const { userId, oldPassword, newPassword } = data;
+    const { oldPassword, newPassword } = data;
 
     await connectMongo();
     console.log("MongoDB Connected");
 
-    const existingUser = await getUserById(userId);
-    if (!existingUser) return NextResponse.json({ message: "No user found" });
+    const existingUser = await UserModel.findOne({ _id: user?._id });
+    if (!existingUser)
+      return NextResponse.json({ message: "No user found" }, { status: 404 });
 
     const isPasswordMatch = await bcrypt.compare(
       oldPassword,
@@ -22,16 +28,19 @@ export const POST = async (request: NextRequest) => {
     );
 
     if (!isPasswordMatch)
-      return NextResponse.json({ message: "Old password does not match" });
+      return NextResponse.json(
+        { message: "Old password does not match" },
+        { status: 401 }
+      );
 
     const newHashedPassword = await hashPassword(newPassword);
-    if (!newHashedPassword)
-      return NextResponse.json({ message: "Error hashing new password" });
-
     existingUser.password = newHashedPassword;
     await existingUser.save();
 
-    return NextResponse.json({ message: "Password has been changed" });
+    return NextResponse.json(
+      { message: "Password changed successfully!" },
+      { status: 201 }
+    );
   } catch (error: any) {
     console.error("Something went wrong", error);
     return NextResponse.json(

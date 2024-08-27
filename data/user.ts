@@ -23,7 +23,3 @@ export const getUserById = async (userId: string) => {
   }
 };
 
-export const createUser = async (userData: any) => {
-  const user = new UserModel(userData);
-  return await user.save();
-};

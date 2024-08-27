@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import connectMongo from "@/lib/connectMongo";
 import Users from "@/models/User";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const dynamic = "force-dynamic";
