@@ -15,44 +15,38 @@ export const POST = async (request: NextRequest) => {
 
     await connectMongo();
 
-    const existingUser = await UserModel.findOne({ _id });
+    const existingUser = await UserModel.findOne({
+      _id,
+      verifyEmailToken: token,
+      verifyEmailTokenExpiry: { $gt: Date.now() },
+    });
 
-    if (existingUser) {
-      if (!existingUser.isVerified) {
-        const isTokenValid = await bcrypt.compare(
-          existingUser._id.toString(),
-          existingUser.verifyEmailToken
-        );
+    if (!existingUser) {
+      return NextResponse.json(
+        { message: "Invalid or expired link" },
+        { status: 404 }
+      );
+    }
+    existingUser.isVerified = true;
+    existingUser.verifyEmailToken = undefined;
+    existingUser.verifyEmailTokenExpiry = undefined;
+    await existingUser.save();
 
-        if (isTokenValid && existingUser.verifyEmailTokenExpiry > Date.now()) {
-          existingUser.isVerified = true;
-          existingUser.verifyEmailToken = undefined;
-          existingUser.verifyEmailTokenExpiry = undefined;
-          await existingUser.save();
-
-          if (existingUser.userRole === UserRole.SERVICE_PROVIDER) {
-            await ServiceProviderModel.updateOne(
-              { linkedUserId: _id },
-              { $set: { isVerified: true } }
-            );
-          } else if (existingUser.userRole === UserRole.COMPANY) {
-            await CompanyModel.updateOne(
-              { linkedUserId: _id },
-              { $set: { isVerified: true } }
-            );
-          }
-
-          return NextResponse.json(
-            { message: "Email verified successfully." },
-            { status: 201 }
-          );
-        }
-      }
+    if (existingUser.userRole === UserRole.SERVICE_PROVIDER) {
+      await ServiceProviderModel.updateOne(
+        { linkedUserId: _id },
+        { $set: { isVerified: true } }
+      );
+    } else if (existingUser.userRole === UserRole.COMPANY) {
+      await CompanyModel.updateOne(
+        { linkedUserId: _id },
+        { $set: { isVerified: true } }
+      );
     }
 
     return NextResponse.json(
-      { message: "Invalid or link expired" },
-      { status: 404 }
+      { message: "Email verified successfully." },
+      { status: 201 }
     );
   } catch (error: any) {
     console.error("Error verifying email:", error);
