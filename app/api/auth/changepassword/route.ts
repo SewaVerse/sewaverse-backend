@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { getUserById } from "@/data/user";
 import { currentUser } from "@/lib/auth";
 import { auth } from "@/auth";
-import UserModel from "@/models/User";
+import UserModel from "@/models/Users/User";
 
 export const POST = async (request: NextRequest) => {
   console.log("Running POST: Change Password");

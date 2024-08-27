@@ -1,4 +1,4 @@
-import UserModel from "@/models/User";
+import UserModel from "@/models/Users/User";
 import connectMongo from "@/lib/connectMongo";
 
 export const getUserByEmail = async (email: string) => {
@@ -22,4 +22,3 @@ export const getUserById = async (userId: string) => {
     return null;
   }
 };
-

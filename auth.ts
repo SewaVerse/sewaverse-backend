@@ -3,7 +3,7 @@ import authConfig from "@/auth.config";
 import { getUserByEmail } from "./data/user";
 import bcrypt from "bcryptjs";
 import connectMongo from "./lib/connectMongo";
-import UserModel from "./models/User";
+import UserModel from "./models/Users/User";
 
 export const {
   handlers: { GET, POST },

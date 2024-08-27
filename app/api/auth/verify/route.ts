@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import connectMongo from "@/lib/connectMongo";
-import UserModel from "@/models/User";
+import UserModel from "@/models/Users/User";
 import { UserRole } from "@/schemas/index";
-import ServiceProviderModel from "@/models/ServiceProvider";
-import CompanyModel from "@/models/Company";
+import ServiceProviderModel from "@/models/Users/ServiceProvider";
+import CompanyModel from "@/models/Users/Company";
 
 export const POST = async (request: NextRequest) => {
   console.log("Running POST Request: Verify Email");

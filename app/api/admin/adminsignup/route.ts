@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import UserModel from "@/models/User";
+import UserModel from "@/models/Users/User";
 import bcrypt from "bcryptjs";
 import connectMongo from "@/lib/connectMongo";
 
@@ -14,7 +14,6 @@ export const POST = async (request: NextRequest) => {
     await connectMongo();
     const existingUser = await UserModel.findOne({
       email: lowerCaseEmail,
-      
     });
 
     if (existingUser) {
@@ -32,7 +31,6 @@ export const POST = async (request: NextRequest) => {
             {
               $set: {
                 password: hashedPassword,
-            
               },
             }
           );

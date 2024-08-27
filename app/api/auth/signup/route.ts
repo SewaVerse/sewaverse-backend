@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import UserModel from "@/models/User";
-import ServiceProviderModel from "@/models/ServiceProvider";
-import CompanyModel from "@/models/Company";
+import UserModel from "@/models/Users/User";
+import ServiceProviderModel from "@/models/Users/ServiceProvider";
+import CompanyModel from "@/models/Users/Company";
 import {
   userSchema,
   serviceProviderSchema,

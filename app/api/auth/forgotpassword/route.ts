@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import UserModel from "@/models/User";
+import UserModel from "@/models/Users/User";
 import connectMongo from "@/lib/connectMongo";
 import { sendEmail } from "@/lib/nodemailer";
 

@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
-import UserModel from "@/models/User";
+import UserModel from "@/models/Users/User";
 
 interface EmailType {
   recipientEmail: string;

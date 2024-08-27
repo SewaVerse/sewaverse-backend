@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectMongo from "@/lib/connectMongo";
-import UserModel from "@/models/User";
+import UserModel from "@/models/Users/User";
 import mongoose from "mongoose";
-import ServiceProviderModel from "@/models/ServiceProvider";
-import CompanyModel from "@/models/Company";
+import ServiceProviderModel from "@/models/Users/ServiceProvider";
+import CompanyModel from "@/models/Users/Company";
 
 export const GET = async (request: NextRequest) => {
   try {
