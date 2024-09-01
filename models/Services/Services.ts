@@ -19,14 +19,13 @@ const serviceSchema = new Schema(
     image: { type: [String], required: true },
     isVerifiedByAdmin: { type: Boolean, required: true, default: false },
     isActive: { type: Boolean, required: true, default: true },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
+    createdDate: { type: Date, default: Date.now },
+    updatedDate: { type: Date, default: Date.now },
   },
   {
     strict: false,
   }
 );
-
 let Services: Model<any>;
 try {
   Services = models.Services || model("Services", serviceSchema, "Services");

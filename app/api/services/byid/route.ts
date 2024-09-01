@@ -3,8 +3,11 @@ import connectMongo from "@/lib/connectMongo";
 import Services from "@/models/Services/Services";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export const GET = async (request: NextRequest) => {
   console.log("Running GET request:User Get Service by id");
+  
   const user = await currentRole();
 
   const { searchParams } = new URL(request.url);

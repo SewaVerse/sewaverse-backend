@@ -14,6 +14,8 @@ const userSchema = new Schema(
     },
     contact: { type: String },
     address: { type: String },
+    gender: String,
+    dob: String,
     userRole: {
       type: String,
       enum: UserRole,
