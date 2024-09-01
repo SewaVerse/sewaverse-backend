@@ -11,7 +11,7 @@ const connectMongo = async () => {
     mongoose.set("strictQuery", false);
 
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI!);
+    await mongoose.connect(process.env.DATABASE_URL!);
     const connection = mongoose.connection;
 
     // Set maximum number of listeners
