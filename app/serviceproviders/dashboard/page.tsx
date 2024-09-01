@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
+  console.log(session, "test");
+
   const router = useRouter();
   const [userDetails, setUserDetails] = useState(null);
 

@@ -69,3 +69,12 @@
 }.ant-input-number-handler-wrap { 
   visibility: hidden;
 }
+.ant-modal-content{
+  padding: 0 !important;
+}
+.backgroundImage {
+  background-color: red;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

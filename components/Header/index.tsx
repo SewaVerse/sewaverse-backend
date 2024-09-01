@@ -1,13 +1,23 @@
-import { Button, Input, InputNumber, Modal, notification } from "antd";
+"use client";
+import { Button, Input, Form, Modal, notification } from "antd";
+import type { FormProps } from "antd";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import Sewaverse from "../../assets/images/Sewaverse.png";
+import { signIn, useSession } from "next-auth/react";
+import { Signup } from "./component/Signup";
+import { Login } from "./component/Login";
+
+type FieldType = {
+  email?: string;
+  password?: string;
+};
 
 const Header = () => {
   const [inputOtp, setInputOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [generatedOtp, setGeneratedOtp] = useState<string>("");
   const [viewType, setViewType] = useState<string>("send-otp");
-
+  const { data: session, status } = useSession();
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const validateOtp = () => {
@@ -59,11 +69,18 @@ const Header = () => {
 
   //modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
   };
+  const showModal1 = () => {
+    setIsModalOpen1(true);
+  };
 
+  const handleOk1 = () => {
+    setIsModalOpen1(false);
+  };
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -71,6 +88,32 @@ const Header = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const handleCancel1 = () => {
+    setIsModalOpen1(false);
+  };
+
+  // handle sign up
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+    });
+    if (result?.ok) {
+      console.log(session, "test");
+      //redirect WIP
+      notification.success({
+        message: "Login Successful",
+        description: "You have been login successfully",
+      });
+    } else {
+      notification.error({
+        message: "Login error",
+        description: result?.error,
+      });
+    }
+  };
+
   return (
     <header className="bg-white">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -109,10 +152,10 @@ const Header = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="sm:flex sm:gap-4">
+            <div className="sm:flex sm:gap-4 cursor-pointer">
               <a
-                className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow"
-                href="#"
+                className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow "
+                onClick={showModal1}
               >
                 Login
               </a>
@@ -152,7 +195,6 @@ const Header = () => {
       <Modal
         title=""
         open={isModalOpen}
-        width={405}
         onOk={handleOk}
         onCancel={handleCancel}
         footer={null}
@@ -162,7 +204,8 @@ const Header = () => {
           <p className="my-4">
             Please continue with your mobile number for registration
           </p>
-          {viewType === "send-otp" ? (
+          {/* OTP WIP */}
+          {/* {viewType === "send-otp" ? (
             <>
               <InputNumber addonBefore="+977" style={{ width: "100%" }} />
               <Button type="primary" className="mt-4" onClick={sendOTP}>
@@ -188,8 +231,58 @@ const Header = () => {
                 Validate OTP
               </Button>
             </>
-          )}
+          )} */}
+          <Signup />
         </div>
+      </Modal>
+
+      <Modal
+        title=""
+        open={isModalOpen1}
+        onOk={handleOk1}
+        width={800}
+        onCancel={handleCancel1}
+        footer={null}
+      >
+        {/* <div className="flex flex-col items-center justify-center ">
+          <Image src={Sewaverse} alt={"Sewa Verse"} width={70} />
+          <p className="my-4">Please continue with your Email and Password</p>
+          <Form
+            name="basic"
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            style={{ maxWidth: 700, width: "100%" }}
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            onFinishFailed={undefined}
+            autoComplete="off"
+          >
+            <Form.Item<FieldType>
+              label="Email"
+              name="email"
+              rules={[{ required: true, message: "Please input your email!" }]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item<FieldType>
+              label="Password"
+              name="password"
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </div> */}
+        <Login />
       </Modal>
     </header>
   );
