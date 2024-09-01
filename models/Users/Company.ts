@@ -17,6 +17,8 @@ const CompanySchema = new Schema(
     contactPersonName: { type: String, required: true },
     contactPersonPosition: { type: String, required: true },
     secondaryContact: { type: String },
+    profileStatus: { type: Boolean, default: false },
+    joinedDate: Date,
   },
   {
     strict: false,

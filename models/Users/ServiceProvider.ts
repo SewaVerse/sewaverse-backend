@@ -19,6 +19,7 @@ const ServiceProviderSchema = new Schema(
     },
     dob: { type: String, required: true },
     gender: { type: String, required: true },
+    profileStatus: {type: Boolean, default: false},
     joinedDate: Date,
   },
   {

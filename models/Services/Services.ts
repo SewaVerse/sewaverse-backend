@@ -1,7 +1,12 @@
-import { Schema, models, model } from "mongoose";
+import { Schema, models, model, Model } from "mongoose";
 
 const serviceSchema = new Schema(
   {
+    linkedUserId: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: [true, "Linked user ID is required"],
+    },
     serviceName: { type: String, required: true },
     description: { type: String, required: true },
     serviceCategory: { type: String, required: true },
@@ -11,10 +16,7 @@ const serviceSchema = new Schema(
     },
     price: { type: String, required: true },
     location: { type: String, required: true },
-    image: { type: String, required: true },
-    userId: { type: String },
-    userName: { type: String },
-    userRole: { type: String },
+    image: { type: [String], required: true },
     isVerifiedByAdmin: { type: Boolean, required: true, default: false },
     isActive: { type: Boolean, required: true, default: true },
     createdAt: { type: Date, default: Date.now },
@@ -25,7 +27,11 @@ const serviceSchema = new Schema(
   }
 );
 
-const ServiceModel =
-  models.Services || model("Services", serviceSchema, "Services");
+let Services: Model<any>;
+try {
+  Services = models.Services || model("Services", serviceSchema, "Services");
+} catch (error) {
+  Services = model("Services", serviceSchema, "Services");
+}
 
-export default ServiceModel;
+export default Services;

@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import connectMongo from "@/lib/connectMongo";
-import ServiceModel from "@/models/Services/Service";
+import ServiceModel from "@/models/Services/Services";
 
 export const dynamic = "force-dynamic";
 
