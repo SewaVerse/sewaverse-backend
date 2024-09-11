@@ -4,6 +4,7 @@ import { getUserByEmail } from "@/data/user";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema } from "@/schemas";
 import { AuthError } from "next-auth";
+import bcrypt from "bcryptjs";
 import * as z from "zod";
 
 export const login = async (
@@ -18,9 +19,11 @@ export const login = async (
   const { email, password } = validatedFields.data;
   const existingUser = await getUserByEmail(email);
 
-  if (!existingUser || !existingUser.email || !existingUser.password) {
-    return { error: "Email does not exist!" };
+  if (!existingUser || !existingUser.email) {
+    return { error: "Invalid Credentials!" };
   }
+  const passwordsMatch = await bcrypt.compare(password, existingUser.password!);
+  if (!passwordsMatch) return { error: "Invalid Credentials!" };
 
   if (!existingUser.isVerified) {
     return { error: "User not Verified!" };
@@ -30,7 +33,7 @@ export const login = async (
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
     if (error instanceof AuthError) {
