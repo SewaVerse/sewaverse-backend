@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import connectMongo from "@/lib/connectMongo";
 import UserModel from "@/models/Users/User";
