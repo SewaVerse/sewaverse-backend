@@ -12,7 +12,7 @@ export const POST = async (request: NextRequest) => {
   try {
     const { email, password, role } = await request.json();
 
-    if (!email || !password || !role) {
+    if (!email || !password) {
       throw new Error("Request body is null");
     }
 
@@ -23,7 +23,7 @@ export const POST = async (request: NextRequest) => {
 
     const existingUser = await UserModel.findOne({
       email: lowerCaseEmail,
-      userRole: role,
+      userRole: "USER",
     });
 
     if (!existingUser) {
@@ -51,7 +51,7 @@ export const POST = async (request: NextRequest) => {
     const tokenData = {
       id: existingUser._id,
       email: existingUser.email,
-      userType: existingUser.userType,
+      userRole: existingUser.userRole,
       joinedDate: existingUser.joinedDate,
     };
 
