@@ -8,29 +8,29 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = async (request: NextRequest) => {
   console.log("Running GET request: Get data by role");
 
-  const userRole = await currentRole();
+  const role = await currentRole();
   const { searchParams } = new URL(request.url);
-  const _id = searchParams.get("id");
+  const id = searchParams.get("id");
 
-  // let userRole = "USER";
+  // let role = "USER";
 
   try {
     await connectMongo();
 
-    if (userRole === "USER") {
-      const user = await UserModel.findById(_id);
+    if (role === "USER") {
+      const user = await UserModel.findOne({ id });
       return NextResponse.json(user, { status: 200 });
     }
 
-    if (userRole === "SERVICE_PROVIDER") {
+    if (role === "SERVICE_PROVIDER") {
       const serviceProvider = await ServiceProviderModel.findOne({
-        linkedUserId: _id,
+        linkedUserId: id,
       });
       return NextResponse.json(serviceProvider, { status: 200 });
     }
 
-    if (userRole === "COMPANY") {
-      const company = await CompanyModel.findOne({ linkedUserId: _id });
+    if (role === "COMPANY") {
+      const company = await CompanyModel.findOne({ linkedUserId: id });
       return NextResponse.json(company, { status: 200 });
     }
 

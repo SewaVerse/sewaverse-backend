@@ -40,7 +40,77 @@ export const GET = async () => {
   }
 };
 
+export const POST = async (request: NextRequest) => {
+  console.log("Running POST Request: Update User");
 
-export const POST = async(request:NextRequest) =>{
-  console.log("Running POST Request: Update User")
-}
+  const user = await currentUser();
+  const role = await currentRole();
+
+  if (!user || !role) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const data = await request.json();
+    await connectMongo();
+
+    if (role === "SERVICE_PROVIDER") {
+      const existingDoc = await ServiceProviderModel.findOne({ _id: data._id });
+      if (existingDoc) {
+        await existingDoc.updateOne({
+          $set: {
+            ...data,
+            updatedDate: Date.now(),
+          },
+        });
+        return NextResponse.json(
+          { message: "Service Updated" },
+          { status: 201 }
+        );
+      }
+    } else if (role === "USER") {
+      const existingUser = await UserModel.findOne({ _id: user.id });
+      if (existingUser) {
+        await existingUser.updateOne({
+          $set: {
+            ...data,
+            updatedDate: Date.now(),
+          },
+        });
+        return NextResponse.json({ message: "User Updated" }, { status: 201 });
+      } else {
+        return NextResponse.json(
+          { message: "User not found" },
+          { status: 404 }
+        );
+      }
+    } else if (role === "COMPANY") {
+      const existingCompany = await CompanyModel.findOne({ _id: user.id });
+      if (existingCompany) {
+        await existingCompany.updateOne({
+          $set: {
+            ...data,
+            updatedDate: Date.now(),
+          },
+        });
+        return NextResponse.json(
+          { message: "Company Updated" },
+          { status: 201 }
+        );
+      } else {
+        return NextResponse.json(
+          { message: "Company not found" },
+          { status: 404 }
+        );
+      }
+    }
+
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  } catch (error: any) {
+    console.log("Something went wrong", error);
+    return NextResponse.json(
+      { message: "Something went wrong", error },
+      { status: 400 }
+    );
+  }
+};
