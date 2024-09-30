@@ -8,12 +8,12 @@ export const dynamic = "force-dynamic";
 export const POST = async (request: NextRequest) => {
   console.log("Running POST request: Add/Update Service");
 
-  const user = await currentUser();
-  const role = await currentRole();
-  // let role = "SERVICE_PROVIDER";
-  // let user = {
-  //   _id: "66d416d4e41cf0cc08026894",
-  // };
+  // const user = await currentUser();
+  // const role = await currentRole();
+  let role = "SERVICE_PROVIDER";
+  let user = {
+    _id: "66d416d4e41cf0cc08026894",
+  };
 
   if (!user || !role) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
