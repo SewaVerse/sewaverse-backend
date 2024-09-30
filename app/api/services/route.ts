@@ -62,6 +62,7 @@ export const GET = async () => {
 
   const user = await currentUser();
   const role = await currentRole();
+  //console.log(user.role);
 
   if (!user || !role) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });

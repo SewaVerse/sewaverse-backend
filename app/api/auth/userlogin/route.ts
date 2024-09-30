@@ -10,7 +10,7 @@ export const POST = async (request: NextRequest) => {
   console.log("Running POST request: User Login");
 
   try {
-    const { email, password, role } = await request.json();
+    const { email, password } = await request.json();
 
     if (!email || !password) {
       throw new Error("Request body is null");
