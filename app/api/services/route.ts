@@ -8,12 +8,8 @@ export const dynamic = "force-dynamic";
 export const POST = async (request: NextRequest) => {
   console.log("Running POST request: Add/Update Service");
 
-  // const user = await currentUser();
-  // const role = await currentRole();
-  let role = "SERVICE_PROVIDER";
-  let user = {
-    _id: "66d416d4e41cf0cc08026894",
-  };
+  const user = await currentUser();
+  const role = await currentRole();
 
   if (!user || !role) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -38,7 +34,7 @@ export const POST = async (request: NextRequest) => {
           { status: 201 }
         );
       } else {
-        const newDoc = new Services({ ...Data, linkedUserId: user._id });
+        const newDoc = new Services({ ...Data, linkedUserId: user.id });
         await newDoc.save();
         return NextResponse.json(
           { message: "New Service Added" },
@@ -61,8 +57,10 @@ export const GET = async () => {
   console.log("Running GET request: Get all Services");
 
   const user = await currentUser();
+  // console.log("Get request", user?.id);
+  // const role = user?.role;
+  // console.log(role);
   const role = await currentRole();
-  //console.log(user.role);
 
   if (!user || !role) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -72,12 +70,12 @@ export const GET = async () => {
     await connectMongo();
 
     let docs;
-    if (role === "USER") {
+    if (role === "USER" || role === "ADMIN") {
       docs = await Services.find().sort({ createdDate: -1 });
     } else if (role === "SERVICE_PROVIDER") {
-      docs = await Services.find({ linkedUserId: user._id });
+      docs = await Services.find({ linkedUserId: user.id });
     } else if (role === "COMPANY") {
-      docs = await Services.find({ linkedUserId: user._id });
+      docs = await Services.find({ linkedUserId: user.id });
     } else {
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
