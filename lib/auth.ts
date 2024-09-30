@@ -10,4 +10,6 @@ export const currentRole = async () => {
   const session = await auth();
   return session?.user?.role;
   //return "SERVICE_PROVIDER";
+  // const role = "USER";
+  // return role;
 };

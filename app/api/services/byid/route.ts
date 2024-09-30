@@ -7,16 +7,18 @@ export const dynamic = "force-dynamic";
 
 export const GET = async (request: NextRequest) => {
   console.log("Running GET request:User Get Service by id");
-  
+
   const user = await currentRole();
+  // const user = "SERVICE_PROVIDER";
 
   const { searchParams } = new URL(request.url);
-  const _id = searchParams.get("id");
+  const id = searchParams.get("id");
+  console.log(id);
 
   try {
     await connectMongo();
     if (user === "SERVICE_PROVIDER" || user === "COMPANY") {
-      const doc = await Services.findOne({ _id });
+      const doc = await Services.find({ linkedUserId: id });
       return NextResponse.json(doc, { status: 201 });
     } else {
       return NextResponse.json({ message: "Forbidden" }, { status: 400 });
