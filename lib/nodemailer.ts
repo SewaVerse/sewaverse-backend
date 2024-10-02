@@ -36,7 +36,7 @@ export const sendEmail = async ({
       messageContent = `
         <p>Greetings ${name || ""},</p>
         <p>Thank you for registering with us.</p>
-        <p>Click the  <a href="${verifyEmailLink}">BUTTON</a> to verify your email.</p>
+        <p>Click the  <a href="${verifyEmailLink}">Link</a> to verify your email.</p>
         <p>Please use this button to verify your email.</p>
         <p>This link will expire in 1 hour.</p>
         <p>If you did not initiate this request, please ignore this email.</p>

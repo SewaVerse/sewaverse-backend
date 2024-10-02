@@ -21,6 +21,7 @@ const userSchema = new Schema(
       enum: UserRole,
       default: "USER",
     },
+    profileStatus: { type: Boolean },
     isVerified: { type: Boolean, default: false },
     verifyEmailToken: { type: String },
     verifyEmailTokenExpiry: { type: Date },
