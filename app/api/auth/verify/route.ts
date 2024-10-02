@@ -9,13 +9,13 @@ export const POST = async (request: NextRequest) => {
   console.log("Running POST Request: Verify Email");
   try {
     const { searchParams } = new URL(request.url);
-    const _id = searchParams.get("id");
+    const id = searchParams.get("id");
     const token = searchParams.get("token");
 
     await connectMongo();
 
     const existingUser = await UserModel.findOne({
-      _id,
+      _id: id,
       verifyEmailToken: token,
       verifyEmailTokenExpiry: { $gt: Date.now() },
     });
@@ -33,12 +33,12 @@ export const POST = async (request: NextRequest) => {
 
     if (existingUser.userRole === UserRole.SERVICE_PROVIDER) {
       await ServiceProviderModel.updateOne(
-        { linkedUserId: _id },
+        { linkedUserId: id },
         { $set: { isVerified: true } }
       );
     } else if (existingUser.userRole === UserRole.COMPANY) {
       await CompanyModel.updateOne(
-        { linkedUserId: _id },
+        { linkedUserId: id },
         { $set: { isVerified: true } }
       );
     }

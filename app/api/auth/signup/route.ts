@@ -146,6 +146,7 @@ export const POST = async (request: NextRequest) => {
       contact,
       address,
       userRole: role,
+      profileStatus: false,
       joinedDate: new Date(),
     });
 
@@ -164,6 +165,7 @@ export const POST = async (request: NextRequest) => {
         dob,
         gender,
         isVerified: false,
+        profileStatus: false,
         joinedDate: new Date(),
       });
       await serviceProvider.save();
@@ -180,6 +182,7 @@ export const POST = async (request: NextRequest) => {
         contactPersonPosition,
         secondaryContact,
         isVerified: false,
+        profileStatus: false,
         joinedDate: new Date(),
       });
       await company.save();
