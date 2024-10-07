@@ -24,7 +24,6 @@ export const POST = async (request: NextRequest) => {
     const { oldPassword, newPassword } = data;
 
     await connectMongo();
-    console.log("MongoDB Connected");
 
     const existingUser = await UserModel.findOne({ _id: user?.id });
     if (!existingUser)
