@@ -3,7 +3,6 @@ import { Schema, model, models } from "mongoose";
 
 const userSchema = new Schema(
   {
-    name: { type: String, required: true },
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -12,20 +11,18 @@ const userSchema = new Schema(
     password: {
       type: String,
     },
-    contact: { type: String },
-    address: { type: String },
-    gender: String,
-    dob: String,
     userRole: {
       type: String,
       enum: UserRole,
       default: "USER",
     },
-    profileStatus: { type: Boolean },
     isVerified: { type: Boolean, default: false },
+    joinedDate: {
+      type: Date,
+      default: Date.now(),
+    },
     verifyEmailToken: { type: String },
     verifyEmailTokenExpiry: { type: Date },
-    joinedDate: { type: Date },
     forgotPasswordToken: { type: String },
     forgotPasswordTokenExpiry: { type: Date },
   },

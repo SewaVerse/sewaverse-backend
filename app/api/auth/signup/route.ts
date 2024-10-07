@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import UserModel from "@/models/Users/User";
+import UserProfile from "@/models/Users/UserProfile";
 import ServiceProviderModel from "@/models/Users/ServiceProvider";
 import CompanyModel from "@/models/Users/Company";
 import {
@@ -16,9 +17,9 @@ export const POST = async (request: NextRequest) => {
   console.log("Running POST Request: Signup");
 
   const requestData = await request.json();
-
   let validationResult;
 
+  // Zod schema validation based on role
   if (requestData.role === UserRole.SERVICE_PROVIDER) {
     validationResult = serviceProviderSchema.safeParse(requestData);
   } else if (requestData.role === UserRole.COMPANY) {
@@ -27,6 +28,7 @@ export const POST = async (request: NextRequest) => {
     validationResult = userSchema.safeParse(requestData);
   }
 
+  // Return if validation fails
   if (!validationResult.success) {
     return NextResponse.json(
       {
@@ -60,20 +62,19 @@ export const POST = async (request: NextRequest) => {
     await connectMongo();
     console.log("MongoDB Connected");
 
-    // Check if the user already exists based on email or contact
-    let existingUser = await UserModel.findOne({
-      $or: [{ email: lowerCaseEmail }, { contact }],
-    });
+    // Check if user already exists in UserModel
+    let existingUser = await UserModel.findOne({ email: lowerCaseEmail });
 
     if (existingUser) {
       if (existingUser.isVerified) {
         return NextResponse.json(
           {
-            message: "User is already verified. Please log in.",
+            message: "User already exist",
           },
           { status: 201 }
         );
       } else {
+        // Update existing user's information if not verified
         existingUser.name = name;
         existingUser.password = hashedPassword;
         existingUser.contact = contact;
@@ -82,13 +83,13 @@ export const POST = async (request: NextRequest) => {
 
         await existingUser.save();
 
+        // Based on role, update the respective model
         if (role === UserRole.SERVICE_PROVIDER) {
           await ServiceProviderModel.updateOne(
             { linkedUserId: existingUser._id },
             {
               $set: {
                 email: lowerCaseEmail,
-                password: hashedPassword,
                 name,
                 address,
                 contact,
@@ -106,7 +107,6 @@ export const POST = async (request: NextRequest) => {
             {
               $set: {
                 email: lowerCaseEmail,
-                password: hashedPassword,
                 name,
                 address,
                 contact,
@@ -114,6 +114,22 @@ export const POST = async (request: NextRequest) => {
                 contactPersonName,
                 contactPersonPosition,
                 secondaryContact,
+                isVerified: false,
+                joinedDate: new Date(),
+              },
+            }
+          );
+        } else {
+          await UserProfile.updateOne(
+            { linkedUserId: existingUser._id },
+            {
+              $set: {
+                email: lowerCaseEmail,
+                name,
+                contact,
+                address,
+                gender,
+                dob,
                 isVerified: false,
                 joinedDate: new Date(),
               },
@@ -138,26 +154,22 @@ export const POST = async (request: NextRequest) => {
       }
     }
 
-    // If the user does not exist, create a new user
+    // Create a new user in UserModel
     const newUser = new UserModel({
-      name,
       email: lowerCaseEmail,
       password: hashedPassword,
-      contact,
-      address,
       userRole: role,
-      profileStatus: false,
+      isVerified: false,
       joinedDate: new Date(),
     });
 
     const savedUser = await newUser.save();
 
-    // Depending on the role, register as ServiceProvider or Company
+    // Add the user to the respective role-specific schema
     if (role === UserRole.SERVICE_PROVIDER) {
       const serviceProvider = new ServiceProviderModel({
         linkedUserId: savedUser._id,
         email: lowerCaseEmail,
-        password: hashedPassword,
         name,
         address,
         contact,
@@ -165,7 +177,6 @@ export const POST = async (request: NextRequest) => {
         dob,
         gender,
         isVerified: false,
-        profileStatus: false,
         joinedDate: new Date(),
       });
       await serviceProvider.save();
@@ -173,7 +184,6 @@ export const POST = async (request: NextRequest) => {
       const company = new CompanyModel({
         linkedUserId: savedUser._id,
         email: lowerCaseEmail,
-        password: hashedPassword,
         name,
         address,
         contact,
@@ -182,12 +192,25 @@ export const POST = async (request: NextRequest) => {
         contactPersonPosition,
         secondaryContact,
         isVerified: false,
-        profileStatus: false,
         joinedDate: new Date(),
       });
       await company.save();
+    } else if (role === UserRole.USER) {
+      const userProfile = new UserProfile({
+        linkedUserId: savedUser._id,
+        email: lowerCaseEmail,
+        name,
+        contact,
+        address,
+        gender,
+        dob,
+        isVerified: false,
+        joinedDate: new Date(),
+      });
+      await userProfile.save();
     }
 
+    // Send verification email
     await sendEmail({
       recipientEmail: savedUser.email,
       emailType: "VERIFY",
