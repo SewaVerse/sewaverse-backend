@@ -6,6 +6,7 @@ import ServiceProviderModel from "@/models//Users/ServiceProvider";
 import CompanyModel from "@/models/Users/Company";
 
 export const GET = async () => {
+  console.log("Running GET Request:Get User Details");
   try {
     await connectMongo();
 
@@ -17,19 +18,21 @@ export const GET = async () => {
     }
 
     if (role === "USER") {
-      const User = await UserModel.findById(user.id);
+      const User = await UserModel.findById(user.id).select("-password");
       return NextResponse.json(User, { status: 200 });
     }
 
     if (role === "SERVICE_PROVIDER") {
       const serviceProvider = await ServiceProviderModel.findOne({
         linkedUserId: user.id,
-      });
+      }).select("-password");
       return NextResponse.json(serviceProvider, { status: 200 });
     }
 
     if (role === "COMPANY") {
-      const company = await CompanyModel.findOne({ linkedUserId: user.id });
+      const company = await CompanyModel.findOne({
+        linkedUserId: user.id,
+      }).select("-password");
       return NextResponse.json(company, { status: 200 });
     }
 
@@ -52,10 +55,14 @@ export const POST = async (request: NextRequest) => {
 
   try {
     const data = await request.json();
+    console.log(data);
     await connectMongo();
 
     if (role === "SERVICE_PROVIDER") {
-      const existingDoc = await ServiceProviderModel.findOne({ _id: data._id });
+      const existingDoc = await ServiceProviderModel.findOne({
+        linkedUserId: data.id,
+      });
+      console.log(existingDoc);
       if (existingDoc) {
         await existingDoc.updateOne({
           $set: {
@@ -63,13 +70,15 @@ export const POST = async (request: NextRequest) => {
             updatedDate: Date.now(),
           },
         });
+        return NextResponse.json({ message: "User Updated" }, { status: 201 });
+      } else {
         return NextResponse.json(
-          { message: "Service Updated" },
-          { status: 201 }
+          { message: "Service Provider not found" },
+          { status: 404 }
         );
       }
     } else if (role === "USER") {
-      const existingUser = await UserModel.findOne({ _id: user.id });
+      const existingUser = await UserModel.findOne({ _id: data.id });
       if (existingUser) {
         await existingUser.updateOne({
           $set: {
@@ -85,7 +94,9 @@ export const POST = async (request: NextRequest) => {
         );
       }
     } else if (role === "COMPANY") {
-      const existingCompany = await CompanyModel.findOne({ _id: user.id });
+      const existingCompany = await CompanyModel.findOne({
+        linkedUserId: data.id,
+      });
       if (existingCompany) {
         await existingCompany.updateOne({
           $set: {

@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const _id = searchParams.get("id");
     const token = searchParams.get("token");
-    const { password } = await request.json();
+    const { newPassword } = await request.json();
 
     await connectMongo();
 
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     existingUser.password = hashedPassword;
     existingUser.forgotPasswordToken = undefined;
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { message: "Password reset successful" },
-      { status: 201 }
+      { status: 200 }
     );
   } catch (error: any) {
     return NextResponse.json(

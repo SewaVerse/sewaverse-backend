@@ -9,23 +9,12 @@ export const POST = async (request: NextRequest) => {
   console.log("Running POST :Forgot Password");
 
   try {
-    await connectMongo();
-    console.log("MongoDB Connected");
-
     const { email } = await request.json();
     const lowerCaseEmail = email.toLowerCase();
+    await connectMongo();
     const existingUser = await UserModel.findOne({ email: lowerCaseEmail });
 
-    if (!existingUser)
-      return NextResponse.json(
-        {
-          message:
-            "Password reset link has been sent to your email if it exists",
-        },
-        { status: 201 }
-      );
-
-    if (existingUser.isVerified) {
+    if (existingUser && existingUser.isVerified) {
       await sendEmail({
         recipientEmail: existingUser.email,
         emailType: "RESET",
@@ -34,21 +23,20 @@ export const POST = async (request: NextRequest) => {
       });
 
       return NextResponse.json(
-        { message: "Password reset link sent successfully." },
-        { status: 201 }
+        { message: "Reset email sent !!" },
+        { status: 200 }
       );
     } else {
-      return NextResponse.json(
+      return (
+        NextResponse.json({ message: "User Not Found" }),
         {
-          message: "User is not verified. Please verify first",
-        },
-        { status: 400 }
+          status: 404,
+        }
       );
     }
   } catch (error: any) {
-    console.error("Error Occurred:", error);
     return NextResponse.json(
-      { message: "Error Occurred" },
+      { message: "Something went wrong" },
       {
         status: 500,
       }

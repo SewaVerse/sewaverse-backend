@@ -4,6 +4,7 @@ import { getUserByEmail } from "./data/user";
 import bcrypt from "bcryptjs";
 import connectMongo from "./lib/connectMongo";
 import UserModel from "./models/Users/User";
+import UserProfile from "./models/Users/UserProfile";
 
 export const {
   handlers: { GET, POST },
@@ -18,59 +19,62 @@ export const {
   },
   callbacks: {
     async signIn({ user, account }: any) {
-      const existingUser = await getUserByEmail(user.email);
+      await connectMongo();
+      const existingUser = await UserModel.findOne({ email: user.email });
+
       if (account?.provider !== "credentials") {
-        // if (account?.provider == "google") {
-        //const existingUser = await getUserByEmail(user.email);
-        await connectMongo();
         if (existingUser) {
-          if (existingUser.userRole === "USER") return true;
-          else return false;
+          if (existingUser.userRole === "USER") {
+            return true;
+          }
+          throw new Error("Only USER role are allowed to signin using OAuth");
         }
 
-        if (!existingUser) {
+        try {
           const newUser = await UserModel.create({
             name: user.name,
             email: user.email,
             isVerified: true,
+            userRole: "USER",
           });
-          console.log("New User ", newUser);
+
+          const userProfile = await UserProfile.create({
+            linkedUserId: newUser._id,
+            name: user.name,
+            image: user.image,
+            email: user.email,
+            isVerified: true,
+            joinedDate: new Date(),
+          });
+
+          console.log("New UserProfile created", userProfile);
+
+          return true;
+        } catch (error) {
+          console.error("Error creating user profile: ", error);
+          throw new Error("Error creating user profile.");
         }
       }
 
       if (account?.provider === "credentials") {
         if (!existingUser || !existingUser.password) return false;
+
         const passwordsMatch = await bcrypt.compare(
           user.password,
           existingUser.password as string
         );
         if (!passwordsMatch) return false;
+
         if (!existingUser?.isVerified) return false;
 
         return true;
       }
 
-      // if (existingUser) console.log("UserModel Details:", existingUser);
-
-      // if (existingUser.userRole === "SERVICE_PROVIDER") {
-      //   const userDetails = await ServiceProviderModel.findOne({
-      //     linkedUserId: existingUser._id,
-      //   });
-      //   console.log("ServiceProvider", userDetails);
-      // }
-
-      // if (existingUser.userRole === "COMPANY") {
-      //   const userDetails = await CompanyModel.findOne({
-      //     linkedUserId: existingUser._id,
-      //   });
-      //   console.log("Comapny", userDetails);
-      // }
-
       return false;
     },
+
     //@ts-ignore
     async session({ session, token }) {
-      //console.log({ sessionToken: token });
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
@@ -81,12 +85,11 @@ export const {
 
       if (session.user) {
         session.user.email = token.email;
-        //session.user.CustomField = token.CustomField;
       }
       return session;
     },
+
     async jwt({ token }: any) {
-      //console.log({ token });
       if (!token.sub) return token;
       const existingUser = await getUserByEmail(token.email);
       if (!existingUser) return token;
@@ -98,6 +101,7 @@ export const {
       return token;
     },
   },
+
   session: {
     strategy: "jwt",
   },
