@@ -20,17 +20,16 @@ export const {
   callbacks: {
     async signIn({ user, account }: any) {
       await connectMongo();
-
       const existingUser = await UserModel.findOne({ email: user.email });
-      if (existingUser) {
-        if (existingUser.userRole === "USER") {
-          return true;
-        } else {
-          throw new Error("Access denied: Only 'USER' role can sign in.");
-        }
-      }
 
       if (account?.provider !== "credentials") {
+        if (existingUser) {
+          if (existingUser.userRole === "USER") {
+            return true;
+          }
+          throw new Error("Only USER role are allowed to signin using OAuth");
+        }
+
         try {
           const newUser = await UserModel.create({
             name: user.name,
