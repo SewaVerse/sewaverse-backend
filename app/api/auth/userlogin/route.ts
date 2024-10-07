@@ -19,11 +19,9 @@ export const POST = async (request: NextRequest) => {
     const lowerCaseEmail = email.toLowerCase();
 
     await connectMongo();
-    console.log("Database Connected");
 
     const existingUser = await UserModel.findOne({
       email: lowerCaseEmail,
-      userRole: "USER",
     });
 
     if (!existingUser) {
@@ -51,13 +49,12 @@ export const POST = async (request: NextRequest) => {
     const tokenData = {
       id: existingUser._id,
       email: existingUser.email,
+      image: existingUser.image,
       userRole: existingUser.userRole,
       joinedDate: existingUser.joinedDate,
     };
 
-    const token = jwt.sign(tokenData, process.env.JWT_SECRET_KEY!, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(tokenData, process.env.JWT_SECRET_KEY!);
 
     const userProfile = await UserModel.findOne({
       linkedUserId: existingUser._id,
