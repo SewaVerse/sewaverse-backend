@@ -60,7 +60,6 @@ export const POST = async (request: NextRequest) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await connectMongo();
-    console.log("MongoDB Connected");
 
     // Check if user already exists in UserModel
     let existingUser = await UserModel.findOne({ email: lowerCaseEmail });
