@@ -16,6 +16,10 @@ export default function RootLayout({
   return (
     // <SessionWrapper>
     <html lang="en">
+      <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet"
+      />
       <body className={pop.className}>
         <main>{children}</main>
       </body>
