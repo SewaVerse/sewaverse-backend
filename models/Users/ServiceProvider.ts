@@ -8,7 +8,7 @@ const ServiceProviderSchema = new Schema(
       required: [true, "Linked user ID is required"],
     },
     name: { type: String, required: true },
-    image:String,
+    image: String,
     email: String,
     contact: String,
     address: String,
@@ -19,7 +19,6 @@ const ServiceProviderSchema = new Schema(
     },
     dob: { type: String, required: true },
     gender: { type: String, required: true },
-    isProfileVerified: { type: Boolean, default: false },
     joinedDate: Date,
   },
   {

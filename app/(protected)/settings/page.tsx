@@ -1,4 +1,5 @@
 import { auth, signOut } from "@/auth";
+import UpdateUserForm from "@/test/UpdateUser";
 
 const UserPgae = async () => {
   const session = await auth();
@@ -15,6 +16,7 @@ const UserPgae = async () => {
           Sign Out
         </button>
       </form>
+      <UpdateUserForm />
     </div>
   );
 };
