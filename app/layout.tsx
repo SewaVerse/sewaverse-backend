@@ -1,6 +1,6 @@
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 import { Poppins } from "next/font/google";
-//import SessionWrapper from "@/utils/SessionWrapper";
 
 const pop = Poppins({ subsets: ["latin"], weight: ["300", "500"] });
 
@@ -14,16 +14,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    // <SessionWrapper>
-    <html lang="en">
-      <link
-        href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        rel="stylesheet"
-      />
-      <body className={pop.className}>
-        <main>{children}</main>
-      </body>
-    </html>
-    // </SessionWrapper>
+    <SessionProvider>
+      <html lang="en">
+        <link
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"
+        />
+        <body className={pop.className}>
+          <main>{children}</main>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
