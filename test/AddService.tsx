@@ -1,0 +1,131 @@
+"use client";
+
+// components/AddServiceForm.tsx
+import React, { useState } from "react";
+
+interface ServiceData {
+  serviceName: string;
+  category: string;
+  price: string;
+  location: string;
+
+  time: string;
+}
+
+const AddServiceForm: React.FC = () => {
+  const [serviceData, setServiceData] = useState<ServiceData>({
+    serviceName: "",
+    category: "",
+    price: "",
+    location: "",
+
+    time: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setServiceData({
+      ...serviceData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/services", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(serviceData),
+      });
+
+      if (response.status === 201) {
+        alert("New Service Added");
+      } else if (response.status === 403) {
+        const result = await response.json();
+        console.log(result);
+        if (result.message === "Profile is not verified") {
+          setError(
+            "Profile is not verified. Please verify your profile to add services."
+          );
+        } else {
+          setError(
+            "Access forbidden. You do not have permission to add services."
+          );
+        }
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
+    } catch (err) {
+      console.log(err);
+      setError("Failed to connect to the server.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+      <input
+        type="text"
+        name="serviceName"
+        placeholder="Service Name"
+        value={serviceData.serviceName}
+        onChange={handleChange}
+        required
+        className="border p-2 rounded"
+      />
+      <input
+        type="text"
+        name="category"
+        placeholder="Category"
+        value={serviceData.category}
+        onChange={handleChange}
+        required
+        className="border p-2 rounded"
+      />
+      <input
+        type="text"
+        name="price"
+        placeholder="Price"
+        value={serviceData.price}
+        onChange={handleChange}
+        required
+        className="border p-2 rounded"
+      />
+      <input
+        type="text"
+        name="location"
+        placeholder="Location"
+        value={serviceData.location}
+        onChange={handleChange}
+        required
+        className="border p-2 rounded"
+      />
+      <input
+        type="time"
+        name="time"
+        value={serviceData.time}
+        onChange={handleChange}
+        className="border p-2 rounded"
+      />
+      <button
+        type="submit"
+        disabled={loading}
+        className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+      >
+        {loading ? "Adding..." : "Add Service"}
+      </button>
+      {error && <p className="text-red-500">{error}</p>}
+    </form>
+  );
+};
+
+export default AddServiceForm;
