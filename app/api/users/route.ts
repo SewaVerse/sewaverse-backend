@@ -7,7 +7,7 @@ import UserProfile from "@/models/Users/UserProfile";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
-  console.log("Running POST Request: Update User");
+  console.log("Running POST Request: Add/sUpdate User Details");
 
   const user = await currentUser();
   const role = await currentRole();

@@ -1,3 +1,4 @@
+import { WorkExperienceSchema } from "../Users/ServiceProvider";
 import { Schema, models, model, Model } from "mongoose";
 
 const serviceSchema = new Schema(
@@ -7,20 +8,20 @@ const serviceSchema = new Schema(
       ref: "Users",
       required: [true, "Linked user ID is required"],
     },
-    serviceName: { type: String, required: true },
-    description: { type: String, required: true },
-    serviceCategory: { type: String, required: true },
-    pricingType: {
-      type: String,
-      required: true,
+    serviceName: { type: String },
+    serviceCategory: { type: String },
+    description: { type: String },
+    price: { type: String },
+    discount: String,
+    location: { type: [String] },
+    image: { type: [String] },
+    time: String,
+    workExperience: {
+      type: [WorkExperienceSchema],
+      //required: true,
     },
-    price: { type: String, required: true },
-    location: { type: [String], required: true },
-    image: { type: [String], required: true },
-    isVerifiedByAdmin: { type: Boolean, required: true, default: false },
-    isActive: { type: Boolean, required: true, default: true },
-    createdDate: { type: Date, default: Date.now },
-    updatedDate: { type: Date },
+    isActive: { type: Boolean, default: true },
+    createdDate: { type: Date, default: Date.now() },
   },
   {
     strict: false,

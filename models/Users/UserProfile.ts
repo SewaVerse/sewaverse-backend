@@ -1,6 +1,6 @@
-import { Schema, model, models } from "mongoose";
+import { Model, Schema, model, models } from "mongoose";
 
-const userProfileSchema = new Schema(
+const UserProfileSchema = new Schema(
   {
     linkedUserId: {
       type: Schema.Types.ObjectId,
@@ -26,7 +26,14 @@ const userProfileSchema = new Schema(
   }
 );
 
-const UserProfile =
-  models.UserProfile || model("UserProfile", userProfileSchema, "UserProfile");
+let UserProfile: Model<any>;
+
+try {
+  UserProfile =
+    models.UserProfile ||
+    model("UserProfile", UserProfileSchema, "UserProfile");
+} catch (error) {
+  UserProfile = model("UserProfile", UserProfileSchema, "UserProfile");
+}
 
 export default UserProfile;

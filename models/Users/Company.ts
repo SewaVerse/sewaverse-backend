@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Model, Schema, model, models } from "mongoose";
 
 const CompanySchema = new Schema(
   {
@@ -16,7 +16,6 @@ const CompanySchema = new Schema(
     contactPersonPosition: { type: String, required: true },
     secondaryContact: { type: String },
     isVerified: { type: Boolean, default: false },
-    isProfileVerified: { type: Boolean, default: false },
     joinedDate: Date,
   },
   {
@@ -24,7 +23,12 @@ const CompanySchema = new Schema(
   }
 );
 
-const CompanyModel =
-  models.Company || model("Company", CompanySchema, "Company");
+let CompanyModel: Model<any>;
+
+try {
+  CompanyModel = models.Company || model("Company", CompanySchema, "Company");
+} catch (error) {
+  CompanyModel = model("Company", CompanySchema, "Company");
+}
 
 export default CompanyModel;

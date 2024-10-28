@@ -3,9 +3,9 @@
  * These routes do not require authentication
  * @types {string[]}
  */
-export const publicRoutes = ["/", "/auth/verify ", "/auth/resetpassword"];
+export const publicRoutes = ["/", "/verify ", "/resetpassword"];
 
-export const authRoutes = ["/auth/login", "/auth/signup"];
+export const authRoutes = ["/login", "/signup"];
 
 export const apiAuthPrefix = "/api";
 

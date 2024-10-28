@@ -1,7 +1,7 @@
 import { UserRole } from "@/schemas";
-import { Schema, model, models } from "mongoose";
+import { Model, Schema, model, models } from "mongoose";
 
-const userSchema = new Schema(
+const UserSchema = new Schema(
   {
     email: {
       type: String,
@@ -16,11 +16,13 @@ const userSchema = new Schema(
       enum: UserRole,
       default: "USER",
     },
+    isProfileVerified: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
     joinedDate: {
       type: Date,
       default: Date.now(),
     },
+
     verifyEmailToken: { type: String },
     verifyEmailTokenExpiry: { type: Date },
     forgotPasswordToken: { type: String },
@@ -31,6 +33,12 @@ const userSchema = new Schema(
   }
 );
 
-const UserModel = models.Users || model("Users", userSchema, "Users");
+let UserModel: Model<any>;
+
+try {
+  UserModel = models.Users || model("Users", UserSchema, "Users");
+} catch (error) {
+  UserModel = model("Users", UserSchema, "Users");
+}
 
 export default UserModel;

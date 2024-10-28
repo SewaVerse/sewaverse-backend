@@ -1,4 +1,18 @@
-import { Schema, models, model } from "mongoose";
+import { Schema, models, model, Model } from "mongoose";
+
+export const WorkExperienceSchema = new Schema(
+  {
+    subCategory: {
+      type: String,
+      required: true,
+    },
+    experience: {
+      type: String,
+      required: true,
+    },
+  },
+  { _id: false }
+);
 
 const ServiceProviderSchema = new Schema(
   {
@@ -13,12 +27,16 @@ const ServiceProviderSchema = new Schema(
     contact: String,
     address: String,
     isVerified: { type: Boolean, default: false },
-    profession: {
-      type: [String],
+    serviceCategory: {
+      type: String,
       required: true,
     },
     dob: { type: String, required: true },
     gender: { type: String, required: true },
+    workExperience: {
+      type: [WorkExperienceSchema],
+      required: true,
+    },
     joinedDate: Date,
   },
   {
@@ -26,8 +44,18 @@ const ServiceProviderSchema = new Schema(
   }
 );
 
-const ServiceProviderModel =
-  models.ServiceProvider ||
-  model("ServiceProvider", ServiceProviderSchema, "ServiceProvider");
+let ServiceProviderModel: Model<any>;
+
+try {
+  ServiceProviderModel =
+    models.ServiceProvider ||
+    model("ServiceProvider", ServiceProviderSchema, "ServiceProvider");
+} catch (error) {
+  ServiceProviderModel = model(
+    "ServiceProvider",
+    ServiceProviderSchema,
+    "ServiceProvider"
+  );
+}
 
 export default ServiceProviderModel;

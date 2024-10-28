@@ -1,17 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
+import connectMongo from "@/lib/connectMongo";
+import { sendEmail } from "@/lib/nodemailer";
+import CompanyModel from "@/models/Users/Company";
+import ServiceProviderModel from "@/models/Users/ServiceProvider";
 import UserModel from "@/models/Users/User";
 import UserProfile from "@/models/Users/UserProfile";
-import ServiceProviderModel from "@/models/Users/ServiceProvider";
-import CompanyModel from "@/models/Users/Company";
+import { UserRole } from "@/schemas";
 import {
   userSchema,
   serviceProviderSchema,
   companySchema,
 } from "@/schemas/zod";
 import bcrypt from "bcryptjs";
-import connectMongo from "@/lib/connectMongo";
-import { sendEmail } from "@/lib/nodemailer";
-import { UserRole } from "@/schemas";
+import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
   console.log("Running POST Request: Signup");
@@ -47,7 +47,7 @@ export const POST = async (request: NextRequest) => {
       role,
       contact,
       address,
-      profession,
+      serviceCategory,
       dob,
       gender,
       registrationNumber,
@@ -92,9 +92,9 @@ export const POST = async (request: NextRequest) => {
                 name,
                 address,
                 contact,
-                profession,
                 dob,
                 gender,
+                serviceCategory,
                 isVerified: false,
                 joinedDate: new Date(),
               },
@@ -159,6 +159,7 @@ export const POST = async (request: NextRequest) => {
       password: hashedPassword,
       userRole: role,
       isVerified: false,
+      isProfileVerified: false,
       joinedDate: new Date(),
     });
 
@@ -172,9 +173,9 @@ export const POST = async (request: NextRequest) => {
         name,
         address,
         contact,
-        profession,
         dob,
         gender,
+        serviceCategory,
         isVerified: false,
         joinedDate: new Date(),
       });

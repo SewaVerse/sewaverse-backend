@@ -1,4 +1,3 @@
-import { getUserById } from "@/data/user";
 import { currentRole, currentUser } from "@/lib/auth";
 import connectMongo from "@/lib/connectMongo";
 import Services from "@/models/Services/Services";
@@ -26,7 +25,9 @@ export const POST = async (request: NextRequest) => {
       const existingDoc = await Services.findOne({ _id: Data?._id });
       const existingUser = await UserModel.findOne({ _id: user.id });
 
-      //console.log(existingUser.profileStatus);
+      //console.log(existingUser);
+
+      console.log(existingUser.isProfileVerified);
 
       if (existingDoc) {
         await existingDoc.updateOne({
@@ -39,7 +40,7 @@ export const POST = async (request: NextRequest) => {
           { message: "Service Updated" },
           { status: 201 }
         );
-      } else if (role === "ADMIN" || existingUser.profileStatus) {
+      } else if (role === "ADMIN" || existingUser.isProfileVerified) {
         const newDoc = new Services({ ...Data, linkedUserId: user.id });
         await newDoc.save();
         return NextResponse.json(
@@ -48,16 +49,16 @@ export const POST = async (request: NextRequest) => {
         );
       } else
         return NextResponse.json(
-          { message: "Profile is not verified." },
+          { message: "Profile is not verified" },
           { status: 403 }
         );
     } else {
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log("Error:", error);
     return NextResponse.json(
-      { error: "An error occurred while processing the request" },
+      { error: "Something went wrong" },
       { status: 500 }
     );
   }

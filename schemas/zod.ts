@@ -1,4 +1,5 @@
 import * as z from "zod";
+
 export const userSchema = z.object({
   name: z
     .string()
@@ -26,10 +27,9 @@ export const serviceProviderSchema = z.object({
     .string()
     .min(5, { message: "Minimum 5 characters" })
     .max(25, { message: "Exceeds 25 characters" }),
-  profession: z.string(),
   dob: z.string(),
   gender: z.string(),
-
+  serviceCategory: z.string(),
   contact: z
     .string()
     .length(10, { message: "Contact number must be 10 digits" }),
