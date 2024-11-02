@@ -1,4 +1,4 @@
-import { UserRole } from "@/schemas";
+import { UserRole } from "@/lib/constants";
 import { Model, Schema, model, models } from "mongoose";
 
 const UserSchema = new Schema(

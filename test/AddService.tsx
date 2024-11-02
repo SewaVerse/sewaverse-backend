@@ -1,6 +1,9 @@
 "use client";
 
 // components/AddServiceForm.tsx
+// Adjust this import as needed
+import { MINIOURL } from "@/lib/constants";
+import { uploadToMinIO } from "@/lib/helper";
 import React, { useState } from "react";
 
 interface ServiceData {
@@ -8,8 +11,8 @@ interface ServiceData {
   category: string;
   price: string;
   location: string;
-
   time: string;
+  image: File | null;
 }
 
 const AddServiceForm: React.FC = () => {
@@ -18,8 +21,8 @@ const AddServiceForm: React.FC = () => {
     category: "",
     price: "",
     location: "",
-
     time: "",
+    image: null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,25 +35,45 @@ const AddServiceForm: React.FC = () => {
     });
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setServiceData({
+        ...serviceData,
+        image: e.target.files[0],
+      });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
+      let imageUrl = null;
+      if (serviceData.image) {
+        imageUrl = await uploadToMinIO(serviceData.image, "services");
+        if (!imageUrl) {
+          setError("Image upload failed. Please try again.");
+          return;
+        }
+      }
+
       const response = await fetch("/api/services", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(serviceData),
+        body: JSON.stringify({
+          ...serviceData,
+          image: imageUrl ? `${MINIOURL}${imageUrl}` : null,
+        }),
       });
 
       if (response.status === 201) {
         alert("New Service Added");
       } else if (response.status === 403) {
         const result = await response.json();
-        console.log(result);
         if (result.message === "Profile is not verified") {
           setError(
             "Profile is not verified. Please verify your profile to add services."
@@ -64,7 +87,7 @@ const AddServiceForm: React.FC = () => {
         setError("An unexpected error occurred. Please try again.");
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError("Failed to connect to the server.");
     } finally {
       setLoading(false);
@@ -114,6 +137,13 @@ const AddServiceForm: React.FC = () => {
         name="time"
         value={serviceData.time}
         onChange={handleChange}
+        className="border p-2 rounded"
+      />
+      <input
+        type="file"
+        name="image"
+        accept="image/*"
+        onChange={handleImageChange}
         className="border p-2 rounded"
       />
       <button
