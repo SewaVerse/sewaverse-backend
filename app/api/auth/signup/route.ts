@@ -4,7 +4,7 @@ import CompanyModel from "@/models/Users/Company";
 import ServiceProviderModel from "@/models/Users/ServiceProvider";
 import UserModel from "@/models/Users/User";
 import UserProfile from "@/models/Users/UserProfile";
-import { UserRole } from "@/schemas";
+import { UserRole } from "@/lib/constants";
 import {
   userSchema,
   serviceProviderSchema,
@@ -177,6 +177,7 @@ export const POST = async (request: NextRequest) => {
         gender,
         serviceCategory,
         isVerified: false,
+        isProfileVerified:false,
         joinedDate: new Date(),
       });
       await serviceProvider.save();
@@ -192,6 +193,7 @@ export const POST = async (request: NextRequest) => {
         contactPersonPosition,
         secondaryContact,
         isVerified: false,
+        isProfileVerified:false,
         joinedDate: new Date(),
       });
       await company.save();

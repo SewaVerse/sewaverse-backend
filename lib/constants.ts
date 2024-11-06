@@ -8,3 +8,10 @@ export const UserRole = {
   COMPANY: "COMPANY",
   ADMIN: "ADMIN",
 };
+
+export const bookingStatusTypes = [
+  "Pending",
+  "Confirmed",
+  "Completed",
+  "Cancelled",
+];

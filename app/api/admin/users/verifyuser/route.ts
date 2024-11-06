@@ -3,7 +3,7 @@ import connectMongo from "@/lib/connectMongo";
 import CompanyModel from "@/models/Users/Company";
 import ServiceProviderModel from "@/models/Users/ServiceProvider";
 import UserModel from "@/models/Users/User";
-import { UserRole } from "@/schemas/index";
+import { UserRole } from "@/lib/constants";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
