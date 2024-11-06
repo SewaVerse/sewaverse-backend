@@ -16,7 +16,6 @@ const UserSchema = new Schema(
       enum: UserRole,
       default: "USER",
     },
-    isProfileVerified: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
     joinedDate: {
       type: Date,

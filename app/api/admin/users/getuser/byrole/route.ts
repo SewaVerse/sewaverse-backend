@@ -7,7 +7,7 @@ import UserProfile from "@/models/Users/UserProfile";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {
-  console.log("Running GET request: Admin get users by role");
+  console.log("Running GET request: Admin get users by role and status");
 
   try {
     const role = await currentRole();
@@ -22,46 +22,52 @@ export const GET = async (request: NextRequest) => {
 
     const { searchParams } = new URL(request.url);
     const userRole = searchParams.get("role");
+    const status = searchParams.get("status");
 
     if (!userRole) {
       return NextResponse.json(
-        { success: false, message: "No role" },
-        { status: 200 }
+        { success: false, message: "No role specified" },
+        { status: 400 }
       );
     }
 
+    const filter: any = {};
+    if (status) {
+      filter.isProfileVerified = status === "true" ? true : false;
+    }
+
+    let existingUser;
     if (userRole === UserRole.SERVICE_PROVIDER) {
-      const existingUser = await ServiceProviderModel.find().sort({
+      existingUser = await ServiceProviderModel.find(filter).sort({
         joinedDate: -1,
       });
-
-      return NextResponse.json(
-        { success: true, existingUser },
-        { status: 200 }
-      );
     } else if (userRole === UserRole.COMPANY) {
-      const existingUser = await CompanyModel.find().sort({ joinedDate: -1 });
-
-      return NextResponse.json(
-        { success: true, existingUser },
-        { status: 200 }
-      );
+      existingUser = await CompanyModel.find(filter).sort({ joinedDate: -1 });
     } else if (userRole === UserRole.USER) {
-      const existingUser = await UserProfile.find().sort({ joinedDate: -1 });
+      existingUser = await UserProfile.find(filter).sort({ joinedDate: -1 });
+    } else {
       return NextResponse.json(
-        { success: true, existingUser },
-        { status: 200 }
+        { success: false, message: "Invalid user role" },
+        { status: 400 }
       );
     }
+
+    if (existingUser.length === 0) {
+      return NextResponse.json(
+        { success: false, message: "No users found for this role and status" },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json(
-      { success: false, message: "No user found with role" },
+      { success: true, users: existingUser },
       { status: 200 }
     );
   } catch (error: any) {
-    console.error("Error fetching users by role:", error.message);
+    console.error("Error fetching users:", error.message);
     return NextResponse.json(
       { success: false, message: "Something went wrong" },
-      { status: 400 }
+      { status: 500 }
     );
   }
 };

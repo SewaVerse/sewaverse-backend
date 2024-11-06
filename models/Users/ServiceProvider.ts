@@ -1,5 +1,6 @@
 import { Schema, models, model, Model } from "mongoose";
 
+
 export const WorkExperienceSchema = new Schema(
   {
     subCategory: {
@@ -27,6 +28,7 @@ const ServiceProviderSchema = new Schema(
     contact: String,
     address: String,
     isVerified: { type: Boolean, default: false },
+    isProfileVerified: { type: Boolean, default: false },
     serviceCategory: {
       type: String,
       required: true,
