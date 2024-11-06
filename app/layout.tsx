@@ -1,3 +1,4 @@
+import { EdgeStoreProvider } from "@/lib/edgestore";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Poppins } from "next/font/google";
@@ -21,7 +22,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
         <body className={pop.className}>
-          <main>{children}</main>
+          <main>
+            {" "}
+            <EdgeStoreProvider>{children}</EdgeStoreProvider>
+          </main>
         </body>
       </html>
     </SessionProvider>

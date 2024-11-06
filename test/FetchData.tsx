@@ -9,8 +9,8 @@ interface Service {
   category: string;
   price: string;
   location: string;
-  date: string;
   time: string;
+  image: string;
 }
 
 interface User {
@@ -107,6 +107,17 @@ const FetchData: React.FC = () => {
               </p>
               <p>
                 <strong>Time:</strong> {service.time}
+              </p>
+              <p>
+                <h1>Image:</h1>
+                {service.image && (
+                  <img
+                    src={service.image}
+                    alt={service.serviceName}
+                    className="service-image"
+                    style={{ maxWidth: "100%", height: "auto" }} // Responsive styling
+                  />
+                )}
               </p>
             </li>
           ))}

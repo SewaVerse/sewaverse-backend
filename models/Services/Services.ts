@@ -14,7 +14,7 @@ const serviceSchema = new Schema(
     price: { type: String },
     discount: String,
     location: { type: [String] },
-    image: { type: [String] },
+    image: { type: String, reuired: true },
     time: String,
     workExperience: {
       type: [WorkExperienceSchema],
