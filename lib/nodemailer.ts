@@ -31,7 +31,7 @@ export const sendEmail = async ({
       };
       await existingUser.updateOne(updateData);
 
-      const verifyEmailLink = `${process.env.DOMAIN}/auth/verify?id=${userId}&token=${hashedToken}`;
+      const verifyEmailLink = `${process.env.DOMAIN}/verify?id=${userId}&token=${hashedToken}`;
 
       messageContent = `
         <p>Greetings ${name || ""},</p>
@@ -43,7 +43,7 @@ export const sendEmail = async ({
         <p>Best regards,<br>The SewaVerse Team</p>
       `;
     } else if (emailType === "RESET") {
-      const resetLink = `${process.env.DOMAIN}/auth/resetpassword?id=${userId}&token=${hashedToken}`;
+      const resetLink = `${process.env.DOMAIN}/resetpassword?id=${userId}&token=${hashedToken}`;
 
       await UserModel.findByIdAndUpdate(userId, {
         forgotPasswordToken: hashedToken,

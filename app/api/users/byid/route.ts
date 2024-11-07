@@ -1,9 +1,9 @@
-import { currentRole, currentUser } from "@/lib/auth";
+import { currentRole } from "@/lib/auth";
 import connectMongo from "@/lib/connectMongo";
-import ServiceProviderModel from "@/models/Users/ServiceProvider";
 import CompanyModel from "@/models/Users/Company";
-import { NextRequest, NextResponse } from "next/server";
+import ServiceProviderModel from "@/models/Users/ServiceProvider";
 import UserProfile from "@/models/Users/UserProfile";
+import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {
   console.log("Running GET request: Get data by role");

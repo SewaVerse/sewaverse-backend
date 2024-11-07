@@ -6,9 +6,3 @@ export const LoginSchema = z.object({
 });
 
 
-export const UserRole = {
-  USER: "USER",
-  SERVICE_PROVIDER: "SERVICE_PROVIDER",
-  COMPANY: "COMPANY",
-  ADMIN: "ADMIN",
-};

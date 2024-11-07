@@ -1,18 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
 import { currentUser, currentRole } from "@/lib/auth";
 import connectMongo from "@/lib/connectMongo";
 import ServiceProviderModel from "@/models//Users/ServiceProvider";
 import CompanyModel from "@/models/Users/Company";
-import UserProfile from "@/models/Users/UserProfile";
 import UserModel from "@/models/Users/User";
+import UserProfile from "@/models/Users/UserProfile";
+import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
-  console.log("Running POST Request: Update User");
+  console.log("Running POST Request: Add/sUpdate User Details");
 
   const user = await currentUser();
   const role = await currentRole();
-
-  console.log(user, role);
 
   if (!user || !role) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -20,24 +18,26 @@ export const POST = async (request: NextRequest) => {
 
   try {
     const data = await request.json();
-    console.log(data.id);
     await connectMongo();
 
-    const existingUser = await UserModel.findOne({ _id: data.id });
+    const existingUser = await UserModel.findOne({ _id: user.id });
+
     if (!existingUser) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-
     if (role === "SERVICE_PROVIDER") {
       const existingServiceProvider = await ServiceProviderModel.findOne({
-        linkedUserId: data.id,
+        linkedUserId: user.id,
       });
+
       if (existingServiceProvider) {
         await existingServiceProvider.updateOne({
+          linkedUserId: user.id,
           $set: {
             ...data,
           },
         });
+
         return NextResponse.json(
           { message: "Service Provider Updated" },
           { status: 201 }
@@ -50,13 +50,13 @@ export const POST = async (request: NextRequest) => {
       }
     } else if (role === "USER") {
       const existingUserProfile = await UserProfile.findOne({
-        linkedUserId: data.id,
+        linkedUserId: user.id,
       });
       if (existingUserProfile) {
-        await existingUserProfile.updateOne(
-          { linkedUserId: data._id },
-          { $set: data }
-        );
+        await existingUserProfile.updateOne({
+          linkedUserId: user.id,
+          $set: { ...data },
+        });
 
         return NextResponse.json(
           { message: "User Profile Updated" },
@@ -70,13 +70,12 @@ export const POST = async (request: NextRequest) => {
       }
     } else if (role === "COMPANY") {
       const existingCompany = await CompanyModel.findOne({
-        linkedUserId: data.id,
+        linkedUserId: user.id,
       });
       if (existingCompany) {
         await existingCompany.updateOne({
-          $set: {
-            ...data,
-          },
+          linkedUserId: user.id,
+          $set: { ...data },
         });
         return NextResponse.json(
           { message: "Company Updated" },
@@ -92,7 +91,7 @@ export const POST = async (request: NextRequest) => {
 
     return NextResponse.json({ message: "Forbidden" }, { status: 403 });
   } catch (error: any) {
-    console.log("Something went wrong", error);
+    console.error("Something went wrong", error);
     return NextResponse.json(
       { message: "Something went wrong", error },
       { status: 400 }
