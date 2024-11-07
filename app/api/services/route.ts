@@ -101,6 +101,7 @@
 //   }
 // };
 
+import { deleteFileFromEdgeStore } from "@/actions/edgestoreDelete";
 import { currentRole, currentUser } from "@/lib/auth";
 import connectMongo from "@/lib/connectMongo";
 import Services from "@/models/Services/Services";
@@ -194,6 +195,65 @@ export const GET = async () => {
     console.log("Error:", error);
     return NextResponse.json(
       { error: "An error occurred while fetching services" },
+      { status: 500 }
+    );
+  }
+};
+
+export const DELETE = async (request: NextRequest) => {
+  console.log("Running Delete Request: Delete Service");
+  // ("use server");
+  // const { edgestore } = useEdgeStore();
+
+  const { searchParams } = new URL(request.url);
+  const serviceId = searchParams.get("id");
+
+  if (!serviceId) {
+    return NextResponse.json(
+      { message: "Service ID is required" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    await connectMongo();
+
+    const existingService = await Services.findById(serviceId);
+    console.log("Existing service images:", existingService.image);
+
+    if (!existingService) {
+      return NextResponse.json(
+        { message: "Service not found" },
+        { status: 404 }
+      );
+    }
+
+    const user = await UserModel.findById(existingService.linkedUserId);
+
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    if (existingService.image) {
+      const imageUrls = Array.isArray(existingService.image)
+        ? existingService.image
+        : [existingService.image];
+
+      for (const imageUrl of imageUrls) {
+        await deleteFileFromEdgeStore(imageUrl);
+      }
+    }
+
+    await Services.findByIdAndDelete(serviceId);
+
+    return NextResponse.json(
+      { success: true, message: "Image deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.log("Error:", error);
+    return NextResponse.json(
+      { error: "Something went wrong" },
       { status: 500 }
     );
   }

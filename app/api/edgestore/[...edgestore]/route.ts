@@ -1,5 +1,7 @@
 import { initEdgeStore } from "@edgestore/server";
 import { createEdgeStoreNextHandler } from "@edgestore/server/adapters/next/app";
+import { initEdgeStoreClient } from "@edgestore/server/core";
+
 
 // Initialize the Edge Store without user context
 const es = initEdgeStore.create();
@@ -15,6 +17,10 @@ const edgeStoreRouter = es.router({
 
 // Create the handler
 const handler = createEdgeStoreNextHandler({
+  router: edgeStoreRouter,
+});
+
+export const backendClient = initEdgeStoreClient({
   router: edgeStoreRouter,
 });
 
