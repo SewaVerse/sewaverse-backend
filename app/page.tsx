@@ -9,6 +9,7 @@ import ServiceDetails from "@/components/ServiceDetails";
 import ServicesSection from "@/components/ServiceSection";
 import SewaList from "@/components/SewaAllList";
 import SewaServiceBanner from "@/components/SewaServicesBanner";
+import TestimonialCard from "@/components/Testimonials";
 import Testimonials from "@/components/Testimonials";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";

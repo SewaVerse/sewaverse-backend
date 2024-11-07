@@ -1,15 +1,15 @@
-import painting from "../../assets/images/services/painting.svg";
-import cleaning from "../../assets/images/services/cleaning.svg";
 import babySitting from "../../assets/images/services/baby-sitting.svg";
-import makeUp from "../../assets/images/services/makeup.svg";
-import hairStyle from "../../assets/images/services/hair-salon.svg";
-import itSupport from "../../assets/images/services/it-support.svg";
-import mechanic from "../../assets/images/services/mechanic.svg";
-import healthService from "../../assets/images/services/health.svg";
+import cleaning from "../../assets/images/services/cleaning.svg";
 import electrician from "../../assets/images/services/electrician.svg";
-import plumber from "../../assets/images/services/plumbing.svg";
-import musician from "../../assets/images/services/musician.svg";
+import hairStyle from "../../assets/images/services/hair-salon.svg";
+import healthService from "../../assets/images/services/health.svg";
 import homeService from "../../assets/images/services/home-service.svg";
+import itSupport from "../../assets/images/services/it-support.svg";
+import makeUp from "../../assets/images/services/makeup.svg";
+import mechanic from "../../assets/images/services/mechanic.svg";
+import musician from "../../assets/images/services/musician.svg";
+import painting from "../../assets/images/services/painting.svg";
+import plumber from "../../assets/images/services/plumbing.svg";
 import Image from "next/image";
 
 const services = [
@@ -24,7 +24,7 @@ const services = [
   { icon: electrician, label: "Electrician" },
   { icon: plumber, label: "Plumber" },
   { icon: musician, label: "Musician" },
-  { icon: homeService, label: "Home Services" },
+  { icon: homeService, label: "All Sewas" },
 ];
 
 const ServicesSection = () => {

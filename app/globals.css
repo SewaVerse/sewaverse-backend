@@ -70,5 +70,11 @@
 
 .box-shadow{
   box-shadow: 0px 0px 6px 0px #00000033;
-
+}
+.light-box-shadow{
+  box-shadow: 0px 0px 3px 0px #00000040;
+}
+.divider{
+  height: 1px;
+  background-color: #C1C1C1;
 }

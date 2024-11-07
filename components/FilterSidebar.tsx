@@ -1,4 +1,3 @@
-// components/FilterSidebar.tsx
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
@@ -44,7 +43,6 @@ export default function FilterSidebar() {
         </Select>
       </div>
 
-      {/* Sewa Price */}
       <div className="mb-6">
         <label className="block text-gray-700 font-semibold mb-2">
           Sewa Price

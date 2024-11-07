@@ -34,7 +34,6 @@ const reviews = [
 export default function ServiceDetails() {
   return (
     <div className="flex justify-center p-8">
-      {/* Main Content */}
       <div className="w-3/5 pr-8">
         <img
           src="/images/service1.jpg"

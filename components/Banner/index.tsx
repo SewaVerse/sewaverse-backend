@@ -1,8 +1,11 @@
 "use client";
+
+import appleStore from "../../assets/images/apple-store.svg";
+import banner from "../../assets/images/banner.svg";
+import googlePlay from "../../assets/images/google-play.svg";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useState } from "react";
-import banner from "../../assets/images/banner.svg";
 
 const banners = [
   {
@@ -98,11 +101,11 @@ const Banner = () => {
       </div>
 
       <div className="absolute top-4 right-4 flex space-x-4">
-        <a href="#">
-          <img src="/playstore-icon.png" alt="Play Store" className="w-8 h-8" />
+        <a>
+          <Image src={googlePlay} alt="Play Store" className="w-8 h-8" />
         </a>
-        <a href="#">
-          <img src="/appstore-icon.png" alt="App Store" className="w-8 h-8" />
+        <a>
+          <Image src={appleStore} alt="App Store" className="w-8 h-8" />
         </a>
       </div>
     </section>
