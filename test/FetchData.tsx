@@ -6,8 +6,9 @@ import React, { useEffect, useState } from "react";
 interface Service {
   id: string;
   serviceName: string;
-  category: string;
+  category: string;   
   price: string;
+  discount: string;
   location: string;
   time: string;
   image: string;
@@ -101,6 +102,9 @@ const FetchData: React.FC = () => {
               </p>
               <p>
                 <strong>Price:</strong> {service.price}
+              </p>
+              <p>
+                <strong>Discount:</strong> {service.discount}
               </p>
               <p>
                 <strong>Location:</strong> {service.location}

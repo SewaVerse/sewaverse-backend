@@ -1,4 +1,3 @@
-// src/hooks/useAuth.ts
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
@@ -11,7 +10,7 @@ export const useAuth = () => {
   useEffect(() => {
     if (status === "authenticated") {
       setUser(session?.user);
-      setRole(session?.user?.role || null);
+      setRole(session?.user?.role || null); 
       setLoading(false);
     } else if (status === "unauthenticated") {
       setUser(null);
