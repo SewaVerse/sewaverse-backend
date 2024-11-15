@@ -1,6 +1,6 @@
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "next-auth/react";
 import { Poppins } from "next/font/google";
 

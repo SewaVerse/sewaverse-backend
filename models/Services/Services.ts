@@ -3,10 +3,10 @@ import { Schema, models, model, Model } from "mongoose";
 
 const serviceSchema = new Schema(
   {
-    linkedUserId: {
+    linkedServiceProviderId: {
       type: Schema.Types.ObjectId,
       ref: "Users",
-      required: [true, "Linked user ID is required"],
+      required: [true, "Linked Service Provider ID is required"],
     },
     serviceName: { type: String },
     serviceCategory: { type: String },

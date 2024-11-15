@@ -20,7 +20,7 @@ const UserPgae = async () => {
         </button>
       </form>
       {/* <UpdateUserForm /> */}
-      {/* <PhoneAuth/> */}
+      {/* <PhoneAuth /> */}
       {/* <h1>User ID: {session?.user?.id}</h1> */}
       <h1>Add Service Here</h1>
       <AddServiceForm />

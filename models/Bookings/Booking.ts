@@ -6,19 +6,25 @@ const BookingSchema = new Schema(
     linkedServiceId: {
       type: Schema.Types.ObjectId,
       ref: "Services",
+      required: [true, "Linked Service ID is required"],
     },
     linkedUserId: {
       type: Schema.Types.ObjectId,
       ref: "Users",
+      required: [true, "Linked User ID is required"],
     },
     linkedServiceProviderId: {
       type: Schema.Types.ObjectId,
       ref: "Users",
+      required: [true, "Linked ServiceProvider ID is required"],
     },
-    bookingDate: {
+    serviceName: {
+      type: String,
+    },
+    selectedDate: {
       type: Date,
     },
-    bookingTime: {
+    selectedTime: {
       type: String,
     },
     status: {
@@ -30,9 +36,6 @@ const BookingSchema = new Schema(
       type: String,
     },
     location: {
-      type: String,
-    },
-    notes: {
       type: String,
     },
   },

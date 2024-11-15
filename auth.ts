@@ -1,10 +1,10 @@
-import NextAuth from "next-auth";
-import authConfig from "@/auth.config";
 import { getUserByEmail } from "./data/user";
-import bcrypt from "bcryptjs";
 import connectMongo from "./lib/connectMongo";
 import UserModel from "./models/Users/User";
 import UserProfile from "./models/Users/UserProfile";
+import authConfig from "@/auth.config";
+import bcrypt from "bcryptjs";
+import NextAuth from "next-auth";
 
 export const {
   handlers: { GET, POST },
@@ -27,7 +27,7 @@ export const {
           if (existingUser.userRole === "USER") {
             return true;
           }
-          throw new Error("Only USER role are allowed to signin using OAuth");
+          console.error("Email already exists");
         }
 
         try {

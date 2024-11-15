@@ -1,16 +1,22 @@
 "use client";
-import * as z from "zod";
-import React, { useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { LoginSchema } from "@/schemas";
+
 import { login } from "@/actions/login";
 import Social from "@/components/social";
+import { useToast } from "@/hooks/use-toast";
+import { LoginSchema } from "@/schemas";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useState } from "react";
+import * as z from "zod";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const { toast } = useToast();
+
+  const router = useRouter();
 
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/settings";
@@ -37,7 +43,12 @@ const LoginPage = () => {
         setError(result.error);
       } else {
         // Redirect the user upon successful login
-        window.location.href = callbackUrl;
+        toast({
+          description: "You are successfully logged in",
+          className: "bg-green-500 text-white",
+        });
+        //window.location.href = callbackUrl;
+        router.push("/settings");
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");

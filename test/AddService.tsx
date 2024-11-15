@@ -262,67 +262,69 @@ const AddServiceForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-      <input
-        type="text"
-        name="serviceName"
-        placeholder="Service Name"
-        value={serviceData.serviceName}
-        onChange={handleChange}
-        required
-        className="border p-2 rounded"
-      />
-      <input
-        type="text"
-        name="category"
-        placeholder="Category"
-        value={serviceData.category}
-        onChange={handleChange}
-        required
-        className="border p-2 rounded"
-      />
-      <input
-        type="text"
-        name="price"
-        placeholder="Price"
-        value={serviceData.price}
-        onChange={handleChange}
-        required
-        className="border p-2 rounded"
-      />
-      <input
-        type="text"
-        name="location"
-        placeholder="Location"
-        value={serviceData.location}
-        onChange={handleChange}
-        required
-        className="border p-2 rounded"
-      />
-      <input
-        type="time"
-        name="time"
-        value={serviceData.time}
-        onChange={handleChange}
-        className="border p-2 rounded"
-      />
-      <input
-        type="file"
-        name="image"
-        accept="image/*"
-        onChange={handleImageChange}
-        className="border p-2 rounded"
-        required // Ensure the image file is required
-      />
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-      >
-        {loading ? "Adding..." : "Add Service"}
-      </button>
-      {error && <p className="text-red-500">{error}</p>}
-    </form>
+    <div className="p-4 w-2/4 bg-red-300">
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-4 ">
+        <input
+          type="text"
+          name="serviceName"
+          placeholder="Service Name"
+          value={serviceData.serviceName}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded"
+        />
+        <input
+          type="text"
+          name="category"
+          placeholder="Category"
+          value={serviceData.category}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded"
+        />
+        <input
+          type="text"
+          name="price"
+          placeholder="Price"
+          value={serviceData.price}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded"
+        />
+        <input
+          type="text"
+          name="location"
+          placeholder="Location"
+          value={serviceData.location}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded"
+        />
+        <input
+          type="time"
+          name="time"
+          value={serviceData.time}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="border p-2 rounded"
+          required // Ensure the image file is required
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+        >
+          {loading ? "Adding..." : "Add Service"}
+        </button>
+        {error && <p className="text-red-500">{error}</p>}
+      </form>
+    </div>
   );
 };
 
