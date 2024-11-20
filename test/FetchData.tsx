@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 interface Service {
   id: string;
   serviceName: string;
-  category: string;   
+  category: string;
   price: string;
   discount: string;
   location: string;
@@ -89,7 +89,7 @@ const FetchData: React.FC = () => {
         <p>No user data available.</p>
       )}
 
-      <h2 className="text-xl font-bold">Services</h2>
+      <h2 className="text-xl font-bold">Fetch All Services</h2>
       {services.length > 0 ? (
         <ul className="space-y-4">
           {services.map((service) => (

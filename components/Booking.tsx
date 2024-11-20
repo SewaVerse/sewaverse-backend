@@ -15,7 +15,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Heart } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaHeart } from "react-icons/fa";
 import { z } from "zod";
 
 const formSchema = z.object({
