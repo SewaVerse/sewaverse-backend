@@ -48,10 +48,6 @@ export default function FilterSidebar() {
           Sewa Price
         </label>
         <div className="flex flex-col space-y-2">
-          <Checkbox label="Less than Rs. 10k" />
-          <Checkbox label="Rs. 10k to Rs. 20k" />
-          <Checkbox label="Rs. 20k to Rs. 30k" />
-          <Checkbox label="Rs. 30k+" />
           <div className="flex space-x-2">
             <Input
               placeholder="Rs Min"

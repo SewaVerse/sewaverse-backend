@@ -5,22 +5,25 @@ import { logout } from "@/actions/logout";
 import {
   BarChart,
   Calendar,
+  ChartNoAxesColumn,
   Layout,
+  LayoutDashboard,
   LogOut,
   Settings,
   User2,
+  UserRoundPen,
 } from "lucide-react";
 import { toast } from "sonner";
 
 const serviceProviderRoutes = [
   {
-    icon: Layout,
+    icon: LayoutDashboard,
     label: "Dashboard",
-    href: "/serviceprovider",
+    href: "/serviceprovider/dashboard",
   },
 
   {
-    icon: BarChart,
+    icon: ChartNoAxesColumn,
     label: "Reports",
     href: "/serviceprovider/reports",
   },
@@ -30,7 +33,7 @@ const serviceProviderRoutes = [
     href: "/serviceprovider/sewa-management",
   },
   {
-    icon: User2,
+    icon: UserRoundPen,
     label: "User Management",
     href: "/serviceprovider/user-management",
   },
@@ -42,7 +45,7 @@ const serviceProviderRoutes = [
 
   {
     icon: Settings,
-    label: "Configuration",
+    label: "Settings",
     href: "/serviceprovider/settings",
   },
 

@@ -1,5 +1,6 @@
 // components/ServiceCard.tsx
 import { Star } from "lucide-react";
+import Image from "next/image";
 
 interface ServiceCardProps {
   imageSrc: string;
@@ -24,8 +25,9 @@ export default function ServiceCard({
 }: ServiceCardProps) {
   return (
     <div className="border rounded-lg shadow-md overflow-hidden">
-      <div className="relative">
-        <img src={imageSrc} alt={title} className="w-full h-40 object-cover" />
+      <div className="relative w-full h-40">
+        <Image src={imageSrc} alt={title} fill className="object-cover" />
+
         {discount && (
           <span className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
             {discount}
@@ -39,11 +41,14 @@ export default function ServiceCard({
         <h3 className="text-lg font-bold">{title}</h3>
         <p className="text-sm text-gray-600">{description}</p>
         <div className="flex items-center mt-4">
-          <img
+          <Image
             src={`https://ui-avatars.com/api/?name=${user}`}
             alt={user}
-            className="w-8 h-8 rounded-full mr-2"
+            width={32}
+            height={32}
+            className="rounded-full mr-2"
           />
+
           <div className="text-sm">
             <p className="font-semibold">{user}</p>
             <p className="text-gray-500">{location}</p>

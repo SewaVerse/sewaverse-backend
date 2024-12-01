@@ -101,7 +101,7 @@
 //   }
 // };
 
-import { deleteFileFromEdgeStore } from "@/actions/edgestoreDelete";
+// import { deleteFileFromEdgeStore } from "@/actions/edgestoreDelete";
 import { currentRole, currentUser } from "@/lib/auth";
 import connectMongo from "@/lib/connectMongo";
 import Services from "@/models/Services/Services";
@@ -239,9 +239,9 @@ export const DELETE = async (request: NextRequest) => {
         ? existingService.image
         : [existingService.image];
 
-      for (const imageUrl of imageUrls) {
-        await deleteFileFromEdgeStore(imageUrl);
-      }
+      // for (const imageUrl of imageUrls) {
+      //   await deleteFileFromEdgeStore(imageUrl);
+      // }
     }
 
     await Services.findByIdAndDelete(serviceId);

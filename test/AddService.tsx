@@ -162,7 +162,7 @@
 
 "use client";
 
-import { useEdgeStore } from "@/lib/edgestore";
+//import { useEdgeStore } from "@/lib/edgestore";
 import React, { useState } from "react";
 
 interface ServiceData {
@@ -184,7 +184,7 @@ const AddServiceForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
-  const { edgestore } = useEdgeStore();
+  //const { edgestore } = useEdgeStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -209,26 +209,26 @@ const AddServiceForm: React.FC = () => {
       let imageUrl: string | null = null;
 
       // Upload the image if a file is selected
-      if (file) {
-        const res = await edgestore.publicFiles.upload({
-          file,
-          onProgressChange: (progress) => {
-            console.log("Upload Progress:", progress);
-          },
-        });
+      // if (file) {
+      //   const res = await edgestore.publicFiles.upload({
+      //     file,
+      //     onProgressChange: (progress) => {
+      //       console.log("Upload Progress:", progress);
+      //     },
+      //   });
 
-        console.log("Upload Response:", res);
+      //   console.log("Upload Response:", res);
 
-        if (res.url) {
-          imageUrl = res.url; // Extract the URL from the response
-        } else {
-          setError("Image upload failed. Please try again.");
-          return;
-        }
-      } else {
-        setError("Please select an image file.");
-        return;
-      }
+      //   if (res.url) {
+      //     imageUrl = res.url; // Extract the URL from the response
+      //   } else {
+      //     setError("Image upload failed. Please try again.");
+      //     return;
+      //   }
+      // } else {
+      //   setError("Please select an image file.");
+      //   return;
+      // }
 
       // Proceed with your API call to add the service
       const response = await fetch("/api/services", {

@@ -1,4 +1,4 @@
-import { EdgeStoreProvider } from "@/lib/edgestore";
+//import { EdgeStoreProvider } from "@/lib/edgestore";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "next-auth/react";
@@ -25,7 +25,8 @@ export default function RootLayout({
         <body className={pop.className}>
           <main>
             {" "}
-            <EdgeStoreProvider>{children}</EdgeStoreProvider>
+            {children}
+            {/* <EdgeStoreProvider></EdgeStoreProvider> */}
             <Toaster />
           </main>
         </body>
