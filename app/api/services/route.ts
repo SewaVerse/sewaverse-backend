@@ -101,7 +101,7 @@
 //   }
 // };
 
-import { deleteFileFromEdgeStore } from "@/actions/edgestoreDelete";
+// import { deleteFileFromEdgeStore } from "@/actions/edgestoreDelete";
 import { currentRole, currentUser } from "@/lib/auth";
 import connectMongo from "@/lib/connectMongo";
 import Services from "@/models/Services/Services";
@@ -142,7 +142,7 @@ export const POST = async (request: NextRequest) => {
       } else if (role === "ADMIN" || existingUser.isProfileVerified) {
         const newDoc = new Services({
           ...Data,
-          linkedUserId: user.id,
+          linkedServiceProviderId: user.id,
           image: imageUrl,
         });
         await newDoc.save();
@@ -185,7 +185,7 @@ export const GET = async () => {
     if (role === "USER" || role === "ADMIN") {
       docs = await Services.find().sort({ createdDate: -1 });
     } else if (role === "SERVICE_PROVIDER" || role === "COMPANY") {
-      docs = await Services.find({ linkedUserId: user.id });
+      docs = await Services.find({ linkedServiceProviderId: user.id });
     } else {
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
@@ -239,9 +239,9 @@ export const DELETE = async (request: NextRequest) => {
         ? existingService.image
         : [existingService.image];
 
-      for (const imageUrl of imageUrls) {
-        await deleteFileFromEdgeStore(imageUrl);
-      }
+      // for (const imageUrl of imageUrls) {
+      //   await deleteFileFromEdgeStore(imageUrl);
+      // }
     }
 
     await Services.findByIdAndDelete(serviceId);

@@ -1,5 +1,6 @@
-import { EdgeStoreProvider } from "@/lib/edgestore";
+//import { EdgeStoreProvider } from "@/lib/edgestore";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "next-auth/react";
 import { Poppins } from "next/font/google";
 
@@ -17,14 +18,16 @@ export default function RootLayout({
   return (
     <SessionProvider>
       <html lang="en">
-        <link
+        {/* <link
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet"
-        />
+        /> */}
         <body className={pop.className}>
           <main>
             {" "}
-            <EdgeStoreProvider>{children}</EdgeStoreProvider>
+            {children}
+            {/* <EdgeStoreProvider></EdgeStoreProvider> */}
+            <Toaster />
           </main>
         </body>
       </html>

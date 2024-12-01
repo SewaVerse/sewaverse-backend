@@ -162,7 +162,7 @@
 
 "use client";
 
-import { useEdgeStore } from "@/lib/edgestore";
+//import { useEdgeStore } from "@/lib/edgestore";
 import React, { useState } from "react";
 
 interface ServiceData {
@@ -184,7 +184,7 @@ const AddServiceForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
-  const { edgestore } = useEdgeStore();
+  //const { edgestore } = useEdgeStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -209,26 +209,26 @@ const AddServiceForm: React.FC = () => {
       let imageUrl: string | null = null;
 
       // Upload the image if a file is selected
-      if (file) {
-        const res = await edgestore.publicFiles.upload({
-          file,
-          onProgressChange: (progress) => {
-            console.log("Upload Progress:", progress);
-          },
-        });
+      // if (file) {
+      //   const res = await edgestore.publicFiles.upload({
+      //     file,
+      //     onProgressChange: (progress) => {
+      //       console.log("Upload Progress:", progress);
+      //     },
+      //   });
 
-        console.log("Upload Response:", res);
+      //   console.log("Upload Response:", res);
 
-        if (res.url) {
-          imageUrl = res.url; // Extract the URL from the response
-        } else {
-          setError("Image upload failed. Please try again.");
-          return;
-        }
-      } else {
-        setError("Please select an image file.");
-        return;
-      }
+      //   if (res.url) {
+      //     imageUrl = res.url; // Extract the URL from the response
+      //   } else {
+      //     setError("Image upload failed. Please try again.");
+      //     return;
+      //   }
+      // } else {
+      //   setError("Please select an image file.");
+      //   return;
+      // }
 
       // Proceed with your API call to add the service
       const response = await fetch("/api/services", {
@@ -262,67 +262,69 @@ const AddServiceForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-      <input
-        type="text"
-        name="serviceName"
-        placeholder="Service Name"
-        value={serviceData.serviceName}
-        onChange={handleChange}
-        required
-        className="border p-2 rounded"
-      />
-      <input
-        type="text"
-        name="category"
-        placeholder="Category"
-        value={serviceData.category}
-        onChange={handleChange}
-        required
-        className="border p-2 rounded"
-      />
-      <input
-        type="text"
-        name="price"
-        placeholder="Price"
-        value={serviceData.price}
-        onChange={handleChange}
-        required
-        className="border p-2 rounded"
-      />
-      <input
-        type="text"
-        name="location"
-        placeholder="Location"
-        value={serviceData.location}
-        onChange={handleChange}
-        required
-        className="border p-2 rounded"
-      />
-      <input
-        type="time"
-        name="time"
-        value={serviceData.time}
-        onChange={handleChange}
-        className="border p-2 rounded"
-      />
-      <input
-        type="file"
-        name="image"
-        accept="image/*"
-        onChange={handleImageChange}
-        className="border p-2 rounded"
-        required // Ensure the image file is required
-      />
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-      >
-        {loading ? "Adding..." : "Add Service"}
-      </button>
-      {error && <p className="text-red-500">{error}</p>}
-    </form>
+    <div className="p-4 w-2/4 bg-red-300">
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-4 ">
+        <input
+          type="text"
+          name="serviceName"
+          placeholder="Service Name"
+          value={serviceData.serviceName}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded"
+        />
+        <input
+          type="text"
+          name="category"
+          placeholder="Category"
+          value={serviceData.category}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded"
+        />
+        <input
+          type="text"
+          name="price"
+          placeholder="Price"
+          value={serviceData.price}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded"
+        />
+        <input
+          type="text"
+          name="location"
+          placeholder="Location"
+          value={serviceData.location}
+          onChange={handleChange}
+          required
+          className="border p-2 rounded"
+        />
+        <input
+          type="time"
+          name="time"
+          value={serviceData.time}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="border p-2 rounded"
+          required // Ensure the image file is required
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+        >
+          {loading ? "Adding..." : "Add Service"}
+        </button>
+        {error && <p className="text-red-500">{error}</p>}
+      </form>
+    </div>
   );
 };
 

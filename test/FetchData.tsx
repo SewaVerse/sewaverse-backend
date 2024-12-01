@@ -8,6 +8,7 @@ interface Service {
   serviceName: string;
   category: string;
   price: string;
+  discount: string;
   location: string;
   time: string;
   image: string;
@@ -88,7 +89,7 @@ const FetchData: React.FC = () => {
         <p>No user data available.</p>
       )}
 
-      <h2 className="text-xl font-bold">Services</h2>
+      <h2 className="text-xl font-bold">Fetch All Services</h2>
       {services.length > 0 ? (
         <ul className="space-y-4">
           {services.map((service) => (
@@ -101,6 +102,9 @@ const FetchData: React.FC = () => {
               </p>
               <p>
                 <strong>Price:</strong> {service.price}
+              </p>
+              <p>
+                <strong>Discount:</strong> {service.discount}
               </p>
               <p>
                 <strong>Location:</strong> {service.location}

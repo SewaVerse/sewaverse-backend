@@ -18,7 +18,7 @@ export const GET = async (request: NextRequest) => {
   try {
     await connectMongo();
     if (user === "SERVICE_PROVIDER" || user === "COMPANY") {
-      const doc = await Services.find({ linkedUserId: id });
+      const doc = await Services.find({ linkedServiceProviderId: id });
       return NextResponse.json(doc, { status: 201 });
     } else {
       return NextResponse.json({ message: "Forbidden" }, { status: 400 });

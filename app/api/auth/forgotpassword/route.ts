@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import UserModel from "@/models/Users/User";
 import connectMongo from "@/lib/connectMongo";
 import { sendEmail } from "@/lib/nodemailer";
+import UserModel from "@/models/Users/User";
+import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
@@ -23,12 +23,12 @@ export const POST = async (request: NextRequest) => {
       });
 
       return NextResponse.json(
-        { message: "Reset email sent !!" },
+        { message: "Reset email sent !!", success: true },
         { status: 200 }
       );
     } else {
-      return (
-        NextResponse.json({ message: "User Not Found" }),
+      return NextResponse.json(
+        { message: "User Not Found", success: false },
         {
           status: 404,
         }
@@ -36,7 +36,7 @@ export const POST = async (request: NextRequest) => {
     }
   } catch (error: any) {
     return NextResponse.json(
-      { message: "Something went wrong" },
+      { message: "Something went wrong", success: false },
       {
         status: 500,
       }

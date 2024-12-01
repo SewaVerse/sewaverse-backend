@@ -4,6 +4,8 @@ import FetchData from "@/test/FetchData";
 import PhoneAuth from "@/test/PhoneSms";
 import UpdateUserForm from "@/test/UpdateUser";
 
+
+
 const UserPgae = async () => {
   const session = await auth();
   return (
@@ -20,7 +22,7 @@ const UserPgae = async () => {
         </button>
       </form>
       {/* <UpdateUserForm /> */}
-      {/* <PhoneAuth/> */}
+      {/* <PhoneAuth /> */}
       {/* <h1>User ID: {session?.user?.id}</h1> */}
       <h1>Add Service Here</h1>
       <AddServiceForm />

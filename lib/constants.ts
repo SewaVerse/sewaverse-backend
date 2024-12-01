@@ -15,3 +15,15 @@ export const bookingStatusTypes = [
   "Completed",
   "Cancelled",
 ];
+
+export interface Service {
+  id: string;
+  serviceName: string;
+  status: boolean;
+  category: string;
+  price: string;
+  discount: string;
+  location: string;
+  time: string;
+  image: string;
+}

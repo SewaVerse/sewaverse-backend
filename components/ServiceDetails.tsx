@@ -9,6 +9,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Star } from "lucide-react";
+import Image from "next/image";
 
 const reviews = [
   {
@@ -35,10 +36,12 @@ export default function ServiceDetails() {
   return (
     <div className="flex justify-center p-8">
       <div className="w-3/5 pr-8">
-        <img
+        <Image
           src="/images/service1.jpg"
           alt="Painting Service"
-          className="rounded-lg mb-6 w-full h-64 object-cover"
+          className="rounded-lg mb-6 object-cover"
+          height={64}
+          width={100}
         />
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -68,7 +71,7 @@ export default function ServiceDetails() {
           ensuring a flawless finish for your interiors and exteriors. They
           provide high-quality paint products, tailored color consultations, and
           timely service. Enhance your space with a fresh, vibrant look from
-          Sewa Saver's expert team.
+          Sewa Saver&apos;s expert team.
         </p>
 
         {/* Review Section */}
@@ -84,10 +87,12 @@ export default function ServiceDetails() {
             <div key={index} className="border rounded-lg p-4 shadow-sm">
               <div className="flex justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <img
+                  <Image
                     src={`https://ui-avatars.com/api/?name=${review.user}`}
                     alt={review.user}
-                    className="w-8 h-8 rounded-full"
+                    className="rounded-full"
+                    height={8}
+                    width={8}
                   />
                   <div>
                     <p className="font-bold">{review.user}</p>
