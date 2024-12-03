@@ -1,9 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300..700&family=Roboto:wght@400..700&family=Inter:wght@300..700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
+    /* --font-heading: "Parkinsans", sans-serif;
+    --font-body: "Roboto", sans-serif;
+    --font-paragraph: "Open Sans", sans-serif; */
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -82,15 +87,31 @@
   body {
     @apply bg-background text-foreground;
   }
+  body {
+    @apply bg-background text-foreground;
+    /* font-family: "Parkinsans", sans-serif; */
+  }
 }
 
-.box-shadow{
+/* .heading {
+  font-family: var(--font-heading);
+}
+
+.body {
+  font-family: var(--font-body);
+}
+
+.paragraph {
+  font-family: var(--font-paragraph);
+} */
+
+.box-shadow {
   box-shadow: 0px 0px 6px 0px #00000033;
 }
-.light-box-shadow{
+.light-box-shadow {
   box-shadow: 0px 0px 3px 0px #00000040;
 }
-.divider{
+.divider {
   height: 1px;
-  background-color: #C1C1C1;
+  background-color: #c1c1c1;
 }
