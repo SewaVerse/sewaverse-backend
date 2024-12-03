@@ -1,10 +1,10 @@
 //import { EdgeStoreProvider } from "@/lib/edgestore";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "next-auth/react";
-import { Poppins } from "next/font/google";
+// import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 
-const pop = Poppins({ subsets: ["latin"], weight: ["300", "500"] });
+// const pop = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Sewaverse",
@@ -22,13 +22,12 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet"
         /> */}
-        <body className={pop.className}>
+        <body>
           <main>
-            {" "}
             {children}
             {/* <EdgeStoreProvider></EdgeStoreProvider> */}
-            <Toaster />
           </main>
+          <Toaster />
         </body>
       </html>
     </SessionProvider>

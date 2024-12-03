@@ -2,10 +2,10 @@
 
 import { login } from "@/actions/login";
 import Social from "@/components/social";
-import { useToast } from "@/hooks/use-toast";
 import { LoginSchema } from "@/schemas";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "sonner";
 import * as z from "zod";
 
 const LoginPage = () => {
@@ -13,8 +13,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const { toast } = useToast();
 
   const router = useRouter();
 
@@ -43,10 +41,11 @@ const LoginPage = () => {
         setError(result.error);
       } else {
         // Redirect the user upon successful login
-        toast({
-          description: "You are successfully logged in",
-          className: "bg-green-500 text-white",
-        });
+        // toast({
+        //   description: "You are successfully logged in",
+        //   className: "bg-green-500 text-white",
+        // });
+        toast.success("You are successfully logged in");
         //window.location.href = callbackUrl;
         router.push("/settings");
       }

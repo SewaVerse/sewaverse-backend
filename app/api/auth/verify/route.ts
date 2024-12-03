@@ -1,16 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
 import connectMongo from "@/lib/connectMongo";
-import UserModel from "@/models/Users/User";
 import { UserRole } from "@/lib/constants";
-import ServiceProviderModel from "@/models/Users/ServiceProvider";
 import CompanyModel from "@/models/Users/Company";
+import ServiceProviderModel from "@/models/Users/ServiceProvider";
+import UserModel from "@/models/Users/User";
+import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
   console.log("Running POST Request: Verify Email");
   try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-    const token = searchParams.get("token");
+    const { id, token } = await request.json();
 
     await connectMongo();
 
@@ -44,11 +42,17 @@ export const POST = async (request: NextRequest) => {
     }
 
     return NextResponse.json(
-      { message: "Email verified successfully." },
+      { message: "Email verified successfully.", success: true },
       { status: 201 }
     );
   } catch (error: any) {
-    console.error("Error verifying email:", error);
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Server error", success: false },
+      { status: 500 }
+    );
   }
+};
+
+export const GET = async (request: NextRequest) => {
+  return NextResponse.json({ message: "Hello" });
 };
