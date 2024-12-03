@@ -79,7 +79,7 @@ const VerifyPageComponent = () => {
           Verify your email to continue
         </h1>
         <div className="text-center font-body text-xs font-medium text-slate-400">
-          <p>We've sent a verification link to your email</p>
+          <p>We&apos;ve sent a verification link to your email</p>
           <p>Please click the link in the email to verify your account</p>
         </div>
 
