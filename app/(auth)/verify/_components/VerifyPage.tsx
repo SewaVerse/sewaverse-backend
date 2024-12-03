@@ -92,7 +92,7 @@ const VerifyPageComponent = () => {
             Verify
           </Button>
           <p className="font-medium text-slate-400 text-xs">
-            Didn't receive an email?
+            Didn&apos;t receive an email?
           </p>
           <Button onClick={handleResend} disabled={loading}>
             Resend Email
