@@ -1,41 +1,37 @@
-import authConfig from "./auth.config";
-import {
-  DEFAULT_LOGIN_REDIRECT,
-  apiAuthPrefix,
-  authRoutes,
-  publicRoutes,
-} from "@/routes";
-import NextAuth from "next-auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-const { auth } = NextAuth(authConfig);
+// 1. Specify protected and public routes
+// const protectedRoutes = ["/dashboard"];
+// const publicRoutes = ["/login", "/signup", "/"];
 
-export default auth(async function middleware(req) {
-  const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
+export default async function middleware(req: NextRequest) {
+  // 2. Check if the current route is protected or public
+  //   const path = req.nextUrl.pathname;
+  //   const isProtectedRoute = protectedRoutes.includes(path);
+  //   const isPublicRoute = publicRoutes.includes(path);
 
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  // 3. Decrypt the session from the cookie
+  //   const cookie = (await cookies()).get("session")?.value;
+  //const session = await decrypt(cookie);
 
-  if (isApiAuthRoute) {
-    return NextResponse.next();
-  }
+  // 4. Redirect to /login if the user is not authenticated
+  //   if (isProtectedRoute && !session?.userId) {
+  //     return NextResponse.redirect(new URL("/login", req.nextUrl));
+  //   }
 
-  if (isAuthRoute) {
-    if (isLoggedIn) {
-      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-    }
-    return NextResponse.next();
-  }
-
-  if (!isLoggedIn && !isPublicRoute) {
-    return NextResponse.redirect(new URL("/login", nextUrl));
-  }
+  // 5. Redirect to /dashboard if the user is authenticated
+  //   if (
+  //     isPublicRoute &&
+  //     session?.userId &&
+  //     !req.nextUrl.pathname.startsWith("/dashboard")
+  //   ) {
+  //     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
+  //   }
 
   return NextResponse.next();
-});
+}
 
+// Routes Middleware should not run on
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
 };

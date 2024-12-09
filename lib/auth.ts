@@ -1,16 +1,26 @@
-import { auth } from "@/auth";
+"use server";
 
-export const currentUser = async () => {
-  const session = await auth();
-  //console.log("Session", session);
-  // const user = { id: "6718e3e6a8a5f98f1f67f9cf" };
-  // return user;
-  return session?.user;
-};
+import { signIn } from "next-auth/react";
 
-export const currentRole = async () => {
-  const session = await auth();
-  // return "SERVICE_PROVIDER";
-  return session?.user?.role;
-};
-
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  try {
+    await signIn("credentials", {
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      redirect: false,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+    throw error;
+  }
+}
