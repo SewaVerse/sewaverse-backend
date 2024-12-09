@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -33,7 +35,6 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (data: LoginForm) => {
-    console.log(data);
     try {
       const callback = await signIn("credentials", {
         ...data,
@@ -51,15 +52,14 @@ const LoginForm = () => {
     }
   };
 
-  const socialAction = (action: SocialActions) => {
-    signIn(action, { redirect: false }).then((callback) => {
-      if (callback?.error) {
-        toast.error("Invalid credentials!");
-      } else if (callback?.ok) {
-        router.push("/chat");
-        toast.success("Logged in!");
-      }
-    });
+  const socialAction = async (action: SocialActions) => {
+    const callback = await signIn(action, { redirect: false });
+    if (callback?.error) {
+      toast.error("Invalid credentials!");
+    } else if (callback?.ok) {
+      router.push("/");
+      toast.success("Logged in successfully!");
+    }
   };
 
   return (
@@ -67,7 +67,13 @@ const LoginForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex-1 rounded-lg bg-gray-50  pt-8">
           <div className="flex flex-col justify-center items-center">
-            <Image src="/images/logo.svg" alt="logo" width={50} height={50} />
+            <Image
+              className="w-auto h-auto"
+              src="/images/logo.svg"
+              alt="logo"
+              width={50}
+              height={50}
+            />
             <h1 className=" text-2xl">Welcome back!</h1>
             <p className="text-gray-500">
               Get instant access to the services you need.
@@ -84,6 +90,7 @@ const LoginForm = () => {
             <div className="my-5">
               <Input
                 {...register("password", { required: true })}
+                type="password"
                 placeholder="Password"
               />
             </div>
