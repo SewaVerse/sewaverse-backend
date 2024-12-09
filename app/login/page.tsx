@@ -51,8 +51,8 @@ export default function LoginForm() {
         <Image
           src="/images/login.svg"
           alt="login image"
-          width={100}
-          height={100}
+          width={300}
+          height={300}
         />
       </div>
       <div>
