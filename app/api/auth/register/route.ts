@@ -1,10 +1,10 @@
-import prisma from "@/app/libs/prismaClient";
 import {
   UserRegisterSchema,
   userRegisterSchema,
 } from "@/app/schema/authSchema";
 import { asyncHandler } from "@/app/utils/asyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
+import prisma from "@/lib/prismaClient";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 
