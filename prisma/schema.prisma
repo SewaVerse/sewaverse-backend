@@ -29,10 +29,10 @@ model Account {
   @@unique([providerId, providerAccountId])
 }
 
-
 model User {
-  id                           String    @id @default(auto()) @map("_id") @db.ObjectId
-  name                         String
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+
   email                        String    @unique
   emailVerified                Boolean   @default(false)
   emailVerificationToken       String?
@@ -42,11 +42,30 @@ model User {
   forgotPasswordToken       String?
   forgotPasswordTokenExpiry DateTime?
 
+  userProfileId String?  @db.ObjectId
+
+  isVerified Boolean @default(false)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  roles   UserRoleMapping[]
-  Account Account[]
+  userProfile UserProfile? @relation(fields: [userProfileId], references: [id])
+
+  roles           UserRoleMapping[]
+  accounts         Account[]
+  serviceProviders ServiceProvider[]
+  bookings         Booking[]
+}
+
+model UserProfile {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  dob     String?
+  imageId String? @db.ObjectId
+  gender  Gender?
+
+  image Image? @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  users User[]
 }
 
 model UserRoleMapping {
@@ -54,13 +73,133 @@ model UserRoleMapping {
   userId String @db.ObjectId
   role   Role   @default(USER)
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, role])
+}
+
+model Service {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String  @unique
+  description     String?
+  parentServiceId String? @db.ObjectId // Made nullable for root services
+
+  imageId  String? @db.ObjectId
+  isActive Boolean @default(false)
+
+  // Self-relation for parent and child services
+  parentService Service? @relation("ServiceHierarchy", fields: [parentServiceId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  image Image? @relation(fields: [imageId], references: [id])
+
+  services        Service[]        @relation("ServiceHierarchy")
+  offeredServices OfferedService[]
+}
+
+model ServiceProvider {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+
+  name    String
+  imageId String? @db.ObjectId
+  email   String
+  contact String
+  address String
+  gender  Gender
+
+  providerType ServiceProviderType
+
+  isVerified       Boolean @default(false)
+  isProfileVerfied Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user           User             @relation(fields: [userId], references: [id])
+  image          Image?           @relation(fields: [imageId], references: [id])
+  companyDetails CompanyDetails[]
+  offeredServices OfferedService[]
+}
+
+model CompanyDetails {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  serviceProviderId String @db.ObjectId
+
+  registrationNumber    String @unique
+  contactPersonName     String
+  contactPersonPosition String
+  secondaryContact      String
+
+  serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id])
+}
+
+model OfferedService {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  serviceProviderId String @db.ObjectId
+  serviceId         String @db.ObjectId
+
+  price          String
+  location       String
+  workExperience String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  service         Service         @relation(fields: [serviceId], references: [id])
+  serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id])
+  bookings         Booking[]
+}
+
+model Image {
+  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  src String
+  alt String
+
+  serviceProviders ServiceProvider[]
+  userProfiles     UserProfile[]
+  services         Service[]
+}
+
+model Booking {
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String @db.ObjectId
+  offeredServiceId String @db.ObjectId
+
+  status BookingStatus @default(PENDING)
+
+  bookingDate DateTime
+
+  location String
+  createdAt DateTime @default(now())
+
+  user           User           @relation(fields: [userId], references: [id])
+  offeredService OfferedService @relation(fields: [offeredServiceId], references: [id])
+
+  @@index([userId])               // Optimize queries by user
+  @@index([offeredServiceId])     // Optimize queries by service
+  @@index([status])               // Optimize status-based queries
 }
 
 enum Role {
   USER
   ADMIN
   SERVICE_PROVIDER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHERS
+}
+
+enum ServiceProviderType {
+  INDIVIDUAL
+  COMPANY
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELED
 }
