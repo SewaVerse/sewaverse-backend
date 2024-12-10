@@ -21,6 +21,7 @@ export const {
   pages: {
     signIn: "login",
   },
+  debug: process.env.NODE_ENV === "development",
   events: {
     async linkAccount({ user }) {
       // update
@@ -85,4 +86,5 @@ export const {
     },
   },
   session: { strategy: "jwt" },
+  secret: process.env.NEXTAUTH_SECRET,
 });
