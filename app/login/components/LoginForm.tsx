@@ -26,6 +26,7 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     formState: { errors },
   } = useForm<LoginForm>({
     defaultValues: {
@@ -46,6 +47,7 @@ const LoginForm = () => {
       } else if (callback?.ok) {
         router.push("/");
         toast.success("Logged in successfully!");
+        router.push("/Dashboard");
       }
     } catch (error) {
       console.log(error);
