@@ -1,59 +1,84 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import bcrypt from "bcrypt";
-import { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
-import prisma from "./lib/prismaClient";
+import NextAuth from "next-auth";
 
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    }),
-    CredentialsProvider({
-      name: "credentials",
-      credentials: {
-        email: { label: "email", type: "text" },
-        password: { label: "password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
-          throw new Error("Invalid Credentials");
-        }
+import { getAccountByUserId } from "./app/data-access/account";
+import {
+  createUserRoleMapping,
+  getUserById,
+  updateUserById,
+} from "./app/data-access/user";
+import authConfig from "./auth.config";
+import db from "./lib/db";
 
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email,
-          },
-        });
-
-        console.log(user);
-
-        if (!user || !user?.password) {
-          throw new Error("Invalid credentials");
-        }
-
-        const isCorrectPassword = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-
-        if (!isCorrectPassword) {
-          throw new Error("Invalid credentials");
-        }
-
-        return user;
-      },
-    }),
-  ],
-  debug: process.env.NODE_ENV === "development",
-  session: {
-    strategy: "jwt",
-  },
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth({
+  adapter: PrismaAdapter(db),
+  ...authConfig,
   pages: {
-    signIn: "/login",
+    signIn: "login",
   },
-  secret: process.env.NEXTAUTH_SECRET,
-};
+  events: {
+    async linkAccount({ user }) {
+      // update
+      await updateUserById(user.id, { emailVerified: new Date() });
+      // add role
+      await createUserRoleMapping({
+        userId: user.id,
+        role: "USER",
+      });
+    },
+  },
+
+  callbacks: {
+    async signIn({ user, account }) {
+      // Allow OAuth without email verification
+      if (account?.provider !== "credentials") return true;
+
+      const existingUser = await getUserById(user.id);
+
+      // Prevent sign in without email verification
+      if (!existingUser?.emailVerified) return false;
+
+      return true;
+    },
+    async session({ token, session }) {
+      if (token.sub && session.user) {
+        session.user.id = token.sub;
+      }
+
+      if (token.roles && session.user) {
+        session.user.roles = token.roles as string[];
+      }
+
+      if (session.user) {
+        session.user.name = token.name!;
+        session.user.email = token.email!;
+      }
+
+      return session;
+    },
+    async jwt({ token }) {
+      if (!token.sub) return token;
+
+      const existingUser = await getUserById(token.sub);
+
+      if (!existingUser) return token;
+
+      const existingAccount = await getAccountByUserId(existingUser.id);
+
+      const roles = existingUser.roles?.map((mapping) => mapping.role) || [];
+
+      token.isOAuth = !!existingAccount;
+      token.name = existingUser.name;
+      token.email = existingUser.email;
+      token.roles = roles;
+
+      return token;
+    },
+  },
+  session: { strategy: "jwt" },
+});

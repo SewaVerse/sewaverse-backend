@@ -1,32 +1,28 @@
-import { NextRequest, NextResponse } from "next/server";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-// 1. Specify protected and public routes
-const protectedRoutes = ["/dashboard"];
-const publicRoutes = ["/login", "/signup", "/"];
+import { DEFAULT_REDIRECT, PUBLIC_ROUTES, ROOT } from "@/lib/routes";
+import NextAuth from "next-auth";
+import authConfig from "./auth.config";
 
-export default async function middleware(req: NextRequest) {
-  // 2. Check if the current route is protected or public
-  const path = req.nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.includes(path);
-  const isPublicRoute = publicRoutes.includes(path);
+const { auth } = NextAuth(authConfig);
 
-  // 3. Decrypt the session from the cookie
-  const session = req.cookies.get("next-auth.session-token");
+export default auth((req) => {
+  const { nextUrl } = req;
 
-  // 4. Redirect to /login if the user is not authenticated
-  if (isProtectedRoute && !session) {
-    return NextResponse.redirect(new URL("/login", req.nextUrl));
-  }
+  const isAuthenticated = !!req.auth;
+  const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
 
-  // 5. Redirect to /dashboard if the user is authenticated
-  if (isPublicRoute && session && !req.nextUrl.pathname.startsWith("/")) {
-    return NextResponse.redirect(new URL("/", req.nextUrl));
-  }
+  if (nextUrl.pathname == "/") return null;
 
-  return NextResponse.next();
-}
+  if (nextUrl.pathname.startsWith("/api")) return null;
 
-// Routes Middleware should not run on
+  if (isPublicRoute && isAuthenticated)
+    return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl));
+
+  if (!isAuthenticated && !isPublicRoute)
+    return Response.redirect(new URL(ROOT, nextUrl));
+});
+
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };

@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { BsGoogle } from "react-icons/bs";
+import { FcGoogle } from "react-icons/fc";
 import AuthSocialButton from "./AuthSocialButton";
 
 type LoginForm = {
@@ -118,7 +118,7 @@ const LoginForm = () => {
       <div className="mt-4 flex gap-2">
         <AuthSocialButton
           name="Continue with Google"
-          icon={BsGoogle}
+          icon={FcGoogle}
           onClick={() => socialAction("google")}
         />
       </div>

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import AuthContext from "./context/AuthContext";
 import ToasterContext from "./context/ToasterContext";
 import "./globals.css";
 
+import { auth } from "@/auth";
+import { SessionProvider } from "next-auth/react";
 import { Poppins } from "next/font/google";
 
 const geistSans = localFont({
@@ -29,20 +30,22 @@ export const metadata: Metadata = {
     "Book reliable pros for anything from plumbing to personal care, all in one easy platform.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable}  ${poppinsFont.variable} antialiased`}
       >
-        <AuthContext>
+        <SessionProvider session={session}>
           {children}
           <ToasterContext />
-        </AuthContext>
+        </SessionProvider>
       </body>
     </html>
   );
