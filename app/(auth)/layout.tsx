@@ -1,9 +1,11 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import Link from "next/link";
-import LoginForm from "./components/LoginForm";
 
-export default function Login() {
+export default async function AuthLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <Card className="p-0">
@@ -33,18 +35,7 @@ export default function Login() {
               </div>
             </div>
             <div className="px-6 mx-6 flex flex-col justify-between md:min-w-[30rem]">
-              <div>
-                <LoginForm />
-                <div className="flex justify-center my-2">
-                  <p className="text-sm">
-                    {"Don't have an account?"}
-                    <Link href="/register" className="text-primary">
-                      {" "}
-                      Register here
-                    </Link>
-                  </p>
-                </div>
-              </div>
+              {children}
 
               <p className="text-xs text-gray-500 text-center mb-2">
                 ©2024 Sewaverse. All rights reserved. Terms of Service
