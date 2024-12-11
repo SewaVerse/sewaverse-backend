@@ -7,14 +7,16 @@ import { Prisma } from "@prisma/client";
  */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function dbAsyncHandler<T>(fn: (...args: any[]) => Promise<T>) {
+export function dbAsyncHandler<T, Args extends any[]>(
+  fn: (...args: Args) => Promise<T>
+) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return async (...args: any[]) => {
+  return async (...args: Args) => {
     try {
       return await fn(...args);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(e.message);
+        console.log("db error", e.message);
       }
       throw e;
     }

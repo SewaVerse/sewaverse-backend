@@ -4,6 +4,8 @@ import ToasterContext from "./context/ToasterContext";
 import "./globals.css";
 
 import { auth } from "@/auth";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import { SessionProvider } from "next-auth/react";
 import { Poppins } from "next/font/google";
 
@@ -40,10 +42,14 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable}  ${poppinsFont.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable}  ${poppinsFont.variable} antialiased `}
       >
         <SessionProvider session={session}>
-          {children}
+          <div className="flex flex-col min-h-[100svh]">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
           <ToasterContext />
         </SessionProvider>
       </body>

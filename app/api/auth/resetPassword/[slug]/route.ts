@@ -6,6 +6,7 @@ import { getUserByEmail, updateUserById } from "@/app/data-access/user";
 import { asyncHandler } from "@/app/utils/asyncHandler";
 import { hash } from "@/app/utils/common";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
+import { User } from "@prisma/client";
 import { NextResponse } from "next/server";
 import {
   resetPasswordSchema,
@@ -68,7 +69,7 @@ export const POST = asyncHandler(
     const hashedPassword = await hash(password);
 
     // update user
-    await updateUserById(existingUser.id, { password: hashedPassword });
+    await updateUserById(existingUser.id, { password: hashedPassword } as User);
 
     await deletePasswordResetTokenById(existingToken.id);
 

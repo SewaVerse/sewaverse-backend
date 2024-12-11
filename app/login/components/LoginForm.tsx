@@ -47,7 +47,6 @@ const LoginForm = () => {
       } else if (callback?.ok) {
         router.push("/");
         toast.success("Logged in successfully!");
-        router.push("/Dashboard");
       }
     } catch (error) {
       console.log(error);

@@ -36,12 +36,12 @@ model Account {
 }
 
 model User {
-  id   String  @id @default(auto()) @map("_id") @db.ObjectId
-  name String?
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
   email         String?   @unique
   emailVerified DateTime?
-  password                  String?
-  userProfileId String? @db.ObjectId
+  password      String?
+  userProfileId String?   @db.ObjectId
 
   image String?
 
@@ -209,14 +209,13 @@ model Booking {
   @@index([status]) // Optimize status-based queries
 }
 
-
 model QueuedEmail {
-  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
   from            String
   to              String
   subject         String
   body            String
-  createdAt       DateTime  @default(now())
+  createdAt       DateTime   @default(now())
   sentTries       Int       @default(0)
   sentAt          DateTime?
   sendImmediately Boolean   @default(false)

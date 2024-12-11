@@ -4,6 +4,7 @@ import {
   getVerificationTokenByToken,
 } from "@/app/data-access/verificationToken";
 import { asyncHandler } from "@/app/utils/asyncHandler";
+import { User } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export const GET = asyncHandler(
@@ -50,7 +51,7 @@ export const GET = asyncHandler(
     // update user
     await updateUserById(existingUser.id, {
       emailVerified: new Date(),
-    });
+    } as User);
 
     await deleteVerificationTokenById(existingToken.id);
 

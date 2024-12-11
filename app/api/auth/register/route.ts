@@ -9,6 +9,7 @@ import { hash } from "@/app/utils/common";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import prisma from "@/lib/db";
 import { sendVerificationEmail } from "@/lib/mail";
+import { User, UserRoleMapping } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (request: Request) => {
@@ -44,13 +45,13 @@ export const POST = asyncHandler(async (request: Request) => {
     email,
     name,
     password: hashedPassword,
-  });
+  } as User);
 
   // Handle role mapping, defaulting to 'USER' if no role is provided
   await createUserRoleMapping({
     userId: user.id,
     role: role ?? "USER",
-  });
+  } as UserRoleMapping);
 
   // Prepare the response with user data and their roles
   // const userResponse = {
@@ -65,5 +66,5 @@ export const POST = asyncHandler(async (request: Request) => {
 
   const response = { sucess: true, message: "Confirmation email sent!" };
 
-  return NextResponse.json(response);
+  return NextResponse.json(response, { status: 200 });
 });
