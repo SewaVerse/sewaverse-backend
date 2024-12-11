@@ -1,7 +1,9 @@
+import ChangePasswordForm from "./ChangePasswordForm";
+
 export default function ChangePassword() {
   return (
     <div>
-      <h1>Change Password</h1>
+     <ChangePasswordForm />
     </div>
   );
 }
