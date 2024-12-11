@@ -1,15 +1,18 @@
-import { signOut } from "@/auth";
+import { signOut } from "next-auth/react";
+
+import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
-export async function SignOut() {
+export function SignOut() {
+  const router = useRouter();
+  const handleSignOut = () => {
+    signOut({ redirect: false }).then(() => {
+      router.push("/"); // Redirect to the dashboard page after signing out
+    });
+  };
   return (
-    <form
-      action={async () => {
-        "use server";
-        await signOut();
-      }}
-    >
-      <Button type="submit">Sign Out</Button>
-    </form>
+    <Button onClick={handleSignOut} type="submit">
+      Sign Out
+    </Button>
   );
 }

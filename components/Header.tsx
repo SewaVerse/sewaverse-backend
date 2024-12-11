@@ -1,12 +1,14 @@
-import { auth } from "@/auth";
+"use client";
+
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { SignOut } from "./SignOut";
 
-const Header = async () => {
-  const session = await auth();
+const Header = () => {
+  const session = useSession();
 
-  const isLoggedin = !!session?.user;
+  const isLoggedin = !!session?.data?.user;
   return (
     <header className="bg-white p-4 shadow-md flex justify-center items-center border-b-2 border-blue-500">
       <div className="flex items-center w-full max-w-6xl justify-between">
