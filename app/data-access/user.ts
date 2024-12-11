@@ -39,3 +39,9 @@ export const createUserRoleMapping = dbAsyncHandler(
     });
   }
 );
+
+export const getRolesByUserId = dbAsyncHandler(async (userId: string) => {
+  return await db.userRoleMapping.findMany({
+    where: { userId },
+  });
+});

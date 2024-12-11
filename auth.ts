@@ -1,9 +1,9 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 
-import { getAccountByUserId } from "./app/data-access/account";
 import {
   createUserRoleMapping,
+  getRolesByUserId,
   getUserById,
   updateUserById,
 } from "./app/data-access/user";
@@ -35,10 +35,6 @@ export const {
   },
 
   callbacks: {
-    authorized: async ({ auth }) => {
-      // Logged in users are authenticated, otherwise redirect to login page
-      return !!auth;
-    },
     async signIn({ user, account }) {
       // Allow OAuth without email verification
       if (account?.provider !== "credentials") return true;
@@ -50,39 +46,34 @@ export const {
 
       return true;
     },
+    async jwt({ token, user, account }) {
+      if (user) {
+        token.name = user.name;
+        token.email = user.email;
+
+        const roles = await getRolesByUserId(user.id);
+
+        if (roles) {
+          token.roles = roles.map((role) => role.role);
+        }
+      }
+
+      if (account) {
+        token.isOAuth = account.provider !== "credentials";
+      }
+
+      return token;
+    },
     async session({ token, session }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-      }
-
-      if (token.roles && session.user) {
-        session.user.roles = token.roles as string[];
-      }
-
       if (session.user) {
-        session.user.name = token.name!;
+        session.user.id = token.sub!;
+        session.user.name = token.name;
         session.user.email = token.email!;
+        session.user.roles = token.roles as string[];
+        session.user.isOAuth = token.isOAuth as boolean;
       }
 
       return session;
-    },
-    async jwt({ token }) {
-      if (!token.sub) return token;
-
-      const existingUser = await getUserById(token.sub);
-
-      if (!existingUser) return token;
-
-      const existingAccount = await getAccountByUserId(existingUser.id);
-
-      const roles = existingUser.roles?.map((mapping) => mapping.role) || [];
-
-      token.isOAuth = !!existingAccount;
-      token.name = existingUser.name;
-      token.email = existingUser.email;
-      token.roles = roles;
-
-      return token;
     },
   },
   session: { strategy: "jwt" },

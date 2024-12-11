@@ -5,6 +5,7 @@ import {
   LOGIN,
   PRIVATE_API_ROUTES,
   PUBLIC_ROUTES,
+  ROOT,
 } from "@/lib/routes";
 import { NextResponse } from "next/server";
 import { auth } from "./auth";
@@ -34,6 +35,9 @@ export default auth((req) => {
   // Handle API routes
   if (nextUrl.pathname.startsWith("/api"))
     return handleApiRoute(nextUrl, isAuthenticated);
+
+  // root is accessible to everyone
+  if (nextUrl.pathname === ROOT) return NextResponse.next();
 
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
 

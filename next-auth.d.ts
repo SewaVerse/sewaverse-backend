@@ -5,6 +5,8 @@ declare module "next-auth" {
     user?: {
       id: string;
       roles: string[]; // Add roles property
+      accessToken: string;
+      isOAuth: boolean;
     } & DefaultSession["user"];
   }
 }
