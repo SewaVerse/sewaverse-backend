@@ -1,21 +1,22 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-type ChangePasswordForm = {
+type ResetPasswordForm = {
   password: string;
   confirmPassword: string;
 };
 
-const ChangePasswordForm = () => {
+export default function ResetPassword({ slug }: { slug: string }) {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<ChangePasswordForm>({
+  } = useForm<ResetPasswordForm>({
     defaultValues: {
       password: "",
       confirmPassword: "",
@@ -23,9 +24,10 @@ const ChangePasswordForm = () => {
   });
 
   const password = watch("password");
-  const passwordsMismatch = watch("confirmPassword") && watch("confirmPassword") !== password;
+  const passwordsMismatch =
+    watch("confirmPassword") && watch("confirmPassword") !== password;
 
-  const onSubmit = async (data: ChangePasswordForm) => {
+  const onSubmit = async (data: ResetPasswordForm) => {
     console.log(data);
     if (passwordsMismatch) {
       console.error("Passwords do not match!");
@@ -33,24 +35,24 @@ const ChangePasswordForm = () => {
     }
     // Perform API call
     try {
-      const response = await fetch('/api/auth/resetPassword/:token', {
-        method: 'POST',
+      const response = await fetch(`/api/auth/resetPassword/${slug}`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to change password!!');
+        throw new Error("Failed to change password!!");
       }
 
       const result = await response.json();
-      console.log('Password Changed successfully:', result);
+      console.log("Password Changed successfully:", result);
       toast.success(result.message);
       // router.push('/login');
     } catch (error) {
-      console.error('Error during password reset request:', error);
+      console.error("Error during password reset request:", error);
     }
   };
 
@@ -65,7 +67,9 @@ const ChangePasswordForm = () => {
             height={50}
             className="mx-auto mb-4"
           />
-          <h2 className="text-2xl font-playfair text-gray-800">Reset Password</h2>
+          <h2 className="text-2xl font-playfair text-gray-800">
+            Reset Password
+          </h2>
           <p className="text-sm text-gray-600 mt-2">
             Strong passwords include numbers, letters, and special characters.
           </p>
@@ -90,7 +94,9 @@ const ChangePasswordForm = () => {
               }`}
             />
             {errors.password && (
-              <p className="text-sm text-red-500 mt-1">{errors.password.message}</p>
+              <p className="text-sm text-red-500 mt-1">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
@@ -120,7 +126,9 @@ const ChangePasswordForm = () => {
               </p>
             )}
             {passwordsMismatch && !errors.confirmPassword && (
-              <p className="text-sm text-red-500 mt-1">Passwords do not match</p>
+              <p className="text-sm text-red-500 mt-1">
+                Passwords do not match
+              </p>
             )}
           </div>
 
@@ -131,6 +139,4 @@ const ChangePasswordForm = () => {
       </div>
     </div>
   );
-};
-
-export default ChangePasswordForm;
+}

@@ -39,7 +39,9 @@ export default auth((req) => {
   // root is accessible to everyone
   if (nextUrl.pathname === ROOT) return NextResponse.next();
 
-  const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
+  const isPublicRoute = PUBLIC_ROUTES.some((route) =>
+    nextUrl.pathname.startsWith(route)
+  );
 
   // If the user is authenticated and the route is public, redirect to the default route
   if (isPublicRoute && isAuthenticated)

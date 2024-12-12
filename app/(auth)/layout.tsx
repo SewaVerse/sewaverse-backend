@@ -7,7 +7,7 @@ export default async function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="flex justify-center my-10 ">
       <Card className="p-0">
         <CardContent className="p-0">
           <div className="flex">
