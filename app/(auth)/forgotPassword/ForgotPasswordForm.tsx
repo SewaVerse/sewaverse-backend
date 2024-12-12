@@ -54,8 +54,7 @@ const ForgotPasswordForm = () => {
           <div className="text-center mb-6">
             <div className="flex justify-center mb-4">
             <Image
-                className="w-auto h-auto"
-                src="/images/logo.svg"
+                src="/images/mainLogo.svg"
                 alt="logo"
                 width={50}
                 height={50}

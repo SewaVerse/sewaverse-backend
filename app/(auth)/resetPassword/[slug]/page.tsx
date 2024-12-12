@@ -71,11 +71,10 @@ export default function ResetPassword() {
       <div className="w-full max-w-md bg-white p-6 rounded-lg ">
         <div className="text-center mb-6">
           <Image
-            src="/images/logo.svg"
+            src="/images/mainLogo.svg"
             alt="logo"
             width={50}
             height={50}
-            className="mx-auto mb-4"
           />
           <h2 className="text-2xl font-playfair text-gray-800">
             Reset Password
