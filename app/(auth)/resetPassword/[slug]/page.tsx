@@ -1,10 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Route } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 
 type ResetPasswordForm = {
   password: string;
@@ -12,6 +15,7 @@ type ResetPasswordForm = {
 };
 
 export default function ResetPassword() {
+  const router = useRouter();
   const params = useParams();
 
   const {slug} = params;
@@ -55,6 +59,7 @@ export default function ResetPassword() {
       const result = await response.json();
       console.log("Password Changed successfully:", result);
       toast.success(result.message);
+      router.push("/resetPasswordSucess");
       // router.push('/login');
     } catch (error) {
       console.error("Error during password reset request:", error);
