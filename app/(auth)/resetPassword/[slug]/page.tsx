@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -10,7 +11,11 @@ type ResetPasswordForm = {
   confirmPassword: string;
 };
 
-export default function ResetPassword({ slug }: { slug: string }) {
+export default function ResetPassword() {
+  const params = useParams();
+
+  const {slug} = params;
+
   const {
     register,
     handleSubmit,
