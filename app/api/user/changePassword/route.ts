@@ -7,6 +7,7 @@ import { asyncHandler } from "@/app/utils/asyncHandler";
 import { hash } from "@/app/utils/common";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { currentUser } from "@/lib/auth";
+import { User } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (request: Request) => {
@@ -27,7 +28,7 @@ export const POST = asyncHandler(async (request: Request) => {
 
   const { password } = validatedFields;
 
-  const existingUser = await getUserByEmail(user.email);
+  const existingUser = await getUserByEmail(user.email!);
 
   if (!existingUser) {
     return NextResponse.json(
@@ -39,7 +40,7 @@ export const POST = asyncHandler(async (request: Request) => {
   const hashedPassword = await hash(password);
 
   // update user
-  await updateUserById(existingUser.id, { password: hashedPassword });
+  await updateUserById(existingUser.id, { password: hashedPassword } as User);
 
   return NextResponse.json({
     success: true,
