@@ -2,15 +2,23 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 
 type ResetPasswordForm = {
   password: string;
   confirmPassword: string;
 };
 
-export default function ResetPassword({ slug }: { slug: string }) {
+export default function ResetPassword() {
+  const router = useRouter();
+  const params = useParams();
+
+  const {slug} = params;
+
   const {
     register,
     handleSubmit,
@@ -50,6 +58,7 @@ export default function ResetPassword({ slug }: { slug: string }) {
       const result = await response.json();
       console.log("Password Changed successfully:", result);
       toast.success(result.message);
+      router.push("/resetPasswordSucess");
       // router.push('/login');
     } catch (error) {
       console.error("Error during password reset request:", error);
@@ -61,11 +70,10 @@ export default function ResetPassword({ slug }: { slug: string }) {
       <div className="w-full max-w-md bg-white p-6 rounded-lg ">
         <div className="text-center mb-6">
           <Image
-            src="/images/logo.svg"
+            src="/images/mainLogo.svg"
             alt="logo"
             width={50}
             height={50}
-            className="mx-auto mb-4"
           />
           <h2 className="text-2xl font-playfair text-gray-800">
             Reset Password

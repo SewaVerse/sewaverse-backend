@@ -9,6 +9,7 @@ import {
 } from "./app/data-access/user";
 import authConfig from "./auth.config";
 import db from "./lib/db";
+import { User, UserRoleMapping } from "@prisma/client";
 
 export const {
   handlers: { GET, POST },
@@ -25,12 +26,12 @@ export const {
   events: {
     async linkAccount({ user }) {
       // update
-      await updateUserById(user.id, { emailVerified: new Date() });
+      await updateUserById(user.id!, { emailVerified: new Date()  } as User);
       // add role
       await createUserRoleMapping({
-        userId: user.id,
+        userId: user.id ,
         role: "USER",
-      });
+      } as UserRoleMapping);
     },
   },
 
@@ -39,7 +40,7 @@ export const {
       // Allow OAuth without email verification
       if (account?.provider !== "credentials") return true;
 
-      const existingUser = await getUserById(user.id);
+      const existingUser = await getUserById(user.id!);
 
       // Prevent sign in without email verification
       if (!existingUser?.emailVerified) return false;
@@ -51,7 +52,7 @@ export const {
         token.name = user.name;
         token.email = user.email;
 
-        const roles = await getRolesByUserId(user.id);
+        const roles = await getRolesByUserId(user.id!);
 
         if (roles) {
           token.roles = roles.map((role) => role.role);

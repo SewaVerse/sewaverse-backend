@@ -8,6 +8,7 @@ export const PUBLIC_ROUTES = [
   "/register",
   "/forgotPassword",
   "/resetPassword",
+  "/resetPasswordSucess",
 ];
 
 /**

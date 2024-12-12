@@ -34,7 +34,7 @@ export default async function AuthLayout({
                 </div>
               </div>
             </div>
-            <div className="px-6 mx-6 flex flex-col justify-between md:min-w-[30rem]">
+            <div className="px-6 mx-6 flex flex-col justify-center md:min-w-[30rem]">
               {children}
 
               <p className="text-xs text-gray-500 text-center mb-2">

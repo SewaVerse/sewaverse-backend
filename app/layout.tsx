@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+// import localFont from "next/font/local";
 import ToasterContext from "./context/ToasterContext";
 import "./globals.css";
 
@@ -9,16 +9,16 @@ import Header from "@/components/Header";
 import { SessionProvider } from "next-auth/react";
 import { Poppins } from "next/font/google";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+// const geistSans = localFont({
+//   src: "./fonts/GeistVF.woff",
+//   variable: "--font-geist-sans",
+//   weight: "100 900",
+// });
+// const geistMono = localFont({
+//   src: "./fonts/GeistMonoVF.woff",
+//   variable: "--font-geist-mono",
+//   weight: "100 900",
+// });
 
 const poppinsFont = Poppins({
   subsets: ["latin"],
@@ -42,7 +42,8 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable}  ${poppinsFont.variable} antialiased `}
+        // className={`${geistSans.variable} ${geistMono.variable}  ${poppinsFont.variable} antialiased `}
+        className={`${poppinsFont.variable} antialiased `}
       >
         <SessionProvider session={session}>
           <div className="flex flex-col min-h-[100svh]">
