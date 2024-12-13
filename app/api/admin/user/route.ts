@@ -4,7 +4,7 @@ import { asyncHandler } from "@/app/utils/asyncHandler";
 
 import { NextResponse } from "next/server";
 
-export const GET = asyncHandler(async () => {
+export const GET = asyncHandler(async (): Promise<NextResponse> => {
   console.log("Running GET request: Get all users");
 
   const users = await getAllUserByAdmin();
