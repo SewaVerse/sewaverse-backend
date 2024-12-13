@@ -1,3 +1,4 @@
+import { QueuedEmail } from "@prisma/client";
 import {
   getQueuedEmails,
   updateQueuedEmailById,
@@ -23,7 +24,10 @@ export const sendScheduleEmail = async () => {
       email.sentTries += 1;
 
       // Update the email record in the database
-      await updateQueuedEmailById(email.id, email);
+      await updateQueuedEmailById(email.id, {
+        sentTries: email.sentTries,
+        sentAt: email.sentAt,
+      } as QueuedEmail);
     }
   }
 };

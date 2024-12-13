@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 
+import { User, UserRoleMapping } from "@prisma/client";
 import {
   createUserRoleMapping,
   getRolesByUserId,
@@ -9,7 +10,6 @@ import {
 } from "./app/data-access/user";
 import authConfig from "./auth.config";
 import db from "./lib/db";
-import { User, UserRoleMapping } from "@prisma/client";
 
 export const {
   handlers: { GET, POST },
@@ -26,10 +26,10 @@ export const {
   events: {
     async linkAccount({ user }) {
       // update
-      await updateUserById(user.id!, { emailVerified: new Date()  } as User);
+      await updateUserById(user.id!, { emailVerified: new Date() } as User);
       // add role
       await createUserRoleMapping({
-        userId: user.id ,
+        userId: user.id,
         role: "USER",
       } as UserRoleMapping);
     },
@@ -51,6 +51,7 @@ export const {
       if (user) {
         token.name = user.name;
         token.email = user.email;
+        token.isEmailVerified = (user as User).emailVerified !== null;
 
         const roles = await getRolesByUserId(user.id!);
 
@@ -70,6 +71,7 @@ export const {
         session.user.id = token.sub!;
         session.user.name = token.name;
         session.user.email = token.email!;
+        session.user.isEmailVerified = token.isEmailVerified as boolean;
         session.user.roles = token.roles as string[];
         session.user.isOAuth = token.isOAuth as boolean;
       }

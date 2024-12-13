@@ -7,6 +7,7 @@ declare module "next-auth" {
       roles: string[]; // Add roles property
       accessToken: string;
       isOAuth: boolean;
+      isEmailVerified: boolean;
     } & DefaultSession["user"];
   }
 }

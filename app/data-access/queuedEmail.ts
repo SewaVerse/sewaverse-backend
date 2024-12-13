@@ -4,7 +4,10 @@ import { dbAsyncHandler } from "../utils/dbAsyncHandler";
 
 export const createQueuedEmail = dbAsyncHandler(async (data: QueuedEmail) => {
   return await db.queuedEmail.create({
-    data,
+    data: {
+      ...data,
+      sentAt: null,
+    },
   });
 });
 

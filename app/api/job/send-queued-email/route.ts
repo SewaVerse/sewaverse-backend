@@ -1,7 +1,8 @@
+import { asyncHandler } from "@/app/utils/asyncHandler";
 import { sendScheduleEmail } from "@/app/utils/schedule";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export const GET = asyncHandler(async () => {
   // Run the sendScheduleEmail function
   await sendScheduleEmail();
 
@@ -10,4 +11,4 @@ export async function GET() {
   });
 
   return response;
-}
+});
