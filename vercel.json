@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/job/send-queued-email",
+      "schedule": "* * * * *"
+    }
+  ]
+}
