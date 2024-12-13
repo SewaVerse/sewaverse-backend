@@ -3,28 +3,52 @@ import { useForm } from "react-hook-form";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
+
 
 interface RegisterFormData {
-  accountType: string;
-  fullName: string;
+  name: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   address: string;
   password: string;
   gender: string;
   dob: string;
-  agree: boolean;
 }
 
 export default function Register() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>();
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log(data); // Handle form submission
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to register.");
+      }
+
+      const result = await response.json();
+      toast.success("Regsitered Sucessfully!");
+      toast.success(result.message);
+      router.push('/email')
+      console.log("Registration successful:", result);
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
   };
 
   return (
@@ -44,31 +68,26 @@ export default function Register() {
             <label className="block text-sm font-medium text-gray-600">
               Account Type
             </label>
-            <select
-              {...register("accountType")}
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg"
-            >
+            <select className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg">
               <option value="User">User</option>
-              <option value="Admin">Admin</option>
+              <option value="Admin">Sewa-Provider</option>
             </select>
           </div>
 
           {/* Full Name */}
           <div>
-            {/* <label className="block text-sm font-medium text-gray-600">Full Name</label> */}
             <input
-              {...register("fullName", { required: "Full Name is required" })}
+              {...register("name", { required: "Full Name is required" })}
               className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg"
               placeholder="Full Name"
             />
-            {errors.fullName && (
-              <p className="text-red-500 text-xs">{errors.fullName.message}</p>
+            {errors.name && (
+              <p className="text-red-500 text-xs">{errors.name.message}</p>
             )}
           </div>
 
           {/* Email */}
           <div>
-            {/* <label className="block text-sm font-medium text-gray-600">Email address</label> */}
             <input
               {...register("email", {
                 required: "Email is required",
@@ -84,6 +103,7 @@ export default function Register() {
               <p className="text-red-500 text-xs">{errors.email.message}</p>
             )}
           </div>
+
           <div className="grid grid-cols-2 gap-4">
             {/* Phone Number */}
             <div>
@@ -91,10 +111,23 @@ export default function Register() {
                 Phone Number
               </label>
               <input
-                {...register("phone")}
-                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg"
+                {...register("phoneNumber", {
+                  required: "Phone number is required",
+                  pattern: {
+                    value: /^[0-9]{10}$/,
+                    message: "Phone number must be 10 digits",
+                  },
+                })}
+                className={`w-full mt-1 px-3 py-2 border rounded-lg ${
+                  errors.phoneNumber ? "border-red-500" : "border-gray-300"
+                }`}
                 placeholder="Phone Number"
               />
+              {errors.phoneNumber && (
+                <p className="text-red-500 text-xs">
+                  {errors.phoneNumber.message}
+                </p>
+              )}
             </div>
 
             {/* Address */}
@@ -112,7 +145,6 @@ export default function Register() {
 
           {/* New Password */}
           <div>
-            {/* <label className="block text-sm font-medium text-gray-600">New Password</label> */}
             <input
               {...register("password", { required: "Password is required" })}
               type="password"
@@ -135,8 +167,8 @@ export default function Register() {
                 className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg"
               >
                 <option value="">Select gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
               </select>
             </div>
 
@@ -145,22 +177,30 @@ export default function Register() {
                 Date of Birth
               </label>
               <input
-                {...register("dob")}
+                {...register("dob", {
+                  required: "Date of Birth is required",
+                  validate: (value) => {
+                    const dob = new Date(value);
+                    const today = new Date();
+                    let age = today.getFullYear() - dob.getFullYear();
+                    const month = today.getMonth() - dob.getMonth();
+                    if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
+                      age--;
+                    }
+                    return age >= 18 || "You must be at least 18 years old";
+                  },
+                })}
                 type="date"
                 className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg"
               />
+              {errors.dob && (
+                <p className="text-red-500 text-xs">{errors.dob.message}</p>
+              )}
             </div>
           </div>
 
           {/* Terms and Conditions */}
           <div className="flex items-center space-x-2">
-            <input
-              {...register("agree", {
-                required: "You must agree to the terms",
-              })}
-              type="checkbox"
-              className="h-4 w-4"
-            />
             <span className="text-sm text-gray-600">
               Yes, I understand and agree to the{" "}
               <a href="#" className="text-blue-500">
@@ -177,9 +217,6 @@ export default function Register() {
               .
             </span>
           </div>
-          {errors.agree && (
-            <p className="text-red-500 text-xs">{errors.agree.message}</p>
-          )}
 
           {/* Register Button */}
           <Button variant={"brand"} className="mt-2 w-full">

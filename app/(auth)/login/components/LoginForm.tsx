@@ -27,7 +27,7 @@ const LoginForm = () => {
     register,
     handleSubmit,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // formState: { errors },
+    formState: { errors },
   } = useForm<LoginForm>({
     defaultValues: {
       email: "",
@@ -45,8 +45,9 @@ const LoginForm = () => {
       if (callback?.error) {
         toast.error("Invalid credentials!");
       } else if (callback?.ok) {
-        router.push("/");
         toast.success("Logged in successfully!");
+        // router.push("/");
+         router.push("/email");
       }
     } catch (error) {
       console.log(error);

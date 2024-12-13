@@ -8,7 +8,7 @@ export const PUBLIC_ROUTES = [
   "/register",
   "/forgotPassword",
   "/resetPassword",
-  "/resetPasswordSucess",
+  "/resetPasswordSucess"
 ];
 
 /**
@@ -23,5 +23,6 @@ export const PRIVATE_API_ROUTES = ["/api/user", "/api/admin"];
 export const DEFAULT_REDIRECT = "/";
 
 export const ROOT = "/";
+export const EMAIL = "/email";
 
 export const LOGIN = "/login";
