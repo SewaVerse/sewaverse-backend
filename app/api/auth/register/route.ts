@@ -93,7 +93,7 @@ export const POST = asyncHandler(async (request: Request) => {
     dob,
     gender: genderMap[gender],
     address,
-  } as UserProfile);
+  } as unknown as UserProfile);
 
   // update user
   await updateUserById(user.id, {
