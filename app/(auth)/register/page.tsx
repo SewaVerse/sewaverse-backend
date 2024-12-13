@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 
 
 interface RegisterFormData {
+  roles: string;
   name: string;
   email: string;
   phoneNumber: string;
@@ -68,9 +69,10 @@ export default function Register() {
             <label className="block text-sm font-medium text-gray-600">
               Account Type
             </label>
-            <select className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg">
-              <option value="User">User</option>
-              <option value="Admin">Sewa-Provider</option>
+            <select  {...register("roles", { required: "Full Name is required" })}
+            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg">
+              <option value="user">User</option>
+              <option value="serviceProvider">Sewa-Provider</option>
             </select>
           </div>
 

@@ -8,8 +8,6 @@ export default function EmailVerification() {
 
     
   return (
-
-    
     <div className="min-h-screen bg-gray-50 flex flex-col items-center">
       {/* Header */}
       <header className="w-full flex justify-between items-center px-6 py-4 bg-white shadow">
