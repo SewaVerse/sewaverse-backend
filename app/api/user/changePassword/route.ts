@@ -11,10 +11,7 @@ import { User } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (request: Request) => {
-  const user = await currentUser();
-
-  if (!user)
-    return new NextResponse("Unauthenticated. Please login", { status: 401 });
+  const user = (await currentUser()) as unknown as User;
 
   const body = (await request.json()) as ResetPasswordSchema;
 
