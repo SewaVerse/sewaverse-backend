@@ -1,12 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import EmailVerified from "./emailverified";
-
-
 
 export default function EmailVerification() {
-
-    
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center">
       {/* Header */}
@@ -65,6 +60,5 @@ export default function EmailVerification() {
         </div>
       </main>
     </div>
-
-);
+  );
 }
