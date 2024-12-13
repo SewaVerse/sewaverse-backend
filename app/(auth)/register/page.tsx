@@ -31,7 +31,7 @@ export default function Register() {
     <div className="flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md bg-white p-6 rounded-lg">
         <div className="flex justify-center mb-6">
-          <Image src="/images/mainLogo.svg" alt="logo" width={50} height={50} />
+          <Image src="/images/logo.svg" alt="logo" width={50} height={50} />
         </div>
 
         <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
