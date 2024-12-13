@@ -91,6 +91,8 @@ model UserProfile {
   dob     String?
   imageId String? @db.ObjectId
   gender  Gender?
+  address String
+  phoneNumber  String
 
   image Image? @relation(fields: [imageId], references: [id], onDelete: Cascade)
 
@@ -134,7 +136,6 @@ model ServiceProvider {
   email   String
   contact String
   address String
-  gender  Gender?
 
   providerType ServiceProviderType
 
@@ -155,9 +156,9 @@ model CompanyDetails {
   serviceProviderId String @db.ObjectId
 
   registrationNumber    String @unique
-  contactPersonName     String
-  contactPersonPosition String
-  secondaryContact      String
+  contactPersonName     String?
+  contactPersonPosition String?
+  secondaryContact      String?
 
   serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id])
 }

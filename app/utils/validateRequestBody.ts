@@ -30,7 +30,10 @@ export const validateRequestBody = <T>(
       // Return a detailed error response
       return [
         {
-          message: "Invalid input",
+          message:
+            Object.keys(invalidFields).length > 1
+              ? "Invalid inputs"
+              : "Invalid input",
           fields: invalidFields, // Return a map of invalid fields and messages
         },
         null,
