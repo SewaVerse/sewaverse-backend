@@ -52,12 +52,12 @@ const Header = () => {
           >
             Why Sewaverse
           </a>
-          <a
-            href="#provider"
+          <Link
+            href="/serviceProvider"
             className="text-[#2E3192] text-sm hover:text-[#1a2573]"
           >
             Become a Sewa provider
-          </a>
+          </Link>
 
           {isLoggedin ? (
             <SignOut />
