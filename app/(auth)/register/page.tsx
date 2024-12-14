@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-
-
 interface RegisterFormData {
   roles: string;
   name: string;
@@ -45,7 +43,7 @@ export default function Register() {
       const result = await response.json();
       toast.success("Regsitered Sucessfully!");
       toast.success(result.message);
-      router.push('/email')
+      router.push("/email");
       console.log("Registration successful:", result);
     } catch (error) {
       console.error("Error during registration:", error);
@@ -59,18 +57,21 @@ export default function Register() {
           <Image src="/images/logo.svg" alt="logo" width={50} height={50} />
         </div>
 
-        <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+        <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center" style={{ fontFamily: '"Playfair Display", serif' }}>
           Create your account
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Account Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-600 poppins" 
+            style={{ fontFamily: '"Playfair Display", serif' , color: "#878787" }} >
               Account Type
             </label>
-            <select  {...register("roles", { required: "Full Name is required" })}
-            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg">
+            <select
+              {...register("roles", { required: "Full Name is required" })}
+              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg"
+            >
               <option value="user">User</option>
               <option value="serviceProvider">Sewa-Provider</option>
             </select>
@@ -80,7 +81,7 @@ export default function Register() {
           <div>
             <input
               {...register("name", { required: "Full Name is required" })}
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg"
+              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg poppins"
               placeholder="Full Name"
             />
             {errors.name && (
@@ -186,7 +187,10 @@ export default function Register() {
                     const today = new Date();
                     let age = today.getFullYear() - dob.getFullYear();
                     const month = today.getMonth() - dob.getMonth();
-                    if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
+                    if (
+                      month < 0 ||
+                      (month === 0 && today.getDate() < dob.getDate())
+                    ) {
                       age--;
                     }
                     return age >= 18 || "You must be at least 18 years old";
@@ -202,18 +206,17 @@ export default function Register() {
           </div>
 
           {/* Terms and Conditions */}
-          <div className="flex items-center space-x-2">
+          <div
+            className="flex items-center space-x-2"
+            style={{ fontFamily: 'Poppins, sans-serif', color: '#878787' }}
+          >
             <span className="text-sm text-gray-600">
               Yes, I understand and agree to the{" "}
-              <a href="#" className="text-blue-500">
+              <a href="#" style={{ textDecoration: 'underline' }} >
                 SewaVerse Terms of Service
               </a>
-              , including the{" "}
-              <a href="#" className="text-blue-500">
-                User Agreement
-              </a>{" "}
-              and{" "}
-              <a href="#" className="text-blue-500">
+              , including the and{" "}
+              <a href="#" style={{ textDecoration: 'underline' }}>
                 Privacy Policy
               </a>
               .
@@ -229,7 +232,7 @@ export default function Register() {
         <div className="mt-4 text-center">
           <span className="text-sm text-gray-600">
             Already have an account?{" "}
-            <Link href="/login" className="text-blue-500">
+            <Link href="/login" className="text-blue-500" style={{ color: '#2E3192' }}>
               Login here
             </Link>
           </span>
