@@ -10,7 +10,7 @@ const Header = () => {
 
   const isLoggedin = !!session?.data?.user;
   return (
-    <header className="bg-white p-4 shadow-md flex justify-center items-center border-b-2 border-blue-500">
+    <header className="bg-white p-4 shadow-md flex justify-between items-center border-b-2 border-blue-500">
       <div className="flex items-center w-full max-w-6xl justify-between">
         {/* Logo */}
         <div className="logo">
@@ -62,16 +62,17 @@ const Header = () => {
           {isLoggedin ? (
             <SignOut />
           ) : (
-            <div>
+            <div className="flex items-center gap-5">
               <Link
                 href="/login"
                 className="text-gray-800 text-sm hover:text-purple-600"
               >
                 Login
               </Link>
-              <button className="bg-purple-600 text-white py-2 px-5 rounded-full text-sm cursor-pointer hover:bg-purple-700">
-                Sign up
-              </button>
+              <button className="bg-[#2E3192] text-white py-2 px-5 rounded-full text-sm cursor-pointer hover:bg-[#1a2573] ml-2">
+  Sign up
+</button>
+
             </div>
           )}
         </div>
