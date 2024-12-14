@@ -28,8 +28,8 @@ const Footer = () => {
         </div>
 
         {/* Footer Links Section */}
-        <div className="flex flex-wrap space-x-8 mt-4 md:mt-0">
-          <div>
+        <div className="flex flex-wrap justify-between space-x-4 mt-4 md:mt-0 w-full">
+          <div className="w-full sm:w-1/4 md:w-auto mb-4 md:mb-0">
             <h3 className="text-lg text-blue-800 font-semibold mb-4">Company</h3>
             <ul className="space-y-2">
               <li><a href="#about" className="text-gray-600 hover:text-blue-800">About us</a></li>
@@ -37,14 +37,14 @@ const Footer = () => {
               <li><a href="#testimonial" className="text-gray-600 hover:text-blue-800">Testimonial</a></li>
             </ul>
           </div>
-          <div>
+          <div className="w-full sm:w-1/4 md:w-auto mb-4 md:mb-0">
             <h3 className="text-lg text-blue-800 font-semibold mb-4">Support</h3>
             <ul className="space-y-2">
               <li><a href="#help-center" className="text-gray-600 hover:text-blue-800">Help Center</a></li>
               <li><a href="#feedback" className="text-gray-600 hover:text-blue-800">Feedback</a></li>
             </ul>
           </div>
-          <div>
+          <div className="w-full sm:w-1/4 md:w-auto mb-4 md:mb-0">
             <h3 className="text-lg text-blue-800 font-semibold mb-4">Services</h3>
             <ul className="space-y-2">
               <li><a href="#painting" className="text-gray-600 hover:text-blue-800">Painting</a></li>
@@ -52,7 +52,7 @@ const Footer = () => {
               <li><a href="#babysitting" className="text-gray-600 hover:text-blue-800">Baby sitting</a></li>
             </ul>
           </div>
-          <div>
+          <div className="w-full sm:w-1/4 md:w-auto mb-4 md:mb-0">
             <h3 className="text-lg text-blue-800 font-semibold mb-4">Contact us</h3>
             <ul className="space-y-2">
               <li className="text-gray-600">+977-2131222211</li>
@@ -62,7 +62,7 @@ const Footer = () => {
         </div>
 
         {/* App Download Links */}
-        <div className="flex space-x-4 mt-8 md:mt-0">
+        <div className="flex flex-wrap justify-start md:justify-end space-x-4 mt-8 md:mt-0 w-full md:w-auto">
           <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">
             <Image src="/images/google-play.svg" alt="Google Play" width={160} height={55} />
           </a>
