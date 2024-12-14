@@ -14,8 +14,10 @@ const Header = () => {
       <div className="flex items-center w-full max-w-6xl justify-between">
         {/* Logo */}
         <div className="logo">
-          <Image src="/images/logo.svg" alt="logo" width={50} height={50} />
-        </div>
+  <Link href="/">
+    <Image src="/images/logo.svg" alt="logo" width={50} height={50} />
+  </Link>
+</div>
 
         {/* Search Bar */}
         <div className="flex items-center flex-1 mx-5 bg-gray-100 rounded-full overflow-hidden shadow-md">
@@ -69,9 +71,15 @@ const Header = () => {
               >
                 Login
               </Link>
-              <button className="bg-[#2E3192] text-white py-2 px-5 rounded-full text-sm cursor-pointer hover:bg-[#1a2573] ml-2">
+              <Link
+                href="/register"
+                className="text-[#2E3192] text-sm hover:text-[#1a2573]"
+              >
+                <button className="bg-[#2E3192] text-white py-2 px-5 rounded-full text-sm cursor-pointer hover:bg-[#1a2573] ml-2">
   Sign up
 </button>
+              </Link>
+              
 
             </div>
           )}
