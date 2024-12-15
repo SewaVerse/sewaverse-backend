@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function ServiceProvider() {
   const [selectedAccountType, setSelectedAccountType] = useState("");
 
-  const handleAccountTypeChange = (e: any) => {
+  const handleAccountTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedAccountType(e.target.value);
   };
 
@@ -20,7 +20,10 @@ export default function ServiceProvider() {
           </div>
 
           {/* Header */}
-          <h2 className="text-2xl font-semibold mb-4" style={{ fontFamily: '"Playfair Display", serif' }}>
+          <h2
+            className="text-2xl font-semibold mb-4"
+            style={{ fontFamily: '"Playfair Display", serif' }}
+          >
             Select an Account Type
           </h2>
 
@@ -42,19 +45,27 @@ export default function ServiceProvider() {
                     width={40}
                     height={40}
                     className={`${
-                      selectedAccountType === "individual" ? "text-[#2E3192]" : ""
+                      selectedAccountType === "individual"
+                        ? "text-[#2E3192]"
+                        : ""
                     } object-contain w-12 h-12 sm:w-20 sm:h-20`}
                   />
                 </div>
                 <div>
                   <h3
-                    className={`font-semibold ${selectedAccountType === "individual" ? "text-[#2E3192]" : ""}`}
+                    className={`font-semibold ${
+                      selectedAccountType === "individual"
+                        ? "text-[#2E3192]"
+                        : ""
+                    }`}
                   >
                     Individual
                   </h3>
                   <p
                     className={`text-sm ${
-                      selectedAccountType === "individual" ? "text-[#2E3192]" : "text-gray-500"
+                      selectedAccountType === "individual"
+                        ? "text-[#2E3192]"
+                        : "text-gray-500"
                     }`}
                   >
                     Offer expertise and services to clients in need.
@@ -93,13 +104,17 @@ export default function ServiceProvider() {
                 </div>
                 <div>
                   <h3
-                    className={`font-semibold ${selectedAccountType === "company" ? "text-[#2E3192]" : ""}`}
+                    className={`font-semibold ${
+                      selectedAccountType === "company" ? "text-[#2E3192]" : ""
+                    }`}
                   >
                     Company
                   </h3>
                   <p
                     className={`text-sm ${
-                      selectedAccountType === "company" ? "text-[#2E3192]" : "text-gray-500"
+                      selectedAccountType === "company"
+                        ? "text-[#2E3192]"
+                        : "text-gray-500"
                     }`}
                   >
                     Manage multiple engagements on the platform as a company.
@@ -117,9 +132,7 @@ export default function ServiceProvider() {
             </div>
 
             {/* Next Button */}
-            <button
-              className="w-full py-2 mt-4 bg-white text-[#878787] border-[#878787] border font-poppins font-semibold rounded-lg"
-            >
+            <button className="w-full py-2 mt-4 bg-white text-[#878787] border-[#878787] border font-poppins font-semibold rounded-lg">
               Next
             </button>
           </div>
