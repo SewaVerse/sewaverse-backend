@@ -1,6 +1,6 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
-
+import { generateToken } from "@/app/utils/token";
 import { User, UserRoleMapping } from "@prisma/client";
 import {
   createUserRoleMapping,
@@ -10,6 +10,7 @@ import {
 } from "./app/data-access/user";
 import authConfig from "./auth.config";
 import db from "./lib/db";
+import { JWT } from "@auth/core/jwt";
 
 export const {
   handlers: { GET, POST },
@@ -61,7 +62,15 @@ export const {
       }
 
       if (account) {
+        token.accessToken = account.access_token;
         token.isOAuth = account.provider !== "credentials";
+      }
+
+      if (!token.isOauth && user) {
+        token.accessToken = generateToken({
+          id: token.sub,
+          email: user.email,
+        });
       }
 
       return token;
@@ -74,6 +83,7 @@ export const {
         session.user.isEmailVerified = token.isEmailVerified as boolean;
         session.user.roles = token.roles as string[];
         session.user.isOAuth = token.isOAuth as boolean;
+        session.user.accessToken = token.accessToken as string;
       }
 
       return session;

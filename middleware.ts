@@ -10,6 +10,7 @@ import {
 } from "@/lib/routes";
 import { NextResponse } from "next/server";
 import { auth } from "./auth";
+import { headers } from "next/headers";
 
 const handleApiRoute = (
   nextUrl: { pathname: string },
@@ -28,14 +29,21 @@ const handleApiRoute = (
   return null;
 };
 
-export default auth((req) => {
+export default auth(async (req) => {
   const { nextUrl } = req;
 
-  const isAuthenticated = !!req.auth;
+  const auth = !!req.auth;
 
   // Handle API routes
-  if (nextUrl.pathname.startsWith("/api"))
+  if (nextUrl.pathname.startsWith("/api")) {
+    const headersList = await headers();
+    const accessToken = headersList.get("Authorization")?.split("Bearer ")[1];
+
+    console.log(accessToken);
+    const isAuthenticated = !!auth || !!accessToken;
+
     return handleApiRoute(nextUrl, isAuthenticated);
+  }
 
   // root is accessible to everyone
   if (nextUrl.pathname === ROOT) return NextResponse.next();
@@ -45,11 +53,11 @@ export default auth((req) => {
   );
 
   // If the user is authenticated and the route is public, redirect to the default route
-  if (isPublicRoute && isAuthenticated)
+  if (isPublicRoute && auth)
     return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl));
 
   // If the user is not authenticated and the route is not public, redirect to the login page
-  if (!isAuthenticated && !isPublicRoute)
+  if (!auth && !isPublicRoute)
     return Response.redirect(new URL(LOGIN, nextUrl));
 
   return NextResponse.next();
