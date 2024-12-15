@@ -52,6 +52,7 @@ const userRegisterSchema = z
     gender: genderSchema,
     address: z.string({ message: "Address is required" }),
     roles: rolesSchema,
+    acceptTerms: z.boolean({ message: "Accept terms is required" }),
     serviceProvider: serviceProviderSchema.optional(),
   })
   .superRefine((data, ctx) => {
