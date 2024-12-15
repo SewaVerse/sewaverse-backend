@@ -3,13 +3,7 @@
 
 import { auth } from "@/auth";
 import { Role } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
-
-interface NextAuthRequest extends NextRequest {
-  auth: {
-    roles: Role[]; // Define the actual shape of your auth object
-  };
-}
+import { NextResponse } from "next/server";
 
 /**
  * A higher-order function that wraps an async handler in Next.js API routes to handle
@@ -24,11 +18,12 @@ interface NextAuthRequest extends NextRequest {
  */
 const roleAsyncHandler = <Args extends unknown[]>(
   role: Role, // Add `role` as a parameter to the wrapper
-  fn: (request: NextRequest, ...args: Args) => Promise<NextResponse>
+  fn: (...args: Args) => Promise<NextResponse>
 ) => {
-  return auth(async (request: NextAuthRequest, ...args: Args) => {
+  return async (...args: Args) => {
     try {
-      const authRoles = request?.auth?.user?.roles;
+      const session = await auth();
+      const authRoles = session.user?.roles;
 
       if (!authRoles || !Array.isArray(authRoles)) {
         return new NextResponse(
@@ -52,7 +47,7 @@ const roleAsyncHandler = <Args extends unknown[]>(
       );
       return new NextResponse("Internal Server Error", { status: 500 });
     }
-  });
+  };
 };
 
 export default roleAsyncHandler;
