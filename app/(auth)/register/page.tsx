@@ -15,6 +15,7 @@ interface RegisterFormData {
   password: string;
   gender: string;
   dob: string;
+  acceptTerms: boolean;
 }
 
 export default function Register() {
@@ -209,7 +210,14 @@ export default function Register() {
           <div
             className="flex items-center space-x-2"
             style={{ fontFamily: 'Poppins, sans-serif', color: '#878787' }}
-          >
+            
+          > 
+          <input
+              type="checkbox"
+              {...register("acceptTerms", { required: "You must accept the terms" })}
+              className="w-4 h-4 mt-1"
+            />
+          
             <span className="text-sm text-gray-600">
               Yes, I understand and agree to the{" "}
               <a href="#" style={{ textDecoration: 'underline' }} >
