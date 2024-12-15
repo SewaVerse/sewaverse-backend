@@ -18,9 +18,9 @@ import { NextResponse } from "next/server";
  */
 const roleAsyncHandler = <Args extends unknown[]>(
   role: Role, // Add `role` as a parameter to the wrapper
-  fn: (...args: Args) => Promise<NextResponse>
+  fn: (request: Request, ...args: Args) => Promise<NextResponse>
 ) => {
-  return async (...args: Args) => {
+  return async (request: Request, ...args: Args) => {
     try {
       const session = await auth();
       const authRoles = session.user?.roles;

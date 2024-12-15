@@ -44,7 +44,7 @@ model User {
   userProfileId String?   @db.ObjectId
 
   image String?
-  acceptTerms  Boolean
+  acceptTerms  Boolean 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
