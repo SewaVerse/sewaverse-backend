@@ -47,7 +47,7 @@ const LoginForm = () => {
       } else if (callback?.ok) {
         toast.success("Logged in successfully!");
         // router.push("/");
-         router.push("/email");
+        router.push("/verify");
       }
     } catch (error) {
       console.log(error);
@@ -106,7 +106,7 @@ const LoginForm = () => {
                   Remember me
                 </label>
               </div>
-              <Link href="/forgotPassword" className="text-sm">
+              <Link href="/forgotpassword" className="text-sm">
                 Forgot password?
               </Link>
             </div>
