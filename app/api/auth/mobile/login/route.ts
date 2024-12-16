@@ -61,6 +61,11 @@ export const POST = asyncHandler(async (request: Request) => {
       message: "login successful",
       accessToken: token,
       expires: expires.toISOString(),
+      user: {
+        id: user.id,
+        name: user.name!,
+        email: user.email,
+      }
     },
     { status: 200 }
   );
