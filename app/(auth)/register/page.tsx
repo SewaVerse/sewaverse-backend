@@ -180,7 +180,7 @@ export default function Register() {
               <label className="block text-sm font-medium text-gray-600">
                 Date of Birth
               </label>
-              <input
+              <input 
                 {...register("dob", {
                   required: "Date of Birth is required",
                   validate: (value) => {
