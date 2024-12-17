@@ -53,3 +53,29 @@ export const generatePasswordResetToken = async (email: string) => {
 
   return passwordResetToken;
 };
+
+export const generatePasswordResetOtp = async (email: string) => {
+   const token = uuidv4();
+  const otp = Math.floor(1000 + Math.random() * 9000).toString();
+  const expires = new Date(new Date().getTime() + 3600 * 1000);
+
+    const existingToken = await getPasswordResetTokenByEmail(email);
+
+    if (existingToken) {
+      await db.passwordResetToken.delete({
+        where: {
+          id: existingToken.id,
+        },
+      });
+    }
+
+  const passwordResetOtp = await db.passwordResetToken.create({
+    data: {
+      email,
+      token,
+      otp,
+      expires,
+    },
+  });
+  return passwordResetOtp;
+};
