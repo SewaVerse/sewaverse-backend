@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export const GET = asyncHandler(async () => {
   // Run the sendScheduleEmail function
-  await sendScheduleEmail();
+  sendScheduleEmail();
 
   const response = NextResponse.json({
     message: "send email job run successfully",

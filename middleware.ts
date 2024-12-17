@@ -8,9 +8,9 @@ import {
   PUBLIC_ROUTES,
   ROOT,
 } from "@/lib/routes";
+import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "./auth";
-import { headers } from "next/headers";
 
 const handleApiRoute = (
   nextUrl: { pathname: string },
@@ -39,7 +39,6 @@ export default auth(async (req) => {
     const headersList = await headers();
     const accessToken = headersList.get("Authorization")?.split("Bearer ")[1];
 
-    console.log(accessToken);
     const isAuthenticated = !!auth || !!accessToken;
 
     return handleApiRoute(nextUrl, isAuthenticated);

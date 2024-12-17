@@ -1,6 +1,7 @@
 import { getUserByEmail, updateUserById } from "@/app/data-access/user";
 import { userLoginSchema, UserLoginSchema } from "@/app/schemas/authSchema";
 import { asyncHandler } from "@/app/utils/asyncHandler";
+import CustomError from "@/app/utils/customError";
 import { generateToken } from "@/app/utils/token";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { User } from "@prisma/client";
@@ -23,17 +24,17 @@ export const POST = asyncHandler(async (request: Request) => {
 
   const user = await getUserByEmail(email);
 
-  if (!user || !user.password) {
-    throw new Error("Invalid credentials.");
+  if (!user || !user.password || !user.emailVerified) {
+    throw new CustomError("Invalid credentials.");
   }
 
   if (!user.emailVerified) {
-    throw new Error("Email not verified.");
+    throw new CustomError("Email not verified.");
   }
 
   const passwordsMatch = await bcrypt.compare(password, user.password);
 
-  if (!passwordsMatch) throw new Error("Invalid credentials.");
+  if (!passwordsMatch) throw new CustomError("Invalid credentials.");
 
   const roles = user.roles.map((role) => role.role);
 
@@ -46,8 +47,6 @@ export const POST = asyncHandler(async (request: Request) => {
     isOAuth: false,
     roles,
   });
-
-  console.log(token, expires);
 
   // update user token
   await updateUserById(user.id!, {
@@ -65,7 +64,7 @@ export const POST = asyncHandler(async (request: Request) => {
         id: user.id,
         name: user.name!,
         email: user.email,
-      }
+      },
     },
     { status: 200 }
   );

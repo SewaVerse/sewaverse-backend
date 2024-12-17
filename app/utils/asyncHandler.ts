@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
+import CustomError from "./customError";
 
 /**
  * Async handler to catch errors in Next.js API routes.
@@ -13,7 +14,15 @@ export function asyncHandler<Args extends any[]>(
       return await fn(...args);
     } catch (error: any) {
       console.error("API Error:", error.message || error);
-      return new NextResponse("Internal Server Error", { status: 500 });
+      if (error instanceof CustomError) {
+        return NextResponse.json(
+          { success: false, message: error.message },
+          { status: error.code }
+        );
+      }
+      return new NextResponse("Internal Server Error", {
+        status: 500,
+      });
     }
   };
 }
