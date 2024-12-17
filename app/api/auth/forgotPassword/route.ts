@@ -1,9 +1,12 @@
-import { generatePasswordResetToken } from "@/app/data-access/token";
+import {
+  generatePasswordResetOtp,
+  generatePasswordResetToken,
+} from "@/app/data-access/token";
 import { getUserByEmail } from "@/app/data-access/user";
 import { ResetSchema, resetSchema } from "@/app/schemas/authSchema";
 import { asyncHandler } from "@/app/utils/asyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { sendPasswordResetEmail } from "@/lib/mail";
+import { sendPasswordResetEmail, sendPaswordResetOtpEmail } from "@/lib/mail";
 import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (request: Request) => {
@@ -18,7 +21,7 @@ export const POST = asyncHandler(async (request: Request) => {
     return NextResponse.json(validationError, { status: 400 }); // If there's an error, return it directly
   }
 
-  const { email } = validatedFields;
+  const { email, isMobile } = validatedFields;
 
   const existingUser = await getUserByEmail(email);
 
@@ -26,14 +29,23 @@ export const POST = asyncHandler(async (request: Request) => {
     return NextResponse.json({ success: false, message: "User not found" });
   }
 
-  const passwordResetToken = await generatePasswordResetToken(email);
-  await sendPasswordResetEmail(
-    passwordResetToken.email,
-    passwordResetToken.token
-  );
+  if (isMobile) {
+    const passwordResetOtp = await generatePasswordResetOtp(email);
+    await sendPaswordResetOtpEmail(
+      passwordResetOtp.email,
+      passwordResetOtp.otp!
+    );
+  } else {
+    const passwordResetToken = await generatePasswordResetToken(email);
+    await sendPasswordResetEmail(
+      passwordResetToken.email,
+      passwordResetToken.token
+    );
+  }
 
   return NextResponse.json({
     success: true,
     message: "Password reset email sent successfully",
+    data: email,
   });
 });
