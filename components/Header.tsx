@@ -4,82 +4,78 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { SignOut } from "./SignOut";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 const Header = () => {
   const session = useSession();
 
   const isLoggedin = !!session?.data?.user;
+  const hasSewaProviderRole =
+    session?.data?.user?.roles.includes("SEWA_PROVIDER");
   return (
-    <header className="bg-white p-4 shadow-md flex justify-between items-center border-b-2 border-blue-500">
-      <div className="flex items-center w-full max-w-6xl justify-between">
-        {/* Logo */}
-        <div className="logo">
-          <Link href="/">
-            <Image src="/images/logo.svg" alt="logo" width={50} height={50} />
-          </Link>
-        </div>
-
-        {/* Search Bar */}
-        <div className="flex items-center flex-1 mx-5 bg-gray-100 rounded-full overflow-hidden shadow-md">
-          <input
-            type="text"
-            placeholder="Search services..."
-            className="flex-1 border-none p-2.5 text-lg outline-none"
-          />
-          <div className="flex items-center px-3 border-l border-gray-300">
+    <header className="py-3 px-5 mx-5">
+      <div className="flex items-center justify-between">
+        <div className="flex gap-5">
+          <Link href={"/"}>
             <Image
-              src="/images/location.svg"
-              alt="location"
-              width={16}
-              height={16}
+              src="/images/logo.png"
+              width={45}
+              height={40}
+              alt="sewaverse logo"
             />
-            <span>Jorpati</span>
+          </Link>
+
+          <div className="flex relative">
+            <Input
+              placeholder="Search services..."
+              type="search"
+              className="text-sm h-full w-[25rem] pe-[8rem]"
+            />
+            <div className="absolute top-0 right-0  flex h-full ">
+              <div className="flex items-center px-2  my-2 border-l-2">
+                <Image
+                  src="/images/location.svg"
+                  width={20}
+                  height={20}
+                  alt="search"
+                />
+                <p className="text-xs text-brand">Jorpati</p>
+              </div>
+              <div className="bg-brand-gradient p-2 h-full rounded-e-md flex items-center">
+                <Image
+                  src="/images/search.svg"
+                  width={20}
+                  height={20}
+                  alt="search"
+                />
+              </div>
+            </div>
           </div>
-          <button className="bg-purple-600 p-2.5 flex items-center justify-center cursor-pointer">
-            <Image
-              src="/images/search.svg"
-              alt="search"
-              width={16}
-              height={16}
-              className="filter brightness-0 invert"
-            />
-          </button>
         </div>
-
-        {/* Navigation Links */}
-        <div className="flex items-center gap-5">
-          <a
-            href="#why-sewaverse"
-            className="text-gray-800 text-sm hover:text-purple-600"
-          >
-            Why Sewaverse
-          </a>
-          <Link
-            href="/serviceProvider"
-            className="text-[#2E3192] text-sm hover:text-[#1a2573]"
-          >
-            Become a Sewa provider
-          </Link>
-
+        <div className="flex items-center gap-4">
+          <p>Why Sewaverse</p>
+          {!hasSewaProviderRole && (
+            <Link
+              href="/register/sewa-provider"
+              className="hover:underline decoration-brand"
+            >
+              <p className="gradient-text">Become a Sewa provider</p>
+            </Link>
+          )}
           {isLoggedin ? (
             <SignOut />
           ) : (
-            <div className="flex items-center gap-5">
-              <Link
-                href="/login"
-                className="text-gray-800 text-sm hover:text-purple-600"
-              >
-                Login
+            <>
+              <Link href="/login">
+                <Button variant={"ghost"} className="px-2">
+                  Login
+                </Button>
               </Link>
-              <Link
-                href="/register"
-                className="text-[#2E3192] text-sm hover:text-[#1a2573]"
-              >
-                <button className="bg-[#2E3192] text-white py-2 px-5 rounded-full text-sm cursor-pointer hover:bg-[#1a2573] ml-2">
-                  Sign up
-                </button>
+              <Link href="/register">
+                <Button variant={"brand"}>Sign up</Button>
               </Link>
-            </div>
+            </>
           )}
         </div>
       </div>
