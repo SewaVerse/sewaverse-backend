@@ -10,6 +10,8 @@ export const PUBLIC_ROUTES = [
   "/resetPassword",
   "/resetPasswordSucess",
    "/accountType",
+   "/sewaprovider",
+   "/sewaproviderwelcome",
 ];
 
 /**
