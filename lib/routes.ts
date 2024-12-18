@@ -9,7 +9,7 @@ export const PUBLIC_ROUTES = [
   "/forgotPassword",
   "/resetPassword",
   "/resetPasswordSucess",
-   "/serviceProvider",
+   "/accountType",
 ];
 
 /**

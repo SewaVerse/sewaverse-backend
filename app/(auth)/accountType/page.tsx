@@ -1,13 +1,24 @@
 "use client";
 
 import Image from "next/image";
+// import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ServiceProvider() {
   const [selectedAccountType, setSelectedAccountType] = useState("");
+  const router = useRouter()
 
   const handleAccountTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedAccountType(e.target.value);
+  };
+
+  const handleNextClick = () => {
+    if (selectedAccountType) {
+      router.push(`/register?accountType=${selectedAccountType}`);
+    } else {
+      alert("Please select an account type");
+    }
   };
 
   return (
@@ -132,7 +143,10 @@ export default function ServiceProvider() {
             </div>
 
             {/* Next Button */}
-            <button className="w-full py-2 mt-4 bg-white text-[#878787] border-[#878787] border font-poppins font-semibold rounded-lg">
+            <button
+              onClick={handleNextClick}
+              className="w-full py-2 mt-4 bg-white text-[#878787] border-[#878787] border font-poppins font-semibold rounded-lg"
+            >
               Next
             </button>
           </div>
