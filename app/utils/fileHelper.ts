@@ -1,0 +1,55 @@
+"use server";
+
+import { File as PrismaFile } from "@prisma/client";
+import { promises as fs } from "fs";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
+import { getFileById, updateFileById } from "../data-access/file";
+
+const mimeToExtension = (mimeType: string): string => {
+  const mimeMap: { [key: string]: string } = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/gif": "gif",
+    "application/pdf": "pdf",
+    "text/plain": "txt",
+    "application/zip": "zip",
+    // Add more MIME types as needed
+  };
+
+  return mimeMap[mimeType] || "bin"; // Default to "bin" if MIME type is unknown
+};
+
+export const getLocalFileUrl = async (id: string) => {
+  const file = await getFileById(id);
+
+  if (!file) return "";
+
+  if (file.localUrl) return file.localUrl;
+
+  if (!file.fileBinaries.length) return "";
+
+  const fileBinary = file.fileBinaries[0];
+
+  if (!fileBinary.data) return "";
+
+  // Ensure `data` is not null and is of type `Uint8Array`
+  const data = fileBinary.data as Uint8Array;
+
+  // Generate a unique filename
+  const uniqueId = uuidv4();
+  const fileExtension = mimeToExtension(file.type);
+  const filename = `${uniqueId}.${fileExtension}`; // Change extension if needed
+  const filePath = path.join(process.cwd(), "public", "thunks", filename);
+
+  // Save file to the `public/thunk` directory
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+  await fs.writeFile(filePath, data); // Pass `data` directly
+
+  const fullPath = `/thunks/${filename}`;
+
+  // save file url
+  await updateFileById(id, { localUrl: fullPath } as PrismaFile);
+
+  return fullPath;
+};

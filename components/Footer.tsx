@@ -89,7 +89,7 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h5 className="mb-4">Company</h5>
+              <h5 className="mb-4">Services</h5>
               <ul className="flex flex-col gap-1">
                 <li>Be a Sewa Provider</li>
                 <li>Explore Services</li>
