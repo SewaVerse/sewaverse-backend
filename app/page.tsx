@@ -437,18 +437,17 @@ const Home = async () => {
 
       {/* other section  */}
       <div className="py-16 bg-white text-center">
-          <h3 className="text-3xl font-bold mb-8 font-poppins">
-            Don’t take our word, trust the real stories <br />
-            <span className="text-[16px] font-normal leading-[24px] text-center decoration-skip-ink-none">
-              Their experiences offer honest insights and a true picture of what
-              to expect.
-              <br /> Discover the difference through their voices.
-            </span>
-          </h3>
+        <h3 className="text-3xl font-bold mb-8 font-poppins">
+          Don’t take our word, trust the real stories <br />
+          <span className="text-[16px] font-normal leading-[24px] text-center decoration-skip-ink-none">
+            Their experiences offer honest insights and a true picture of what
+            to expect.
+            <br /> Discover the difference through their voices.
+          </span>
+        </h3>
 
-          <div className="relative flex flex-col items-center">
-          
-            <div className="relative z-20 bg-white rounded-lg shadow-2xl border border-white/50 w-[638px] h-[497px] p-6">
+        <div className="relative flex flex-col items-center">
+          <div className="relative z-20 bg-white rounded-lg shadow-2xl border border-white/50 w-[638px] h-[497px] p-6">
             <Image
               src="/images/profileimage1.svg"
               alt="Marinda Walkers"
@@ -456,63 +455,63 @@ const Home = async () => {
               width={638}
               height={497}
             />
-              <p
-                className="mt-12 text-gray-600 text-[16px] font-poppins font-normal leading-[24px] text-justify decoration-skip-ink-none"
-                style={{ textUnderlinePosition: "from-font" }}
-              >
-                I’ve used Serwaverse for a variety of services, from home
+            <p
+              className="mt-12 text-gray-600 text-[16px] font-poppins font-normal leading-[24px] text-justify decoration-skip-ink-none"
+              style={{ textUnderlinePosition: "from-font" }}
+            >
+              {`I’ve used Serwaverse for a variety of services, from home
                 cleaning to graphic design, and overall, I've been very
                 impressed. The range of services is extensive, and the quality
                 is generally high. My only gripe is that the service reviews can
                 sometimes be a bit inconsistent. Still, it’s a fantastic
-                resource for all kinds of needs.
+                resource for all kinds of needs.`}
+            </p>
+            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-900 font-bold">
+              Jackson Hopkins <br />
+              <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
+            </div>
+          </div>
+
+          <div className="relative flex justify-between w-full -mt-[130px] px-4">
+            <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-[600px] h-[460px] opacity-50 p-6 -translate-y-[50px]">
+              <Image
+                src="/images/profileimage3.svg"
+                alt="Jackson Hopkins"
+                className="w-16 h-16 rounded-full mx-auto -mt-8 border-4 border-white"
+                width={638}
+                height={497}
+              />
+              <p className="mt-12 text-gray-600 text-sm">
+                I’ve used Servaverse for a variety of services, from home
+                cleaning to graphic design, and overall, I’ve been very
+                impressed...
               </p>
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-900 font-bold">
-                Jackson Hopkins <br />
-                <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
+              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-700 font-semibold">
+                Marinda Walkers <br />
+                <span className="text-yellow-400">⭐⭐⭐⭐</span>
               </div>
             </div>
 
-            <div className="relative flex justify-between w-full -mt-[130px] px-4">
-              <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-[600px] h-[460px] opacity-50 p-6 -translate-y-[50px]">
+            <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-[600px] h-[460px] opacity-50 p-6 -translate-y-[80px]">
               <Image
-              src="/images/profileimage3.svg"
-              alt="Jackson Hopkins"
-              className="w-16 h-16 rounded-full mx-auto -mt-8 border-4 border-white"
-              width={638}
-              height={497}
-            />
-                <p className="mt-12 text-gray-600 text-sm">
-                  I’ve used Servaverse for a variety of services, from home
-                  cleaning to graphic design, and overall, I’ve been very
-                  impressed...
-                </p>
-                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-700 font-semibold">
-                  Marinda Walkers <br />
-                  <span className="text-yellow-400">⭐⭐⭐⭐</span>
-                </div>
-              </div>
-
-              <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-[600px] h-[460px] opacity-50 p-6 -translate-y-[80px]">
-              <Image
-              src="/images/profileimage2.svg"
-              alt="Jensony Kennedy"
-              className="w-16 h-16 rounded-full mx-auto -mt-8 border-4 border-white"
-              width={638}
-              height={497}
-            />
-                <p className="mt-12 text-gray-600 text-sm">
-                  This service has been a game-changer for me! From booking a
-                  plumber to finding last-minute help...
-                </p>
-                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-700 font-semibold">
-                  Jensony Kennedy <br />
-                  <span className="text-yellow-400">⭐⭐⭐⭐</span>
-                </div>
+                src="/images/profileimage2.svg"
+                alt="Jensony Kennedy"
+                className="w-16 h-16 rounded-full mx-auto -mt-8 border-4 border-white"
+                width={638}
+                height={497}
+              />
+              <p className="mt-12 text-gray-600 text-sm">
+                This service has been a game-changer for me! From booking a
+                plumber to finding last-minute help...
+              </p>
+              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-700 font-semibold">
+                Jensony Kennedy <br />
+                <span className="text-yellow-400">⭐⭐⭐⭐</span>
               </div>
             </div>
           </div>
         </div>
+      </div>
     </div>
   );
 };
