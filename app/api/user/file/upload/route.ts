@@ -1,6 +1,6 @@
 import { createFile } from "@/app/data-access/file";
 import { fileSchema } from "@/app/schemas/fileSchema";
-import { asyncHandler } from "@/app/utils/asyncHandler";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { getLocalFileUrl } from "@/app/utils/fileHelper";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { File as PrismaFile } from "@prisma/client";

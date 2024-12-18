@@ -9,7 +9,8 @@ import {
   UserRegisterSchema,
   userRegisterSchema,
 } from "@/app/schemas/authSchema";
-import { asyncHandler } from "@/app/utils/asyncHandler";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
+
 import { hash } from "@/app/utils/common";
 import CustomError from "@/app/utils/customError";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";

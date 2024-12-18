@@ -1,5 +1,5 @@
 import { getAllUserByAdmin } from "@/app/data-access/admin";
-import roleAsyncHandler from "@/app/utils/roleAsyncHandler";
+import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { NextResponse } from "next/server";
 
 export const GET = roleAsyncHandler("ADMIN", async (request: Request) => {

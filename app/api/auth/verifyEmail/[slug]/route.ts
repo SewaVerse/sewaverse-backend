@@ -3,7 +3,7 @@ import {
   deleteVerificationTokenById,
   getVerificationTokenByToken,
 } from "@/app/data-access/verificationToken";
-import { asyncHandler } from "@/app/utils/asyncHandler";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { User } from "@prisma/client";
 import { NextResponse } from "next/server";
 

@@ -1,7 +1,7 @@
 import { generatePasswordResetToken } from "@/app/data-access/token";
 import { getUserByEmail } from "@/app/data-access/user";
 import { ResetSchema, resetSchema } from "@/app/schemas/authSchema";
-import { asyncHandler } from "@/app/utils/asyncHandler";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { sendPasswordResetEmail } from "@/lib/mail";
 import { NextResponse } from "next/server";

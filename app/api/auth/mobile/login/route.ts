@@ -1,6 +1,6 @@
 import { getUserByEmail, updateUserById } from "@/app/data-access/user";
 import { userLoginSchema, UserLoginSchema } from "@/app/schemas/authSchema";
-import { asyncHandler } from "@/app/utils/asyncHandler";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import CustomError from "@/app/utils/customError";
 import { generateToken } from "@/app/utils/token";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";

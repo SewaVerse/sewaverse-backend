@@ -1,4 +1,4 @@
-import { asyncHandler } from "@/app/utils/asyncHandler";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { sendScheduleEmail } from "@/app/utils/schedule";
 import { NextResponse } from "next/server";
 

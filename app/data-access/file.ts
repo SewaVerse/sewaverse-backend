@@ -1,6 +1,6 @@
 import db from "@/lib/db";
 import { File } from "@prisma/client";
-import { dbAsyncHandler } from "../utils/dbAsyncHandler";
+import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 
 export const getFileById = dbAsyncHandler(async (id: string) => {
   return await db.file.findUnique({

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
-import CustomError from "./customError";
+import CustomError from "../customError";
 
 /**
  * Async handler to catch errors in Next.js API routes.

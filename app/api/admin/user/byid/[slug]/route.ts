@@ -1,5 +1,5 @@
 import { getUserById } from "@/app/data-access/user";
-import { asyncHandler } from "@/app/utils/asyncHandler";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { NextResponse } from "next/server";
 
 export const GET = asyncHandler(

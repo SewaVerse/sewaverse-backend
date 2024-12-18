@@ -1,15 +1,25 @@
 import db from "@/lib/db";
 import { QueuedEmail } from "@prisma/client";
-import { dbAsyncHandler } from "../utils/dbAsyncHandler";
+import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
+import { sendQueuedEmail } from "../utils/email/sendQueuedEmail";
 
-export const createQueuedEmail = dbAsyncHandler(async (data: QueuedEmail) => {
-  return await db.queuedEmail.create({
-    data: {
-      ...data,
-      sentAt: null,
-    },
-  });
-});
+export const createQueuedEmail = dbAsyncHandler(
+  async (data: QueuedEmail, sendImmediately = false) => {
+    const email = await db.queuedEmail.create({
+      data: {
+        ...data,
+        sentAt: null,
+        sendImmediately,
+      },
+    });
+
+    if (sendImmediately) {
+      await sendQueuedEmail(email);
+    }
+
+    return email;
+  }
+);
 
 export const updateQueuedEmailById = dbAsyncHandler(
   async (id: string, data: QueuedEmail) => {

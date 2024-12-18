@@ -1,5 +1,5 @@
 import { findUsersByRole } from "@/app/data-access/user";
-import { asyncHandler } from "@/app/utils/asyncHandler";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { Role } from "@prisma/client";
 import { NextResponse } from "next/server";
 
