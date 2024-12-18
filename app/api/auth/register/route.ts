@@ -30,6 +30,11 @@ const roleMap: { [key: string]: Role } = {
   serviceProvider: "SERVICE_PROVIDER",
 };
 
+const userTypeMap: { [key: string]: string } = {
+  individual: "INDIVIDUAL",
+  company: "COMPANY",
+};
+
 export const POST = asyncHandler(async (request: Request) => {
   const body = (await request.json()) as UserRegisterSchema;
 
@@ -41,7 +46,7 @@ export const POST = asyncHandler(async (request: Request) => {
     return NextResponse.json(validationError, { status: 400 }); // If there's an error, return it directly
   }
 
-  const { email, name, userType, password, role, phoneNumber } =
+  const { email, name, userType, password, role, phoneNumber, acceptTerms } =
     validatedFields;
 
   // Check if a user already exists with the provided email
@@ -61,7 +66,8 @@ export const POST = asyncHandler(async (request: Request) => {
     email,
     name,
     password: hashedPassword,
-    userType,
+    userType: userTypeMap[userType],
+    acceptTerms,
   } as User);
 
   if (!user.id) throw new CustomError("Failed to create user");

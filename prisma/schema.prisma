@@ -96,7 +96,7 @@ model UserProfile {
   dob         String?
   imageId     String? @db.ObjectId
   gender      Gender?
-  address     String
+  address     String?
   phoneNumber String
 
   file File? @relation(fields: [imageId], references: [id], onDelete: Cascade)

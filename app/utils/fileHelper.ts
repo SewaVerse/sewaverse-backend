@@ -20,18 +20,29 @@ const mimeToExtension = (mimeType: string): string => {
   return mimeMap[mimeType] || "bin"; // Default to "bin" if MIME type is unknown
 };
 
+const checkFileExists = async (filePath: string): Promise<boolean> => {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export const getLocalFileUrl = async (id: string) => {
   const file = await getFileById(id);
 
   if (!file) return "";
-
-  if (file.localUrl) return file.localUrl;
 
   if (!file.fileBinaries.length) return "";
 
   const fileBinary = file.fileBinaries[0];
 
   if (!fileBinary.data) return "";
+
+  if (file.localUrl && (await checkFileExists(file.localUrl))) {
+    return file.localUrl;
+  }
 
   // Ensure `data` is not null and is of type `Uint8Array`
   const data = fileBinary.data as Uint8Array;
@@ -42,7 +53,7 @@ export const getLocalFileUrl = async (id: string) => {
   const filename = `${uniqueId}.${fileExtension}`; // Change extension if needed
   const filePath = path.join(process.cwd(), "public", "thunks", filename);
 
-  // Save file to the `public/thunk` directory
+  // Save file to the `public/thunks` directory
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   await fs.writeFile(filePath, data); // Pass `data` directly
 
