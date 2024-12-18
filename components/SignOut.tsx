@@ -11,7 +11,7 @@ export function SignOut() {
     });
   };
   return (
-    <Button onClick={handleSignOut} type="submit">
+    <Button variant={"brand"} onClick={handleSignOut} type="submit">
       Sign Out
     </Button>
   );

@@ -14,7 +14,7 @@ export default async function AuthLayout({
             {/* Left Side: Image */}
             <div className="relative w-1/2">
               <Image
-                src="/images/login.svg"
+                src="/images/authLayout.webp"
                 alt="login image"
                 width={450}
                 height={460}
