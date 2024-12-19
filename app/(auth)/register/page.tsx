@@ -43,7 +43,7 @@ export default function Register() {
       const payload = {
         ...data,
         userType: accountType || "default",
-        acceptTerms: true, // Always set acceptTerms to true
+        acceptTerms: true,
       };
 
       const response = await fetch("/api/auth/register", {
@@ -64,11 +64,12 @@ export default function Register() {
       toast.success(result.message);
       router.push("/email");
       console.log("Registration successful:", result);
-    } catch (error: any) {
-      console.error("Error during registration:", error.message || error);
-      toast.error(error.message || "An unexpected error occurred.");
-    }
+    } catch (error) {
+      console.error("Error during registration:");
+      toast.error("Failed to register. Please try again.");
+  
   };
+}
 
   return (
     <div className="flex items-center justify-center bg-gray-50">
