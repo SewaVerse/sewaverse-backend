@@ -1,5 +1,5 @@
 import { getUserByEmail } from "@/app/data-access/user";
-import { asyncHandler } from "@/app/utils/asyncHandler";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (request: Request) => {
