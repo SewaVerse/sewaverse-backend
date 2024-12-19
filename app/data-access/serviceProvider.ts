@@ -1,6 +1,6 @@
 import db from "@/lib/db";
 import { CompanyDetails, ServiceProvider } from "@prisma/client";
-import { dbAsyncHandler } from "../utils/dbAsyncHandler";
+import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 
 export const createServiceProvider = dbAsyncHandler(
   async (data: ServiceProvider) => {

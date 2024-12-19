@@ -15,11 +15,9 @@ export const phoneNumberSchema = z
       "Phone number must contain only digits and be exactly 10 characters long",
   });
 
-export const rolesSchema = z
-  .array(z.enum(["user", "admin", "serviceProvider"]), {
-    message: "Each role must be one of 'user', 'admin', or 'serviceProvider'",
-  })
-  .optional();
+export const roleSchema = z.enum(["user", "admin", "serviceProvider"], {
+  message: "Each role must be one of 'user', 'admin', or 'serviceProvider'",
+});
 
 export const genderSchema = z
   .string({ message: "Gender is required" })

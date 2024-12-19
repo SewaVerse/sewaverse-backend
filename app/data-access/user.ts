@@ -1,4 +1,4 @@
-import { dbAsyncHandler } from "@/app/utils/dbAsyncHandler";
+import { dbAsyncHandler } from "@/app/utils/asyncHelper/dbAsyncHandler";
 import db from "@/lib/db";
 import { Role, User, UserProfile, UserRoleMapping } from "@prisma/client";
 

@@ -42,12 +42,13 @@ model User {
   emailVerified DateTime?
   password      String?
   userProfileId String?   @db.ObjectId
+  userType      UserType  @default(INDIVIDUAL)
 
-  image String?
-  acceptTerms  Boolean
+  image       String?
+  acceptTerms Boolean
 
-  accessToken  String?
-  expires      DateTime? 
+  accessToken String?
+  expires     DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -92,14 +93,14 @@ model PasswordResetToken {
 }
 
 model UserProfile {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  dob     String?
-  imageId String? @db.ObjectId
-  gender  Gender?
-  address String
-  phoneNumber  String
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  dob         String?
+  imageId     String? @db.ObjectId
+  gender      Gender?
+  address     String?
+  phoneNumber String
 
-  image Image? @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  file File? @relation(fields: [imageId], references: [id], onDelete: Cascade)
 
   users User[]
 }
@@ -126,7 +127,7 @@ model Service {
   // Self-relation for parent and child services
   parentService Service? @relation("ServiceHierarchy", fields: [parentServiceId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  image Image? @relation(fields: [imageId], references: [id])
+  file File? @relation(fields: [imageId], references: [id])
 
   services        Service[]        @relation("ServiceHierarchy")
   offeredServices OfferedService[]
@@ -142,7 +143,7 @@ model ServiceProvider {
   contact String
   address String
 
-  providerType ServiceProviderType
+  providerType UserType
 
   isVerified       Boolean @default(false)
   isProfileVerfied Boolean @default(false)
@@ -151,7 +152,7 @@ model ServiceProvider {
   updatedAt DateTime @updatedAt
 
   user            User             @relation(fields: [userId], references: [id])
-  image           Image?           @relation(fields: [imageId], references: [id])
+  file            File?            @relation(fields: [imageId], references: [id])
   companyDetails  CompanyDetails[]
   offeredServices OfferedService[]
 }
@@ -160,7 +161,7 @@ model CompanyDetails {
   id                String @id @default(auto()) @map("_id") @db.ObjectId
   serviceProviderId String @db.ObjectId
 
-  registrationNumber    String @unique
+  registrationNumber    String  @unique
   contactPersonName     String?
   contactPersonPosition String?
   secondaryContact      String?
@@ -185,14 +186,28 @@ model OfferedService {
   bookings        Booking[]
 }
 
-model Image {
-  id  String @id @default(auto()) @map("_id") @db.ObjectId
-  src String
-  alt String
+model File {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  type     String
+  size     Int
+  url      String?
+  localUrl String?
 
+  createdAt DateTime @default(now())
+
+  fileBinaries     FileBinary[]
   serviceProviders ServiceProvider[]
   userProfiles     UserProfile[]
   services         Service[]
+}
+
+model FileBinary {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  fileId String @db.ObjectId
+  data   Bytes?
+
+  file File @relation(fields: [fileId], references: [id], onDelete: Cascade)
 }
 
 model Booking {
@@ -221,7 +236,7 @@ model QueuedEmail {
   to              String
   subject         String
   body            String
-  createdAt       DateTime   @default(now())
+  createdAt       DateTime  @default(now())
   sentTries       Int       @default(0)
   sentAt          DateTime?
   sendImmediately Boolean   @default(false)
@@ -239,7 +254,7 @@ enum Gender {
   OTHERS
 }
 
-enum ServiceProviderType {
+enum UserType {
   INDIVIDUAL
   COMPANY
 }

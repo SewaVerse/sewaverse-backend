@@ -1,5 +1,5 @@
 import { getUserByEmail, updateUserById } from "@/app/data-access/user";
-import { asyncHandler } from "@/app/utils/asyncHandler";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { User } from "@prisma/client";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";

@@ -1,5 +1,5 @@
 import db from "@/lib/db";
-import { dbAsyncHandler } from "../utils/dbAsyncHandler";
+import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 
 export const getVerificationTokenByEmail = dbAsyncHandler(
   async (email: string) => {

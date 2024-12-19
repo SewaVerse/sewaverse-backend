@@ -1,9 +1,5 @@
-import { QueuedEmail } from "@prisma/client";
-import {
-  getQueuedEmails,
-  updateQueuedEmailById,
-} from "../data-access/queuedEmail";
-import { sendEmail } from "./sendEmail";
+import { getQueuedEmails } from "../data-access/queuedEmail";
+import { sendQueuedEmail } from "./email/sendQueuedEmail";
 
 export const sendScheduleEmail = async () => {
   const maxTries = 3;
@@ -12,22 +8,6 @@ export const sendScheduleEmail = async () => {
   const queuedEmails = await getQueuedEmails(maxTries);
 
   for (const email of queuedEmails) {
-    try {
-      await sendEmail(email);
-
-      // If sent successfully, set the sentAt to current date
-      email.sentAt = new Date();
-    } catch (error) {
-      console.error(`Error sending email to ${email.to}:`, error);
-    } finally {
-      // Increment the sentTries count whether sending was successful or not
-      email.sentTries += 1;
-
-      // Update the email record in the database
-      await updateQueuedEmailById(email.id, {
-        sentTries: email.sentTries,
-        sentAt: email.sentAt,
-      } as QueuedEmail);
-    }
+    await sendQueuedEmail(email);
   }
 };

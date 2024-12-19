@@ -1,5 +1,5 @@
 import { findUsersByRole, getUserById } from "@/app/data-access/user";
-import { asyncHandler } from "@/app/utils/asyncHandler";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { mongoId } from "@/lib/constants";
 import { Role } from "@prisma/client";
 import { NextResponse } from "next/server";

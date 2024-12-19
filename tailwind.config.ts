@@ -50,6 +50,8 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        brand: "hsla(217, 97%, 29%, 1)",
+        "brand-grey": "hsla(0, 0%, 53%, 1)",
       },
       borderRadius: {
         lg: "var(--radius)",
