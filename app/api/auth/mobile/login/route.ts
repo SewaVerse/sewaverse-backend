@@ -24,7 +24,7 @@ export const POST = asyncHandler(async (request: Request) => {
 
   const user = await getUserByEmail(email);
 
-  if (!user || !user.password || !user.emailVerified) {
+  if (!user || !user.password) {
     throw new CustomError("Invalid credentials.");
   }
 

@@ -31,6 +31,20 @@ const socialLinks = [
   },
 ];
 
+const mobileLinks = [
+  {
+    path: "/images/playstore.svg",
+    alt: "playstore",
+    title: "Get it from",
+    description: "Google Play",
+  },
+  {
+    path: "/images/apple.svg",
+    alt: "apple store",
+    title: "Download from",
+    description: "Apple Store",
+  },
+];
 const Footer = () => {
   return (
     <footer className="p-4 md:pt-10 md:pb-4">
@@ -40,10 +54,11 @@ const Footer = () => {
             <Image
               src="/images/sewaverse.svg"
               alt="logo"
-              width={200}
-              height={200}
+              width={150}
+              height={180}
+              className="h-auto w-auto"
             />
-            <p className="ms-[2.5rem] text-sm">
+            <p className="ms-[4rem] text-sm">
               Offer or receive services with simplicity, convenience, and
               seamless ease.
             </p>
@@ -57,9 +72,9 @@ const Footer = () => {
                   <Image
                     src={socialLink.path}
                     alt={socialLink.alt}
-                    width={20}
-                    height={20}
-                    className="object-cover"
+                    width={0}
+                    height={0}
+                    className="h-6 w-6"
                   />
                 </Link>
               ))}
@@ -107,6 +122,7 @@ const Footer = () => {
                     alt="phoone"
                     width={20}
                     height={20}
+                    className="h-5 w-5"
                   />
                   +977-21234567
                 </li>
@@ -116,6 +132,7 @@ const Footer = () => {
                     alt="phoone"
                     width={20}
                     height={20}
+                    className="h-5 w-5"
                   />
                   support@gmail.com
                 </li>
@@ -123,30 +140,25 @@ const Footer = () => {
             </div>
           </div>
           <div className="flex justify-end gap-4">
-            <Button variant={"outline"} className="py-1 px-4 h-auto w-auto">
-              <Image
-                src={"/images/playstore.svg"}
-                alt="playstore"
-                width={25}
-                height={25}
-              />
-              <div className="text-left">
-                <p className="text-[10px]">Get it from</p>
-                <p className="text-sm">Google Play</p>
-              </div>
-            </Button>
-            <Button variant={"outline"} className="py-1 px-4 h-auto w-auto">
-              <Image
-                src={"/images/apple.svg"}
-                alt="playstore"
-                width={25}
-                height={25}
-              />
-              <div className="text-left">
-                <p className="text-[10px]">Download from</p>
-                <p className="text-sm">Apple Store</p>
-              </div>
-            </Button>
+            {mobileLinks.map((socialLink) => (
+              <Button
+                key={socialLink.alt}
+                variant={"outline"}
+                className="py-1 px-4 h-auto w-auto"
+              >
+                <Image
+                  src={socialLink.path}
+                  alt={socialLink.alt}
+                  width={20}
+                  height={20}
+                  className="w-auto h-auto"
+                />
+                <div className="text-left">
+                  <p className="text-[10px]">{socialLink.title}</p>
+                  <p className="text-sm">{socialLink.description}</p>
+                </div>
+              </Button>
+            ))}
           </div>
         </div>
       </div>

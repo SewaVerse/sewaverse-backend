@@ -1,8 +1,8 @@
 "use client";
 
+import Input from "@/components/form/Input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
@@ -13,22 +13,19 @@ import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import AuthSocialButton from "./AuthSocialButton";
 
-type LoginForm = {
-  email: string;
-  password: string;
-};
+import { userLoginSchema } from "@/app/schemas/authSchema";
+import { Form } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
+type LoginForm = z.infer<typeof userLoginSchema>;
 type SocialActions = "google" | "twitter" | "github";
 
 const LoginForm = () => {
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    formState: { errors },
-  } = useForm<LoginForm>({
+  const form = useForm<LoginForm>({
+    resolver: zodResolver(userLoginSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -56,6 +53,7 @@ const LoginForm = () => {
 
   const socialAction = async (action: SocialActions) => {
     const callback = await signIn(action, { redirect: false });
+
     if (callback?.error) {
       toast.error("Invalid credentials!");
     } else if (callback?.ok) {
@@ -65,8 +63,8 @@ const LoginForm = () => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex-1 rounded-lg bg-gray-50  pt-8">
           <div className="flex flex-col justify-center items-center">
             <Image
@@ -83,19 +81,20 @@ const LoginForm = () => {
           </div>
 
           <div className="w-full my-4">
-            <div>
-              <Input
-                {...register("email", { required: true })}
-                placeholder="Enter email address"
-              />
-            </div>
-            <div className="my-5">
-              <Input
-                {...register("password", { required: true })}
-                type="password"
-                placeholder="Password"
-              />
-            </div>
+            <Input
+              type="email"
+              placeholder="Email"
+              label="Email"
+              form={form}
+              name="email"
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              label="Password"
+              form={form}
+              name="password"
+            />
             <div className="my-2 flex justify-between">
               <div className="flex items-center space-x-2">
                 <Checkbox id="terms" />
@@ -124,7 +123,7 @@ const LoginForm = () => {
           onClick={() => socialAction("google")}
         />
       </div>
-    </>
+    </Form>
   );
 };
 

@@ -68,14 +68,21 @@ const resetPasswordSchema = z.object({
   confirmPassword: passwordSchema,
 });
 
+const verifyEmailSchema = z.object({
+  token: z.string({ message: "Token is required" }),
+});
+
 export type UserRegisterSchema = z.infer<typeof userRegisterSchema>;
 export type UserLoginSchema = z.infer<typeof userLoginSchema>;
 export type ResetSchema = z.infer<typeof resetSchema>;
 export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
+
+export type VerifyEmailSchema = z.infer<typeof verifyEmailSchema>;
 
 export {
   resetPasswordSchema,
   resetSchema,
   userLoginSchema,
   userRegisterSchema,
+  verifyEmailSchema,
 };

@@ -64,6 +64,7 @@ export default {
       },
       fontFamily: {
         poppins: "var(--font-poppins)",
+        "play-fair": "var(--font-play-fair)",
         "studio-pro": "var(--font-studio-pro)",
       },
     },

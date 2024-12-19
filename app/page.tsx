@@ -40,9 +40,8 @@ const Home = async () => {
         <Image
           src="/images/homepageimage.webp"
           alt="Homepage background"
-          layout="fill"
-          objectFit="cover"
-          objectPosition="center"
+          fill
+          className="object-cover w-full h-full"
         />
         <div className="absolute inset-0 bg-black opacity-40"></div>
 
@@ -358,9 +357,8 @@ const Home = async () => {
             <Image
               src="/images/service_market_place.webp"
               alt="Homepage background"
-              layout="fill"
-              objectFit="cover"
-              objectPosition="center"
+              className="object-cover w-full h-full"
+              fill
               priority
             />
           </div>
@@ -428,7 +426,13 @@ const Home = async () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 place-items-center">
           {imagesData.map((image, index) => (
             <div key={index} className="flex flex-col items-center">
-              <Image src={image.src} alt={image.name} width={50} height={50} />
+              <Image
+                src={image.src}
+                alt={image.name}
+                width={20}
+                height={20}
+                className="w-[4rem] h-[4rem]"
+              />
               <span className="mt-2 text-sm text-gray-600">{image.name}</span>
             </div>
           ))}

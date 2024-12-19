@@ -34,7 +34,7 @@ export const sendPaswordResetOtpEmail = dbAsyncHandler(
 
 export const sendVerificationEmail = dbAsyncHandler(
   async (email: string, token: string) => {
-    const confirmLink = `${domain}/email-verification?token=${token}`;
+    const confirmLink = `${domain}/email-verification/${token}`;
 
     return await createQueuedEmail(
       {

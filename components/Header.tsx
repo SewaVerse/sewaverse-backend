@@ -57,7 +57,10 @@ const Header = () => {
           <p>Why Sewaverse</p>
           {!hasSewaProviderRole && (
             <Link
-              href="/register/sewa-provider"
+              href={{
+                pathname: "/account-type",
+                query: { role: "serviceProvider" },
+              }}
               className="hover:underline decoration-brand"
             >
               <p className="gradient-text">Become a Sewa provider</p>
@@ -72,7 +75,9 @@ const Header = () => {
                   Login
                 </Button>
               </Link>
-              <Link href="/register">
+              <Link
+                href={{ pathname: "/account-type", query: { role: "user" } }}
+              >
                 <Button variant={"brand"}>Sign up</Button>
               </Link>
             </>

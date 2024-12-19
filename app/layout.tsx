@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { SessionProvider } from "next-auth/react";
-import { Poppins } from "next/font/google";
+import { Playfair, Poppins } from "next/font/google";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -23,6 +23,12 @@ import { Poppins } from "next/font/google";
 const poppinsFont = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
+  weight: ["400", "500", "600", "700"],
+});
+
+const playFairFont = Playfair({
+  subsets: ["latin"],
+  variable: "--font-play-fair",
   weight: ["400", "500", "600", "700"],
 });
 
@@ -43,7 +49,7 @@ export default async function RootLayout({
     <html lang="en">
       <body
         // className={`${geistSans.variable} ${geistMono.variable}  ${poppinsFont.variable} antialiased `}
-        className={`${poppinsFont.variable} antialiased `}
+        className={`${poppinsFont.variable} ${playFairFont.variable} antialiased `}
       >
         <SessionProvider session={session}>
           <div className="flex flex-col min-h-[100svh]">
