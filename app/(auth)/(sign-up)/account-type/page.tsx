@@ -85,10 +85,10 @@ export default function ServiceProvider() {
             {/* Account Selection */}
             <div className="w-full space-y-4 flex flex-col">
               <RadioGroup
-                {...register("accountType", {
-                  required: true,
-                })}
-                onValueChange={(value) => setValue("accountType", value)}
+                value={watch("accountType")} // Bind the value to the form's state
+                onValueChange={(value) => {
+                  setValue("accountType", value); // Update the form state
+                }}
                 className="flex flex-col gap-4"
               >
                 {radioOptions.map((option) => (

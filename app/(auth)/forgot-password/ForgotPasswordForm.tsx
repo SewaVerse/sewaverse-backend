@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 type ForgotPasswordForm = {
   email: string;
@@ -76,12 +77,12 @@ const ForgotPasswordForm = () => {
           </Button>
         </form>
         <div className="text-center mt-4">
-          <a
+          <Link
             href="/login"
             className="text-blue-500 font-medium hover:underline"
           >
             Back to Login
-          </a>
+          </Link>
         </div>
       </div>
     </div>

@@ -8,7 +8,7 @@ export default function Login() {
       <div className="flex justify-center my-2">
         <p className="text-sm">
           {"Don't have an account?"}
-          <Link href="/accountType" className="text-primary">
+          <Link  href={{ pathname: "/account-type", query: { role: "user" } }} className="text-primary">
             {" "}
             Register here
           </Link>
