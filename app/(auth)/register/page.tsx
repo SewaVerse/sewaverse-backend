@@ -65,7 +65,7 @@ export default function Register() {
       router.push("/email");
       console.log("Registration successful:", result);
     } catch (error) {
-      console.error("Error during registration:");
+      console.error("Error during registration:", error);
       toast.error("Failed to register. Please try again.");
   
   };
