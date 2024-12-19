@@ -122,7 +122,7 @@ model Service {
   parentServiceId String? @db.ObjectId // Made nullable for root services
 
   imageId  String? @db.ObjectId
-  isActive Boolean @default(false)
+  isActive Boolean @default(true)
 
   // Self-relation for parent and child services
   parentService Service? @relation("ServiceHierarchy", fields: [parentServiceId], references: [id], onDelete: NoAction, onUpdate: NoAction)
