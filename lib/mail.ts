@@ -21,6 +21,17 @@ export const sendPasswordResetEmail = dbAsyncHandler(
   }
 );
 
+export const sendPaswordResetOtpEmail = dbAsyncHandler(
+  async (email: string, otp: string) => {
+    return await createQueuedEmail({
+      from: fromEmail,
+      to: email,
+      subject: "Reset your password",
+      body: `<p>OTP: ${otp}</p>`,
+    } as QueuedEmail);
+  }
+);
+
 export const sendVerificationEmail = dbAsyncHandler(
   async (email: string, token: string) => {
     const confirmLink = `${domain}/email-verification?token=${token}`;

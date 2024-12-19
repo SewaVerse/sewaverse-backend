@@ -43,3 +43,5 @@ export const dobSchema = z
     },
     { message: "You must be at least 18 years old" }
   );
+
+export const isMobileSchema = z.boolean().optional();

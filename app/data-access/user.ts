@@ -10,12 +10,16 @@ export const getUserByEmail = dbAsyncHandler(async (email: string) => {
 });
 
 export const getUserById = dbAsyncHandler(async (id: string) => {
-  return await db.user.findUnique({
+  const user = await db.user.findUnique({
     where: { id },
     include: {
       roles: true,
     },
   });
+  if (user) {
+    return user;
+  }
+  return null;
 });
 
 export const createUser = dbAsyncHandler(async (data: User) => {

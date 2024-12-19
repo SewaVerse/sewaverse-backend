@@ -3,6 +3,7 @@ import {
   dobSchema,
   emailSchema,
   genderSchema,
+  isMobileSchema,
   passwordSchema,
   phoneNumberSchema,
   roleSchema,
@@ -59,6 +60,7 @@ const userLoginSchema = z.object({
 
 const resetSchema = z.object({
   email: emailSchema,
+  isMobile: isMobileSchema,
 });
 
 const resetPasswordSchema = z.object({
