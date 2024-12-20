@@ -1,6 +1,7 @@
 import db from "@/lib/db";
 import { File } from "@prisma/client";
 import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
+import { getLocalFileUrl } from "../utils/fileHelper";
 
 export const getFileById = dbAsyncHandler(async (id: string) => {
   return await db.file.findUnique({
@@ -23,7 +24,9 @@ export const createFile = dbAsyncHandler(async (file: File, binary: Buffer) => {
     },
   });
 
-  return { savedFile, fileBinary };
+  const updatedFile = await getLocalFileUrl(savedFile.id);
+
+  return { file: updatedFile, fileBinary };
 });
 
 export const updateFileById = dbAsyncHandler(async (id: string, data: File) => {

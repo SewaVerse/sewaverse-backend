@@ -60,7 +60,9 @@ export const getLocalFileUrl = async (id: string) => {
   const fullPath = `/thunks/${filename}`;
 
   // save file url
-  await updateFileById(id, { localUrl: fullPath } as PrismaFile);
+  const updatedFile = await updateFileById(id, {
+    localUrl: fullPath,
+  } as PrismaFile);
 
-  return fullPath;
+  return updatedFile;
 };

@@ -1,7 +1,6 @@
 import { createFile } from "@/app/data-access/file";
 import { fileSchema } from "@/app/schemas/fileSchema";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
-import { getLocalFileUrl } from "@/app/utils/fileHelper";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { File as PrismaFile } from "@prisma/client";
 import { NextResponse } from "next/server";
@@ -31,13 +30,11 @@ export const POST = asyncHandler(async (request: Request) => {
   } as PrismaFile;
 
   // save to db
-  const { savedFile } = await createFile(prismaFile, buffer);
-
-  const fileUrl = await getLocalFileUrl(savedFile.id);
+  const { file: saveFile } = await createFile(prismaFile, buffer);
 
   return NextResponse.json({
     success: true,
-    fileUrl,
+    file: saveFile,
     message: "File uploaded successfully",
   });
 });
