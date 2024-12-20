@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { SessionProvider } from "next-auth/react";
-import { Playfair, Poppins } from "next/font/google";
+import { Inter, Roboto, Work_Sans } from "next/font/google";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -20,15 +20,29 @@ import { Playfair, Poppins } from "next/font/google";
 //   weight: "100 900",
 // });
 
-const poppinsFont = Poppins({
-  subsets: ["latin"],
-  variable: "--font-poppins",
-  weight: ["400", "500", "600", "700"],
-});
+// const poppinsFont = Poppins({
+//   subsets: ["latin"],
+//   variable: "--font-poppins",
+//   weight: ["400", "500", "600", "700"],
+// });
 
-const playFairFont = Playfair({
+// const playFairFont = Playfair({
+//   subsets: ["latin"],
+//   variable: "--font-play-fair",
+//   weight: ["400", "500", "600", "700"],
+// });
+const Work_SansFont = Work_Sans({
   subsets: ["latin"],
-  variable: "--font-play-fair",
+  variable: "--work-sans",
+});
+const robotoFont = Roboto({
+  subsets: ["latin"],
+  variable: "--roboto",
+  weight: ["400", "500", "700"],
+});
+const interFont = Inter({
+  subsets: ["latin"],
+  variable: "--inter",
   weight: ["400", "500", "600", "700"],
 });
 
@@ -49,7 +63,7 @@ export default async function RootLayout({
     <html lang="en">
       <body
         // className={`${geistSans.variable} ${geistMono.variable}  ${poppinsFont.variable} antialiased `}
-        className={`${poppinsFont.variable} ${playFairFont.variable} antialiased `}
+        className={`${Work_SansFont.variable} ${robotoFont.variable} ${interFont.variable} antialiased `}
       >
         <SessionProvider session={session}>
           <div className="flex flex-col min-h-[100svh]">

@@ -62,10 +62,15 @@ export default {
         "brand-gradient":
           "linear-gradient(to right,hsla(238, 52%, 38%, 1), hsla(301, 57%, 36%, 1))",
       },
+      // fontFamily: {
+      //   poppins: "var(--font-poppins)",
+      //   "play-fair": "var(--font-play-fair)",
+      //   "studio-pro": "var(--font-studio-pro)",
+      // },
       fontFamily: {
-        poppins: "var(--font-poppins)",
-        "play-fair": "var(--font-play-fair)",
-        "studio-pro": "var(--font-studio-pro)",
+        "work-sans": "var(--work-sans)",
+        "roboto": "var(--roboto)",
+        "inter": "var(--inter)",
       },
     },
   },
