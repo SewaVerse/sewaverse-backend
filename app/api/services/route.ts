@@ -1,11 +1,10 @@
-import { NextResponse } from "next/server";
-import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
-import { createService } from "@/app/data-access/service";
-import { Service } from "@prisma/client";
-import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { fileSchema } from "@/app/schemas/fileSchema";
 import { createFile } from "@/app/data-access/file";
-import { File as PrismaFile } from "@prisma/client";
+import { createService } from "@/app/data-access/service";
+import { fileSchema } from "@/app/schemas/fileSchema";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
+import { validateRequestBody } from "@/app/utils/validateRequestBody";
+import { File as PrismaFile, Service } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (request: Request) => {
   console.log("Running POST request: Create Services");
@@ -34,7 +33,7 @@ export const POST = asyncHandler(async (request: Request) => {
     const fileBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(fileBuffer);
 
-    const { savedFile } = await createFile(
+    const { file: savedFile } = await createFile(
       {
         name: file.name,
         size: file.size,

@@ -115,7 +115,11 @@ export default function Register() {
               form={form}
               name="name"
               type="text"
-              placeholder="Full Name"
+              placeholder={
+                registerData && registerData.accountType === "company"
+                  ? "Company Name"
+                  : "Full Name"
+              }
             />
 
             {/* Phone Number */}

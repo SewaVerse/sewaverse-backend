@@ -24,7 +24,12 @@ export const createFile = dbAsyncHandler(async (file: File, binary: Buffer) => {
     },
   });
 
-  const updatedFile = await getLocalFileUrl(savedFile.id);
+  const localPath = await getLocalFileUrl(savedFile.id, false);
+
+  const updatedFile = await db.file.update({
+    where: { id: savedFile.id },
+    data: { localUrl: localPath },
+  });
 
   return { file: updatedFile, fileBinary };
 });

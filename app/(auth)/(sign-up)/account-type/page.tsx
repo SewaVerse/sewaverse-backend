@@ -43,7 +43,6 @@ export default function ServiceProvider() {
   const router = useRouter();
 
   const {
-    register,
     handleSubmit,
     setValue,
     watch,

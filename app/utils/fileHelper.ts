@@ -29,7 +29,10 @@ const checkFileExists = async (filePath: string): Promise<boolean> => {
   }
 };
 
-export const getLocalFileUrl = async (id: string) => {
+export const getLocalFileUrl = async (
+  id: string,
+  updatePath: boolean = true
+) => {
   const file = await getFileById(id);
 
   if (!file) return "";
@@ -59,10 +62,10 @@ export const getLocalFileUrl = async (id: string) => {
 
   const fullPath = `/thunks/${filename}`;
 
-  // save file url
-  const updatedFile = await updateFileById(id, {
-    localUrl: fullPath,
-  } as PrismaFile);
+  if (updatePath) {
+    // save file url
+    await updateFileById(id, { localUrl: fullPath } as PrismaFile);
+  }
 
-  return updatedFile;
+  return fullPath;
 };
