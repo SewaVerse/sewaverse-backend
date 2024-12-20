@@ -1,8 +1,14 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 export default function sewaproviderWelcome() {
+  const session = useSession();
+  const userName =
+  session?.data?.user?.name;
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
       {/* Top Navigation */}
@@ -10,7 +16,7 @@ export default function sewaproviderWelcome() {
       {/* Main Content */}
       <main className="flex flex-col items-center text-center px-6">
         <h1 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-4">
-          Welcome <span className="text-purple-600">Bishal</span>, Ready to take
+          Welcome <span className="text-purple-600">{userName}</span>, Ready to take
           your business <br /> to the next{" "}
           <span className="underline decoration-red-500">level</span>??
         </h1>
