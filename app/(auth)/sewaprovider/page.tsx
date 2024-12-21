@@ -5,13 +5,18 @@ import { useForm } from "react-hook-form";
 
 // Define Form Data Interface
 interface SewaProviderDetailsFormData {
+  gender: string;
+  dateOfBirth: string;
   province: string;
   district: string;
   municipality: string;
   wardNo: string;
   tole: string;
-  gender: string;
-  dateOfBirth: string;
+  citizenshipFront: FileList;
+  citizenshipBack: FileList;
+  panNumber: string;
+  panCardImage: FileList;
+  citizenship: string;
 }
 
 export default function SewaProviderDetails() {
@@ -27,118 +32,49 @@ export default function SewaProviderDetails() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 font-poppins">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 ">
       {/* Form Card */}
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
         {/* Logo */}
         <div className="flex justify-center mb-4">
           <Image src="/images/mainLogo.svg" alt="logo" width={50} height={50} />
         </div>
 
         {/* Title */}
-        <h2 className="text-center text-2xl text-black mb-6 font-poppins">
+        <h2 className="text-center text-2xl text-black mb-6">
           Sewa Provider Details
         </h2>
 
         {/* Individual Tab */}
-        <div className="text-center text-sm text-[#878787] mb-4">
+        <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
           <p>Individual</p>
-          <div
-            className="w-full h-[2px]"
-            style={{ backgroundColor: "#2E3192", marginTop: "8px" }}
-          ></div>
+          <p>Step 1</p>
         </div>
+        <div className="w-full h-[2px] bg-[#2E3192] mb-6"></div>
 
         {/* Form */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4 text-[#878787]"
-        >
-          {/* Province and District */}
-          <div className="flex space-x-2">
-            <select
-              {...register("province", { required: "Province is required" })}
-              className="w-1/2 border rounded-md p-2 focus:ring-[#2E3192]"
-            >
-              <option value="">Province</option>
-              <option value="Province 1">Province 1</option>
-              <option value="Province 2">Province 2</option>
-            </select>
-            {errors.province && (
-              <span className="text-red-500 text-sm">
-                {errors.province.message}
-              </span>
-            )}
-
-            <select
-              {...register("district", { required: "District is required" })}
-              className="w-1/2 border rounded-md p-2 focus:ring-[#2E3192]"
-            >
-              <option value="">District</option>
-              <option value="District 1">District 1</option>
-              <option value="District 2">District 2</option>
-            </select>
-            {errors.district && (
-              <span className="text-red-500 text-sm">
-                {errors.district.message}
-              </span>
-            )}
-          </div>
-
-          {/* Municipality and Ward No */}
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              placeholder="Municipality"
-              {...register("municipality", {
-                required: "Municipality is required",
-              })}
-              className="w-1/2 border rounded-md p-2 focus:ring-[#2E3192] placeholder-[#878787]"
-            />
-            <input
-              type="text"
-              placeholder="Ward No."
-              {...register("wardNo", { required: "Ward No. is required" })}
-              className="w-1/2 border rounded-md p-2 focus:ring-[#2E3192] placeholder-[#878787]"
-            />
-          </div>
-          {errors.municipality && (
-            <span className="text-red-500 text-sm">
-              {errors.municipality.message}
-            </span>
-          )}
-          {errors.wardNo && (
-            <span className="text-red-500 text-sm">
-              {errors.wardNo.message}
-            </span>
-          )}
-
-          {/* Tole */}
-          <input
-            type="text"
-            placeholder="Tole"
-            {...register("tole", { required: "Tole is required" })}
-            className="w-full border rounded-md p-2 focus:ring-[#2E3192] placeholder-[#878787]"
-          />
-          {errors.tole && (
-            <span className="text-red-500 text-sm">{errors.tole.message}</span>
-          )}
-
-          {/* Gender and Date of Birth */}
-          <div className="flex space-x-2">
-            <div className="w-1/2">
-              <label className="block text-sm text-[#878787] mb-1">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Gender and Date of Birth Section */}
+          <div className="grid grid-cols-2 gap-4 items-center">
+            {/* Gender Dropdown */}
+            <div className="relative">
+              <label
+                className="block mb-2 text-sm font-medium"
+                htmlFor="gender"
+              >
                 Gender
               </label>
               <select
+                id="gender"
                 {...register("gender", { required: "Gender is required" })}
-                className="w-full border rounded-md p-2 focus:ring-[#2E3192]"
+                className="block w-full h-[45px] border border-gray-300 rounded-[20px] px-3 appearance-none"
               >
-                <option value="">Select a gender</option>
+                <option value="">Select gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
+
               {errors.gender && (
                 <span className="text-red-500 text-sm">
                   {errors.gender.message}
@@ -146,16 +82,21 @@ export default function SewaProviderDetails() {
               )}
             </div>
 
-            <div className="w-1/2">
-              <label className="block text-sm text-[#878787] mb-1">
+            {/* Date Picker */}
+            <div className="relative">
+              <label
+                className="block mb-2 text-sm font-medium"
+                htmlFor="dateOfBirth"
+              >
                 Date of Birth
               </label>
               <input
+                id="dateOfBirth"
                 type="date"
                 {...register("dateOfBirth", {
                   required: "Date of Birth is required",
                 })}
-                className="w-full border rounded-md p-2 focus:ring-[#2E3192]"
+                className="block w-full h-[45px] border rounded-[100px] px-3"
               />
               {errors.dateOfBirth && (
                 <span className="text-red-500 text-sm">
@@ -165,8 +106,132 @@ export default function SewaProviderDetails() {
             </div>
           </div>
 
+          {/* Address Section */}
+          <div>
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Address</h3>
+            <div className="grid grid-cols-2 gap-6 mb-4">
+              <select
+                {...register("province", { required: "Province is required" })}
+                className="w-full border border-gray-300 rounded-[20px] p-3 shadow-sm"
+              >
+                <option value="">Province</option>
+                <option value="Province 1">Province 1</option>
+                <option value="Province 2">Province 2</option>
+              </select>
+              <select
+                {...register("district", { required: "District is required" })}
+                className="w-full border border-gray-300 rounded-[20px] p-3 shadow-sm"
+              >
+                <option value="">District</option>
+                <option value="District 1">District 1</option>
+                <option value="District 2">District 2</option>
+              </select>
+            </div>
+            <div className="grid grid-cols-2 gap-6 mb-4">
+              {/* <input
+                type="text"
+                placeholder="Municipality"
+                {...register("municipality", {
+                  required: "Municipality is required",
+                })}
+                className="w-full border border-gray-300 rounded-lg p-3 shadow-sm"
+              /> */}
+              <select
+                {...register("district", {
+                  required: "Municipality is required",
+                })}
+                className="w-full border border-gray-300 rounded-[20px] p-3 shadow-sm"
+              >
+                <option value="">Municipality</option>
+                <option value="Municipality 1">Municipality 1</option>
+                <option value="Municipality 2">Municipality 2</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Ward No."
+                {...register("wardNo", { required: "Ward No. is required" })}
+                className="w-full border border-gray-300 rounded-[20px] p-3 shadow-sm"
+              />
+            </div>
+            <input
+              type="text"
+              placeholder="Tole"
+              {...register("tole", { required: "Tole is required" })}
+              className="w-full border border-gray-300 rounded-[20px] p-3 shadow-sm"
+            />
+          </div>
+
+          {/* Verification Documents */}
+          <div>
+            <h3 className="text-lg font-medium text-gray-800 mb-4">
+              Verification Documents
+            </h3>
+            <h5 className="text-lg font-medium text-gray-800 mb-4">
+              Personal Documents
+            </h5>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                Citizenship Type
+              </label>
+              <select
+                {...register("citizenship", {
+                  required: "Citizenship type is required",
+                })}
+                className="w-full border border-gray-300 rounded-[20px] p-3 shadow-sm"
+              >
+                <option value="">Select Citizenship</option>
+                <option value="Nepali">Nepali</option>
+                <option value="Foreign">Foreign</option>
+              </select>
+              {errors.citizenship && (
+                <span className="text-red-500 text-sm">
+                  {errors.citizenship.message}
+                </span>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <input
+                type="file"
+                {...register("citizenshipFront", {
+                  required: "Citizenship front side is required",
+                })}
+                className="w-full text-sm text-gray-500"
+              />
+              <input
+                type="file"
+                {...register("citizenshipBack", {
+                  required: "Citizenship back side is required",
+                })}
+                className="w-full text-sm text-gray-500"
+              />
+            </div>
+          </div>
+
+          {/* PAN Card */}
+          {/* PAN Card */}
+          <div>
+            <h3 className="text-lg font-medium text-gray-800 mb-4">PAN Card</h3>
+            <input
+              type="text"
+              placeholder="PAN Number"
+              {...register("panNumber", { required: "PAN Number is required" })}
+              className="w-full border border-gray-300 rounded-[20px] p-3 shadow-sm"
+            />
+            <input
+              type="file"
+              {...register("panCardImage", {
+                required: "PAN Card image is required",
+              })}
+              className="w-full text-sm text-gray-500"
+            />
+          </div>
+
           {/* Proceed Button */}
-          <Button variant={"brand"} className="mt-2 w-full">
+          <Button variant={"brand"}
+            type="submit"
+            className="w-full text-white py-3 rounded-[20px] shadow-md"
+          >
             Proceed
           </Button>
         </form>
