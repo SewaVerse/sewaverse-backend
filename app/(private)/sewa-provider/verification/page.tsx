@@ -8,8 +8,6 @@ const SewaProviderVerificationPage = async () => {
 
   if (!user || !hasServiceProviderRole) redirect("/");
 
-  console.log("user", user.id);
-
   const serviceProvider = await getServiceProviderByUserId(user.id!);
 
   const current = serviceProvider?.verificationStep ?? 1;
