@@ -50,7 +50,9 @@ const Home = async () => {
             <h1 className="text-3xl font-bold mb-4">Id: {session?.user?.id}</h1>
             <h2 className="text-2xl mb-4">Name: {session?.user?.name}</h2>
             <h3 className="text-xl mb-4">Email: {session?.user?.email}</h3>
-            <h4 className="text-lg mb-8">Role: {session?.user?.roles}</h4>
+            <h4 className="text-lg mb-8">
+              Role: {session?.user?.roles.join(", ")}
+            </h4>
           </div>
         </div>
 

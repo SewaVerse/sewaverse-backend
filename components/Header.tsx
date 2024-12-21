@@ -14,7 +14,7 @@ const Header = () => {
   const hasSewaProviderRole =
     session?.data?.user?.roles.includes("SEWA_PROVIDER");
   return (
-    <header className="py-3 px-5 mx-5">
+    <header className="py-3 px-5 md:px-10 border-b shadow">
       <div className="flex items-center justify-between">
         <div className="flex gap-5">
           <Link href={"/"}>

@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "../ui/form";
 
+import clsx from "clsx";
 import { Input as ShadInput } from "../ui/input";
 
 type InputProps = {
@@ -45,7 +46,7 @@ const Input: React.FC<InputProps> = ({
               type={type}
               disabled={disabled || form.formState.isSubmitting}
               {...field}
-              className={className}
+              className={clsx(className, "w-full")}
             />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}

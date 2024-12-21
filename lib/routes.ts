@@ -3,15 +3,13 @@
  * These routes do not require authentication
  */
 export const PUBLIC_ROUTES = [
-  "/",
   "/login",
   "/register",
-  "/forgotPassword",
-  "/resetPassword",
-  "/resetPasswordSucess",
-   "/accountType",
-   "/sewaprovider",
-   "/sewaproviderwelcome",
+  "/forgot-password",
+  "/reset-password",
+  "/account-type",
+  "/email-verification",
+  "/sewaprovider",
 ];
 
 /**

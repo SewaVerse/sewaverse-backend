@@ -67,20 +67,19 @@ export default function ServiceProvider() {
   }, [searchParams, router]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex items-center justify-center bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-center items-center w-full max-w-md bg-white">
-          <div className="text-center font-poppins">
-            {/* Logo */}
-            <div className="flex justify-center mb-6">
-              <Image src="/images/logo.svg" alt="logo" width={50} height={50} />
-            </div>
+    <div className="flex items-center justify-center flex-1 py-6 px-4 sm:px-6 lg:px-8">
+      <div className="flex justify-center items-center w-full max-w-md ">
+        <div className="text-center font-poppins">
+          {/* Logo */}
+          <div className="flex justify-center mb-6">
+            <Image src="/images/logo.svg" alt="logo" width={50} height={50} />
+          </div>
 
-            {/* Header */}
-            <h2 className="text-3xl font-semibold mb-4 font-play-fair">
-              Select an Account Type
-            </h2>
-
+          {/* Header */}
+          <h2 className="text-3xl font-semibold mb-4 font-play-fair">
+            Select an Account Type
+          </h2>
+          <form onSubmit={handleSubmit(onSubmit)}>
             {/* Account Selection */}
             <div className="w-full space-y-4 flex flex-col">
               <RadioGroup
@@ -129,7 +128,7 @@ export default function ServiceProvider() {
               )}
 
               {/* Next Button */}
-              <div className="flex justify-end">
+              <div className="flex justify-end mt-4">
                 <Button
                   variant={"outline"}
                   type="submit"
@@ -139,9 +138,9 @@ export default function ServiceProvider() {
                 </Button>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
-    </form>
+    </div>
   );
 }

@@ -97,12 +97,12 @@ model UserProfile {
   dob         String?
   imageId     String? @db.ObjectId
   gender      Gender?
-  address     String?
   phoneNumber String
 
   file File? @relation(fields: [imageId], references: [id], onDelete: Cascade)
 
-  users User[]
+  users     User[]
+  addresses UserAddressMapping[]
 }
 
 model UserRoleMapping {
@@ -131,42 +131,118 @@ model Service {
 
   services        Service[]        @relation("ServiceHierarchy")
   offeredServices OfferedService[]
+  workExperiences WorkExperience[]
 }
 
 model ServiceProvider {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
+  userId String @db.ObjectId @unique
 
-  name    String
-  imageId String? @db.ObjectId
-  email   String
-  contact String
-  address String
+  name String
+
+  email     String
+  contact   String
+  profileId String? @db.ObjectId
 
   providerType UserType
-
-  isVerified       Boolean @default(false)
-  isProfileVerfied Boolean @default(false)
+  verificationStep  Int @default(0)
+  isVerified        Boolean   @default(false)
+  isAdminVerified   Boolean  @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user            User             @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  companyDetails        CompanyDetails[]
+  verificationDocuments VerificationDocument[]
+  addresses             ServiceProviderAddressMapping[]
+  offeredServices       OfferedService[]
+  serviceLocations      ServiceLocation[]
+  profiles              ServiceProviderProfile[]
+}
+
+model ServiceProviderProfile {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  serviceProviderId String  @unique @db.ObjectId
+  profession        String
+  skills            String
+  description       String?
+  imageId           String? @db.ObjectId
+
   file            File?            @relation(fields: [imageId], references: [id])
-  companyDetails  CompanyDetails[]
-  offeredServices OfferedService[]
+  serviceProvider ServiceProvider? @relation(fields: [serviceProviderId], references: [id], onDelete: Cascade)
+
+  workExperiences WorkExperience[]
+  licenses        License[]
+  awards          Award[]
 }
 
 model CompanyDetails {
   id                String @id @default(auto()) @map("_id") @db.ObjectId
   serviceProviderId String @db.ObjectId
 
-  registrationNumber    String  @unique
-  contactPersonName     String?
-  contactPersonPosition String?
-  secondaryContact      String?
+  contactPersonName        String?
+  contactPersonDesignation String?
+  contactNumber            String?
 
   serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id])
+}
+
+model Address {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  province     String
+  district     String
+  municipality String
+  wardNo       String
+  tole         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  addresses                UserAddressMapping[]
+  serviceProviderAddresses ServiceProviderAddressMapping[]
+}
+
+model UserAddressMapping {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  userProfileId String @db.ObjectId
+  addressId     String @db.ObjectId
+
+  userProfile UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+  address     Address     @relation(fields: [addressId], references: [id], onDelete: NoAction)
+
+  @@unique([userProfileId, addressId])
+}
+
+model ServiceProviderAddressMapping {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  serviceProviderId String @db.ObjectId
+  addressId         String @db.ObjectId
+
+  serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id], onDelete: Cascade)
+  address         Address         @relation(fields: [addressId], references: [id])
+
+  @@unique([serviceProviderId, addressId])
+}
+
+model VerificationDocument {
+  id                String                   @id @default(auto()) @map("_id") @db.ObjectId
+  serviceProviderId String                   @db.ObjectId
+  documentType      VerificationDocumentType
+  documentNo        String?
+  frontFileId       String?                  @unique @db.ObjectId
+  backFileId        String?                  @unique @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  frontFile       File?           @relation("FrontFile", fields: [frontFileId], references: [id])
+  backFile        File?           @relation("BackFile", fields: [backFileId], references: [id])
+  serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id], onDelete: Cascade)
+
+  @@unique([documentType, documentNo])
+  @@index([serviceProviderId])
 }
 
 model OfferedService {
@@ -174,7 +250,12 @@ model OfferedService {
   serviceProviderId String @db.ObjectId
   serviceId         String @db.ObjectId
 
-  price          String
+  title       String
+  description String
+
+  price          Float
+  priceType      PriceType
+  discount       Float
   location       String
   workExperience String
 
@@ -184,6 +265,64 @@ model OfferedService {
   service         Service         @relation(fields: [serviceId], references: [id])
   serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id])
   bookings        Booking[]
+}
+
+model ServiceLocation {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  serviceProviderId String @db.ObjectId
+  area              String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id])
+}
+
+model WorkExperience {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  providerProfileId String    @db.ObjectId
+  jobTitle          String
+  company           String
+  duration          String
+  description       String?
+  startDate         DateTime
+  endDate           DateTime?
+  isCurrent         Boolean
+  serviceId         String    @db.ObjectId
+  fileId            String?   @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  service                Service                @relation(fields: [serviceId], references: [id])
+  file                   File?                  @relation(fields: [fileId], references: [id])
+  serviceProviderProfile ServiceProviderProfile @relation(fields: [providerProfileId], references: [id], onDelete: Cascade)
+}
+
+model License {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  providerProfileId String @db.ObjectId
+  licenseOf         String
+  licenseFrom       String
+  licenseNumber     String @unique
+
+  fileId String? @db.ObjectId
+
+  file                   File?                  @relation(fields: [fileId], references: [id])
+  serviceProviderProfile ServiceProviderProfile @relation(fields: [providerProfileId], references: [id], onDelete: Cascade)
+}
+
+model Award {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  providerProfileId String   @db.ObjectId
+  title             String
+  date              DateTime
+  awardFrom         String
+
+  fileId String? @db.ObjectId
+
+  file                   File?                  @relation(fields: [fileId], references: [id])
+  serviceProviderProfile ServiceProviderProfile @relation(fields: [providerProfileId], references: [id], onDelete: Cascade)
 }
 
 model File {
@@ -197,9 +336,17 @@ model File {
   createdAt DateTime @default(now())
 
   fileBinaries     FileBinary[]
-  serviceProviders ServiceProvider[]
+  providerProfiles ServiceProviderProfile[]
   userProfiles     UserProfile[]
   services         Service[]
+
+  // Relations for front and back files
+  frontDocuments VerificationDocument? @relation("FrontFile")
+  backDocuments  VerificationDocument? @relation("BackFile")
+
+  workExperiences WorkExperience[]
+  licenses        License[]
+  awards          Award[]
 }
 
 model FileBinary {
@@ -257,6 +404,22 @@ enum Gender {
 enum UserType {
   INDIVIDUAL
   COMPANY
+}
+
+enum VerificationDocumentType {
+  CITIZENSHIP
+  NATIONAL_IDENTITY_CARD
+  DRIVING_LICENSE
+  CERTIFICATE
+  PAN_VAT
+}
+
+enum PriceType {
+  HOURLY
+  TASK
+  SESSION
+  UNIT
+  PROJECT
 }
 
 enum BookingStatus {
