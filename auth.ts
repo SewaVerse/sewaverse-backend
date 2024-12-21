@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { User, UserRoleMapping } from "@prisma/client";
 import NextAuth from "next-auth";
+import { getServiceProviderByUserId } from "./app/data-access/serviceProvider";
 import {
   createUserRoleMapping,
   getRolesByUserId,
@@ -56,6 +57,17 @@ export const {
 
         if (roles) {
           token.roles = roles.map((role) => role.role);
+
+          if (token.roles.includes("SERVICE_PROVIDER")) {
+            const sewaProvider = await getServiceProviderByUserId(user.id!);
+
+            if (sewaProvider) {
+              token.serviceProviderVerification = {
+                verificationStep: sewaProvider.verificationStep,
+                isVerified: sewaProvider.isVerified,
+              };
+            }
+          }
         }
       }
 
@@ -75,6 +87,11 @@ export const {
         session.user.roles = token.roles as string[];
         session.user.isOAuth = token.isOAuth as boolean;
         session.user.accessToken = token.accessToken as string;
+
+        if (token.serviceProviderVerification) {
+          session.user.serviceProviderVerification =
+            token.serviceProviderVerification;
+        }
       }
 
       return session;

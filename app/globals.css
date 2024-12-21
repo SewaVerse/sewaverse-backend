@@ -63,18 +63,27 @@ body {
 }
 
 @layer components {
-  h1,h2,h3,h4,h5,h6{
-    font-family: "work-sans","san-serif";
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "work-sans", "san-serif";
   }
   p,
   button,
   input[type="text"] {
-    font-family: "inter","sans-serif";
+    font-family: "inter", "sans-serif";
   }
 
   footer {
     background: hsla(0, 0%, 97%, 1);
-
   }
 
   .gradient-text {

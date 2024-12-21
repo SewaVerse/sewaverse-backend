@@ -1,10 +1,9 @@
 "use client";
 
 import Input from "@/components/form/Input";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,14 +13,18 @@ import { FcGoogle } from "react-icons/fc";
 import AuthSocialButton from "./AuthSocialButton";
 
 import { userLoginSchema } from "@/app/schemas/authSchema";
+import Button from "@/components/form/Button";
+import PasswordInput from "@/components/form/PasswordInput";
 import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { z } from "zod";
 
 type LoginForm = z.infer<typeof userLoginSchema>;
 type SocialActions = "google" | "twitter" | "github";
 
 const LoginForm = () => {
+  const session = useSession();
   const router = useRouter();
 
   const form = useForm<LoginForm>({
@@ -38,13 +41,10 @@ const LoginForm = () => {
         ...data,
         redirect: false,
       });
-
       if (callback?.error) {
         toast.error("Invalid credentials!");
       } else if (callback?.ok) {
         toast.success("Logged in successfully!");
-        // router.push("/");
-        router.push("/verify");
       }
     } catch (error) {
       console.log(error);
@@ -57,15 +57,29 @@ const LoginForm = () => {
     if (callback?.error) {
       toast.error("Invalid credentials!");
     } else if (callback?.ok) {
-      router.push("/");
       toast.success("Logged in successfully!");
     }
   };
 
+  useEffect(() => {
+    if (session?.status === "authenticated") {
+      const user = session?.data?.user;
+      if (
+        user &&
+        user.roles.includes("SERVICE_PROVIDER") &&
+        !user.serviceProviderVerification?.isVerified
+      ) {
+        router.push("/sewa-provider/welcome");
+        return;
+      }
+      return router.push("/");
+    }
+  }, [session, router]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex-1 rounded-lg bg-gray-50  pt-8">
+        <div className="flex-1 rounded-lg  pt-8">
           <div className="flex flex-col justify-center items-center">
             <Image
               className="w-auto h-auto"
@@ -75,29 +89,26 @@ const LoginForm = () => {
               height={50}
             />
             <h1 className=" text-2xl">Welcome back!</h1>
-            <p className="text-gray-500">
+            <p className="text-gray-500 text-center ">
               Get instant access to the services you need.
             </p>
           </div>
 
-          <div className="w-full my-4">
+          <div className="w-full my-4 space-y-5">
+            {/* Email */}
             <Input
               type="email"
-              placeholder="Email"
-              label="Email"
+              placeholder="Email address or phone number"
               form={form}
               name="email"
+              disabled={form.formState.isSubmitting}
             />
-            <Input
-              type="password"
-              placeholder="Password"
-              label="Password"
-              form={form}
-              name="password"
-            />
+            {/* Password */}
+            <PasswordInput form={form} />
+
             <div className="my-2 flex justify-between">
               <div className="flex items-center space-x-2">
-                <Checkbox id="terms" />
+                <Checkbox id="terms" disabled={form.formState.isSubmitting} />
                 <label
                   htmlFor="terms"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -109,7 +120,11 @@ const LoginForm = () => {
                 Forgot password?
               </Link>
             </div>
-            <Button variant={"brand"} className="mt-2 w-full">
+            <Button
+              type="submit"
+              isLoading={form.formState.isSubmitting}
+              className="mt-2 w-full"
+            >
               Log in
             </Button>
           </div>
