@@ -24,14 +24,14 @@ export const getServiceById = dbAsyncHandler(async (id: string) => {
   });
 });
 
-export const updateServiceById = dbAsyncHandler(
-  async (id: string, data: any) => {
-    return await db.service.update({
-      where: { id },
-      data,
-    });
-  }
-);
+// export const updateServiceById = dbAsyncHandler(
+//   async (id: string, data: Service) => {
+//     return await db.service.update({
+//       where: { id },
+//       data,
+//     });
+//   }
+// );
 
 export const deleteServiceById = dbAsyncHandler(async (id: string) => {
   return await db.service.delete({
