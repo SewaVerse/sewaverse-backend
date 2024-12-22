@@ -40,8 +40,7 @@ const Home = async () => {
         <Image
           src="/images/homepageimage.webp"
           alt="Homepage background"
-          width={100}
-          height={100}
+          fill
           className="object-cover w-full h-full"
         />
         <div className="absolute inset-0 bg-black opacity-40"></div>
