@@ -1,5 +1,15 @@
+"use client";
+
+import { useMediaQuery } from "@uidotdev/usehooks";
+import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
@@ -45,12 +55,52 @@ const mobileLinks = [
     description: "Apple Store",
   },
 ];
+
+type FooterAccordionProps = {
+  title: string;
+  children: React.ReactNode;
+};
+
+const Terms = ({ className }: { className: string }) => {
+  return (
+    <div className={clsx(" mt-auto", className)}>
+      <p>Terms of Service</p>
+      <p>Privacy Policy</p>
+    </div>
+  );
+};
+const FooterAccordion: React.FC<FooterAccordionProps> = ({
+  title,
+  children,
+}) => {
+  const isSmallDevice = useMediaQuery("only screen and (max-width : 768px)");
+  return (
+    <Accordion
+      type="single"
+      defaultValue={isSmallDevice ? "" : title}
+      collapsible={isSmallDevice}
+    >
+      <AccordionItem value={title} className="border-none">
+        <AccordionTrigger
+          className={clsx(
+            "hover:no-underline text-lg font-semibold md:[&>svg]:hidden",
+            isSmallDevice && "py-2"
+          )}
+        >
+          {title}
+        </AccordionTrigger>
+        <AccordionContent className="border-none">{children}</AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+};
+
 const Footer = () => {
   return (
     <footer className="p-4 md:pt-10 md:pb-4 border-t shadow-md rounded-md">
-      <div className="flex gap-5 h-full px-8">
+      <div className="flex flex-col md:flex-row gap-5 h-full px-2 md:px-8">
         <div className="flex flex-col justify-between md:max-w-[18rem]">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 justify-center items-center">
             <Image
               src="/images/sewaverse.svg"
               alt="logo"
@@ -58,11 +108,11 @@ const Footer = () => {
               height={180}
               className="h-auto w-auto"
             />
-            <p className="ms-[4rem] text-sm">
-              Offer or receive services with simplicity, convenience, and
-              seamless ease.
+            <p className="text-center md:ms-[4rem] md:text-left text-sm">
+              Seamlessly offer or receive services simply, conveniently and
+              with.
             </p>
-            <div className="flex justify-between items-center my-2">
+            <div className="flex justify-center gap-4 md:justify-between items-center my-2">
               {socialLinks.map((socialLink) => (
                 <Link
                   href={socialLink.link}
@@ -80,39 +130,34 @@ const Footer = () => {
               ))}
             </div>
           </div>
-          <div className="flex justify-between mt-auto">
-            <p>Terms of Service</p>
-            <p>Privacy Policy</p>
-          </div>
+          <Terms className="hidden md:flex justify-between" />
         </div>
         <div className="flex flex-col gap-5 w-full md:px-10">
-          <div className="flex justify-around">
-            <div>
-              <h5 className="mb-4">Company</h5>
+          <div className="flex flex-col md:flex-row md:justify-around">
+            <FooterAccordion title="Company">
               <ul className="flex flex-col gap-1">
                 <li>About Us</li>
                 <li>Sewaverse Academy</li>
                 <li>Careers</li>
                 <li>Newsroom</li>
               </ul>
-            </div>
-            <div>
-              <h5 className="mb-4">Support</h5>
+            </FooterAccordion>
+
+            <FooterAccordion title="Support">
               <ul className="flex flex-col gap-1">
                 <li>Help Center</li>
                 <li>FAQs</li>
               </ul>
-            </div>
-            <div>
-              <h5 className="mb-4">Services</h5>
+            </FooterAccordion>
+
+            <FooterAccordion title="Services">
               <ul className="flex flex-col gap-1">
                 <li>Be a Sewa Provider</li>
                 <li>Explore Services</li>
                 <li>Partner with us</li>
               </ul>
-            </div>
-            <div>
-              <h5 className="mb-4">Contact us</h5>
+            </FooterAccordion>
+            <FooterAccordion title="Contact us">
               <ul className="flex flex-col gap-1">
                 <li>Message Us</li>
                 <li>Provide Feedback</li>
@@ -137,9 +182,9 @@ const Footer = () => {
                   support@gmail.com
                 </li>
               </ul>
-            </div>
+            </FooterAccordion>
           </div>
-          <div className="flex justify-end gap-4">
+          <div className="flex md:justify-end md:gap-4 gap-2">
             {mobileLinks.map((socialLink) => (
               <Button
                 key={socialLink.alt}
@@ -151,7 +196,7 @@ const Footer = () => {
                   alt={socialLink.alt}
                   width={20}
                   height={20}
-                  className="w-auto h-auto"
+                  className="w-[2rem] h-[2rem] md:w-auto md:h-auto"
                 />
                 <div className="text-left">
                   <p className="text-[10px]">{socialLink.title}</p>
@@ -162,12 +207,13 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <Separator className="w-full mt-2" />
-      <div className="pt-4">
-        <p className="text-center text-brand-grey">
-          Copyright 2024 © All Rights Reserved
+      <Separator className="w-full mt-2 hidden md:block" />
+      <div className="mb-2 md:mb-0 pt-4">
+        <p className="text-center text-brand-grey text-sm">
+          ©2024 Sewaverse. All rights reserved.
         </p>
       </div>
+      <Terms className="flex flex-col justify-center items-center gap-2 md:hidden" />
     </footer>
   );
 };

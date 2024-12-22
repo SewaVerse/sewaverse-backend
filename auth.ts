@@ -26,7 +26,10 @@ export const {
   events: {
     async linkAccount({ user }) {
       // update
-      await updateUserById(user.id!, { emailVerified: new Date() } as User);
+      await updateUserById(user.id!, {
+        emailVerified: new Date(),
+        acceptTerms: true,
+      } as User);
       // add role
       await createUserRoleMapping({
         userId: user.id,

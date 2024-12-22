@@ -66,7 +66,7 @@ export default async function RootLayout({
         className={`${Work_SansFont.variable} ${robotoFont.variable} ${interFont.variable} antialiased `}
       >
         <SessionProvider session={session}>
-          <div className="flex flex-col min-h-[100svh]">
+          <div className="flex flex-col md:min-h-[100svh]">
             <Header />
             <main className="flex-1 flex flex-col">{children}</main>
             <Footer />

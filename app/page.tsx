@@ -40,7 +40,8 @@ const Home = async () => {
         <Image
           src="/images/homepageimage.webp"
           alt="Homepage background"
-          fill
+          width={100}
+          height={100}
           className="object-cover w-full h-full"
         />
         <div className="absolute inset-0 bg-black opacity-40"></div>
@@ -76,7 +77,7 @@ const Home = async () => {
       <div>
         <div className="py-16 bg-white text-center">
           <h2 className="text-3xl font-bold mb-8">Featured Sewas</h2>
-          <div className="flex justify-center gap-12">
+          <div className="flex flex-wrap justify-center gap-12">
             {" "}
             <Button variant={"brand"} className="mt-2 px-8 py-4">
               All Services
@@ -214,7 +215,7 @@ const Home = async () => {
 
         <div className="py-16 bg-white text-center">
           <h2 className="text-3xl font-bold mb-8">Popular Sewas</h2>
-          <div className="flex justify-center gap-12">
+          <div className="flex flex-wrap justify-center gap-12">
             {" "}
             <Button variant={"brand"} className="mt-2 px-8 py-4">
               All Services
@@ -452,7 +453,7 @@ const Home = async () => {
           </span>
         </h3>
 
-        <div className="relative flex flex-col items-center">
+        <div className="relative flex flex-col items-center max-w-full overflow-scroll">
           <div className="relative z-20 bg-white rounded-lg shadow-2xl border border-white/50 w-[638px] h-[497px] p-6">
             <Image
               src="/images/profileimage1.svg"

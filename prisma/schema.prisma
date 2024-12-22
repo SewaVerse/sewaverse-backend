@@ -45,7 +45,7 @@ model User {
   userType      UserType  @default(INDIVIDUAL)
 
   image       String?
-  acceptTerms Boolean
+  acceptTerms Boolean @default(false)
 
   accessToken String?
   expires     DateTime?

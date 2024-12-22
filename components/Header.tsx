@@ -16,7 +16,7 @@ const Header = () => {
   return (
     <header className="py-3 px-5 md:px-10 border-b shadow">
       <div className="flex items-center justify-between">
-        <div className="flex gap-5">
+        <div className="flex gap-5 me-3">
           <Link href={"/"}>
             <Image
               src="/images/logo.png"
@@ -26,7 +26,7 @@ const Header = () => {
             />
           </Link>
 
-          <div className="flex relative">
+          <div className="md:flex hidden relative">
             <Input
               placeholder="Search services..."
               type="search"
@@ -54,14 +54,14 @@ const Header = () => {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <p>Why Sewaverse</p>
+          <p className="hidden md:block">Why Sewaverse</p>
           {!hasSewaProviderRole && (
             <Link
               href={{
                 pathname: "/account-type",
                 query: { role: "serviceProvider" },
               }}
-              className="hover:underline decoration-brand"
+              className="hover:underline decoration-brand hidden md:block"
             >
               <p className="gradient-text">Become a Sewa provider</p>
             </Link>
