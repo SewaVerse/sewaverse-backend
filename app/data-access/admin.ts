@@ -8,3 +8,25 @@ export const getAllUserByAdmin = dbAsyncHandler(async () => {
     },
   });
 });
+
+// export const getAllVerifiedUserByAdmin = dbAsyncHandler(async () => {
+//   return await db.user.findMany({
+//     where: {
+//       //isVerified: true,
+//     },
+//     orderBy: {
+//       createdAt: "desc",
+//     },
+//   });
+// });
+
+// export const getAllUnverifiedUserByAdmin = dbAsyncHandler(async () => {
+//   return await db.user.findMany({
+//     where: {
+//       isVerified: false,
+//     },
+//     orderBy: {
+//       createdAt: "desc",
+//     },
+//   });
+// });

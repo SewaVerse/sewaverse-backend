@@ -8,7 +8,7 @@ import { userLoginSchema } from "./app/schemas/authSchema";
 export default {
   providers: [
     Google({
-      clientId: process.env.GOGGLE_CLIENT_ID,
+      clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       profile(profile) {
         return { roles: profile.roles ?? [], ...profile };
