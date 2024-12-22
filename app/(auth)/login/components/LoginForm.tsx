@@ -88,7 +88,7 @@ const LoginForm = () => {
               width={50}
               height={50}
             />
-            <h1 className=" text-2xl">Welcome back!</h1>
+            <h1 className=" text-2xl mt-2">Welcome back!</h1>
             <p className="text-gray-500 text-center ">
               Get instant access to the services you need.
             </p>
@@ -130,7 +130,12 @@ const LoginForm = () => {
           </div>
         </div>
       </form>
-      <Separator />
+      <div className="flex items-center gap-4">
+        <Separator className="flex-1" />
+        <span className="text-muted-foreground">Or</span>
+        <Separator className="flex-1" />
+      </div>
+
       <div className="mt-4 flex gap-2">
         <AuthSocialButton
           name="Continue with Google"

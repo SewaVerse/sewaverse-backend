@@ -1,15 +1,7 @@
-"use client";
-
-import { useMediaQuery } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./ui/accordion";
+import FooterAccordion from "./footer/FooterAccordoin";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
@@ -56,42 +48,12 @@ const mobileLinks = [
   },
 ];
 
-type FooterAccordionProps = {
-  title: string;
-  children: React.ReactNode;
-};
-
 const Terms = ({ className }: { className: string }) => {
   return (
     <div className={clsx(" mt-auto", className)}>
       <p>Terms of Service</p>
       <p>Privacy Policy</p>
     </div>
-  );
-};
-const FooterAccordion: React.FC<FooterAccordionProps> = ({
-  title,
-  children,
-}) => {
-  const isSmallDevice = useMediaQuery("only screen and (max-width : 768px)");
-  return (
-    <Accordion
-      type="single"
-      defaultValue={isSmallDevice ? "" : title}
-      collapsible={isSmallDevice}
-    >
-      <AccordionItem value={title} className="border-none">
-        <AccordionTrigger
-          className={clsx(
-            "hover:no-underline text-lg font-semibold md:[&>svg]:hidden",
-            isSmallDevice && "py-2"
-          )}
-        >
-          {title}
-        </AccordionTrigger>
-        <AccordionContent className="border-none">{children}</AccordionContent>
-      </AccordionItem>
-    </Accordion>
   );
 };
 
