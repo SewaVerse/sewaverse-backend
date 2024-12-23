@@ -1,5 +1,7 @@
-import db from "@/lib/db";
 import { File } from "@prisma/client";
+
+import db from "@/lib/db";
+
 import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 import { getLocalFileUrl } from "../utils/fileHelper";
 
@@ -14,13 +16,11 @@ export const getFileById = dbAsyncHandler(async (id: string) => {
 
 export const createFile = dbAsyncHandler(async (file: File, binary: Buffer) => {
   const savedFile = await db.file.create({
-    data: file,
-  });
-
-  const fileBinary = await db.fileBinary.create({
     data: {
-      data: binary,
-      fileId: savedFile.id,
+      ...file,
+      fileBinaries: {
+        create: { data: binary },
+      },
     },
   });
 
@@ -31,7 +31,7 @@ export const createFile = dbAsyncHandler(async (file: File, binary: Buffer) => {
     data: { localUrl: localPath },
   });
 
-  return { file: updatedFile, fileBinary };
+  return { file: updatedFile };
 });
 
 export const updateFileById = dbAsyncHandler(async (id: string, data: File) => {

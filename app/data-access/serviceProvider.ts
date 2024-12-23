@@ -1,5 +1,7 @@
-import db from "@/lib/db";
 import { CompanyDetails, ServiceProvider } from "@prisma/client";
+
+import db from "@/lib/db";
+
 import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 
 export const getServiceProviderByUserId = dbAsyncHandler(

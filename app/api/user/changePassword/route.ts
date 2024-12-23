@@ -1,3 +1,6 @@
+import { User } from "@prisma/client";
+import { NextResponse } from "next/server";
+
 import { getUserByEmail, updateUserById } from "@/app/data-access/user";
 import {
   resetPasswordSchema,
@@ -7,8 +10,6 @@ import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { hash } from "@/app/utils/common";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { currentUser } from "@/lib/auth";
-import { User } from "@prisma/client";
-import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (request: Request) => {
   const user = (await currentUser()) as unknown as User;

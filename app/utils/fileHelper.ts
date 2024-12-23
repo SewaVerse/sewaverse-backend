@@ -1,9 +1,11 @@
 "use server";
 
-import { File as PrismaFile } from "@prisma/client";
 import { promises as fs } from "fs";
 import path from "path";
+
+import { File as PrismaFile } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
+
 import { getFileById, updateFileById } from "../data-access/file";
 
 const mimeToExtension = (mimeType: string): string => {

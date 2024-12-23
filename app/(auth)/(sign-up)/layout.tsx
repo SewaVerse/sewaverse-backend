@@ -1,7 +1,8 @@
 "use client";
 
-import RegisterContext, { TRegisterData } from "@/app/context/RegisterContext";
 import { useState } from "react";
+
+import RegisterContext, { TRegisterData } from "@/app/context/RegisterContext";
 
 export default function SignUpLayout({
   children,

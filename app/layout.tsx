@@ -1,36 +1,16 @@
 import type { Metadata } from "next";
+import { Inter, Roboto, Work_Sans } from "next/font/google";
+import { SessionProvider } from "next-auth/react";
+
 // import localFont from "next/font/local";
+import { auth } from "@/auth";
+import Footer from "@/components/footer";
+import Header from "@/components/header";
+
 import ToasterContext from "./context/ToasterContext";
+
 import "./globals.css";
 
-import { auth } from "@/auth";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import { SessionProvider } from "next-auth/react";
-import { Inter, Roboto, Work_Sans } from "next/font/google";
-
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
-
-// const poppinsFont = Poppins({
-//   subsets: ["latin"],
-//   variable: "--font-poppins",
-//   weight: ["400", "500", "600", "700"],
-// });
-
-// const playFairFont = Playfair({
-//   subsets: ["latin"],
-//   variable: "--font-play-fair",
-//   weight: ["400", "500", "600", "700"],
-// });
 const Work_SansFont = Work_Sans({
   subsets: ["latin"],
   variable: "--work-sans",
@@ -66,7 +46,7 @@ export default async function RootLayout({
         className={`${Work_SansFont.variable} ${robotoFont.variable} ${interFont.variable} antialiased `}
       >
         <SessionProvider session={session}>
-          <div className="flex flex-col min-h-[100svh]">
+          <div className="flex flex-col md:min-h-[100svh]">
             <Header />
             <main className="flex-1 flex flex-col">{children}</main>
             <Footer />

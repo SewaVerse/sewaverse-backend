@@ -1,7 +1,8 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
+
+import { Button } from "@/components/ui/button";
 
 // Define Form Data Interface
 interface SewaProviderDetailsFormData {
@@ -28,7 +29,7 @@ export default function SewaProviderDetails() {
 
   // Handle Form Submission
   const onSubmit = (data: SewaProviderDetailsFormData) => {
-    console.log("Form Data:", data);
+    console.error("Form Data:", data);
   };
 
   return (
@@ -228,7 +229,8 @@ export default function SewaProviderDetails() {
           </div>
 
           {/* Proceed Button */}
-          <Button variant={"brand"}
+          <Button
+            variant={"brand"}
             type="submit"
             className="w-full text-white py-3 rounded-[20px] shadow-md"
           >

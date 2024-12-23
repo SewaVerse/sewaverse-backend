@@ -1,6 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
+
 import {
   DEFAULT_REDIRECT,
   LOGIN,
@@ -8,8 +11,7 @@ import {
   PUBLIC_ROUTES,
   ROOT,
 } from "@/lib/routes";
-import { headers } from "next/headers";
-import { NextResponse } from "next/server";
+
 import { auth } from "./auth";
 
 const handleApiRoute = (

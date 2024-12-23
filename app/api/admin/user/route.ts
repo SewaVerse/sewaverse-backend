@@ -1,10 +1,11 @@
-import { getAllUserByAdmin } from "@/app/data-access/admin";
-import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { NextResponse } from "next/server";
 
+import { getAllUserByAdmin } from "@/app/data-access/admin";
+import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
+
 export const GET = roleAsyncHandler("ADMIN", async (request: Request) => {
-  console.log("Running GET request: Get all users");
-  console.log(request.url);
+  console.error("Running GET request: Get all users");
+  console.error(request.url);
 
   const users = await getAllUserByAdmin();
 

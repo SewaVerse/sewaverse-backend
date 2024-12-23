@@ -1,5 +1,7 @@
-import db from "@/lib/db";
 import { QueuedEmail } from "@prisma/client";
+
+import db from "@/lib/db";
+
 import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 import { sendQueuedEmail } from "../utils/email/sendQueuedEmail";
 

@@ -1,6 +1,7 @@
+import Image from "next/image";
+
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import Image from "next/image";
 
 const Home = async () => {
@@ -77,7 +78,7 @@ const Home = async () => {
       <div>
         <div className="py-16  bg-white text-center">
           <h2 className="text-3xl font-bold mb-8">Featured Sewas</h2>
-          <div className="flex  justify-between items-center mx-16">
+          <div className="flex justify-center gap-12">
             {" "}
             <ChevronLeft />
             <Button variant={"brand"} className="  px-8 py-5 ">
@@ -235,7 +236,7 @@ const Home = async () => {
 
         <div className="py-16  bg-white text-center">
           <h2 className="text-3xl font-bold mb-8">Popular Sewas</h2>
-          <div className="flex  justify-between items-center mx-16">
+          <div className="flex justify-center gap-12">
             {" "}
             <ChevronLeft />
             <Button variant={"brand"} className="  px-8 py-5 ">
@@ -491,8 +492,8 @@ const Home = async () => {
           </span>
         </h3>
 
-        <div className="relative flex flex-col items-center mx-16">
-          <div className="relative z-20 bg-white rounded-lg shadow-2xl border border-white/50 w-[638px] h-[450px] p-6">
+        <div className="relative flex flex-col items-center">
+          <div className="relative z-20 bg-white rounded-lg shadow-2xl border border-white/50 w-[638px] h-[497px] p-6">
             <Image
               src="/images/profileimage1.svg"
               alt="Marinda Walkers"

@@ -1,6 +1,7 @@
+import { redirect } from "next/navigation";
+
 import { getServiceProviderByUserId } from "@/app/data-access/serviceProvider";
 import { currentUser } from "@/lib/auth";
-import { redirect } from "next/navigation";
 
 const SewaProviderVerificationPage = async () => {
   const user = await currentUser();

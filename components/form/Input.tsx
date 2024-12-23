@@ -1,4 +1,6 @@
+import clsx from "clsx";
 import { UseFormReturn } from "react-hook-form";
+
 import {
   FormControl,
   FormDescription,
@@ -7,8 +9,6 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-
-import clsx from "clsx";
 import { Input as ShadInput } from "../ui/input";
 
 type InputProps = {

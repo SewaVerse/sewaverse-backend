@@ -1,13 +1,13 @@
+import { User } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
+
 import { getUserByEmail, updateUserById } from "@/app/data-access/user";
 import { userLoginSchema, UserLoginSchema } from "@/app/schemas/authSchema";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import CustomError from "@/app/utils/customError";
 import { generateToken } from "@/app/utils/token";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { User } from "@prisma/client";
-import bcrypt from "bcryptjs";
-
-import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (request: Request) => {
   const body = (await request.json()) as UserLoginSchema;
