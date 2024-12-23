@@ -83,7 +83,7 @@ const Home = async () => {
       <div>
         <div className="py-16  bg-white text-center">
           <h2 className="text-3xl font-bold mb-8">Featured Sewas</h2>
-          <div className="flex justify-center gap-12">
+          <div className="flex  justify-between items-center mx-16">
             {" "}
             <ChevronLeft />
             <Button variant={"brand"} className="  px-8 py-5 ">
@@ -241,7 +241,7 @@ const Home = async () => {
 
         <div className="py-16  bg-white text-center">
           <h2 className="text-3xl font-bold mb-8">Popular Sewas</h2>
-          <div className="flex justify-center gap-12">
+          <div className="flex  justify-between items-center mx-16">
             {" "}
             <ChevronLeft />
             <Button variant={"brand"} className="  px-8 py-5 ">

@@ -60,7 +60,7 @@ const Terms = ({ className }: { className: string }) => {
 
 const Footer = () => {
   return (
-    <footer className="p-4 md:pt-10 md:pb-4 border-t shadow-md rounded-md">
+    <footer className="p-4 md:pt-5 md:pb-4 border-t shadow-md rounded-md">
       <div className="flex flex-col md:flex-row gap-5 h-full px-2 md:px-8">
         <div className="flex flex-col justify-between md:max-w-[18rem]">
           <div className="flex flex-col gap-2 justify-center items-center">
@@ -171,7 +171,7 @@ const Footer = () => {
         </div>
       </div>
       <Separator className="w-full mt-2 hidden md:block" />
-      <div className="mb-2 md:mb-0 pt-4">
+      <div className="mb-2 md:mb-0 pt-1">
         <p className="text-center text-brand-grey text-sm">
           ©2024 Sewaverse. All rights reserved.
         </p>
