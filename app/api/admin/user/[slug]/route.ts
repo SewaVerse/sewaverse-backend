@@ -1,19 +1,20 @@
+import { Role } from "@prisma/client";
+import { NextResponse } from "next/server";
+
 import { findUsersByRole, getUserById } from "@/app/data-access/user";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { mongoId } from "@/lib/constants";
-import { Role } from "@prisma/client";
-import { NextResponse } from "next/server";
 
 export const GET = asyncHandler(
   async (
     request: Request,
     { params }: { params: Promise<{ slug: string }> }
   ) => {
-    console.log("Running GET request: Get data by ADMIN");
+    console.error("Running GET request: Get data by ADMIN");
     const slug = (await params).slug;
 
     const isMongoId = mongoId(slug);
-    // console.log("Slug received:", slug, "Is MongoDB ObjectId?", isMongoId);
+    // console.error("Slug received:", slug, "Is MongoDB ObjectId?", isMongoId);
 
     if (isMongoId) {
       const user = await getUserById(slug);
@@ -34,7 +35,7 @@ export const GET = asyncHandler(
 
     // Check if the `slug` is a valid role
     if (Object.values(Role).includes(slug as Role)) {
-      // console.log("Role executed");
+      // console.error("Role executed");
       const users = await findUsersByRole(slug as Role);
 
       if (!users) {

@@ -1,8 +1,10 @@
 "use client";
 
-import useMediaQuery from "@/hooks/useMediaQuery";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+
+import useMediaQuery from "@/hooks/useMediaQuery";
+
 import {
   Accordion,
   AccordionContent,

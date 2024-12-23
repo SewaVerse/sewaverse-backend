@@ -1,7 +1,9 @@
-import { signOut } from "next-auth/react";
 
+import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import toast from "react-hot-toast";
+
 import { Button } from "./ui/button";
 
 export function SignOut() {
@@ -14,6 +16,7 @@ export function SignOut() {
   };
   return (
     <Button variant={"brand"} onClick={handleSignOut} type="submit">
+      <LogOut />
       Sign Out
     </Button>
   );

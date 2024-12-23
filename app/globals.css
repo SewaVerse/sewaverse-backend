@@ -6,6 +6,27 @@ body {
   font-family: "roboto", sans-serif;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(hsla(238, 52%, 38%, 1), hsla(301, 57%, 36%, 1));
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(hsla(238, 52%, 38%, 1), hsla(301, 57%, 36%, 1));
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

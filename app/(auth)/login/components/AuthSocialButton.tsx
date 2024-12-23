@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { IconType } from "react-icons";
+
+import { Button } from "@/components/ui/button";
 
 interface AuthSocialButtonProps {
   icon: IconType;

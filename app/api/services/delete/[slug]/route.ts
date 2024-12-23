@@ -1,17 +1,18 @@
+import { NextResponse } from "next/server";
+
 import { deleteFileById } from "@/app/data-access/file";
 import { deleteServiceById, getServiceById } from "@/app/data-access/service";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
-import { NextResponse } from "next/server";
 
 export const DELETE = asyncHandler(
   async (
     request: Request,
     { params }: { params: Promise<{ slug: string }> }
   ) => {
-    console.log("Running DELETE request: Delete Service");
+    console.error("Running DELETE request: Delete Service");
     const id = (await params).slug;
 
-    console.log(id);
+    console.error(id);
 
     const service = await getServiceById(id);
     if (!service) {

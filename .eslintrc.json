@@ -1,3 +1,26 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "ignorePatterns": ["src/components/ui/**"],
+  "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
+  "rules": {
+    "import/order": [
+      "warn",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal", // Absolute imports (e.g., @/...)
+          ["sibling", "parent"], // Relative imports (e.g., ../...)
+          "index",
+          "unknown"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": false
+        }
+      }
+    ],
+    "no-console": ["error", { "allow": ["error", "warn"] }],
+    "no-debugger": "error"
+  }
 }

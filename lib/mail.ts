@@ -1,6 +1,7 @@
+import { QueuedEmail } from "@prisma/client";
+
 import { createQueuedEmail } from "@/app/data-access/queuedEmail";
 import { dbAsyncHandler } from "@/app/utils/asyncHelper/dbAsyncHandler";
-import { QueuedEmail } from "@prisma/client";
 
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 const fromEmail = process.env.SMTP_EMAIL!;

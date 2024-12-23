@@ -1,3 +1,6 @@
+import { User } from "@prisma/client";
+import { NextResponse } from "next/server";
+
 import {
   deletePasswordResetTokenById,
   getPasswordResetTokenByToken,
@@ -6,8 +9,7 @@ import { getUserByEmail, updateUserById } from "@/app/data-access/user";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { hash } from "@/app/utils/common";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { User } from "@prisma/client";
-import { NextResponse } from "next/server";
+
 import {
   resetPasswordSchema,
   ResetPasswordSchema,

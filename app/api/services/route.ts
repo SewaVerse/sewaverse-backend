@@ -1,13 +1,14 @@
+import { File as PrismaFile, Service } from "@prisma/client";
+import { NextResponse } from "next/server";
+
 import { createFile } from "@/app/data-access/file";
 import { createService } from "@/app/data-access/service";
 import { fileSchema } from "@/app/schemas/fileSchema";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { File as PrismaFile, Service } from "@prisma/client";
-import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (request: Request) => {
-  console.log("Running POST request: Create Services");
+  console.error("Running POST request: Create Services");
 
   const formData = await request.formData();
 

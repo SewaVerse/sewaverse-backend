@@ -1,5 +1,6 @@
-import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+
+import { Card, CardContent } from "@/components/ui/card";
 
 export default async function AuthLayout({
   children,

@@ -16,7 +16,7 @@ export function dbAsyncHandler<T, Args extends any[]>(
       return await fn(...args);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log("db error", e.message);
+        console.error("db error", e.message);
       }
       throw e;
     }

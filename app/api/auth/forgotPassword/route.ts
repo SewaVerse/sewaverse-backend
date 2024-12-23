@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 import {
   generatePasswordResetOtp,
   generatePasswordResetToken,
@@ -7,7 +9,6 @@ import { ResetSchema, resetSchema } from "@/app/schemas/authSchema";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { sendPasswordResetEmail, sendPaswordResetOtpEmail } from "@/lib/mail";
-import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (request: Request) => {
   const body = (await request.json()) as ResetSchema;

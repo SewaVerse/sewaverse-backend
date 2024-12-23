@@ -1,13 +1,14 @@
+import { NextResponse } from "next/server";
+
 import { getServiceById } from "@/app/data-access/service";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
-import { NextResponse } from "next/server";
 
 export const GET = asyncHandler(
   async (
     request: Request,
     { params }: { params: Promise<{ slug: string }> }
   ) => {
-    console.log("Running GET request: Get service byid");
+    console.error("Running GET request: Get service byid");
     const id = (await params).slug;
 
     const existingService = await getServiceById(id);

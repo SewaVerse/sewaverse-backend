@@ -1,20 +1,12 @@
-"use client";
-
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { SignOut } from "./SignOut";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+
+import DynamicMenu from "./DynamicMenu";
+import { Input } from "../ui/input";
 
 const Header = () => {
-  const session = useSession();
-
-  const isLoggedin = !!session?.data?.user;
-  const hasSewaProviderRole =
-    session?.data?.user?.roles.includes("SEWA_PROVIDER");
   return (
-    <header className="py-3 px-5 md:px-10 border-b shadow">
+    <header className="py-3 px-5 md:px-16 border-b shadow">
       <div className="flex items-center justify-between">
         <div className="flex flex-1 gap-5 me-3">
           <Link href={"/"}>
@@ -55,33 +47,7 @@ const Header = () => {
         </div>
         <div className="flex items-center gap-5">
           <p className="hidden md:block">Why Sewaverse</p>
-          {!hasSewaProviderRole && (
-            <Link
-              href={{
-                pathname: "/account-type",
-                query: { role: "serviceProvider" },
-              }}
-              className="hover:underline decoration-brand hidden md:block"
-            >
-              <p className="gradient-text">Become a Sewa provider</p>
-            </Link>
-          )}
-          {isLoggedin ? (
-            <SignOut />
-          ) : (
-            <>
-              <Link href="/login">
-                <Button variant={"ghost"} className="px-2">
-                  Login
-                </Button>
-              </Link>
-              <Link
-                href={{ pathname: "/account-type", query: { role: "user" } }}
-              >
-                <Button variant={"brand"}>Sign up</Button>
-              </Link>
-            </>
-          )}
+          <DynamicMenu />
         </div>
       </div>
     </header>

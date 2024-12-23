@@ -1,24 +1,25 @@
 "use client";
 
-import Input from "@/components/form/Input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
-import { signIn, useSession } from "next-auth/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
-import AuthSocialButton from "./AuthSocialButton";
+import { z } from "zod";
 
 import { userLoginSchema } from "@/app/schemas/authSchema";
 import Button from "@/components/form/Button";
+import Input from "@/components/form/Input";
 import PasswordInput from "@/components/form/PasswordInput";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Form } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
-import { z } from "zod";
+import { Separator } from "@/components/ui/separator";
+
+import AuthSocialButton from "./AuthSocialButton";
 
 type LoginForm = z.infer<typeof userLoginSchema>;
 type SocialActions = "google" | "twitter" | "github";
@@ -43,21 +44,23 @@ const LoginForm = () => {
       });
       if (callback?.error) {
         toast.error("Invalid credentials!");
-      } else if (callback?.ok) {
-        toast.success("Logged in successfully!");
+        return;
       }
+
+      toast.success("Logged in successfully!");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const socialAction = async (action: SocialActions) => {
-    const callback = await signIn(action, { redirect: false });
-
-    if (callback?.error) {
-      toast.error("Invalid credentials!");
-    } else if (callback?.ok) {
+    try {
+      await signIn(action, {
+        redirect: false,
+      });
       toast.success("Logged in successfully!");
+    } catch (error) {
+      console.error(error);
     }
   };
 

@@ -1,13 +1,14 @@
-import { getUserByEmail } from "@/app/data-access/user";
-import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { NextResponse } from "next/server";
 
+import { getUserByEmail } from "@/app/data-access/user";
+import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
+
 export const POST = asyncHandler(async (request: Request) => {
-  console.log("Running POST request: Verify OTP");
+  console.error("Running POST request: Verify OTP");
 
   const { otp, email } = await request.json();
 
-  console.log(otp, email);
+  console.error(otp, email);
 
   if (!otp) {
     return NextResponse.json(

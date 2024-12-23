@@ -1,6 +1,7 @@
+import Image from "next/image";
+
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 const Home = async () => {
   const session = await auth();

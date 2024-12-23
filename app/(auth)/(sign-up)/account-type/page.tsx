@@ -1,14 +1,15 @@
 "use client";
 
+import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import { use, useEffect } from "react";
+import { useForm } from "react-hook-form";
+
 import RegisterContext from "@/app/context/RegisterContext";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import Image from "next/image";
 // import { useRouter } from "next/router";
-import { useRouter, useSearchParams } from "next/navigation";
-import { use, useEffect } from "react";
-import { useForm } from "react-hook-form";
 
 type RegisterForm = {
   accountType: string;
