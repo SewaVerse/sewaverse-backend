@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui/button";
+
 import { currentUser } from "@/lib/auth";
-import Image from "next/image";
-import Link from "next/link";
+
 
 export default async function SewaProviderWelcomePage() {
   const user = await currentUser();

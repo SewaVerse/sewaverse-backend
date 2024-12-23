@@ -4,7 +4,6 @@ import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import {
   ChevronLeft,
-  ChevronLeftCircle,
   ChevronRight,
   MapPin,
 } from "lucide-react";
@@ -205,7 +204,7 @@ const Home = async () => {
                   </div>
                   <div className="flex items-center justify-between text-sm text-gray-500">
                     <div className="flex gap-4">
-                      <img
+                      <Image
                         src="/images/profileimage1.svg"
                         className="w-6 h-6 rounded-full"
                         alt="user"
@@ -363,7 +362,7 @@ const Home = async () => {
                   </div>
                   <div className="flex items-center justify-between text-sm text-gray-500">
                     <div className="flex gap-4">
-                      <img
+                      <Image
                         src="/images/profileimage1.svg"
                         className="w-6 h-6 rounded-full"
                         alt="user"
