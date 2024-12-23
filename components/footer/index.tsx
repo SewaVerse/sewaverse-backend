@@ -95,7 +95,7 @@ const Footer = () => {
           </div>
           <Terms className="hidden md:flex justify-between" />
         </div>
-        <div className="flex flex-col gap-5 w-full md:px-10">
+        <div className="flex flex-col gap-2 w-full md:px-10">
           <div className="flex flex-col md:flex-row md:justify-around">
             <FooterAccordion title="Company">
               <ul className="flex flex-col gap-1">
