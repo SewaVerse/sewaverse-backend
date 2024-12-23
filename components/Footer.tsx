@@ -47,7 +47,7 @@ const mobileLinks = [
 ];
 const Footer = () => {
   return (
-    <footer className="p-4 md:pt-10 md:pb-4 border-t shadow-md rounded-md">
+    <footer className="p-4 md:pt-5 md:pb-4 border-t shadow-md rounded-md">
       <div className="flex gap-5 h-full px-8">
         <div className="flex flex-col justify-between md:max-w-[18rem]">
           <div className="flex flex-col gap-2">
@@ -163,7 +163,7 @@ const Footer = () => {
         </div>
       </div>
       <Separator className="w-full mt-2" />
-      <div className="pt-4">
+      <div className="pt-1">
         <p className="text-center text-brand-grey">
           Copyright 2024 © All Rights Reserved
         </p>
