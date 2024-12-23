@@ -1,5 +1,5 @@
 {
-  "ignorePatterns": ["src/components/ui/**"],
+  "ignorePatterns": ["components/ui"],
   "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
   "rules": {
     "import/order": [

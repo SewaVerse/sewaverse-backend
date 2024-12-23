@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { LayoutDashboard, User } from "lucide-react";
 import { useSession } from "next-auth/react"; // To access user session
 
-import { SignOut } from "../SignOut";
+import { SignOut } from "./SignOut";
 import {
   DropdownMenu,
   DropdownMenuContent,
