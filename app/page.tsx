@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import Image from "next/image";
 
 import { auth } from "@/auth";
@@ -36,6 +36,16 @@ const Home = async () => {
     { src: "/images/Pandit&Jyotish.svg", name: "Pandit & Jyotish" },
     { src: "/images/AllSewas.svg", name: "All Sewas" },
   ];
+
+  const menuItems = [
+    { src: "/images/painting.svg", alt: "logo", label: "Painting" },
+    { src: "/images/cleaning.svg", alt: "logo", label: "Cleaning" },
+    { src: "/images/babysitting.svg", alt: "logo", label: "Baby Sitting" },
+    { src: "/images/beautician.svg", alt: "logo", label: "Beautician" },
+    { src: "/images/hair.svg", alt: "logo", label: "Hair Stylist" },
+    { src: "/images/it.svg", alt: "logo", label: "IT Support" },
+    { src: "", alt: "", label: "More" },
+  ];
   return (
     <div className="font-poppins font-medium text-xl min-h-screen">
       <div className="relative w-full h-screen">
@@ -46,6 +56,23 @@ const Home = async () => {
           className="object-cover w-full h-full"
         />
         <div className="absolute inset-0 bg-black opacity-40"></div>
+
+        <div className="absolute top-5 left-8 px-6 text-white z-10">
+          <ul className="flex flex-row space-x-6">
+            {menuItems.map((item, index) => (
+              <li
+                key={index}
+                className="flex items-center text-lg font-medium hover:underline"
+              >
+                {item.src && (
+                  <Image src={item.src} alt={item.alt} width={23} height={23} />
+                )}
+                {item.label}
+                <ChevronDown style={{ width: "19px", height: "16px" }} />
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <div className="absolute top-0 right-0 pt-16 pr-16 text-white z-10">
           <div className="text-right">
@@ -80,7 +107,7 @@ const Home = async () => {
           <h2 className="text-3xl font-bold mb-8">Featured Sewas</h2>
           <div className="flex  justify-between items-center mx-16">
             {" "}
-            <ChevronLeft />
+            <ChevronLeft style={{ color: "#D9D9D9" }} />
             <Button variant={"brand"} className="  px-8 py-5 ">
               All Services
             </Button>
@@ -114,12 +141,12 @@ const Home = async () => {
             >
               Hair Stylist
             </Button>
-            <ChevronRight />
+            <ChevronRight style={{ color: "#D9D9D9" }} />
           </div>
         </div>
 
         <div className="flex items-center justify-between  mx-16">
-          <ChevronLeft />
+          <ChevronLeft style={{ color: "#D9D9D9" }} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-9 col-auto">
             {[
               {
@@ -171,7 +198,7 @@ const Home = async () => {
                   <Image
                     src={service.image}
                     alt={`Featured Service ${index + 1}`}
-                    className="w-full h-[200px] object-cover rounded-t-lg"
+                    className="w-full h-[280px] object-cover rounded-t-lg"
                     width={310}
                     height={20}
                   />
@@ -182,21 +209,23 @@ const Home = async () => {
                   )}
                 </div>
                 <div className="p-4">
-                  <h4 className="font-semibold text-lg mb-1">
+                  <h4 className="font-semibold text-lg">
                     {service.title}
                   </h4>
-                  <p className="text-gray-500 text-sm mb-3">
+                  <p className="text-gray-500 text-sm">
                     {service.description}
                   </p>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xl font-semibold text-gray-800">
+                    {/* <span className="text-xl font-semibold text-gray-800">
                       Rs. {service.price}
                     </span>
                     {service.discount && (
                       <span className="text-sm text-gray-400 line-through">
                         Rs. {service.originalPrice}
                       </span>
-                    )}
+                    )} */}
+
+<span className="text-[#D9D9D9] text-xl">------------------------------------------</span>
                   </div>
                   <div className="flex items-center justify-between text-sm text-gray-500">
                     <div className="flex gap-4">
@@ -209,8 +238,9 @@ const Home = async () => {
                       />
                       <div className="text-gray-700 flex flex-col  ">
                         {service.name}{" "}
-                        <span className="flex items-center">
-                          <MapPin className="text-zinc-500 h-4" /> Kathmandu
+                        <span className="flex items-center text-[#878787]">
+                          <MapPin className="text-zinc-500 h-4" />
+                          <span style={{ color: "#878787" }}>Kathmandu</span>
                         </span>
                       </div>
                     </div>
@@ -233,14 +263,14 @@ const Home = async () => {
             ))}
           </div>
 
-          <ChevronRight />
+          <ChevronRight style={{ color: "#D9D9D9" }} />
         </div>
 
         <div className="py-16  bg-white text-center">
           <h2 className="text-3xl font-bold mb-8">Popular Sewas</h2>
           <div className="flex  justify-between items-center mx-16">
             {" "}
-            <ChevronLeft />
+            <ChevronLeft style={{ color: "#D9D9D9" }} />
             <Button variant={"brand"} className="  px-8 py-5 ">
               All Services
             </Button>
@@ -274,12 +304,13 @@ const Home = async () => {
             >
               Hair Stylist
             </Button>
-            <ChevronRight />
+            {/* <ChevronRight /> */}
+            <ChevronRight style={{ color: "#D9D9D9" }} />
           </div>
         </div>
 
         <div className="flex items-center justify-between  mx-16">
-          <ChevronLeft />
+          <ChevronLeft style={{ color: "#D9D9D9" }} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-9 col-auto">
             {[
               {
@@ -331,7 +362,7 @@ const Home = async () => {
                   <Image
                     src={service.image}
                     alt={`Featured Service ${index + 1}`}
-                    className="w-full h-[200px] object-cover rounded-t-lg"
+                    className="w-full h-[280px] object-cover rounded-t-lg"
                     width={310}
                     height={20}
                   />
@@ -342,21 +373,26 @@ const Home = async () => {
                   )}
                 </div>
                 <div className="p-4">
-                  <h4 className="font-semibold text-lg mb-1">
+                  <h4 className="font-semibold text-lg ">
                     {service.title}
                   </h4>
-                  <p className="text-gray-500 text-sm mb-3">
+                  <p className="text-gray-500 text-sm ">
                     {service.description}
+
+                    
                   </p>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xl font-semibold text-gray-800">
+                  <div className="flex items-center justify-between ">
+                    {/* <span className="text-xl font-semibold text-gray-800">
                       Rs. {service.price}
                     </span>
                     {service.discount && (
                       <span className="text-sm text-gray-400 line-through">
                         Rs. {service.originalPrice}
                       </span>
-                    )}
+                    )} */}
+
+                    <span className="text-[#D9D9D9] text-xl">------------------------------------------</span>
+
                   </div>
                   <div className="flex items-center justify-between text-sm text-gray-500">
                     <div className="flex gap-4">
@@ -369,7 +405,7 @@ const Home = async () => {
                       />
                       <div className="text-gray-700 flex flex-col  ">
                         {service.name}{" "}
-                        <span className="flex items-center">
+                        <span className="flex items-center text-[#878787]">
                           <MapPin className="text-zinc-500 h-4" /> Kathmandu
                         </span>
                       </div>
@@ -393,69 +429,82 @@ const Home = async () => {
             ))}
           </div>
 
-          <ChevronRight />
+          <ChevronRight style={{ color: "#D9D9D9" }} />
         </div>
       </div>
 
       {/* hello */}
-      <div className="py-16 bg-white text-center overflow-hidden mx-16">
-        <div className="relative h-screen w-full">
+      <div className="py-16 bg-white text-center overflow-hidden mx-16  ">
+        <div className="relative h-[80vh] w-full">
           {/* Background Image */}
-          <div className="inset-0">
+          <div className="absolute inset-0 rounded-[20px]  border-4 border-white">
             <Image
               src="/images/service_market_place.webp"
               alt="Homepage background"
-              className="object-cover w-full h-full "
+              className="object-cover w-full h-full"
               fill
               priority
             />
           </div>
 
-          <div className="absolute z-10 text-white text-left max-w-3xl ml-10 px-4">
-            {/* Main Heading */}
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-              A service marketplace <br /> for everyone
-            </h1>
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
-            {/* Description */}
-            <p className="text-lg md:text-xl leading-relaxed mb-8">
-              Effortlessly begin offering or receiving services with simplicity,
-              convenience, and peace of mind, making the whole process smooth
-              and enjoyable for everyone involved.
-            </p>
+          {/* Content */}
+          <div className="absolute z-10 flex flex-col justify-center h-full px-10">
+            {/* Logo or Title */}
+            <div className="absolute top-8 left-8 text-sm font-semibold tracking-wide text-white">
+              sewaverse
+            </div>
+
+            {/* Left-Aligned Text Section */}
+            <div className="text-left text-white max-w-xl mt-12">
+              {" "}
+              {/* Adjusted margin */}
+              {/* Main Heading */}
+              <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-6">
+                A service marketplace <br /> for everyone
+              </h1>
+              {/* Description */}
+              <p className="text-base md:text-lg leading-relaxed mb-10">
+                Effortlessly begin offering or receiving services with
+                simplicity, convenience, and peace of mind, making the whole
+                process smooth and enjoyable for everyone involved.
+              </p>
+            </div>
 
             {/* Cards Section */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-6 w-full px-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-10">
               {/* Card 1 */}
-              <div className="bg-[#023994CC] p-6 rounded-lg shadow-lg cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
-                <h3 className="text-2xl font-semibold mb-2">
+              <div className="bg-[#023994CC] p-6 rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
+                <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
                   Book the service
                 </h3>
-                <p className="text-base mb-4">
+                <p className="text-sm md:text-base text-center">
                   Find the right expert{" "}
-                  <span className="text-2xl ml-4 font-bold">→</span>
+                  <span className="text-lg ml-2 font-bold">→</span>
                 </p>
               </div>
 
               {/* Card 2 */}
-              <div className="bg-[#023994CC] p-6 rounded-lg shadow-lg cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
-                <h3 className="text-2xl font-semibold mb-2">
+              <div className="bg-[#023994CC] p-6 rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
+                <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
                   Become a Sewa Provider
                 </h3>
-                <p className="text-base mb-4">
+                <p className="text-sm md:text-base text-center">
                   Start providing services{" "}
-                  <span className="text-2xl ml-4 font-bold">→</span>
+                  <span className="text-lg ml-2 font-bold">→</span>
                 </p>
               </div>
 
               {/* Card 3 */}
-              <div className="bg-[#023994CC] p-6 rounded-lg shadow-lg cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
-                <h3 className="text-2xl font-semibold mb-2">
+              <div className="bg-[#023994CC] p-6 rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
+                <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
                   Learn more about Sewaverse
                 </h3>
-                <p className="text-base mb-4">
+                <p className="text-sm md:text-base text-center">
                   More about us{" "}
-                  <span className="text-2xl ml-4 font-bold">→</span>
+                  <span className="text-lg ml-2 font-bold">→</span>
                 </p>
               </div>
             </div>
@@ -466,7 +515,7 @@ const Home = async () => {
       {/* Sewa Categories */}
 
       <div className="pb-16 bg-white text-center">
-        <h2 className="text-3xl font-bold mb-8 font-poppins">Popular Sewas</h2>
+        <h2 className="text-3xl font-bold mb-8 font-poppins">Sewa Categories</h2>
 
         {/* Grid container to arrange images */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 place-items-center">
