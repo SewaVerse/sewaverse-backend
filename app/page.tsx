@@ -204,6 +204,8 @@ const Home = async () => {
                         src="/images/profileimage1.svg"
                         className="w-6 h-6 rounded-full"
                         alt="user"
+                        width={10}
+                        height={10}
                       />
                       <div className="text-gray-700 flex flex-col  ">
                         {service.name}{" "}
@@ -362,6 +364,8 @@ const Home = async () => {
                         src="/images/profileimage1.svg"
                         className="w-6 h-6 rounded-full"
                         alt="user"
+                        width={10}
+                        height={10}
                       />
                       <div className="text-gray-700 flex flex-col  ">
                         {service.name}{" "}
