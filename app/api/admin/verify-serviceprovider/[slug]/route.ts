@@ -1,6 +1,7 @@
+import { NextResponse } from "next/server";
+
 import { verifyServiceProvider } from "@/app/data-access/admin";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
-import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(
   async (

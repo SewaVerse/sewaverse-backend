@@ -1,12 +1,8 @@
+import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import Image from "next/image";
 
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
-import {
-  ChevronLeft,
-  ChevronRight,
-  MapPin,
-} from "lucide-react";
 
 const Home = async () => {
   const session = await auth();
