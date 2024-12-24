@@ -27,7 +27,10 @@ export const POST = asyncHandler(async (request: Request) => {
   const existingUser = await getUserByEmail(email);
 
   if (!existingUser) {
-    return NextResponse.json({ success: false, message: "User not found" });
+    return NextResponse.json(
+      { success: false, message: "User not found" },
+      { status: 404 }
+    );
   }
 
   if (isMobile) {
