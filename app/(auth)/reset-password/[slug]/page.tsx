@@ -1,10 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+
+import { Button } from "@/components/ui/button";
 
 type ResetPasswordForm = {
   password: string;
@@ -34,7 +35,7 @@ export default function ResetPassword() {
     watch("confirmPassword") && watch("confirmPassword") !== password;
 
   const onSubmit = async (data: ResetPasswordForm) => {
-    console.log(data);
+    console.error(data);
     if (passwordsMismatch) {
       console.error("Passwords do not match!");
       return;
@@ -54,7 +55,7 @@ export default function ResetPassword() {
       }
 
       const result = await response.json();
-      console.log("Password Changed successfully:", result);
+      console.error("Password Changed successfully:", result);
       toast.success(result.message);
       router.push("/reset-password/success");
       // router.push('/login');

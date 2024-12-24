@@ -1,9 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-import { auth } from "@/auth";
 import { Role } from "@prisma/client";
 import { NextResponse } from "next/server";
+
+import { auth } from "@/auth";
 
 /**
  * A higher-order function that wraps an async handler in Next.js API routes to handle

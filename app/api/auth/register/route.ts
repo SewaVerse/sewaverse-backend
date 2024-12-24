@@ -1,3 +1,6 @@
+import { Role, User, UserProfile, UserRoleMapping } from "@prisma/client";
+import { NextResponse } from "next/server";
+
 import { generateVerificationToken } from "@/app/data-access/token";
 import {
   createUser,
@@ -10,14 +13,11 @@ import {
   userRegisterSchema,
 } from "@/app/schemas/authSchema";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
-
 import { hash } from "@/app/utils/common";
 import CustomError from "@/app/utils/customError";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import prisma from "@/lib/db";
 import { sendVerificationEmail } from "@/lib/mail";
-import { Role, User, UserProfile, UserRoleMapping } from "@prisma/client";
-import { NextResponse } from "next/server";
 
 // const genderMap: { [key: string]: Gender } = {
 //   male: "MALE",

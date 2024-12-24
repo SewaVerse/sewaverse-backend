@@ -1,6 +1,7 @@
+import { Role, User, UserProfile, UserRoleMapping } from "@prisma/client";
+
 import { dbAsyncHandler } from "@/app/utils/asyncHelper/dbAsyncHandler";
 import db from "@/lib/db";
-import { Role, User, UserProfile, UserRoleMapping } from "@prisma/client";
 
 export const getUserByEmail = dbAsyncHandler(async (email: string) => {
   return await db.user.findUnique({

@@ -1,9 +1,10 @@
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import FooterAccordion from "./footer/FooterAccordoin";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
+
+import FooterAccordion from "./FooterAccordoin";
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
 
 const socialLinks = [
   {

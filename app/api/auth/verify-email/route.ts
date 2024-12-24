@@ -1,3 +1,6 @@
+import { User } from "@prisma/client";
+import { NextResponse } from "next/server";
+
 import { generateVerificationToken } from "@/app/data-access/token";
 import { getUserByEmail, updateUserById } from "@/app/data-access/user";
 import {
@@ -8,8 +11,6 @@ import { verifyEmailSchema, VerifyEmailSchema } from "@/app/schemas/authSchema";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { sendVerificationEmail } from "@/lib/mail";
-import { User } from "@prisma/client";
-import { NextResponse } from "next/server";
 
 export const POST = asyncHandler(async (request: Request) => {
   const body = (await request.json()) as VerifyEmailSchema;

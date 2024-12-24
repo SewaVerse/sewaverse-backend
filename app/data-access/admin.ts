@@ -1,4 +1,5 @@
 import db from "@/lib/db";
+
 import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 
 export const getAllUserByAdmin = dbAsyncHandler(async () => {
@@ -7,6 +8,18 @@ export const getAllUserByAdmin = dbAsyncHandler(async () => {
       createdAt: "desc",
     },
   });
+});
+
+export const verifyServiceProvider = dbAsyncHandler(async (id: string) => {
+  await db.serviceProvider.findFirst({
+    where: { id: id },
+  });
+  const updatedServiceProvider = await db.serviceProvider.update({
+    where: { id: id },
+    data: { isAdminVerified: true },
+  });
+
+  return updatedServiceProvider;
 });
 
 // export const getAllVerifiedUserByAdmin = dbAsyncHandler(async () => {

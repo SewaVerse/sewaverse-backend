@@ -1,5 +1,7 @@
-import db from "@/lib/db";
 import { File } from "@prisma/client";
+
+import db from "@/lib/db";
+
 import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 import { getLocalFileUrl } from "../utils/fileHelper";
 

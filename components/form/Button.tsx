@@ -1,9 +1,10 @@
+import { Loader2 } from "lucide-react";
+import React from "react";
+
 import {
   Button as ShadButton,
   ButtonProps as ShadButtonProps,
 } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import React from "react";
 
 interface ButtonProps extends ShadButtonProps {
   isLoading?: boolean;

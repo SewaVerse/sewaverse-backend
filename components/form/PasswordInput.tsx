@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 import Input from "./Input";
 
 type PasswordInputProps = {

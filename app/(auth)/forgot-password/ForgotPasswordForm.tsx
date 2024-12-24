@@ -1,11 +1,12 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 type ForgotPasswordForm = {
   email: string;
@@ -29,7 +30,7 @@ const ForgotPasswordForm = () => {
       }
 
       const result = await response.json();
-      console.log("Password reset request successful:", result);
+      console.error("Password reset request successful:", result);
       toast.success(result.message);
       router.push("/login");
     } catch (error) {

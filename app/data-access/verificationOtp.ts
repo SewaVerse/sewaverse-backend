@@ -8,3 +8,10 @@ export const getPasswordResetOtpByEmail = dbAsyncHandler(
     });
   }
 );
+
+export const deleteOtpByEmail = dbAsyncHandler(async (email: string) => {
+  return await db.passwordResetToken.updateMany({
+    where: { email },
+    data: { otp: null }, // Setting the otp field to null
+  });
+});

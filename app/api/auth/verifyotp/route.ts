@@ -1,15 +1,18 @@
 import { getUserByEmail } from "@/app/data-access/user";
-import { getPasswordResetOtpByEmail } from "@/app/data-access/verificationOtp";
+import {
+  deleteOtpByEmail,
+  getPasswordResetOtpByEmail,
+} from "@/app/data-access/verificationOtp";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { NextResponse } from "next/server";
 import { generatePasswordResetOtp } from "@/app/data-access/token";
+import { sendPasswordResetEmail } from "@/lib/mail";
 
 export const POST = asyncHandler(async (request: Request) => {
-  console.log("Running POST request: Verify OTP");
+  console.error("Running POST request: Verify OTP");
 
   const { otp, email } = await request.json();
 
-  // console.log("Request body", otp, email);
   // const data = request.headers.get("Authorization");
 
   // if (!data) {
@@ -79,13 +82,16 @@ export const POST = asyncHandler(async (request: Request) => {
     );
   }
 
-  // await deletePasswordResetTokenById(existingOtp.id);
+  const passwordResetToken = await generatePasswordResetOtp(
+    existingUser.email as string
+  );
+  await deleteOtpByEmail(existingUser.email as string);
 
   return NextResponse.json(
     {
       success: true,
       message: "OTP verified successfully",
-      data: existingUser,
+      data: passwordResetToken.token,
     },
     { status: 200 }
   );

@@ -1,5 +1,7 @@
-import { updateQueuedEmailById } from "@/app/data-access/queuedEmail";
 import { QueuedEmail } from "@prisma/client";
+
+import { updateQueuedEmailById } from "@/app/data-access/queuedEmail";
+
 import { sendEmail } from "./sendEmail";
 
 export const sendQueuedEmail = async (email: QueuedEmail) => {

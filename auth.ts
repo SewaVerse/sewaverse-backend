@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { User, UserRoleMapping } from "@prisma/client";
 import NextAuth from "next-auth";
+
 import { getServiceProviderByUserId } from "./app/data-access/serviceProvider";
 import {
   createUserRoleMapping,
@@ -20,7 +21,8 @@ export const {
   adapter: PrismaAdapter(db),
   ...authConfig,
   pages: {
-    signIn: "login",
+    signIn: "/login",
+    error: "/login",
   },
   debug: process.env.NODE_ENV === "development",
   events: {
