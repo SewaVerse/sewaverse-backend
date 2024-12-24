@@ -35,7 +35,8 @@ const userRegisterSchema = z.object({
   email: emailSchema,
   name: z
     .string({ message: "Name is required" })
-    .min(5, { message: "Name must be at least 5 characters" }),
+    .min(5, { message: "Name must be at least 5 characters" })
+    .regex(/^[A-Za-z\s]+$/, { message: "Name must contain only letters and spaces" }),
   password: passwordSchema,
   phoneNumber: phoneNumberSchema,
   dob: dobSchema.optional(),

@@ -10,6 +10,18 @@ export const getAllUserByAdmin = dbAsyncHandler(async () => {
   });
 });
 
+export const verifyServiceProvider = dbAsyncHandler(async (id: string) => {
+  await db.serviceProvider.findFirst({
+    where: { id: id },
+  });
+  const updatedServiceProvider = await db.serviceProvider.update({
+    where: { id: id },
+    data: { isAdminVerified: true },
+  });
+
+  return updatedServiceProvider;
+});
+
 // export const getAllVerifiedUserByAdmin = dbAsyncHandler(async () => {
 //   return await db.user.findMany({
 //     where: {
