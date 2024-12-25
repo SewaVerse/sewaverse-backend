@@ -5,9 +5,9 @@ import {
   ServiceProviderProfile,
 } from "@prisma/client";
 
+import { dbAsyncHandler } from "@/app/utils/asyncHelper/dbAsyncHandler";
 import db from "@/lib/db";
 
-import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 import { upsertAddress } from "./address";
 
 export const getServiceProviderByUserId = dbAsyncHandler(
