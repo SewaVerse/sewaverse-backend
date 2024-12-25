@@ -5,7 +5,7 @@ import { currentUser } from "@/lib/auth";
 export default async function SewaProviderWelcomePage() {
   const user = await currentUser();
   return (
-    <div className="flex flex-col items-center justify-center p-10 my-10 bg-white h-full ">
+    <div className="flex flex-col items-center justify-center p-10  bg-white my-28  ">
       {/* Greeting Section */}
       <div className="flex flex-col items-center text-center px-6">
         <h1 className=" text-2xl md:text-3xl font-semibold text-gray-800 my-4">
