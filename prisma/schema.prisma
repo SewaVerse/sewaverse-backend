@@ -143,10 +143,9 @@ model ServiceProvider {
   name String
 
   email     String
-  contact   String
   profileId String? @db.ObjectId
 
-  providerType UserType
+  providerType UserType @default(INDIVIDUAL)
   verificationStep  Int @default(0)
   isVerified        Boolean   @default(false)
   isAdminVerified   Boolean  @default(false)
@@ -167,8 +166,10 @@ model ServiceProvider {
 model ServiceProviderProfile {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   serviceProviderId String  @unique @db.ObjectId
-  profession        String
-  skills            String
+  dob               String
+  gender            Gender
+  profession        String?
+  skills            String?
   description       String?
   imageId           String? @db.ObjectId
 
@@ -196,7 +197,7 @@ model Address {
   province     String
   district     String
   municipality String
-  wardNo       String
+  wardNo       Int
   tole         String?
 
   createdAt DateTime @default(now())

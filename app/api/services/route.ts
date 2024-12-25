@@ -34,7 +34,7 @@ export const POST = asyncHandler(async (request: Request) => {
     const fileBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(fileBuffer);
 
-    const { file: savedFile } = await createFile(
+    const savedFile = await createFile(
       {
         name: file.name,
         size: file.size,

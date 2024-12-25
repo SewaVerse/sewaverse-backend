@@ -1,8 +1,14 @@
-import { CompanyDetails, ServiceProvider } from "@prisma/client";
+import {
+  Address,
+  CompanyDetails,
+  ServiceProvider,
+  ServiceProviderProfile,
+} from "@prisma/client";
 
+import { dbAsyncHandler } from "@/app/utils/asyncHelper/dbAsyncHandler";
 import db from "@/lib/db";
 
-import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
+import { upsertAddress } from "./address";
 
 export const getServiceProviderByUserId = dbAsyncHandler(
   async (userId: string) => {
@@ -26,6 +32,44 @@ export const createServiceProvider = dbAsyncHandler(
   }
 );
 
+export const updateServiceProvider = dbAsyncHandler(
+  async (id: string, data: Partial<ServiceProvider>) => {
+    return await db.serviceProvider.update({
+      where: { id },
+      data,
+    });
+  }
+);
+
+export const createServiceProviderProfile = dbAsyncHandler(
+  async (data: ServiceProviderProfile) => {
+    return await db.serviceProviderProfile.create({
+      data,
+    });
+  }
+);
+
+export const createServiceProviderAddress = dbAsyncHandler(
+  async (serviceProviderId: string, data: Address) => {
+    const saveAddress = await upsertAddress({
+      province: data.province,
+      district: data.district,
+      municipality: data.municipality,
+      wardNo: data.wardNo,
+      tole: data.tole ?? null,
+    } as Address);
+
+    db.serviceProviderAddressMapping.create({
+      data: {
+        serviceProviderId: serviceProviderId,
+        addressId: saveAddress.id,
+      },
+    });
+
+    return saveAddress;
+  }
+);
+
 export const createCompanyDetail = dbAsyncHandler(
   async (data: CompanyDetails) => {
     return await db.companyDetails.create({
@@ -33,5 +77,3 @@ export const createCompanyDetail = dbAsyncHandler(
     });
   }
 );
-
-

@@ -17,7 +17,11 @@ export const PUBLIC_ROUTES = [
  * An array of api routes that are accessible to the private
  * These routes do require authentication
  */
-export const PRIVATE_API_ROUTES = ["/api/user", "/api/admin"];
+export const PRIVATE_API_ROUTES = [
+  "/api/user",
+  "/api/service-provider",
+  "/api/admin",
+];
 
 /**
  * The default redirect path after loggin in

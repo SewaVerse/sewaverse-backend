@@ -41,7 +41,7 @@ export default auth(async (req) => {
     const headersList = await headers();
     const accessToken = headersList.get("Authorization")?.split("Bearer ")[1];
 
-    const isAuthenticated = !!auth || !!accessToken;
+    const isAuthenticated = !!auth || (!!accessToken && accessToken !== "null");
 
     return handleApiRoute(nextUrl, isAuthenticated);
   }
