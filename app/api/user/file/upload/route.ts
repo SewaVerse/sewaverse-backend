@@ -31,7 +31,7 @@ export const POST = asyncHandler(async (request: Request) => {
   } as PrismaFile;
 
   // save to db
-  const { file: saveFile } = await createFile(prismaFile, buffer);
+  const saveFile = await createFile(prismaFile, buffer);
 
   return NextResponse.json({
     success: true,
