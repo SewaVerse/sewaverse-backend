@@ -1,12 +1,10 @@
-import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 
-import { auth } from "@/auth";
-import { Button } from "@/components/ui/button";
+import FeaturedSewa from "@/components/home/FeaturedSewa";
+import PopularSewa from "@/components/home/PopularSewa";
 
 const Home = async () => {
-  const session = await auth();
-
   const imagesData = [
     { src: "/images/HomeMaintenance.svg", name: "Home maintenance" },
     { src: "/images/Construction.svg", name: "Construction" },
@@ -36,6 +34,16 @@ const Home = async () => {
     { src: "/images/Pandit&Jyotish.svg", name: "Pandit & Jyotish" },
     { src: "/images/AllSewas.svg", name: "All Sewas" },
   ];
+
+  const menuItems = [
+    { src: "/images/painting.svg", alt: "logo", label: "Painting" },
+    { src: "/images/cleaning.svg", alt: "logo", label: "Cleaning" },
+    { src: "/images/babysitting.svg", alt: "logo", label: "Baby Sitting" },
+    { src: "/images/beautician.svg", alt: "logo", label: "Beautician" },
+    { src: "/images/hair.svg", alt: "logo", label: "Hair Stylist" },
+    { src: "/images/it.svg", alt: "logo", label: "IT Support" },
+    { src: "", alt: "", label: "More" },
+  ];
   return (
     <div className="font-poppins font-medium text-xl min-h-screen">
       <div className="relative w-full h-screen">
@@ -47,15 +55,21 @@ const Home = async () => {
         />
         <div className="absolute inset-0 bg-black opacity-40"></div>
 
-        <div className="absolute top-0 right-0 pt-16 pr-16 text-white z-10">
-          <div className="text-right">
-            <h1 className="text-3xl font-bold mb-4">Id: {session?.user?.id}</h1>
-            <h2 className="text-2xl mb-4">Name: {session?.user?.name}</h2>
-            <h3 className="text-xl mb-4">Email: {session?.user?.email}</h3>
-            <h4 className="text-lg mb-8">
-              Role: {session?.user?.roles.join(", ")}
-            </h4>
-          </div>
+        <div className="absolute top-5 left-8 px-6 text-white z-10">
+          <ul className="flex flex-row space-x-6">
+            {menuItems.map((item, index) => (
+              <li
+                key={index}
+                className="flex items-center text-lg font-medium hover:underline"
+              >
+                {item.src && (
+                  <Image src={item.src} alt={item.alt} width={23} height={23} />
+                )}
+                {item.label}
+                <ChevronDown style={{ width: "19px", height: "16px" }} />
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Welcome Section (Left Side) */}
@@ -75,484 +89,185 @@ const Home = async () => {
       </div>
 
       {/* Services Section */}
-      <div>
-        <div className="py-16  bg-white text-center">
-          <h2 className="text-3xl font-bold mb-8">Featured Sewas</h2>
-          <div className="flex  justify-between items-center mx-16">
-            {" "}
-            <ChevronLeft />
-            <Button variant={"brand"} className="  px-8 py-5 ">
-              All Services
-            </Button>
-            <Button
-              variant={"brand"}
-              className="mt-2 bg-white text-black shadow-md hover:shadow-lg px-8 py-4 w-48"
-            >
-              Plumbing
-            </Button>
-            <Button
-              variant={"brand"}
-              className="mt-2 bg-white text-black shadow-md hover:shadow-lg px-8 py-4 w-56"
-            >
-              Counselling
-            </Button>
-            <Button
-              variant={"brand"}
-              className="mt-2 bg-white text-black shadow-md hover:shadow-lg px-8 py-4 w-56"
-            >
-              Cleaning
-            </Button>
-            <Button
-              variant={"brand"}
-              className="mt-2 bg-white text-black shadow-md hover:shadow-lg px-8 py-4 w-56"
-            >
-              Mechanic
-            </Button>
-            <Button
-              variant={"brand"}
-              className="mt-2 bg-white text-black shadow-md hover:shadow-lg px-8 py-4 w-56"
-            >
-              Hair Stylist
-            </Button>
-            <ChevronRight />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between  mx-16">
-          <ChevronLeft />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-9 col-auto">
-            {[
-              {
-                title: "Painting | Exterior | Interior",
-                description: "All kind of painting work",
-                image: "/images/image1.webp",
-                price: "10,000",
-                originalPrice: "20,000",
-                discount: "30%",
-                name: "Emma Clark",
-                rating: 4.5,
-              },
-              {
-                title: "Beautician | Bridal | Event",
-                description: "Book professional for the event",
-                image: "/images/image2.webp",
-                price: "5,000",
-                originalPrice: "7,000",
-                discount: null,
-                name: "Emily Wilson",
-                rating: 4.0,
-              },
-              {
-                title: "Child care | Night | Day",
-                description: "Guider for your child development",
-                image: "/images/image3.webp",
-                price: "10,000",
-                originalPrice: "12,000",
-                discount: null,
-                name: "Isabella Adams",
-                rating: 4.8,
-              },
-              {
-                title: "Mechanics | Repair | Replace",
-                description: "Inspect your home for problem solving",
-                image: "/images/image4.webp",
-                price: "15,000",
-                originalPrice: "18,000",
-                discount: "20%",
-                name: "John Ward",
-                rating: 4.5,
-              },
-            ].map((service, index) => (
-              <div
-                key={index}
-                className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-              >
-                <div className="relative">
-                  <Image
-                    src={service.image}
-                    alt={`Featured Service ${index + 1}`}
-                    className="w-full h-[200px] object-cover rounded-t-lg"
-                    width={310}
-                    height={20}
-                  />
-                  {service.discount && (
-                    <div className="absolute top-0 left-0 bg-red-500 text-white px-3 py-1 text-xs font-bold rounded-br-lg">
-                      {service.discount} OFF
-                    </div>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-lg mb-1">
-                    {service.title}
-                  </h4>
-                  <p className="text-gray-500 text-sm mb-3">
-                    {service.description}
-                  </p>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xl font-semibold text-gray-800">
-                      Rs. {service.price}
-                    </span>
-                    {service.discount && (
-                      <span className="text-sm text-gray-400 line-through">
-                        Rs. {service.originalPrice}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <div className="flex gap-4">
-                      <Image
-                        src="/images/profileimage1.svg"
-                        className="w-6 h-6 rounded-full"
-                        alt="user"
-                      />
-                      <div className="text-gray-700 flex flex-col  ">
-                        {service.name}{" "}
-                        <span className="flex items-center">
-                          <MapPin className="text-zinc-500 h-4" /> Kathmandu
-                        </span>
-                      </div>
-                    </div>
-                    <span className="flex items-center">
-                      <span className="text-gray-700">{service.rating}</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="bi bi-star-fill text-yellow-400 ml-1"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M3.612 15.443c-.387.198-.85-.182-.716-.623l.857-2.81-2.18-1.621c-.366-.268-.213-.766.288-.8l2.948-.211L7.74.38c.178-.57.83-.57 1.01 0l1.463 4.22 2.948.211c.502.034.654.532.288.8l-2.18 1.62.857 2.81c.134.441-.329.821-.716.623l-2.444-1.705-2.443 1.705z" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <ChevronRight />
-        </div>
-
-        <div className="py-16  bg-white text-center">
-          <h2 className="text-3xl font-bold mb-8">Popular Sewas</h2>
-          <div className="flex  justify-between items-center mx-16">
-            {" "}
-            <ChevronLeft />
-            <Button variant={"brand"} className="  px-8 py-5 ">
-              All Services
-            </Button>
-            <Button
-              variant={"brand"}
-              className="mt-2 bg-white text-black shadow-md hover:shadow-lg px-8 py-4 w-48"
-            >
-              Plumbing
-            </Button>
-            <Button
-              variant={"brand"}
-              className="mt-2 bg-white text-black shadow-md hover:shadow-lg px-8 py-4 w-56"
-            >
-              Counselling
-            </Button>
-            <Button
-              variant={"brand"}
-              className="mt-2 bg-white text-black shadow-md hover:shadow-lg px-8 py-4 w-56"
-            >
-              Cleaning
-            </Button>
-            <Button
-              variant={"brand"}
-              className="mt-2 bg-white text-black shadow-md hover:shadow-lg px-8 py-4 w-56"
-            >
-              Mechanic
-            </Button>
-            <Button
-              variant={"brand"}
-              className="mt-2 bg-white text-black shadow-md hover:shadow-lg px-8 py-4 w-56"
-            >
-              Hair Stylist
-            </Button>
-            <ChevronRight />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between  mx-16">
-          <ChevronLeft />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-9 col-auto">
-            {[
-              {
-                title: "Painting | Exterior | Interior",
-                description: "All kind of painting work",
-                image: "/images/image1.webp",
-                price: "10,000",
-                originalPrice: "20,000",
-                discount: "30%",
-                name: "Emma Clark",
-                rating: 4.5,
-              },
-              {
-                title: "Beautician | Bridal | Event",
-                description: "Book professional for the event",
-                image: "/images/image2.webp",
-                price: "5,000",
-                originalPrice: "7,000",
-                discount: null,
-                name: "Emily Wilson",
-                rating: 4.0,
-              },
-              {
-                title: "Child care | Night | Day",
-                description: "Guider for your child development",
-                image: "/images/image3.webp",
-                price: "10,000",
-                originalPrice: "12,000",
-                discount: null,
-                name: "Isabella Adams",
-                rating: 4.8,
-              },
-              {
-                title: "Mechanics | Repair | Replace",
-                description: "Inspect your home for problem solving",
-                image: "/images/image4.webp",
-                price: "15,000",
-                originalPrice: "18,000",
-                discount: "20%",
-                name: "John Ward",
-                rating: 4.5,
-              },
-            ].map((service, index) => (
-              <div
-                key={index}
-                className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-              >
-                <div className="relative">
-                  <Image
-                    src={service.image}
-                    alt={`Featured Service ${index + 1}`}
-                    className="w-full h-[200px] object-cover rounded-t-lg"
-                    width={310}
-                    height={20}
-                  />
-                  {service.discount && (
-                    <div className="absolute top-0 left-0 bg-red-500 text-white px-3 py-1 text-xs font-bold rounded-br-lg">
-                      {service.discount} OFF
-                    </div>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-lg mb-1">
-                    {service.title}
-                  </h4>
-                  <p className="text-gray-500 text-sm mb-3">
-                    {service.description}
-                  </p>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xl font-semibold text-gray-800">
-                      Rs. {service.price}
-                    </span>
-                    {service.discount && (
-                      <span className="text-sm text-gray-400 line-through">
-                        Rs. {service.originalPrice}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <div className="flex gap-4">
-                      <Image
-                        src="/images/profileimage1.svg"
-                        className="w-6 h-6 rounded-full"
-                        alt="user"
-                      />
-                      <div className="text-gray-700 flex flex-col  ">
-                        {service.name}{" "}
-                        <span className="flex items-center">
-                          <MapPin className="text-zinc-500 h-4" /> Kathmandu
-                        </span>
-                      </div>
-                    </div>
-                    <span className="flex items-center">
-                      <span className="text-gray-700">{service.rating}</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="bi bi-star-fill text-yellow-400 ml-1"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M3.612 15.443c-.387.198-.85-.182-.716-.623l.857-2.81-2.18-1.621c-.366-.268-.213-.766.288-.8l2.948-.211L7.74.38c.178-.57.83-.57 1.01 0l1.463 4.22 2.948.211c.502.034.654.532.288.8l-2.18 1.62.857 2.81c.134.441-.329.821-.716.623l-2.444-1.705-2.443 1.705z" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <ChevronRight />
-        </div>
-      </div>
-
-      {/* hello */}
-      <div className="py-16 bg-white text-center overflow-hidden mx-16">
-        <div className="relative h-screen w-full">
-          {/* Background Image */}
-          <div className="inset-0">
-            <Image
-              src="/images/service_market_place.webp"
-              alt="Homepage background"
-              className="object-cover w-full h-full "
-              fill
-              priority
-            />
-          </div>
-
-          <div className="absolute z-10 text-white text-left max-w-3xl ml-10 px-4">
-            {/* Main Heading */}
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-              A service marketplace <br /> for everyone
-            </h1>
-
-            {/* Description */}
-            <p className="text-lg md:text-xl leading-relaxed mb-8">
-              Effortlessly begin offering or receiving services with simplicity,
-              convenience, and peace of mind, making the whole process smooth
-              and enjoyable for everyone involved.
-            </p>
-
-            {/* Cards Section */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-6 w-full px-4">
-              {/* Card 1 */}
-              <div className="bg-[#023994CC] p-6 rounded-lg shadow-lg cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
-                <h3 className="text-2xl font-semibold mb-2">
-                  Book the service
-                </h3>
-                <p className="text-base mb-4">
-                  Find the right expert{" "}
-                  <span className="text-2xl ml-4 font-bold">→</span>
-                </p>
-              </div>
-
-              {/* Card 2 */}
-              <div className="bg-[#023994CC] p-6 rounded-lg shadow-lg cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
-                <h3 className="text-2xl font-semibold mb-2">
-                  Become a Sewa Provider
-                </h3>
-                <p className="text-base mb-4">
-                  Start providing services{" "}
-                  <span className="text-2xl ml-4 font-bold">→</span>
-                </p>
-              </div>
-
-              {/* Card 3 */}
-              <div className="bg-[#023994CC] p-6 rounded-lg shadow-lg cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
-                <h3 className="text-2xl font-semibold mb-2">
-                  Learn more about Sewaverse
-                </h3>
-                <p className="text-base mb-4">
-                  More about us{" "}
-                  <span className="text-2xl ml-4 font-bold">→</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Sewa Categories */}
-
-      <div className="pb-16 bg-white text-center">
-        <h2 className="text-3xl font-bold mb-8 font-poppins">Popular Sewas</h2>
-
-        {/* Grid container to arrange images */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 place-items-center">
-          {imagesData.map((image, index) => (
-            <div key={index} className="flex flex-col items-center">
+      <div className="mx-16">
+        <FeaturedSewa />
+        <PopularSewa />
+        {/* hello */}
+        <div className="py-16 bg-white text-center overflow-hidden  ">
+          <div className="relative h-[80vh] w-full">
+            {/* Background Image */}
+            <div className="absolute inset-0 rounded-[20px]  border-4 border-white">
               <Image
-                src={image.src}
-                alt={image.name}
-                width={20}
-                height={20}
-                className="w-[4rem] h-[4rem]"
+                src="/images/service_market_place.webp"
+                alt="Homepage background"
+                className="object-cover w-full h-full"
+                fill
+                priority
               />
-              <span className="mt-2 text-sm text-gray-600">{image.name}</span>
             </div>
-          ))}
+
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+
+            {/* Content */}
+            <div className="absolute z-10 flex flex-col justify-center h-full px-10">
+              {/* Logo or Title */}
+              <div className="absolute top-8 left-8 text-sm font-semibold tracking-wide text-white">
+                sewaverse
+              </div>
+
+              {/* Left-Aligned Text Section */}
+              <div className="text-left text-white max-w-xl mt-12">
+                {" "}
+                {/* Adjusted margin */}
+                {/* Main Heading */}
+                <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-6">
+                  A service marketplace <br /> for everyone
+                </h1>
+                {/* Description */}
+                <p className="text-base md:text-lg leading-relaxed mb-10">
+                  Effortlessly begin offering or receiving services with
+                  simplicity, convenience, and peace of mind, making the whole
+                  process smooth and enjoyable for everyone involved.
+                </p>
+              </div>
+
+              {/* Cards Section */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-10">
+                {/* Card 1 */}
+                <div className="bg-[#023994CC] p-6 rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
+                  <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
+                    Book the service
+                  </h3>
+                  <p className="text-sm md:text-base text-center">
+                    Find the right expert{" "}
+                    <span className="text-lg ml-2 font-bold">→</span>
+                  </p>
+                </div>
+
+                {/* Card 2 */}
+                <div className="bg-[#023994CC] p-6 rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
+                  <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
+                    Become a Sewa Provider
+                  </h3>
+                  <p className="text-sm md:text-base text-center">
+                    Start providing services{" "}
+                    <span className="text-lg ml-2 font-bold">→</span>
+                  </p>
+                </div>
+
+                {/* Card 3 */}
+                <div className="bg-[#023994CC] p-6 rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
+                  <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
+                    Learn more about Sewaverse
+                  </h3>
+                  <p className="text-sm md:text-base text-center">
+                    More about us{" "}
+                    <span className="text-lg ml-2 font-bold">→</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* other section  */}
-      <div className="pb-16 bg-white text-center">
-        <h3 className="text-3xl font-bold mb-8 font-poppins">
-          Don’t take our word, trust the real stories <br />
-          <span className="text-[16px] font-normal leading-[24px] text-center decoration-skip-ink-none">
-            Their experiences offer honest insights and a true picture of what
-            to expect.
-            <br /> Discover the difference through their voices.
-          </span>
-        </h3>
+        {/* Sewa Categories */}
 
-        <div className="relative flex flex-col items-center">
-          <div className="relative z-20 bg-white rounded-lg shadow-2xl border border-white/50 w-[638px] h-[497px] p-6">
-            <Image
-              src="/images/profileimage1.svg"
-              alt="Marinda Walkers"
-              className="w-16 h-16 rounded-full mx-auto mt-4 border-4 border-white"
-              width={638}
-              height={497}
-            />
-            <p
-              className="mt-12 text-gray-600 text-[16px] font-poppins font-normal leading-[24px] text-justify decoration-skip-ink-none"
-              style={{ textUnderlinePosition: "from-font" }}
-            >
-              {`I’ve used Serwaverse for a variety of services, from home
+        <div className="pb-16 bg-white text-center">
+          <h2 className="text-3xl font-bold mb-8 font-poppins">
+            Sewa Categories
+          </h2>
+
+          {/* Grid container to arrange images */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 place-items-center">
+            {imagesData.map((image, index) => (
+              <div key={index} className="flex flex-col items-center">
+                <Image
+                  src={image.src}
+                  alt={image.name}
+                  width={20}
+                  height={20}
+                  className="w-[4rem] h-[4rem]"
+                />
+                <span className="mt-2 text-sm text-gray-600">{image.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* other section  */}
+        <div className="pb-16 bg-white text-center">
+          <h3 className="text-3xl font-bold mb-8 font-poppins">
+            Don’t take our word, trust the real stories <br />
+            <span className="text-[16px] font-normal leading-[24px] text-center decoration-skip-ink-none">
+              Their experiences offer honest insights and a true picture of what
+              to expect.
+              <br /> Discover the difference through their voices.
+            </span>
+          </h3>
+
+          <div className="relative flex flex-col items-center">
+            <div className="relative z-20 bg-white rounded-lg shadow-2xl border border-white/50 w-[638px] h-[497px] p-6">
+              <Image
+                src="/images/profileimage1.svg"
+                alt="Marinda Walkers"
+                className="w-16 h-16 rounded-full mx-auto mt-4 border-4 border-white"
+                width={638}
+                height={497}
+              />
+              <p
+                className="mt-12 text-gray-600 text-[16px] font-poppins font-normal leading-[24px] text-justify decoration-skip-ink-none"
+                style={{ textUnderlinePosition: "from-font" }}
+              >
+                {`I’ve used Serwaverse for a variety of services, from home
                 cleaning to graphic design, and overall, I've been very
                 impressed. The range of services is extensive, and the quality
                 is generally high. My only gripe is that the service reviews can
                 sometimes be a bit inconsistent. Still, it’s a fantastic
                 resource for all kinds of needs.`}
-            </p>
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-900 font-bold">
-              Jackson Hopkins <br />
-              <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
-            </div>
-          </div>
-
-          <div className="absolute flex justify-between w-full  top-5  px-4">
-            <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-[600px] h-[350px] opacity-50 p-6 translate-y-[70px]">
-              <Image
-                src="/images/profileimage3.svg"
-                alt="Jackson Hopkins"
-                className="w-16 h-16 rounded-full mx-auto mt-4 border-4 border-white"
-                width={638}
-                height={497}
-              />
-              <p className="mt-12 text-gray-600 text-sm">
-                I’ve used Servaverse for a variety of services, from home
-                cleaning to graphic design, and overall, I’ve been very
-                impressed...
               </p>
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-700 font-semibold">
-                Marinda Walkers <br />
-                <span className="text-yellow-400">⭐⭐⭐⭐</span>
+              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-900 font-bold">
+                Jackson Hopkins <br />
+                <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
               </div>
             </div>
 
-            <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-[600px] h-[350px] opacity-50 p-6 translate-y-[70px]">
-              <Image
-                src="/images/profileimage2.svg"
-                alt="Jensony Kennedy"
-                className="w-16 h-16 rounded-full mx-auto mt-4 border-4 border-white"
-                width={638}
-                height={497}
-              />
-              <p className="mt-12 text-gray-600 text-sm">
-                This service has been a game-changer for me! From booking a
-                plumber to finding last-minute help...
-              </p>
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-700 font-semibold">
-                Jensony Kennedy <br />
-                <span className="text-yellow-400">⭐⭐⭐⭐</span>
+            <div className="absolute flex justify-between w-full  top-5  px-4">
+              <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-[600px] h-[350px] opacity-50 p-6 translate-y-[70px]">
+                <Image
+                  src="/images/profileimage3.svg"
+                  alt="Jackson Hopkins"
+                  className="w-16 h-16 rounded-full mx-auto mt-4 border-4 border-white"
+                  width={638}
+                  height={497}
+                />
+                <p className="mt-12 text-gray-600 text-sm">
+                  I’ve used Servaverse for a variety of services, from home
+                  cleaning to graphic design, and overall, I’ve been very
+                  impressed...
+                </p>
+                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-700 font-semibold">
+                  Marinda Walkers <br />
+                  <span className="text-yellow-400">⭐⭐⭐⭐</span>
+                </div>
+              </div>
+
+              <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-[600px] h-[350px] opacity-50 p-6 translate-y-[70px]">
+                <Image
+                  src="/images/profileimage2.svg"
+                  alt="Jensony Kennedy"
+                  className="w-16 h-16 rounded-full mx-auto mt-4 border-4 border-white"
+                  width={638}
+                  height={497}
+                />
+                <p className="mt-12 text-gray-600 text-sm">
+                  This service has been a game-changer for me! From booking a
+                  plumber to finding last-minute help...
+                </p>
+                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-700 font-semibold">
+                  Jensony Kennedy <br />
+                  <span className="text-yellow-400">⭐⭐⭐⭐</span>
+                </div>
               </div>
             </div>
           </div>

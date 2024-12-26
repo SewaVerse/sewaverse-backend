@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { genderTypes } from "../utils/enumMap";
+
 export const emailSchema = z
   .string({ message: "Email is required" })
   .email({ message: "Invalid email address" });
@@ -21,9 +23,12 @@ export const roleSchema = z.enum(["user", "admin", "serviceProvider"], {
 
 export const genderSchema = z
   .string({ message: "Gender is required" })
-  .refine((value) => ["male", "female", "others"].includes(value), {
-    message: "Gender must be 'male', 'female', or 'others'",
-  });
+  .refine(
+    (value) => genderTypes.includes(value as (typeof genderTypes)[number]),
+    {
+      message: "Gender must be 'male', 'female', or 'others'",
+    }
+  );
 
 export const dobSchema = z
   .string({ message: "Date of birth is required" }) // Ensures dob is not empty
@@ -45,3 +50,18 @@ export const dobSchema = z
   );
 
 export const isMobileSchema = z.boolean().optional();
+
+export const addressSchema = z.object({
+  province: z.string().nonempty({ message: "Province is required" }),
+  district: z.string().nonempty({ message: "District is required" }),
+  municipality: z.string().nonempty({ message: "Municipality is required" }),
+  wardNo: z
+    .number({ invalid_type_error: "Ward number must be a number" })
+    .min(1, { message: "Ward number must be at least 1" })
+    .max(99, { message: "Ward number must be less than 100" }),
+  tole: z.string().optional(),
+});
+
+
+
+
