@@ -171,6 +171,7 @@ model ServiceProviderProfile {
   skills            String
   description       String?
   imageId           String? @db.ObjectId
+  serviceSubCategory String[]
 
   file            File?            @relation(fields: [imageId], references: [id])
   serviceProvider ServiceProvider? @relation(fields: [serviceProviderId], references: [id], onDelete: Cascade)

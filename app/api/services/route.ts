@@ -34,14 +34,13 @@ export const POST = asyncHandler(async (request: Request) => {
     const fileBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(fileBuffer);
 
-    const { file: savedFile } = await createFile(
-      {
-        name: file.name,
-        size: file.size,
-        type: file.type,
-      } as PrismaFile,
-      buffer
-    );
+    const prismaFile = {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+    } as PrismaFile;
+
+    const { file: savedFile } = await createFile(prismaFile, buffer);
 
     imageId = savedFile.id;
   }
