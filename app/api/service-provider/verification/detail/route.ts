@@ -1,7 +1,12 @@
-import { Address, ServiceProviderProfile } from "@prisma/client";
+import {
+  Address,
+  ServiceProvider,
+  ServiceProviderProfile,
+} from "@prisma/client";
 import { NextResponse } from "next/server";
 
 import {
+  createServiceProvider,
   createServiceProviderAddress,
   createServiceProviderProfile,
   getServiceProviderByUserId,
@@ -69,10 +74,14 @@ export const POST = roleAsyncHandler(
 
     const user = await currentUser();
 
-    const serviceProvider = await getServiceProviderByUserId(user!.id!);
+    let serviceProvider = await getServiceProviderByUserId(user!.id!);
 
     if (!serviceProvider) {
-      throw new Error("Service provider not found");
+      serviceProvider = await createServiceProvider({
+        userId: user!.id!,
+        name: user!.name!,
+        email: user!.email!,
+      } as ServiceProvider);
     }
 
     const {

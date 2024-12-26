@@ -59,7 +59,7 @@ export const createServiceProviderAddress = dbAsyncHandler(
       tole: data.tole ?? null,
     } as Address);
 
-    db.serviceProviderAddressMapping.create({
+    await db.serviceProviderAddressMapping.create({
       data: {
         serviceProviderId: serviceProviderId,
         addressId: saveAddress.id,

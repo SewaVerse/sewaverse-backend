@@ -34,11 +34,15 @@ export const createVerificationDocumentFromSchema = dbAsyncHandler(
 
 export const upsertVerificationDocument = dbAsyncHandler(
   async (data: VerificationDocument) => {
-    const { id, ...rest } = data;
-    return await db.verificationDocument.upsert({
-      where: { id: id || undefined },
-      create: { ...rest },
-      update: { ...rest },
+    if (data.id) {
+      return await db.verificationDocument.update({
+        where: { id: data.id },
+        data,
+      });
+    }
+
+    return await db.verificationDocument.create({
+      data,
     });
   }
 );
