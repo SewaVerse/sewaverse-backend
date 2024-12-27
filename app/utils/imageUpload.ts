@@ -1,6 +1,8 @@
 import { File as PrismaFile } from "@prisma/client";
+
 import { createFile } from "@/app/data-access/file";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
+
 import { fileSchema } from "../schemas/fileSchema";
 
 export const imageUpload = async (

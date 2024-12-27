@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
+
 import {
   getServiceProviderProfile,
   updateServiceProviderProfile,
 } from "@/app/data-access/serviceProvider";
 import { providerVerificationTwo } from "@/app/schemas/providerVerificationTwo";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
+import { imageUpload } from "@/app/utils/imageUpload";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { currentUser } from "@/lib/auth";
-import { imageUpload } from "@/app/utils/imageUpload";
+
 
 export const POST = roleAsyncHandler(
   "SERVICE_PROVIDER",
