@@ -6,7 +6,7 @@ import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 import { sendQueuedEmail } from "../utils/email/sendQueuedEmail";
 
 export const createQueuedEmail = dbAsyncHandler(
-  async (data: QueuedEmail, sendImmediately = false) => {
+  async (data: QueuedEmail, sendImmediately = true) => {
     const email = await db.queuedEmail.create({
       data: {
         ...data,

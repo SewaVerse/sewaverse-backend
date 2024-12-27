@@ -8,7 +8,7 @@ const fromEmail = process.env.SMTP_EMAIL!;
 
 export const sendPasswordResetEmail = dbAsyncHandler(
   async (email: string, token: string) => {
-    const resetLink = `${domain}/reset-password?token=${token}`;
+    const resetLink = `${domain}/reset-password/${token}`;
 
     return await createQueuedEmail(
       {
