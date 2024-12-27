@@ -49,6 +49,28 @@ export const createServiceProviderProfile = dbAsyncHandler(
   }
 );
 
+export const getServiceProviderProfile = dbAsyncHandler(
+  async (userId: string) => {
+    const serviceProvider = await db.serviceProvider.findFirst({
+      where: { userId },
+    });
+
+    if (!serviceProvider) {
+      throw new Error("Service Provider not found");
+    }
+
+    const profile = await db.serviceProviderProfile.findFirst({
+      where: { serviceProviderId: serviceProvider.id },
+    });
+
+    if (!profile) {
+      throw new Error("Service Provider Profile not found");
+    }
+
+    return profile;
+  }
+);
+
 export const updateServiceProviderProfile = dbAsyncHandler(
   async (profileId: string, data: Partial<ServiceProviderProfile>) => {
     const currentProfile = await db.serviceProviderProfile.findUnique({

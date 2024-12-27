@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { profilePictureSchema } from "./profilePictureSchema";
+// import { profilePictureSchema } from "./profilePictureSchema";
 
 export const providerVerificationTwo = z.object({
   profession: z.string().min(1, "Profession is required"),
@@ -9,7 +9,7 @@ export const providerVerificationTwo = z.object({
     .array(z.string().min(1, "Sub Category is required"))
     .min(1, "At least one sub category is required"),
   description: z.string().min(1, "Description is required"),
-  profile: profilePictureSchema.optional(),
+  // profile: profilePictureSchema.optional(),
 });
 
 export type ProviderVerificationTwo = z.infer<typeof providerVerificationTwo>;
