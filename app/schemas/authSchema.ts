@@ -36,8 +36,8 @@ const userRegisterSchema = z.object({
   name: z
     .string({ message: "Name is required" })
     .min(5, { message: "Name must be at least 5 characters" })
-    .regex(/^[A-Za-z\s]+$/, {
-      message: "Name must contain only letters and spaces",
+    .regex(/^[A-Za-z\s.]+$/, {
+      message: "Name must contain only letters, spaces, and dots",
     })
     .regex(/([A-Za-z]+\s[A-Za-z]+)/, {
       message: "Name must contain at least two words",
