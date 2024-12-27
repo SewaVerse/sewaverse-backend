@@ -2,10 +2,11 @@ import { Role } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 import { findUsersByRole, getUserById } from "@/app/data-access/user";
-import { mongoId } from "@/lib/constants";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
+import { mongoId } from "@/lib/constants";
 
-export const GET = roleAsyncHandler("ADMIN",
+export const GET = roleAsyncHandler(
+  "ADMIN",
   async (
     request: Request,
     { params }: { params: Promise<{ slug: string }> }
