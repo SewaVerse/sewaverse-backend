@@ -64,6 +64,8 @@ export const POST = asyncHandler(async (request: Request) => {
         id: user.id,
         name: user.name!,
         email: user.email,
+        role: user.roles,
+        profileId: user.userProfileId,
       },
     },
     { status: 200 }
