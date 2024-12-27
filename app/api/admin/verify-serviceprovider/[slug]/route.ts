@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
 import { verifyServiceProvider } from "@/app/data-access/admin";
-import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
+import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 
-export const POST = asyncHandler(
+export const POST = roleAsyncHandler("ADMIN",
   async (
     request: Request,
     { params }: { params: Promise<{ slug: string }> }
