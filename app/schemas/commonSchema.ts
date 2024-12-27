@@ -9,12 +9,15 @@ export const emailSchema = z
 export const passwordSchema = z
   .string({ message: "Password is required" })
   .min(8, "Password must be at least 8 characters");
+// .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+// .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+// .regex(/[0-9]/, "Password must contain at least one number")
+// .regex(/[\W_]/, "Password must contain at least one special character");
 
 export const phoneNumberSchema = z
   .string({ message: "Phone number is required" })
-  .refine((value) => /^\d{10}$/.test(value), {
-    message:
-      "Phone number must contain only digits and be exactly 10 characters long",
+  .refine((value) => /^(97|98)\d{8}$/.test(value), {
+    message: "Invalid phone number ",
   });
 
 export const roleSchema = z.enum(["user", "admin", "serviceProvider"], {
