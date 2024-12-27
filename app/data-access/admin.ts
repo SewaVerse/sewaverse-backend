@@ -10,6 +10,14 @@ export const getAllUserByAdmin = dbAsyncHandler(async () => {
   });
 });
 
+export const getAllServiceProviderProfileByAdmin = dbAsyncHandler(async () => {
+  return await db.serviceProviderProfile.findMany({
+    // orderBy: {
+    //   createdAt: "desc",
+    // },
+  });
+});
+
 export const verifyServiceProvider = dbAsyncHandler(async (id: string) => {
   await db.serviceProvider.findFirst({
     where: { id: id },
