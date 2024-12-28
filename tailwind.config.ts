@@ -62,9 +62,9 @@ export default {
   			'brand-gradient': 'linear-gradient(to right,hsla(238, 52%, 38%, 1), hsla(301, 57%, 36%, 1))'
   		},
   		fontFamily: {
-  			'work-sans': 'var(--work-sans)',
-  			'roboto': 'var(--roboto)',
-  			'inter': 'var(--inter)'
+  			'work-sans': 'var(--work-sans)', //heading font
+  			'roboto': 'var(--roboto)', //body font
+  			'inter': 'var(--inter)' //paragrpah font
   		},
   		keyframes: {
   			'accordion-down': {

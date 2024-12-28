@@ -10,6 +10,7 @@ export const PUBLIC_ROUTES = [
   "/account-type",
   "/email-verification",
   "/sewaprovider",
+  "/sewaproviderstep1",
   "/sewaprovidercontent",
 ];
 
