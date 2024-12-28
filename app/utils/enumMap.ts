@@ -1,4 +1,8 @@
-import { Gender, VerificationDocumentType } from "@prisma/client";
+import {
+  Gender,
+  MunicipalityType,
+  VerificationDocumentType,
+} from "@prisma/client";
 
 export const genderTypes = ["male", "female", "others"] as const;
 
@@ -25,4 +29,21 @@ export const verificationDocumentTypeMap: Record<
   drivinglicense: "DRIVING_LICENSE",
   pan_vat: "PAN_VAT",
   certificate: "CERTIFICATE",
+};
+
+export const municipalityTypes = [
+  "metropolitan",
+  "sub_metropolitan",
+  "municipality",
+  "rural_municipality",
+] as const;
+
+export const municipalityTypeMap: Record<
+  (typeof municipalityTypes)[number],
+  MunicipalityType
+> = {
+  metropolitan: "METROPOLITAN",
+  sub_metropolitan: "SUB_METROPOLITAN",
+  municipality: "MUNICIPALITY",
+  rural_municipality: "RURAL_MUNICIPALITY",
 };
