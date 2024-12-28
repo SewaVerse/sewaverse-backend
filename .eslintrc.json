@@ -8,16 +8,11 @@
         "groups": [
           "builtin",
           "external",
-          "internal", // Absolute imports (e.g., @/...)
-          ["sibling", "parent"], // Relative imports (e.g., ../...)
-          "index",
-          "unknown"
+          "internal",
+          ["sibling", "parent"],
+          "index"
         ],
-        "newlines-between": "always",
-        "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": false
-        }
+        "newlines-between": "always"
       }
     ],
     "no-console": ["error", { "allow": ["error", "warn"] }],

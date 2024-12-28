@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, Roboto, Work_Sans } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
+import { Inter, Roboto, Work_Sans } from "next/font/google";
 
-// import localFont from "next/font/local";
 import { auth } from "@/auth";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 
 import ToasterContext from "./context/ToasterContext";
-
 import "./globals.css";
 
 const Work_SansFont = Work_Sans({
@@ -34,8 +32,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   const session = await auth();
 
@@ -52,6 +52,7 @@ export default async function RootLayout({
             <Footer />
           </div>
           <ToasterContext />
+          {modal}
         </SessionProvider>
       </body>
     </html>
