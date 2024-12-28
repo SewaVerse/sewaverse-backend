@@ -22,10 +22,6 @@ export const getCountryByName = dbAsyncHandler(async (name: string) => {
   });
 });
 
-export const getAllCountry = dbAsyncHandler(async () => {
-  return await db.country.findMany();
-});
-
 export const updateCountryById = dbAsyncHandler(
   async (id: string, data: Partial<Country>) => {
     return await db.country.update({
