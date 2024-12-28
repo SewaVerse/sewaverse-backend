@@ -9,10 +9,10 @@ import {
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { hash } from "@/app/utils/common";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { currentUser } from "@/lib/auth";
+import { currentNextAuthUser } from "@/lib/auth";
 
 export const POST = asyncHandler(async (request: Request) => {
-  const user = (await currentUser()) as unknown as User;
+  const user = (await currentNextAuthUser()) as unknown as User;
 
   const body = (await request.json()) as ResetPasswordSchema;
 

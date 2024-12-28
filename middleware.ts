@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -12,6 +9,7 @@ import {
   ROOT,
 } from "@/lib/routes";
 
+import { decodeToken } from "./app/utils/token";
 import { auth } from "./auth";
 
 const handleApiRoute = (
@@ -28,7 +26,7 @@ const handleApiRoute = (
     });
   }
 
-  return null;
+  return NextResponse.next();
 };
 
 export default auth(async (req) => {
@@ -38,10 +36,17 @@ export default auth(async (req) => {
 
   // Handle API routes
   if (nextUrl.pathname.startsWith("/api")) {
-    const headersList = await headers();
-    const accessToken = headersList.get("Authorization")?.split("Bearer ")[1];
+    const headerList = await headers();
+    const accessToken = headerList.get("Authorization")?.split("Bearer ")[1];
 
-    const isAuthenticated = !!auth || (!!accessToken && accessToken !== "null");
+    let tokenPayload = null;
+
+    // speciallly for mobile
+    if (accessToken) {
+      tokenPayload = await decodeToken(accessToken);
+    }
+
+    const isAuthenticated = !!auth || !!tokenPayload;
 
     return handleApiRoute(nextUrl, isAuthenticated);
   }
@@ -60,8 +65,6 @@ export default auth(async (req) => {
   // If the user is not authenticated and the route is not public, redirect to the login page
   if (!auth && !isPublicRoute)
     return Response.redirect(new URL(LOGIN, nextUrl));
-
-  return NextResponse.next();
 });
 
 export const config = {

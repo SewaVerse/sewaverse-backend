@@ -2,10 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { currentUser } from "@/lib/auth";
+import { currentNextAuthUser } from "@/lib/auth";
 
 export default async function SewaProviderWelcomePage() {
-  const user = await currentUser();
+  const user = await currentNextAuthUser();
   return (
     <div className="flex flex-col items-center justify-center p-10 my-10 bg-gray-50 h-full rounded-md">
       {/* Top Navigation */}

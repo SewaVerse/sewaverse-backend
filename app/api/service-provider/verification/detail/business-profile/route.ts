@@ -8,8 +8,7 @@ import { providerVerificationTwo } from "@/app/schemas/providerVerificationTwo";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { imageUpload } from "@/app/utils/imageUpload";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { currentUser } from "@/lib/auth";
-
+import { currentNextAuthUser } from "@/lib/auth";
 
 export const POST = roleAsyncHandler(
   "SERVICE_PROVIDER",
@@ -42,7 +41,7 @@ export const POST = roleAsyncHandler(
       return NextResponse.json(validationError, { status: 400 });
     }
 
-    const user = await currentUser();
+    const user = await currentNextAuthUser();
 
     const existingUser = await getServiceProviderProfile(user!.id!);
 

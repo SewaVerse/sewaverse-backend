@@ -39,7 +39,7 @@ export const POST = asyncHandler(async (request: Request) => {
   const roles = user.roles.map((role) => role.role);
 
   // safe to generate token
-  const { token, expires } = generateToken({
+  const { token, expires } = await generateToken({
     id: user.id,
     name: user.name!,
     email: user.email!,
@@ -64,7 +64,7 @@ export const POST = asyncHandler(async (request: Request) => {
         id: user.id,
         name: user.name!,
         email: user.email,
-        role: user.roles,
+        roles: user.roles.map((role) => role.role),
         profileId: user.userProfileId,
       },
     },

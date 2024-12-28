@@ -97,13 +97,7 @@ export const updateServiceProviderProfile = dbAsyncHandler(
 
 export const createServiceProviderAddress = dbAsyncHandler(
   async (serviceProviderId: string, data: Address) => {
-    const saveAddress = await upsertAddress({
-      province: data.province,
-      district: data.district,
-      municipality: data.municipality,
-      wardNo: data.wardNo,
-      tole: data.tole ?? null,
-    } as Address);
+    const saveAddress = await upsertAddress(data);
 
     await db.serviceProviderAddressMapping.create({
       data: {

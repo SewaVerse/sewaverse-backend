@@ -21,7 +21,7 @@ import { VerificationDocumentSchema } from "@/app/schemas/verificationSchema";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { genderTypeMap } from "@/app/utils/enumMap";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { currentUser } from "@/lib/auth";
+import { currentNextAuthUser } from "@/lib/auth";
 
 function parseProviderVerificationDetail(
   formData: FormData
@@ -72,7 +72,7 @@ export const POST = roleAsyncHandler(
       return NextResponse.json(validationError, { status: 400 }); // If there's an error, return it directly
     }
 
-    const user = await currentUser();
+    const user = await currentNextAuthUser();
 
     let serviceProvider = await getServiceProviderByUserId(user!.id!);
 
@@ -94,9 +94,9 @@ export const POST = roleAsyncHandler(
 
     // save address
     await createServiceProviderAddress(serviceProvider.id, {
-      province: address.province,
-      district: address.district,
-      municipality: address.municipality,
+      provinceId: address.province,
+      districtId: address.district,
+      municipalityId: address.municipality,
       wardNo: address.wardNo,
       tole: address.tole ?? null,
     } as Address);

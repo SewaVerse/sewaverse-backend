@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 
 import { getServiceProviderByUserId } from "@/app/data-access/serviceProvider";
-import { currentUser } from "@/lib/auth";
+import { currentNextAuthUser } from "@/lib/auth";
 
 const SewaProviderVerificationPage = async () => {
-  const user = await currentUser();
+  const user = await currentNextAuthUser();
   const hasServiceProviderRole = user?.roles.includes("SERVICE_PROVIDER");
 
   if (!user || !hasServiceProviderRole) redirect("/");
