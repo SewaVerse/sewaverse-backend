@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { CirclePlus, Share2 } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 
 export default function SewaProviderStep1() {
   return (
@@ -16,11 +16,8 @@ export default function SewaProviderStep1() {
         </h3>
         <h3 className="text-lg font-semibold">Create your business profile</h3>
         <p className="text-sm text-gray-500 mt-4">
-          Create your business profile Your Profile is Your First Impression. It
-          is the face of your services. Customers rely on it to learn about your
-          expertise and decide if you're the right fit for their needs. Ensure
-          it’s accurate, professional, and showcases your strengths.
-        </p>
+  Create your business profile Your Profile is Your First Impression. It is the face of your services. Customers rely on it to learn about your expertise and decide if you&apos;re the right fit for their needs. Ensure it&apos;s accurate, professional, and showcases your strengths.
+</p>
 
         <form className="mt-4 space-y-4">
           <div className="border border-solid border-black rounded-md h-20 flex items-center justify-between px-4">
