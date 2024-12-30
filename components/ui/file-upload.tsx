@@ -19,9 +19,9 @@ import {
   FileRejection,
   DropzoneOptions,
 } from 'react-dropzone'
-import { toast } from 'sonner'
 import { Trash2 as RemoveIcon } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
+import toast from 'react-hot-toast'
 
 type DirectionOptions = 'rtl' | 'ltr' | undefined
 
