@@ -60,6 +60,8 @@ model User {
   serviceProviders ServiceProvider[]
   bookings         Booking[]
   sessions         Session[]
+  Review           Review[]
+  Rating           Rating[]
 }
 
 model Session {
@@ -173,6 +175,7 @@ model ServiceProviderProfile {
   description        String?
   imageId            String?  @db.ObjectId
   serviceSubCategory String[]
+  overallRating      Float    @default(0)
 
   file            File?            @relation(fields: [imageId], references: [id])
   serviceProvider ServiceProvider? @relation(fields: [serviceProviderId], references: [id], onDelete: Cascade)
@@ -224,17 +227,17 @@ model StateProvince {
 }
 
 model District {
-  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
   name            String
-  stateProvinceId String        @db.ObjectId
-  published    Boolean
+  stateProvinceId String  @db.ObjectId
+  published       Boolean
 
-  stateProvince   StateProvince @relation(fields: [stateProvinceId], references: [id], onDelete: Cascade)
+  stateProvince StateProvince @relation(fields: [stateProvinceId], references: [id], onDelete: Cascade)
 
   municipalities Municipality[]
   Address        Address[]
 
-  @@unique([stateProvinceId,name])
+  @@unique([stateProvinceId, name])
 }
 
 model Municipality {
@@ -246,10 +249,10 @@ model Municipality {
 
   district District @relation(fields: [districtId], references: [id], onDelete: Cascade)
 
-  wards    Int[]
+  wards   Int[]
   Address Address[]
 
-  @@unique([districtId,name])
+  @@unique([districtId, name])
 }
 
 model Address {
@@ -325,6 +328,7 @@ model OfferedService {
   discount       Float
   location       String
   workExperience String
+  overallRating  Float     @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -332,6 +336,8 @@ model OfferedService {
   service         Service         @relation(fields: [serviceId], references: [id])
   serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id])
   bookings        Booking[]
+  ratings         Rating[]
+  reviews         Review[]
 }
 
 model ServiceLocation {
@@ -444,6 +450,30 @@ model Booking {
   @@index([status]) // Optimize status-based queries
 }
 
+model Rating {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
+  offeredServiceId String   @db.ObjectId
+  rating           Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user           User           @relation(fields: [userId], references: [id])
+  offeredService OfferedService @relation(fields: [offeredServiceId], references: [id])
+}
+
+model Review {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
+  offeredServiceId String   @db.ObjectId
+  reviewText       String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user           User           @relation(fields: [userId], references: [id])
+  offeredService OfferedService @relation(fields: [offeredServiceId], references: [id])
+}
+
 model QueuedEmail {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   from            String
@@ -490,12 +520,11 @@ enum PriceType {
 }
 
 enum MunicipalityType {
-  METROPOLITAN 
-  SUB_METROPOLITAN 
+  METROPOLITAN
+  SUB_METROPOLITAN
   MUNICIPALITY
   RURAL_MUNICIPALITY
 }
-
 
 enum BookingStatus {
   PENDING
