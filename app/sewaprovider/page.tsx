@@ -1,10 +1,18 @@
 "use client";
-
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import FileUpload from "@/components/form/FileUpload";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import Select from "@/components/form/Select";
+import Input from "@/components/form/Input";
+
+interface Province {
+  value: string;
+  label: string;
+}
+
 
 // Define Form Data Interface
 interface SewaProviderDetailsFormData {
@@ -25,10 +33,32 @@ interface SewaProviderDetailsFormData {
 }
 
 export default function SewaProviderDetails() {
+
+  const [provinceOptions, setProvinceOptions] = useState<Province[]>([]);
+
+  // Fetch Province Data
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      try {
+        const response = await fetch("https://api.example.com/provinces"); 
+        const data = await response.json();
+        const formattedProvinces = data.map((province: any) => ({
+          value: province.id,
+          label: province.name,
+        }));
+        setProvinceOptions(formattedProvinces);
+      } catch (error) {
+        console.error("Error fetching provinces:", error);
+      }
+    };
+
+    fetchProvinces();
+  }, []);
   const form = useForm<SewaProviderDetailsFormData>({
     defaultValues: {
       name: "",
       citizenshipFront: "",
+      gender: "",
     },
   });
 
@@ -69,16 +99,17 @@ export default function SewaProviderDetails() {
                 >
                   Gender
                 </label>
-                <select
-                  id="gender"
+                <Select
+                  className=" border rounded-xl"
+                  form={form}
                   name="gender"
-                  className="block w-full py-2  border border-gray-200 rounded-xl px-3 appearance-none"
-                >
-                  <option value="">Select gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
+                  placeholder="Select gender"
+                  options={[
+                    { value: "male", label: "Male" },
+                    { value: "female", label: "Female" },
+                    { value: "other", label: "Other" },
+                  ]}
+                />
               </div>
 
               <div className="relative">
@@ -98,22 +129,24 @@ export default function SewaProviderDetails() {
             </div>
 
             {/* Address Section */}
-            <div>
-              <label className="block mb-2 text-md font-medium">Address</label>
+            <div className="mt-[50px]">
+              <label className="block mb-2 text-md font-sm">Address</label>
               <div className="grid grid-cols-2 gap-6 mb-4">
-                <select className="w-full border border-gray-200 rounded-xl px-3 py-2">
-                  <option value="">Province</option>
-                  <option value="Province 1">Province 1</option>
-                  <option value="Province 2">Province 2</option>
-                </select>
-                <select className="w-full border border-gray-200 rounded-xl px-3 py-2">
+                <Select
+                  className="rounded-xl"
+                  form={form}
+                  name="province"
+                  placeholder="Select Province"
+                  options={provinceOptions}
+                />
+                <select className="w-full border border-gray-200 rounded-xl px-3 ">
                   <option value="">District</option>
                   <option value="District 1">District 1</option>
                   <option value="District 2">District 2</option>
                 </select>
               </div>
               <div className="grid grid-cols-2 gap-6 mb-4">
-                <select className="w-full border border-gray-200 rounded-xl px-3 py-2">
+                <select className="w-full border border-gray-200 rounded-xl px-3">
                   <option value="">Municipality</option>
                   <option value="Municipality 1">Municipality 1</option>
                   <option value="Municipality 2">Municipality 2</option>
@@ -133,11 +166,11 @@ export default function SewaProviderDetails() {
 
             {/* Verification Documents */}
             <div>
-              <div className="flex flex-col mb-4">
+              <div className="flex flex-col">
                 <label className="text-lg font-medium ">
                   Verification Documents
                 </label>
-                <label className="text-sm font-medium ">
+                <label className="text-sm font-sm gradient-text ">
                   Personal Documents
                 </label>
               </div>
@@ -145,89 +178,55 @@ export default function SewaProviderDetails() {
                 {/* <label className="block text-sm font-medium text-gray-600 mb-2">
                 Citizenship Type
               </label> */}
-                <select className="w-full border border-1 border-gray-600 rounded-xl p-3 ">
-                  <option value="">Select Citizenship</option>
-                  <option value="Nepali">Nepali</option>
-                  <option value="Foreign">Foreign</option>
-                </select>
+                <Select
+                  className=" rounded-xl"
+                  form={form}
+                  name="citizenship"
+                  placeholder="Select Citizenship"
+                  options={[
+                    { value: "Nepali", label: "Nepali" },
+                    { value: "Foreign", label: "Foreign" },
+                  ]}
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block mb-1 text-md text-gray-400 font-medium">
+                  <label className="block  text-md text-gray-400 font-sm px-2">
                     Front Side
                   </label>
-                  {/* <input type="text" className=" w-full border border-dotted p-3 text-gray-500" placeholder="Drag your image here or click to upload" /> */}
-                  <FileUpload form={form} name="citizenshipFront" />
+                   <FileUpload form={form} name="citizenshipFront" />
                 </div>
                 <div>
-                  <label className="block mb-1 text-md text-gray-400 font-medium">
+                  <label className="block  text-md text-gray-400 font-sm px-2">
                     Address
                   </label>
-                  <input
-                    type="text"
-                    className="border w-full border-dotted p-3 text-gray-500"
-                    placeholder="Drag your image here or click to upload"
-                  />
+                  <FileUpload form={form} name="citizenshipFront" />
                 </div>
-
-                {/* <input
-                type="file"
-                {...register("citizenshipFront", {
-                  required: "Citizenship front side is required",
-                })}
-                className="w-full text-sm text-gray-500"
-              /> */}
-                {/* <input
-                type="file"
-                {...register("citizenshipBack", {
-                  required: "Citizenship back side is required",
-                })}
-                className="w-full text-sm text-gray-500"
-              /> */}
               </div>
             </div>
 
-            {/* PAN Card */}
-            {/* <div>
-            <h3 className="text-lg font-medium text-gray-800 mb-4">PAN Card</h3>
-            <input
-              type="text"
-              placeholder="PAN Number"
-              {...register("panNumber", { required: "PAN Number is required" })}
-              className="w-full border border-gray-300 rounded-[20px] p-3 shadow-sm"
-            />
-            <input
-              type="file"
-              {...register("panCardImage", {
-                required: "PAN Card image is required",
-              })}
-              className="w-full text-sm text-gray-500"
-            />
-          </div> */}
-            <label className="block mb-2 text-lg text-gray-600 font-medium">
-              Pan
-            </label>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-6 mt-[-20px]">
               <div>
-                <label className="block mb-1 text-md text-gray-400 font-medium">
-                  Pan Number
+                <label className="block gradient-text  font-sm mt-[-15px] px-2">
+                  PAN Card
                 </label>
-                <input
-                  type="text"
-                  className="border w-full  p-3 text-gray-500"
-                  placeholder="Drag your image here or click to upload"
-                />
+                <label className="block mb-1 text-black font-sm px-2">
+                  PAN Number
+                </label>
+                <Input 
+                type="text"
+                placeholder="PAN Number"
+                form={form}
+                name="panNumber"
+                disabled={form.formState.isSubmitting}
+              />
               </div>
               <div>
-                <label className="block mb-1 text-md text-gray-400 font-medium">
-                  Pan Card Image
+                <label className="block text-md text-black font-sm px-2 mt-2">
+                  PAN Card Image
                 </label>
-                <input
-                  type="text"
-                  className="border w-full border-dotted p-3 text-gray-500"
-                  placeholder="Drag your image here or click to upload"
-                />
+                <FileUpload form={form} name="panCard" />
               </div>
             </div>
 
@@ -235,18 +234,18 @@ export default function SewaProviderDetails() {
             <Button
               variant={"brand"}
               type="submit"
-              className="w-full text-white py-3 rounded-[20px] shadow-md"
+              className="w-full text-white py-3 rounded-[10px] shadow-md"
             >
               Proceed
             </Button>
           </form>
         </div>
         <div className="mx-auto w-dvw ">
-          <label className="block mb-2 text-lg text-gray-600 font-medium text-center">
+          <label className="block mb-2 text-lg text-black font-sm text-center">
             Preview Of Document
           </label>
           {/* <div   className="border border-dotted border-gray-500 h-screen w-full" >&nbsp;<span className="text-center">image</span></div> */}
-          <div className="border border-dotted border-gray-500 h-80 w-full flex items-center justify-center">
+          <div className="border-[2px] border-dashed border-black h-80 w-full flex items-center justify-center">
             <span className="text-center">image</span>
           </div>
         </div>
