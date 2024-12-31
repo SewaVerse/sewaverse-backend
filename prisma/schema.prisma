@@ -176,6 +176,7 @@ model ServiceProviderProfile {
   imageId            String?  @db.ObjectId
   serviceSubCategory String[]
   overallRating      Float    @default(0)
+  totalRatings       Int      @default(0)
 
   file            File?            @relation(fields: [imageId], references: [id])
   serviceProvider ServiceProvider? @relation(fields: [serviceProviderId], references: [id], onDelete: Cascade)
