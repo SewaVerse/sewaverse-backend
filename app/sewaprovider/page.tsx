@@ -144,7 +144,7 @@ export default function SewaProviderDetails() {
       </div> */}
 
           {/* Title */}
-          <h2 className="text-center text-2xl text-black mb-6">
+          <h2 className="text-center text-2xl text-black mb-4">
             Sewa Provider Details
           </h2>
 
@@ -260,8 +260,10 @@ export default function SewaProviderDetails() {
                   name="citizenship"
                   placeholder="Select Citizenship"
                   options={[
-                    { value: "Nepali", label: "Nepali" },
-                    { value: "Foreign", label: "Foreign" },
+                    { value: "citizenship", label: "Citizenship"},
+                    { value: "nationalIdentityCard", label: "National Identity Card"},
+                    { value: "driversLicense", label: "Drivre's License" },
+
                   ]}
                 />
               </div>

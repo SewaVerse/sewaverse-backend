@@ -1,10 +1,23 @@
 "use client";
 
-import { CirclePlus, Share2 } from "lucide-react";
+import { CirclePlus, Share2, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import React, { useState,MouseEvent } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function SewaProviderStep1() {
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleNext1Click = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault(); // Prevent form submission
+    setShowPopup(true);
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
+  };
+
   return (
     <div className="flex flex-col lg:flex-row gap-8 p-6">
       <div className="w-full lg:w-1/3 bg-white rounded-lg shadow p-6">
@@ -16,8 +29,11 @@ export default function SewaProviderStep1() {
         </h3>
         <h3 className="text-lg font-semibold">Create your business profile</h3>
         <p className="text-sm text-gray-500 mt-4">
-  Create your business profile Your Profile is Your First Impression. It is the face of your services. Customers rely on it to learn about your expertise and decide if you&apos;re the right fit for their needs. Ensure it&apos;s accurate, professional, and showcases your strengths.
-</p>
+          Create your business profile Your Profile is Your First Impression. It
+          is the face of your services. Customers rely on it to learn about your
+          expertise and decide if you&apos;re the right fit for their needs.
+          Ensure it&apos;s accurate, professional, and showcases your strengths.
+        </p>
 
         <form className="mt-4 space-y-4">
           <div className="border border-solid border-black rounded-md h-20 flex items-center justify-between px-4">
@@ -27,9 +43,10 @@ export default function SewaProviderStep1() {
             </label>
             <div className="border border-dotted border-black rounded-md h-[57px] w-[158px] flex flex-col items-center justify-center">
               <span className="text-green-500">
-                <CirclePlus />
+                <CirclePlus  />
               </span>
               <span className="text-[12px] text-gray-700">Upload Picture</span>
+              
             </div>
           </div>
 
@@ -71,7 +88,7 @@ export default function SewaProviderStep1() {
               Offered Service <br />
               <span className="text-gray-500">(Required*)</span>
             </label>
-            <div className="border border-dotted border-black rounded-md h-[57px] w-[158px] flex flex-col items-center justify-center">
+            <div className="border border-dotted border-black rounded-md h-[57px] w-[158px] flex flex-col items-center justify-center cursor-pointer" onClick={handleNext1Click}>
               <span className="text-green-500">
                 <CirclePlus />
               </span>
@@ -110,6 +127,7 @@ export default function SewaProviderStep1() {
           >
             Next
           </Button>
+          
         </form>
       </div>
 
@@ -275,6 +293,75 @@ export default function SewaProviderStep1() {
           </div>
         </div>
       </div>
+
+      {/* popup  */}
+
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-1/2 h-1/2">
+            <div className="flex justify-between items-center ">
+              <h2 className="text-lg font-roboto px-44">
+                Select The Service That You are Offering!
+              </h2>
+              <X
+                onClick={closePopup}
+                className="cursor-pointer text-gray-700"
+              />
+            </div>
+            <div className="mx-20 mt-2">
+              <p>
+                Connect with the clients,showcase your skills and grow your
+                business.
+              </p>
+            </div>
+            <div className="text-center mt-4">
+              <p>Sewa Category</p>
+              <select className="mt-2 border border-gray-300 rounded-lg w-5/12 h-10">
+                <option>Search a Sewa Category</option>
+                <option>Service 1</option>
+                <option>service 2</option>
+              </select>
+              <p className="mt-1 text-gray-500 text-sm">
+                {" "}
+                Select the Category based on the sewa you will be providing
+              </p>
+            </div>
+
+            <div className="mt-4 flex gap-14 mx-4">
+              <div className="flex items-center">
+                <Checkbox />
+                <span className="ml-2">Home Maintenance</span>
+              </div>
+              <div className="flex items-center">
+                <Checkbox />
+                <span className="ml-2">Computer Repair and Maintenance</span>
+              </div>
+              <div className="flex items-center">
+                <Checkbox />
+                <span className="ml-2">Pet Care Sewa</span>
+              </div>
+            </div>
+            <div className="mt-2 flex gap-24 mx-4">
+              <div className="flex items-center">
+                <Checkbox />
+                <span className="ml-2">Construction</span>
+              </div>
+              <div className="flex items-center ml-2">
+                <Checkbox />
+                <span className="ml-2">Beauty and Personal Care</span>
+              </div>
+              <div className="flex items-center ml-6">
+                <Checkbox />
+                <span className="ml-2">Pet Care Sewa</span><span></span>
+              </div>
+            </div>
+
+            <div className="text-center my-10  text-s ">
+              <p>If youe desired service is not listed above, <span className="gradient-text">+ Add New Service</span></p>
+              </div>
+          </div> 
+        </div>
+      )}
     </div>
   );
 }
