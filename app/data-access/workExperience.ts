@@ -6,20 +6,24 @@ import { File as PrismaFile } from "@prisma/client";
 import { creatPrismaFileFromFile } from "./file";
 import { ImageSchema } from "../schemas/imageSchema";
 
-export const createWorkExperienceFileFromSchema = dbAsyncHandler(
-  async (serviceProviderId: string, data: ImageSchema) => {
+export const createWorkExperience = dbAsyncHandler(
+  async (providerProfileId: string, data: WorkExperienceSchema) => {
     let file: PrismaFile | null = null;
-
+    const { verificationFile, description, startDate, endDate, ...rest } = data;
     // If the image file exists, create a Prisma file
-    if (data.image?.file) {
-      file = await creatPrismaFileFromFile(data.image.file);
+    if (verificationFile?.file) {
+      file = await creatPrismaFileFromFile(verificationFile.file);
     }
 
     // Upsert the WorkExperience file record in the database
     return await upsertWorkExperienceFile({
-      serviceProviderId,
+      providerProfileId,
+      description: description ?? null,
+      startDate: startDate ?? null,
+      endDate: endDate ?? null,
+      ...rest,
       fileId: file?.id ?? null,
-    } as unknown as WorkExperience);
+    } as WorkExperience);
   }
 );
 
@@ -40,13 +44,13 @@ export const upsertWorkExperienceFile = dbAsyncHandler(
   }
 );
 
-export const createWorkExperience = dbAsyncHandler(
-  async (data: WorkExperience) => {
-    return await db.workExperience.create({
-      data,
-    });
-  }
-);
+// export const createWorkExperience = dbAsyncHandler(
+//   async (data: WorkExperience) => {
+//     return await db.workExperience.create({
+//       data,
+//     });
+//   }
+// );
 
 export const getWorkExperience = dbAsyncHandler(async (id: string) => {
   return await db.workExperience.findMany({

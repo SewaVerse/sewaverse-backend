@@ -1,6 +1,7 @@
 import {
   getExistingServiceProviderProfile,
   getServiceProviderProfileById,
+  getServiceProviderProfileByServiceProviderId,
 } from "@/app/data-access/serviceProviderProfile";
 import {
   createWorkExperience,
@@ -8,7 +9,7 @@ import {
 } from "@/app/data-access/workExperience";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 // import { imageUpload } from "@/app/utils/imageUpload";
-import { currentNextAuthUser } from "@/lib/auth";
+import { currentNextAuthUser, getcurrentUser } from "@/lib/auth";
 import {
   WorkExperienceSchema,
   workExperienceSchema,
@@ -24,31 +25,28 @@ import { WorkExperience } from "@prisma/client";
 import { use } from "react";
 
 function parseWorkExperience(formData: FormData): WorkExperienceSchema {
-  // Extract the JSON string containing other fields
   const json = formData.get("jsonData") as string;
 
   if (!json) {
     throw new Error("Missing jsonData in form data");
   }
 
-  // Parse the JSON string into an object
   const data = JSON.parse(json) as WorkExperienceSchema;
 
-  // Extract the file from the form data
-  const experienceFile = formData.get("experienceFile") as File | null;
+  console.log(data);
 
-  // Attach the file to the `fileId` if it exists
+  const experienceFile = formData.get("file") as File | null;
+
+  console.log(experienceFile);
+
   if (experienceFile) {
-    data.fileId = { image: { file: experienceFile } };
-  } else {
-    data.fileId = undefined;
+    data.verificationFile = { file: experienceFile };
   }
 
-  // Return the parsed data
   return {
     ...data,
-    startDate: new Date(data.startDate), // Ensure `startDate` is a Date object
-    endDate: data.endDate ? new Date(data.endDate) : null, // Ensure `endDate` is a Date or null
+    startDate: data.startDate ? new Date(data.startDate) : null,
+    endDate: data.endDate ? new Date(data.endDate) : null,
   };
 }
 
@@ -74,21 +72,36 @@ export const POST = roleAsyncHandler(
       description,
       startDate,
       endDate,
+      serviceId,
       isCurrent,
-      fileId,
+      verificationFile,
     } = validatedFields;
 
-    const user = await currentNextAuthUser();
-    console.error("user", user);
+    const user = await getcurrentUser();
+    let serviceProvider = await getServiceProviderByUserId(user?.id!);
 
-    const providerId = await getServiceProviderProfileById(user?.id!);
-    console.error(providerId);
+    const profile = await getServiceProviderProfileByServiceProviderId(
+      serviceProvider?.id!
+    );
+
+    const data = await createWorkExperience(profile?.id!, {
+      jobTitle,
+      company,
+      duration,
+      description,
+      startDate,
+      endDate,
+      isCurrent,
+      serviceId,
+
+      verificationFile,
+    } as WorkExperienceSchema);
 
     return NextResponse.json(
       {
         success: true,
-        message: "Work Experience validated",
-        data: validatedFields,
+        message: "Success",
+        data,
       },
       { status: 201 }
     );

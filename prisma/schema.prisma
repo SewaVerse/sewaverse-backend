@@ -360,7 +360,7 @@ model WorkExperience {
   company           String
   duration          String
   description       String?
-  startDate         DateTime
+  startDate         DateTime?
   endDate           DateTime?
   isCurrent         Boolean
   serviceId         String    @db.ObjectId
