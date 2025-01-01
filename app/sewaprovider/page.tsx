@@ -1,26 +1,21 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { District, Municipality, StateProvince } from "@prisma/client";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import FileUpload from "@/components/form/FileUpload";
+import Input from "@/components/form/Input";
+import Select, { Option } from "@/components/form/Select";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import Select from "@/components/form/Select";
-import Input from "@/components/form/Input";
-
-interface Province {
-  value: string;
-  label: string;
-}
-
 
 // Define Form Data Interface
 interface SewaProviderDetailsFormData {
   gender: string;
   dateOfBirth: string;
-  province: string;
-  district: string;
-  municipality: string;
+  provinceId: string;
+  districtId: string;
+  municipalityId: string;
   wardNo: string;
   tole: string;
   citizenshipFront: string;
@@ -32,27 +27,70 @@ interface SewaProviderDetailsFormData {
   front: string;
 }
 
-export default function SewaProviderDetails() {
+const fetchProvinces = async () => {
+  try {
+    const response = await fetch("/api/state-province");
+    const data = await response.json();
+    const formattedProvinces = data.data.map((province: StateProvince) => ({
+      value: province.id,
+      label: province.name,
+    }));
+    return formattedProvinces;
+  } catch (error) {
+    console.error("Error fetching provinces:", error);
+    return [];
+  }
+};
 
-  const [provinceOptions, setProvinceOptions] = useState<Province[]>([]);
+const fetchDistricts = async (provinceId: string) => {
+  try {
+    const response = await fetch("/api/district?provinceId=" + provinceId);
+    const data = await response.json();
+    const formattedProvinces = data.data.map((district: District) => ({
+      value: district.id,
+      label: district.name,
+    }));
+    return formattedProvinces;
+  } catch (error) {
+    console.error("Error fetching provinces:", error);
+    return [];
+  }
+};
+
+type MunicipalityOption = Option & { wards: Option[] };
+
+const fetchMunicipalities = async (districtId: string) => {
+  try {
+    const response = await fetch("/api/municipality?districtId=" + districtId);
+    const data = await response.json();
+    const formattedProvinces = data.data.map((municipality: Municipality) => ({
+      value: municipality.id,
+      label: municipality.name,
+      wards: municipality.wards.map((ward) => ({
+        value: ward.toString(),
+        label: ward.toString(),
+      })),
+    }));
+    return formattedProvinces;
+  } catch (error) {
+    console.error("Error fetching provinces:", error);
+    return [];
+  }
+};
+
+export default function SewaProviderDetails() {
+  const [provinceOptions, setProvinceOptions] = useState<Option[]>([]);
+  const [districtOptions, setDistrictOptions] = useState<Option[]>([]);
+  const [municipalityOptions, setMunicipalityOptions] = useState<
+    MunicipalityOption[]
+  >([]);
+  const [wardOptions, setWardOptions] = useState<Option[]>([]);
 
   // Fetch Province Data
   useEffect(() => {
-    const fetchProvinces = async () => {
-      try {
-        const response = await fetch("https://api.example.com/provinces"); 
-        const data = await response.json();
-        const formattedProvinces = data.map((province: any) => ({
-          value: province.id,
-          label: province.name,
-        }));
-        setProvinceOptions(formattedProvinces);
-      } catch (error) {
-        console.error("Error fetching provinces:", error);
-      }
-    };
-
-    fetchProvinces();
+    fetchProvinces().then((fetchedProvinces) => {
+      setProvinceOptions(fetchedProvinces);
+    });
   }, []);
   const form = useForm<SewaProviderDetailsFormData>({
     defaultValues: {
@@ -61,6 +99,35 @@ export default function SewaProviderDetails() {
       gender: "",
     },
   });
+
+  // Handle Province Change
+  const handleProvinceChange = async (provinceId: string) => {
+    form.setValue("districtId", "");
+    form.setValue("municipalityId", "");
+    form.setValue("wardNo", "");
+    const districts = await fetchDistricts(provinceId);
+    setDistrictOptions(districts);
+    setMunicipalityOptions([]);
+    setWardOptions([]);
+  };
+
+  // Handle District Change
+  const handleDistrictChange = async (districtId: string) => {
+    form.setValue("municipalityId", "");
+    form.setValue("wardNo", "");
+    const municipalities = await fetchMunicipalities(districtId);
+    setMunicipalityOptions(municipalities);
+    setWardOptions([]);
+  };
+
+  // Handle Municipality Change
+  const handleMunicipalityChange = (municipalityId: string) => {
+    form.setValue("wardNo", "");
+    const municipality = municipalityOptions.find(
+      (municipality) => municipality.value === municipalityId
+    );
+    setWardOptions(municipality?.wards ?? []);
+  };
 
   // Handle Form Submission
   const onSubmit = (data: SewaProviderDetailsFormData) => {
@@ -135,26 +202,35 @@ export default function SewaProviderDetails() {
                 <Select
                   className="rounded-xl"
                   form={form}
-                  name="province"
+                  name="provinceId"
                   placeholder="Select Province"
                   options={provinceOptions}
+                  onChange={(value) => handleProvinceChange(value)}
                 />
-                <select className="w-full border border-gray-200 rounded-xl px-3 ">
-                  <option value="">District</option>
-                  <option value="District 1">District 1</option>
-                  <option value="District 2">District 2</option>
-                </select>
+                <Select
+                  className="rounded-xl"
+                  form={form}
+                  name="districtId"
+                  placeholder="Select District"
+                  options={districtOptions}
+                  onChange={(value) => handleDistrictChange(value)}
+                />
               </div>
               <div className="grid grid-cols-2 gap-6 mb-4">
-                <select className="w-full border border-gray-200 rounded-xl px-3">
-                  <option value="">Municipality</option>
-                  <option value="Municipality 1">Municipality 1</option>
-                  <option value="Municipality 2">Municipality 2</option>
-                </select>
-                <input
-                  type="text"
-                  placeholder="Ward No."
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2 "
+                <Select
+                  className="rounded-xl"
+                  form={form}
+                  name="municipalityId"
+                  placeholder="Select Municipality"
+                  options={municipalityOptions}
+                  onChange={(value) => handleMunicipalityChange(value)}
+                />
+                <Select
+                  className="rounded-xl"
+                  form={form}
+                  name="wardNo"
+                  placeholder="Select Ward No"
+                  options={wardOptions}
                 />
               </div>
               <input
@@ -195,7 +271,7 @@ export default function SewaProviderDetails() {
                   <label className="block  text-md text-gray-400 font-sm px-2">
                     Front Side
                   </label>
-                   <FileUpload form={form} name="citizenshipFront" />
+                  <FileUpload form={form} name="citizenshipFront" />
                 </div>
                 <div>
                   <label className="block  text-md text-gray-400 font-sm px-2">
@@ -214,13 +290,13 @@ export default function SewaProviderDetails() {
                 <label className="block mb-1 text-black font-sm px-2">
                   PAN Number
                 </label>
-                <Input 
-                type="text"
-                placeholder="PAN Number"
-                form={form}
-                name="panNumber"
-                disabled={form.formState.isSubmitting}
-              />
+                <Input
+                  type="text"
+                  placeholder="PAN Number"
+                  form={form}
+                  name="panNumber"
+                  disabled={form.formState.isSubmitting}
+                />
               </div>
               <div>
                 <label className="block text-md text-black font-sm px-2 mt-2">
