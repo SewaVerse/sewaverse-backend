@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { genderTypes } from "../utils/enumMap";
+import { fileSchema } from "./fileSchema";
 
 export const emailSchema = z
   .string({ message: "Email is required" })

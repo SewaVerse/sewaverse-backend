@@ -9,3 +9,20 @@ export const getServiceProviderProfileById = dbAsyncHandler(
     });
   }
 );
+
+export const getExistingServiceProviderProfile = dbAsyncHandler(
+  async (id: string) => {
+    return await db.serviceProviderProfile.findUnique({
+      where: { serviceProviderId: id },
+    });
+  }
+);
+
+export const updateServiceProviderProfile = dbAsyncHandler(
+  async (id: string, data: any) => {
+    return await db.serviceProviderProfile.update({
+      where: { id },
+      data,
+    });
+  }
+);
