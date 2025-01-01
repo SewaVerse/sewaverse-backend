@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+
 import db from "@/lib/db";
 
 import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
@@ -10,17 +12,23 @@ export const getServiceProviderProfileById = dbAsyncHandler(
   }
 );
 
-export const getExistingServiceProviderProfile = dbAsyncHandler(
-  async (id: string) => {
+export const getServiceProviderProfileByServiceProviderId = dbAsyncHandler(
+  async (serviceProviderId: string) => {
     return await db.serviceProviderProfile.findUnique({
-      where: { serviceProviderId: id },
+      where: { serviceProviderId },
     });
   }
 );
 
 export const updateServiceProviderProfile = dbAsyncHandler(
-  async (id: string, data: any) => {
-    return await db.serviceProviderProfile.update({
+  async (
+    id: string,
+    data: Prisma.ServiceProviderProfileUncheckedUpdateInput,
+    tx: Prisma.TransactionClient | null = null
+  ) => {
+    const prismaClient = tx || db;
+
+    return await prismaClient.serviceProviderProfile.update({
       where: { id },
       data,
     });

@@ -1,14 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { CirclePlus, Share2 } from "lucide-react";
+import { CirclePlus, FolderPen, Share2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-
 export default function SewaProviderStep2() {
   return (
-    <div className="flex flex-col lg:flex-row gap-8 p-6">
+    <div className="flex flex-col lg:flex-row gap-6 p-6">
       <div className="w-full lg:w-1/3 bg-white rounded-lg shadow p-6">
         <h3
           className="text-lg font-semibold text-center mb-2"
@@ -26,66 +25,70 @@ export default function SewaProviderStep2() {
 
         <form className="mt-4 space-y-4">
           <textarea
-            className="h-[337px] w-[300px] border border-solid rounded-lg py-2 px-4 text-left resize-none"
+            className="h-[400px] w-[300px] border border-solid rounded-lg py-2 px-4 text-left resize-none"
             placeholder="Type here"
           />
-          <div className="border border-solid border-black rounded-md h-[82px] flex items-center justify-between px-4">
+          <div className="border border-solid border-black rounded-md h-[100px] flex items-center justify-between px-4">
             <label className="block text-sm font-medium text-gray-700">
               Experience <br />
-              <span className="text-gray-300 text-[10px]">
-              Showcase your skills and experience.{" "}
+              <span className="text-gray-300 text-[15px]">
+                Showcase your skills and experience.{" "}
               </span>
             </label>
-            <div className="border border-dotted border-black rounded-md h-[57px] w-[130px] flex flex-col items-center justify-center">
+            <div className="border border-dotted border-black rounded-md h-[75px] w-[130px] flex flex-col items-center justify-center">
               <span className="text-green-500">
                 <CirclePlus />
               </span>
-              <span className="text-[12px] text-gray-700">Add Experience</span>
+              <span className="text-[12px] text-gray-700 mt-2">
+                Add Experience
+              </span>
             </div>
           </div>
 
-          <div className="border border-solid border-black rounded-md h-20 flex items-center justify-between px-4">
+          <div className="border border-solid border-black rounded-md h-[100px] flex items-center justify-between px-4">
             <label className="block text-sm font-medium text-gray-700">
               Licence <br />
-              <span className="text-gray-300 text-[10px]">
+              <span className="text-gray-300 text-[15px]">
                 Verify your qualification & standout more.
               </span>
             </label>
-            <div className="border border-dotted border-black rounded-md h-[57px] w-[140px] flex flex-col items-center justify-center">
+            <div className="border border-dotted border-black rounded-md h-[75px] w-[140px] flex flex-col items-center justify-center">
               <span className="text-green-500">
                 <CirclePlus />
               </span>
-              <span className="text-[12px] text-gray-700">Add Licence</span>
+              <span className="text-[12px] text-gray-700 mt-2">
+                Add Licence
+              </span>
             </div>
           </div>
-          <div className="border border-solid border-black rounded-md h-20 flex items-center justify-between px-4">
+          <div className="border border-solid border-black rounded-md h-[100px] flex items-center justify-between px-4">
             <label className="block text-sm font-medium text-gray-700">
               Awards & Achievements <br />
-              <span className="text-gray-300 text-[10px]">
+              <span className="text-gray-300 text-[14px]">
                 Build Reliability & Trust of Clients.{" "}
               </span>
             </label>
-            <div className="border border-dotted border-black rounded-md h-[57px] w-[115px] flex flex-col items-center justify-center">
+            <div className="border border-dotted border-black rounded-md h-[75px] w-[115px] flex flex-col items-center justify-center">
               <span className="text-green-500">
                 <CirclePlus />
               </span>
-              <span className="text-[12px] text-gray-700">
+              <span className="text-[12px] text-gray-700 mt-2">
                 Add Certification
               </span>
             </div>
           </div>
-          <div className="border border-solid border-black rounded-md h-20 flex items-center justify-between px-4">
+          <div className="border border-solid border-black rounded-md h-[95px] flex items-center justify-between px-4">
             <label className="block text-sm font-medium text-gray-700">
               My Works <br />
-              <span className="text-gray-300 text-[10px]">
+              <span className="text-gray-300 text-[15px]">
                 Show your previous works and attract customers.
               </span>
             </label>
-            <div className="border border-dotted border-black rounded-md h-[57px] w-[162px] flex flex-col items-center justify-center">
+            <div className="border border-dotted border-black rounded-md h-[75px] w-[162px] flex flex-col items-center justify-center">
               <span className="text-green-500">
                 <CirclePlus />
               </span>
-              <span className="text-[12px] text-gray-700">Add Works</span>
+              <span className="text-[12px] text-gray-700 mt-2">Add Works</span>
             </div>
           </div>
 
@@ -103,8 +106,10 @@ export default function SewaProviderStep2() {
             Previous
           </Button>
           <Link href="/sewaproviderstep1">
-  <p className="w-full mt-2 text-gray-400 underline hover:text-gray-700 text-center">Skip</p>
-</Link>
+            <p className="w-full mt-2 text-gray-400 underline hover:text-gray-700 text-center">
+              Skip
+            </p>
+          </Link>
         </form>
       </div>
 
@@ -225,7 +230,7 @@ export default function SewaProviderStep2() {
             <li className="text-md">Offered Services</li>
           </ul>
         </div> */}
-        <div className="h-[440px] w-full mt-4 bg-white rounded border-2 border-gray-200 shadow-lg p-4">
+        <div className="h-[1100px] w-full mt-4 bg-white rounded border-2 border-gray-200 shadow-lg p-4">
           <div className="flex justify-between items-start gap-4">
             <div>
               <ul className="flex gap-4">
@@ -234,8 +239,121 @@ export default function SewaProviderStep2() {
                 <li className="text-md">Awards & Certification</li>
                 <li className="text-md">Offered Services</li>
               </ul>
-              {/* <input className=" mt-2 w-[600px] h-[200px] px-4 py-2 border border-gray-200 rounded-lg"></input> */}
-              <div className=" mt-2 w-[750px] h-[200px] px-4 py-2 border border-gray-200 rounded-lg"></div>
+              <h3 className="text-2xl font-medium mt-5 font-roboto">
+                About Me
+              </h3>
+              <textarea className=" mt-2 w-[753px] h-[200px] px-4 py-2 border border-gray-200 rounded-lg"></textarea>
+              {/* <div className=" mt-2 w-[750px] h-[200px] px-4 py-2 border border-gray-200 rounded-lg"></div> */}
+
+              {/* work exoerience section */}
+              <div>
+                <h3 className="text-2xl mt-5 font-roboto font-medium flex justify-between items-center">
+                  Work Experiences
+                  <span className="ml-auto mt-3"><FolderPen size={14} className="text-gray-500" /></span>
+                   
+                </h3>
+                <div className="flex flex-row justify-between gap-2">
+                  <div className="flex-1 mt-2 h-[65px] px-4 py-1 border border-gray-200 rounded-lg flex justify-between items-center">
+                    <div className="flex flex-col items-start">
+                      <label className="text-sm font-medium">Title</label>
+                      <span className="text-xs text-gray-400 mt-1">Info</span>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <label className="text-sm font-medium gradient-text">
+                        Experience Years
+                      </label>
+                      <span className="text-xs text-gray-400 underline cursor-pointer mt-1">
+                        View Document
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex-1 mt-2 h-[65px] px-4 py-1 border border-gray-200 rounded-lg flex justify-between items-center">
+                    <div className="flex flex-col items-start">
+                      <label className="text-sm font-medium">Title</label>
+                      <span className="text-xs text-gray-400 mt-1 ">Info</span>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <label className="text-sm font-medium gradient-text">
+                        Experience Years
+                      </label>
+                      <span className="text-xs text-gray-400 underline cursor-pointer mt-1">
+                        View Document
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* {licence sectio} */}
+              <div>
+                <h3 className="text-2xl mt-5 font-roboto font-medium">
+                  Licence
+                </h3>
+                <div className="mt-2 h-[70px] px-4 py-1 w-[376px] border border-gray-200 rounded-lg flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium">Licence</label>
+                    <span className="text-xs text-gray-400 mt-1">
+                      Licence From
+                    </span>
+                  </div>
+                  <div className="border border-gray-500 w-28 py-7 square-md"></div>
+                </div>
+              </div>
+
+              {/* Awards section */}
+              <div>
+                <h3 className="text-2xl mt-5 font-roboto font-medium flex justify-between items-center">
+                  Awards & Certification
+                  <span className="ml-[-118px8px] mt-3"><FolderPen size={14} className="text-gray-500" /></span>
+                </h3>
+                <div className="flex gap-4 mt-2">
+                  <div className="flex flex-col items-center">
+                    <div className="h-[100px] w-[200px] border-[2px] border-gray-400 square-lg flex items-center justify-between"></div>
+                    <span className="text-sm mt-2">Certification</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="h-[100px] w-[200px] border-[2px] border-gray-400 square-lg flex items-center justify-between"></div>
+                    <span className="text-sm mt-2">Certification</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="h-[100px] w-[200px] border-[2px] border-gray-400 square-lg flex items-center justify-between"></div>
+                    <span className="text-sm mt-2">Certification</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* My Works Section  */}
+              <div>
+                <h3 className="text-2xl mt-5 font-roboto font-medium">
+                  Awards & Certification
+                </h3>
+                <div className="flex gap-4 mt-2">
+                  <div className="flex flex-col items-center border border-gray-500 rounded-lg p-4 w-[220px] h-[250px]">
+                    <div className="h-[100px] w-[180px] border-[3px] border-gray-400 square-lg flex items-center justify-between"></div>
+                    <div className="flex flex-col items-start mt-2 w-full">
+                      <div>Title</div>
+                      <span className="text-gray-400">Description</span>
+                    </div>
+                  </div>
+
+                  {/* Second bordered item */}
+                  <div className="flex flex-col items-center border border-gray-500 rounded-lg p-4 w-[210px]">
+                    <div className="h-[100px] w-[180px]  border-[3px] border-gray-400 border-solid square-lg  flex items-center justify-between"></div>
+                    <div className="flex flex-col items-start mt-2 w-full">
+                      <div>Title</div>
+                      <span className="text-gray-400">Description</span>
+                    </div>
+                  </div>
+
+                  {/* Third bordered item */}
+                  <div className="flex flex-col items-center border border-gray-500 rounded-lg p-4 w-[210px]">
+                    <div className="h-[100px] w-[180px] border-[3px] border-gray-400 square-lg flex items-center justify-between"></div>
+                    <div className="flex flex-col items-start mt-2 w-full">
+                      <div>Title</div>
+                      <span className="text-gray-400">Description</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="h-[300px] w-[313px] border-2 border-gray-200 rounded-lg p-6">
               <form className="space-y-4">
