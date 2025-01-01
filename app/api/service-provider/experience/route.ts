@@ -1,6 +1,5 @@
 import {
   getExistingServiceProviderProfile,
-  getServiceProviderProfileById,
   getServiceProviderProfileByServiceProviderId,
 } from "@/app/data-access/serviceProviderProfile";
 import {
@@ -8,7 +7,6 @@ import {
   getWorkExperience,
 } from "@/app/data-access/workExperience";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
-// import { imageUpload } from "@/app/utils/imageUpload";
 import { currentNextAuthUser, getcurrentUser } from "@/lib/auth";
 import {
   WorkExperienceSchema,
@@ -16,13 +14,11 @@ import {
 } from "@/app/schemas/workExperienceSchema";
 import { NextResponse } from "next/server";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { createFile, creatPrismaFileFromFile } from "@/app/data-access/file";
 import {
   getServiceProviderByUserId,
-  getServiceProviderProfile,
+  
 } from "@/app/data-access/serviceProvider";
-import { WorkExperience } from "@prisma/client";
-import { use } from "react";
+
 
 function parseWorkExperience(formData: FormData): WorkExperienceSchema {
   const json = formData.get("jsonData") as string;
@@ -33,11 +29,8 @@ function parseWorkExperience(formData: FormData): WorkExperienceSchema {
 
   const data = JSON.parse(json) as WorkExperienceSchema;
 
-  console.log(data);
-
   const experienceFile = formData.get("file") as File | null;
 
-  console.log(experienceFile);
 
   if (experienceFile) {
     data.verificationFile = { file: experienceFile };

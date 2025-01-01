@@ -32,7 +32,6 @@ function parseProviderVerificationDetail(
   // Parse the JSON data
   const data = JSON.parse(json) as ProviderVerificationDetail;
 
-  console.log(data);
 
   // Extract files from the form data
   const document1FrontFile = formData.get("document1.frontFile") as File;
@@ -42,7 +41,7 @@ function parseProviderVerificationDetail(
 
   // Update verificationDocument1 with the front and back files
   if (document1FrontFile) {
-    console.log(data.verificationDocument1);
+  
     data.verificationDocument1.frontFile = { file: document1FrontFile };
   }
   if (document1BackFile) {

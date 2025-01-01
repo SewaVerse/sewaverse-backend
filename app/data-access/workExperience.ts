@@ -4,7 +4,6 @@ import { WorkExperience } from "@prisma/client";
 import { WorkExperienceSchema } from "../schemas/workExperienceSchema";
 import { File as PrismaFile } from "@prisma/client";
 import { creatPrismaFileFromFile } from "./file";
-import { ImageSchema } from "../schemas/imageSchema";
 
 export const createWorkExperience = dbAsyncHandler(
   async (providerProfileId: string, data: WorkExperienceSchema) => {
