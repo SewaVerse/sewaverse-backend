@@ -19,7 +19,7 @@ type PasswordInputProps = {
   label?: string;
   disabled?: boolean;
   placeholder?: string;
-  name: string;
+  name?: string;
   className?: string;
   description?: string;
 };

@@ -108,7 +108,7 @@ const LoginForm = () => {
                 disabled={form.formState.isSubmitting}
               />
               {/* Password */}
-              <PasswordInput form={form}  />
+              <PasswordInput form={form} />
 
               <div className="my-2 flex justify-between">
                 <div className="flex items-center space-x-2">
