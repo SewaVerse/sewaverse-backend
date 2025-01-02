@@ -32,6 +32,7 @@ function parseProviderVerificationDetail(
   // Parse the JSON data
   const data = JSON.parse(json) as ProviderVerificationDetail;
 
+
   // Extract files from the form data
   const document1FrontFile = formData.get("document1.frontFile") as File;
   const document1BackFile = formData.get("document1.backFile") as File;
@@ -40,6 +41,7 @@ function parseProviderVerificationDetail(
 
   // Update verificationDocument1 with the front and back files
   if (document1FrontFile) {
+  
     data.verificationDocument1.frontFile = { file: document1FrontFile };
   }
   if (document1BackFile) {
@@ -94,9 +96,9 @@ export const POST = roleAsyncHandler(
 
     // save address
     await createServiceProviderAddress(serviceProvider.id, {
-      provinceId: address.province,
-      districtId: address.district,
-      municipalityId: address.municipality,
+      provinceId: address.provinceId,
+      districtId: address.districtId,
+      municipalityId: address.municipalityId,
       wardNo: address.wardNo,
       tole: address.tole ?? null,
     } as Address);

@@ -12,6 +12,14 @@ export const getServiceProviderProfileById = dbAsyncHandler(
   }
 );
 
+export const getExistingServiceProviderProfile = dbAsyncHandler(
+  async (id: string) => {
+    return await db.serviceProviderProfile.findUnique({
+      where: { serviceProviderId: id },
+    });
+  }
+);
+
 export const getServiceProviderProfileByServiceProviderId = dbAsyncHandler(
   async (serviceProviderId: string) => {
     return await db.serviceProviderProfile.findUnique({

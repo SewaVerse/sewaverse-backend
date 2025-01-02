@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { genderTypes } from "../utils/enumMap";
+import { fileSchema } from "./fileSchema";
 
 export const emailSchema = z
   .string({ message: "Email is required" })
@@ -55,9 +56,9 @@ export const dobSchema = z
 export const isMobileSchema = z.boolean().optional();
 
 export const addressSchema = z.object({
-  province: z.string().nonempty({ message: "Province is required" }),
-  district: z.string().nonempty({ message: "District is required" }),
-  municipality: z.string().nonempty({ message: "Municipality is required" }),
+  provinceId: z.string().nonempty({ message: "Province is required" }),
+  districtId: z.string().nonempty({ message: "District is required" }),
+  municipalityId: z.string().nonempty({ message: "Municipality is required" }),
   wardNo: z
     .number({ invalid_type_error: "Ward number must be a number" })
     .min(1, { message: "Ward number must be at least 1" })
