@@ -1,6 +1,6 @@
+import clsx from "clsx";
 import { UseFormReturn } from "react-hook-form";
 
-import clsx from "clsx";
 import {
   FormControl,
   FormField,
@@ -16,7 +16,7 @@ import {
   Select as ShadSelect,
 } from "../ui/select";
 
-type Option = {
+export type Option = {
   value: string;
   label: string;
 };
@@ -30,6 +30,7 @@ type SelectProps = {
   options: Option[];
   className?: string;
   disabled?: boolean;
+  onChange?: (value: string) => void;
 };
 
 const Select: React.FC<SelectProps> = ({
@@ -40,6 +41,7 @@ const Select: React.FC<SelectProps> = ({
   options,
   className,
   disabled,
+  onChange,
 }) => {
   return (
     <FormField
@@ -49,8 +51,14 @@ const Select: React.FC<SelectProps> = ({
         <FormItem>
           {label && <FormLabel>{label}</FormLabel>}
           <ShadSelect
-            onValueChange={field.onChange}
+            onValueChange={(value) => {
+              field.onChange(value);
+              if (onChange) {
+                onChange(value);
+              }
+            }}
             defaultValue={field.value}
+            value={field.value}
             disabled={disabled || form.formState.isSubmitting}
           >
             <FormControl>
