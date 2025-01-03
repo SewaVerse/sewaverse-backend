@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { fileSchema } from "./fileSchema";
 
 export const licenseSchema = z.object({
