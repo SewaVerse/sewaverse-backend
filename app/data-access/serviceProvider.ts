@@ -84,6 +84,7 @@ export const updateServiceProviderProfile = dbAsyncHandler(
     await db.serviceProviderProfile.update({
       where: { id: profileId },
       data: {
+        about: data.about ?? currentProfile.about,
         profession: data.profession ?? currentProfile.profession,
         skills: data.skills ?? currentProfile.skills,
         description: data.description ?? currentProfile.description,

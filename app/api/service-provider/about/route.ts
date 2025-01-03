@@ -1,36 +1,49 @@
-import { updateServiceProviderProfile } from "@/app/data-access/serviceProviderProfile";
-import { getExistingServiceProviderProfile } from "@/app/data-access/serviceProviderProfile";
-import { AboutSchema } from "@/app/schemas/providerSteps/aboutSchema";
-import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
-import { currentNextAuthUser } from "@/lib/auth";
 import { NextResponse } from "next/server";
+
+import {
+  getServiceProviderByUserId,
+  updateServiceProviderProfile,
+} from "@/app/data-access/serviceProvider";
+import { getServiceProviderProfileByServiceProviderId } from "@/app/data-access/serviceProviderProfile";
+import {
+  AboutSchema,
+  aboutSchema,
+} from "@/app/schemas/providerSteps/aboutSchema";
+import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
+import { validateRequestBody } from "@/app/utils/validateRequestBody";
+import { getcurrentUser } from "@/lib/auth";
 
 export const POST = roleAsyncHandler(
   "SERVICE_PROVIDER",
   async (request: Request) => {
     const data = (await request.json()) as AboutSchema;
 
-    console.error(data);
-
-    // const user = await getcurrentUser();
-    const user = await currentNextAuthUser();
-
-    if (!user)
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
-
-    const serviceProviderProfile = await getExistingServiceProviderProfile(
-      user?.id!
+    const [validationError, validatedFields] = validateRequestBody(
+      aboutSchema,
+      data
     );
-    // console.error("serviceProviderProfile", serviceProviderProfile);
 
-    if (serviceProviderProfile) {
-      await updateServiceProviderProfile(user?.id, data);
+    if (validationError) {
+      return NextResponse.json(validationError, { status: 400 });
     }
 
-    // await createServiceProviderProfile(data);
+    const { about } = validatedFields;
+
+    console.error("data", about);
+
+    const user = await getcurrentUser();
+    const serviceProvider = await getServiceProviderByUserId(user!.id);
+
+    const profile = await getServiceProviderProfileByServiceProviderId(
+      serviceProvider!.id
+    );
+
+    const updatedData = await updateServiceProviderProfile(profile!.id, {
+      about,
+    });
 
     return NextResponse.json(
-      { success: true, message: "About added Successfully" },
+      { success: true, message: "About added Successfully", data: updatedData },
       { status: 201 }
     );
   }
