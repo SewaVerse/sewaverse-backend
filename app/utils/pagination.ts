@@ -6,12 +6,25 @@ import db from "@/lib/db";
 // Define a type for valid model names in Prisma
 type PrismaModel = keyof PrismaClient;
 
-const paginate = async <T extends PrismaModel, K extends object>(
-  model: T,
-  where: K,
-  page: number = 1,
-  limit: number = 10
-) => {
+type PaginationType<T, K, L> = {
+  model: T;
+  where: K;
+  include?: L;
+  page?: number; // Optional for default values
+  limit?: number; // Optional for default values
+};
+
+const paginate = async <
+  T extends PrismaModel,
+  K extends object,
+  L extends object,
+>({
+  model,
+  where,
+  include,
+  page = 1,
+  limit = 10,
+}: PaginationType<T, K, L>) => {
   const skip = (page - 1) * limit;
 
   const modelDelegate = db[model] as PrismaClient[T] as any;
@@ -19,6 +32,7 @@ const paginate = async <T extends PrismaModel, K extends object>(
   // Fetch the paginated records
   const data = await modelDelegate.findMany({
     where,
+    include,
     skip,
     take: limit,
   });
