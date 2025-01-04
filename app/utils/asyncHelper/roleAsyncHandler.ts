@@ -6,6 +6,8 @@ import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
 
+import ApiError from "../apiError";
+
 /**
  * A higher-order function that wraps an async handler in Next.js API routes to handle
  * role-based access control and error management.
@@ -42,10 +44,13 @@ const roleAsyncHandler = <Args extends unknown[]>(
 
       return await fn(request, ...args);
     } catch (error) {
-      console.error(
-        "RBAC API Error:",
-        error instanceof Error ? error.message : String(error)
-      );
+      console.error("API Error:", error.message || error);
+      if (error instanceof ApiError) {
+        return NextResponse.json(
+          { success: false, message: error.message },
+          { status: error.code }
+        );
+      }
       return new NextResponse("Internal Server Error", { status: 500 });
     }
   };

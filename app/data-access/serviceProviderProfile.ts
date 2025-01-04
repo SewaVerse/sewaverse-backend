@@ -28,6 +28,20 @@ export const getServiceProviderProfileByServiceProviderId = dbAsyncHandler(
   }
 );
 
+export const getServiceProviderProfile = dbAsyncHandler(
+  async (serviceProviderId: string) => {
+    return await db.serviceProviderProfile.findUnique({
+      where: { serviceProviderId },
+      include: {
+        file: true,
+        workExperiences: true,
+        licenses: true,
+        awards: true,
+      },
+    });
+  }
+);
+
 export const updateServiceProviderProfile = dbAsyncHandler(
   async (
     id: string,

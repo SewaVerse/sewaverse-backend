@@ -2,22 +2,22 @@ import { User } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 import { getUserByEmail, updateUserById } from "@/app/data-access/user";
+import ApiError from "@/app/utils/apiError";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
-import CustomError from "@/app/utils/customError";
 import { getcurrentUser } from "@/lib/auth";
 
 export const POST = asyncHandler(async () => {
   const sessionUser = await getcurrentUser();
 
-  if (!sessionUser) throw new CustomError("Invalid token", 401);
+  if (!sessionUser) throw new ApiError("Invalid token", 401);
 
   const { email, accessToken } = sessionUser;
 
-  if (!email) throw new CustomError("Invalid token", 401);
+  if (!email) throw new ApiError("Invalid token", 401);
 
   const user = await getUserByEmail(email);
 
-  if (!user || !user.id) throw new CustomError("Invalid token", 401);
+  if (!user || !user.id) throw new ApiError("Invalid token", 401);
 
   if (accessToken !== user.accessToken)
     return NextResponse.json(

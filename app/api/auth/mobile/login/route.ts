@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 
 import { getUserByEmail, updateUserById } from "@/app/data-access/user";
 import { userLoginSchema, UserLoginSchema } from "@/app/schemas/authSchema";
+import ApiError from "@/app/utils/apiError";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
-import CustomError from "@/app/utils/customError";
 import { generateToken } from "@/app/utils/token";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 
@@ -25,16 +25,16 @@ export const POST = asyncHandler(async (request: Request) => {
   const user = await getUserByEmail(email);
 
   if (!user || !user.password) {
-    throw new CustomError("Invalid credentials.");
+    throw new ApiError("Invalid credentials.");
   }
 
   if (!user.emailVerified) {
-    throw new CustomError("Email not verified.");
+    throw new ApiError("Email not verified.");
   }
 
   const passwordsMatch = await bcrypt.compare(password, user.password);
 
-  if (!passwordsMatch) throw new CustomError("Invalid credentials.");
+  if (!passwordsMatch) throw new ApiError("Invalid credentials.");
 
   const roles = user.roles.map((role) => role.role);
 

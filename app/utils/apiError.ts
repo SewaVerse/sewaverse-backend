@@ -1,6 +1,6 @@
 type HttpCode = 400 | 404 | 500 | 401;
 
-class CustomError extends Error {
+class ApiError extends Error {
   code: HttpCode;
 
   constructor(message: string, code?: HttpCode) {
@@ -10,4 +10,4 @@ class CustomError extends Error {
   }
 }
 
-export default CustomError;
+export default ApiError;
