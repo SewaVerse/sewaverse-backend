@@ -17,10 +17,10 @@ type PaginationType<T, K, L> = {
 const paginate = async <
   T extends PrismaModel,
   K extends object,
-  L extends object,
+  L extends object
 >({
   model,
-  where,
+  where = {} as K,
   include,
   page = 1,
   limit = 10,

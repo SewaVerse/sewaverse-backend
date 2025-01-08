@@ -18,7 +18,12 @@ export const GET = asyncHandler(async (request: NextRequest) => {
     where.stateProvinceId = stateProvinceId;
   }
 
-  const paginationData = await paginate("district", where, page, limit);
+  const paginationData = await paginate({
+    model: "district",
+    page,
+    limit,
+    where: {},
+  });
 
   return NextResponse.json({
     success: true,

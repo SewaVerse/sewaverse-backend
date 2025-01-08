@@ -9,7 +9,12 @@ export const GET = asyncHandler(async (request: NextRequest) => {
 
   const { page, limit } = getPaginationParams(searchParams);
 
-  const paginationData = await paginate("country", {}, page, limit);
+  const paginationData = await paginate({
+    model: "country",
+    page,
+    limit,
+    where: {},
+  });
 
   return NextResponse.json({
     success: true,
