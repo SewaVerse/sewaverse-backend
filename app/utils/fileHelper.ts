@@ -59,9 +59,11 @@ export const getLocalFileUrl = async (
   const filename = `${uniqueId}.${fileExtension}`; // Change extension if needed
   const filePath = path.join(process.cwd(), "public", "thunks", filename);
 
+  console.warn(filePath, data);
+
   // Save file to the `public/thunks` directory
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(filePath, data); // Pass `data` directly
+  // await fs.mkdir(path.dirname(filePath), { recursive: true });
+  // await fs.writeFile(filePath, data); // Pass `data` directly
 
   const fullPath = `/thunks/${filename}`;
 
