@@ -45,7 +45,7 @@ export default function Register() {
   }, [registerData, router]);
 
   const form = useForm<RegisterForm>({
-    resolver: zodResolver(userRegisterSchema),
+    resolver: zodResolver(userRegisterSchema), 
     defaultValues: {
       name: "",
       email: "",
