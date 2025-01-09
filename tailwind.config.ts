@@ -51,7 +51,17 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			},
   			brand: 'hsla(217, 97%, 29%, 1)',
-  			'brand-grey': 'hsla(0, 0%, 53%, 1)'
+  			'brand-grey': 'hsla(0, 0%, 53%, 1)',
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
+  			}
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -62,9 +72,9 @@ export default {
   			'brand-gradient': 'linear-gradient(to right,hsla(238, 52%, 38%, 1), hsla(301, 57%, 36%, 1))'
   		},
   		fontFamily: {
-  			'work-sans': 'var(--work-sans)', //heading font
-  			'roboto': 'var(--roboto)', //body font
-  			'inter': 'var(--inter)' //paragrpah font
+  			'work-sans': 'var(--work-sans)',
+  			roboto: 'var(--roboto)',
+  			inter: 'var(--inter)'
   		},
   		keyframes: {
   			'accordion-down': {

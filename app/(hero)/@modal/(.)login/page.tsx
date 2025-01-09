@@ -3,13 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import LoginForm from "@/app/(auth)/login/components/LoginForm";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
+import LoginForm from "../../(auth)/login/components/LoginForm";
 
 const LoginModal = () => {
   const [open, setOpen] = useState(true);

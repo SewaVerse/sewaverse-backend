@@ -16,9 +16,10 @@ export const GET = asyncHandler(async (request: NextRequest) => {
 
   const include: Prisma.ServiceInclude = {
     file: true,
+    parentService: true,
   };
 
-  const services = await paginate({
+  const { data, pagination } = await paginate({
     model: "service",
     where: serviceWhere,
     include,
@@ -27,7 +28,12 @@ export const GET = asyncHandler(async (request: NextRequest) => {
   });
 
   return NextResponse.json(
-    { success: true, message: "Services fetched successfully", data: services },
+    {
+      success: true,
+      message: "Services fetched successfully",
+      services: data,
+      pagination,
+    },
     { status: 200 }
   );
 });
