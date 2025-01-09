@@ -14,6 +14,8 @@ export const PUBLIC_ROUTES = [
   "/sewaproviderstep2",
   "/sewaprovidercontent",
   "/profile",
+  "/popup",
+  "/profile/edit",
 ];
 
 /**
