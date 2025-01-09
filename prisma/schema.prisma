@@ -185,6 +185,7 @@ model ServiceProviderProfile {
   workExperiences WorkExperience[]
   licenses        License[]
   awards          Award[]
+  myWorks         MyWork[]
 }
 
 model CompanyDetails {
@@ -331,6 +332,8 @@ model OfferedService {
   location       String
   workExperience String
   overallRating  Float     @default(0)
+  published      Boolean   @default(true)
+  adminVerified  Boolean   @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -400,6 +403,29 @@ model Award {
   serviceProviderProfile ServiceProviderProfile @relation(fields: [providerProfileId], references: [id], onDelete: Cascade)
 }
 
+model MyWork {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  title             String
+  description       String
+  providerProfileId String @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  serviceProviderProfile ServiceProviderProfile @relation(fields: [providerProfileId], references: [id], onDelete: Cascade)
+
+  workImages WorkImageMapping[]
+}
+
+model WorkImageMapping {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  workId  String @db.ObjectId
+  imageId String @db.ObjectId
+
+  work  MyWork @relation(fields: [workId], references: [id])
+  image File   @relation(fields: [imageId], references: [id])
+}
+
 model File {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   name     String
@@ -422,6 +448,7 @@ model File {
   workExperiences WorkExperience[]
   licenses        License[]
   awards          Award[]
+  workImages      WorkImageMapping[]
 }
 
 model FileBinary {

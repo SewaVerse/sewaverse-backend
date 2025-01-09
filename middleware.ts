@@ -65,6 +65,15 @@ export default auth(async (req) => {
   // If the user is not authenticated and the route is not public, redirect to the login page
   if (!auth && !isPublicRoute)
     return Response.redirect(new URL(LOGIN, nextUrl));
+
+  if (
+    nextUrl.pathname.startsWith("/admin") &&
+    !req.auth?.user?.roles.includes("ADMIN")
+  ) {
+    return Response.redirect(new URL(ROOT, nextUrl));
+  }
+
+  return NextResponse.next();
 });
 
 export const config = {

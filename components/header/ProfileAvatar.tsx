@@ -3,8 +3,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { LayoutDashboard, User } from "lucide-react";
 import { useSession } from "next-auth/react"; // To access user session
+import Link from "next/link";
+import { RiAdminLine } from "react-icons/ri";
 
-import { SignOut } from "./SignOut";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +14,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { SignOut } from "./SignOut";
 
 const ProfileAvatar = () => {
   const { data: session } = useSession();
+
+  const isAdmin = session?.user?.roles.includes("ADMIN");
 
   const fallbackName = session?.user?.name
     ? session.user.name
@@ -40,6 +44,17 @@ const ProfileAvatar = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        {isAdmin && (
+          <>
+            <DropdownMenuSeparator />
+            <Link href="/admin">
+              <DropdownMenuItem>
+                <RiAdminLine />
+                Admin Dashboard
+              </DropdownMenuItem>
+            </Link>
+          </>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <LayoutDashboard />

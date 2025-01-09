@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
 import { CirclePlus, Share2, X } from "lucide-react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -43,10 +43,9 @@ export default function SewaProviderStep1() {
             </label>
             <div className="border border-dotted border-black rounded-md h-[57px] w-[158px] flex flex-col items-center justify-center">
               <span className="text-green-500">
-                <CirclePlus  />
+                <CirclePlus />
               </span>
               <span className="text-[12px] text-gray-700">Upload Picture</span>
-              
             </div>
           </div>
 
@@ -88,7 +87,10 @@ export default function SewaProviderStep1() {
               Offered Service <br />
               <span className="text-gray-500">(Required*)</span>
             </label>
-            <div className="border border-dotted border-black rounded-md h-[57px] w-[158px] flex flex-col items-center justify-center cursor-pointer" onClick={handleNext1Click}>
+            <div
+              className="border border-dotted border-black rounded-md h-[57px] w-[158px] flex flex-col items-center justify-center cursor-pointer"
+              onClick={handleNext1Click}
+            >
               <span className="text-green-500">
                 <CirclePlus />
               </span>
@@ -127,7 +129,6 @@ export default function SewaProviderStep1() {
           >
             Next
           </Button>
-          
         </form>
       </div>
 
@@ -352,14 +353,18 @@ export default function SewaProviderStep1() {
               </div>
               <div className="flex items-center ml-6">
                 <Checkbox />
-                <span className="ml-2">Pet Care Sewa</span><span></span>
+                <span className="ml-2">Pet Care Sewa</span>
+                <span></span>
               </div>
             </div>
 
             <div className="text-center my-10  text-s ">
-              <p>If youe desired service is not listed above, <span className="gradient-text">+ Add New Service</span></p>
-              </div>
-          </div> 
+              <p>
+                If youe desired service is not listed above,{" "}
+                <span className="gradient-text">+ Add New Service</span>
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </div>

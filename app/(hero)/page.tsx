@@ -111,21 +111,17 @@ const Home = async () => {
 
             {/* Content */}
             <div className="absolute z-10 flex flex-col justify-center h-full px-10">
-              {/* Logo or Title */}
               <div className="absolute top-8 left-8 text-sm font-semibold tracking-wide text-white">
                 sewaverse
               </div>
 
-              {/* Left-Aligned Text Section */}
-              <div className="text-left text-white max-w-xl mt-12">
+              <div className="text-left text-white max-w-xl mt-24">
                 {" "}
-                {/* Adjusted margin */}
-                {/* Main Heading */}
-                <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-6">
+                <h1 className="text-3xl md:text-4xl font-bold leading-tight ">
                   A service marketplace <br /> for everyone
                 </h1>
                 {/* Description */}
-                <p className="text-base md:text-lg leading-relaxed mb-10">
+                <p className="text-base md:text-lg leading-relaxed mt-12 ">
                   Effortlessly begin offering or receiving services with
                   simplicity, convenience, and peace of mind, making the whole
                   process smooth and enjoyable for everyone involved.
@@ -133,9 +129,9 @@ const Home = async () => {
               </div>
 
               {/* Cards Section */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-10">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-20">
                 {/* Card 1 */}
-                <div className="bg-[#023994CC] p-6 rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
+                <div className="bg-[#023994CC] p-6 w-[300px] rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
                   <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
                     Book the service
                   </h3>
@@ -146,7 +142,7 @@ const Home = async () => {
                 </div>
 
                 {/* Card 2 */}
-                <div className="bg-[#023994CC] p-6 rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
+                <div className="bg-[#023994CC] p-6 w-[300px] rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
                   <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
                     Become a Sewa Provider
                   </h3>
@@ -157,7 +153,7 @@ const Home = async () => {
                 </div>
 
                 {/* Card 3 */}
-                <div className="bg-[#023994CC] p-6 rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
+                <div className="bg-[#023994CC] p-6 w-[300px] rounded-md shadow-md cursor-pointer text-white hover:bg-[#021f77] transition duration-300">
                   <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
                     Learn more about Sewaverse
                   </h3>
@@ -178,7 +174,6 @@ const Home = async () => {
             Sewa Categories
           </h2>
 
-          {/* Grid container to arrange images */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 place-items-center">
             {imagesData.map((image, index) => (
               <div key={index} className="flex flex-col items-center">
@@ -207,7 +202,7 @@ const Home = async () => {
           </h3>
 
           <div className="relative flex flex-col items-center">
-            <div className="relative z-20 bg-white rounded-lg shadow-2xl border border-white/50 w-[638px] h-[497px] p-6">
+            <div className="relative z-20 bg-white rounded-lg shadow-2xl border border-white/50 w-full md:w-[638px] h-auto md:h-[497px] p-6">
               <Image
                 src="/images/profileimage1.svg"
                 alt="Marinda Walkers"
@@ -215,25 +210,23 @@ const Home = async () => {
                 width={638}
                 height={497}
               />
-              <p
-                className="mt-12 text-gray-600 text-[16px] font-poppins font-normal leading-[24px] text-justify decoration-skip-ink-none"
-                style={{ textUnderlinePosition: "from-font" }}
-              >
+              <p className="mt-12 text-gray-600 text-[16px] font-poppins font-normal leading-[24px] text-justify decoration-skip-ink-none">
                 {`I’ve used Serwaverse for a variety of services, from home
-                cleaning to graphic design, and overall, I've been very
-                impressed. The range of services is extensive, and the quality
-                is generally high. My only gripe is that the service reviews can
-                sometimes be a bit inconsistent. Still, it’s a fantastic
-                resource for all kinds of needs.`}
+        cleaning to graphic design, and overall, I've been very
+        impressed. The range of services is extensive, and the quality
+        is generally high. My only gripe is that the service reviews can
+        sometimes be a bit inconsistent. Still, it’s a fantastic
+        resource for all kinds of needs.`}
               </p>
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-900 font-bold">
+
+              <div className="mt-6 text-gray-900 font-bold">
                 Jackson Hopkins <br />
                 <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
               </div>
             </div>
 
-            <div className="absolute flex justify-between w-full  top-5  px-4">
-              <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-[600px] h-[350px] opacity-50 p-6 translate-y-[70px]">
+            <div className="absolute flex justify-between w-full top-5 px-4">
+              <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-full md:w-[600px] h-auto md:h-[350px] opacity-50 p-6 translate-y-[70px]">
                 <Image
                   src="/images/profileimage3.svg"
                   alt="Jackson Hopkins"
@@ -252,7 +245,7 @@ const Home = async () => {
                 </div>
               </div>
 
-              <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-[600px] h-[350px] opacity-50 p-6 translate-y-[70px]">
+              <div className="relative z-10 bg-gray-50 rounded-lg shadow-lg border border-gray-200/50 w-full md:w-[600px] h-auto md:h-[350px] opacity-50 p-6 translate-y-[70px]">
                 <Image
                   src="/images/profileimage2.svg"
                   alt="Jensony Kennedy"

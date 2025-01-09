@@ -1,6 +1,7 @@
 import {
   Address,
   CompanyDetails,
+  Prisma,
   ServiceProvider,
   ServiceProviderProfile,
 } from "@prisma/client";
@@ -18,6 +19,15 @@ export const getServiceProviderByUserId = dbAsyncHandler(
   }
 );
 
+export const getServiceProviderByUserIdWithInclude = dbAsyncHandler(
+  async (userId: string, include: Prisma.ServiceProviderInclude = {}) => {
+    return await db.serviceProvider.findUnique({
+      where: { userId },
+      include,
+    });
+  }
+);
+
 export const getServiceProviderById = dbAsyncHandler(async (id: string) => {
   return await db.serviceProvider.findUnique({
     where: { id },
@@ -25,16 +35,22 @@ export const getServiceProviderById = dbAsyncHandler(async (id: string) => {
 });
 
 export const createServiceProvider = dbAsyncHandler(
-  async (data: ServiceProvider) => {
-    return await db.serviceProvider.create({
+  async (data: ServiceProvider, tx: Prisma.TransactionClient | null = null) => {
+    const prismaClient = tx || db;
+    return await prismaClient.serviceProvider.create({
       data,
     });
   }
 );
 
 export const updateServiceProvider = dbAsyncHandler(
-  async (id: string, data: Partial<ServiceProvider>) => {
-    return await db.serviceProvider.update({
+  async (
+    id: string,
+    data: Prisma.ServiceProviderUncheckedUpdateInput,
+    tx: Prisma.TransactionClient | null = null
+  ) => {
+    const prismaClient = tx || db;
+    return await prismaClient.serviceProvider.update({
       where: { id },
       data,
     });
@@ -42,8 +58,12 @@ export const updateServiceProvider = dbAsyncHandler(
 );
 
 export const createServiceProviderProfile = dbAsyncHandler(
-  async (data: ServiceProviderProfile) => {
-    return await db.serviceProviderProfile.create({
+  async (
+    data: ServiceProviderProfile,
+    tx: Prisma.TransactionClient | null = null
+  ) => {
+    const prismaClient = tx || db;
+    return await prismaClient.serviceProviderProfile.create({
       data,
     });
   }
@@ -97,10 +117,15 @@ export const updateServiceProviderProfile = dbAsyncHandler(
 );
 
 export const createServiceProviderAddress = dbAsyncHandler(
-  async (serviceProviderId: string, data: Address) => {
-    const saveAddress = await upsertAddress(data);
+  async (
+    serviceProviderId: string,
+    data: Address,
+    tx: Prisma.TransactionClient | null = null
+  ) => {
+    const prismaClient = tx || db;
+    const saveAddress = await upsertAddress(data, prismaClient);
 
-    await db.serviceProviderAddressMapping.create({
+    await prismaClient.serviceProviderAddressMapping.create({
       data: {
         serviceProviderId: serviceProviderId,
         addressId: saveAddress.id,

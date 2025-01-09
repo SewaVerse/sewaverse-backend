@@ -1,35 +1,47 @@
-import { File as FileModel } from "@prisma/client";
+import { File as FileModel, Prisma } from "@prisma/client";
 
 import db from "@/lib/db";
 
 import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 import { getLocalFileUrl } from "../utils/fileHelper";
 
-export const getFileById = dbAsyncHandler(async (id: string) => {
-  return await db.file.findUnique({
-    where: { id },
-    include: {
-      fileBinaries: true,
-    },
-  });
-});
+export const getFileById = dbAsyncHandler(
+  async (id: string, tx: Prisma.TransactionClient | null = null) => {
+    const prismaClient = tx || db;
+    return await prismaClient.file.findUnique({
+      where: { id },
+      include: {
+        fileBinaries: true,
+      },
+    });
+  }
+);
 
-export const creatPrismaFileFromFile = dbAsyncHandler(async (file: File) => {
-  const fileBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(fileBuffer);
+export const creatPrismaFileFromFile = dbAsyncHandler(
+  async (file: File, tx: Prisma.TransactionClient | null = null) => {
+    const prismaClient = tx || db;
 
-  const prismaFile = {
-    name: file.name,
-    size: file.size,
-    type: file.type,
-  } as FileModel;
+    const fileBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(fileBuffer);
 
-  return await createFile(prismaFile, buffer);
-});
+    const prismaFile = {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+    } as FileModel;
+
+    return await createFile(prismaFile, buffer, prismaClient);
+  }
+);
 
 export const createFile = dbAsyncHandler(
-  async (file: FileModel, binary: Buffer) => {
-    const savedFile = await db.file.create({
+  async (
+    file: FileModel,
+    binary: Buffer,
+    tx: Prisma.TransactionClient | null = null
+  ) => {
+    const prismaClient = tx || db;
+    const savedFile = await prismaClient.file.create({
       data: {
         ...file,
         fileBinaries: {
@@ -38,9 +50,9 @@ export const createFile = dbAsyncHandler(
       },
     });
 
-    const localPath = await getLocalFileUrl(savedFile.id, false);
+    const localPath = await getLocalFileUrl(savedFile.id, false, prismaClient);
 
-    const updatedFile = await db.file.update({
+    const updatedFile = await prismaClient.file.update({
       where: { id: savedFile.id },
       data: { localUrl: localPath },
     });
@@ -50,16 +62,24 @@ export const createFile = dbAsyncHandler(
 );
 
 export const updateFileById = dbAsyncHandler(
-  async (id: string, data: FileModel) => {
-    return await db.file.update({
+  async (
+    id: string,
+    data: Prisma.FileUncheckedUpdateInput,
+    tx: Prisma.TransactionClient | null = null
+  ) => {
+    const prismaClient = tx || db;
+    return await prismaClient.file.update({
       where: { id },
       data,
     });
   }
 );
 
-export const deleteFileById = dbAsyncHandler(async (id: string) => {
-  return await db.file.delete({
-    where: { id },
-  });
-});
+export const deleteFileById = dbAsyncHandler(
+  async (id: string, tx: Prisma.TransactionClient | null = null) => {
+    const prismaClient = tx || db;
+    return await prismaClient.file.delete({
+      where: { id },
+    });
+  }
+);

@@ -45,6 +45,16 @@ export const getAllServices = dbAsyncHandler(async () => {
   return await db.service.findMany({ where: { isActive: true } });
 });
 
+export const getPaginatedServices = dbAsyncHandler(
+  async (skip: number, take: number) => {
+    return await db.service.findMany({
+      where: { isActive: true },
+      skip,
+      take,
+    });
+  }
+);
+
 export const getAllLatestServices = dbAsyncHandler(async () => {
   return await db.service.findMany({
     where: { isActive: true },
