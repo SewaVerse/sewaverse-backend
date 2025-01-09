@@ -82,69 +82,74 @@ export const POST = roleAsyncHandler(
       throw new ApiError("Service provider verification detail already exists");
     }
 
-    await db.$transaction(async (tx) => {
-      if (!serviceProvider) {
-        serviceProvider = await createServiceProvider(
-          {
-            userId: user!.id!,
-            name: user!.name!,
-            email: user!.email!,
-          } as ServiceProvider,
-          tx
-        );
-      }
+    await db.$transaction(
+      async (tx) => {
+        if (!serviceProvider) {
+          serviceProvider = await createServiceProvider(
+            {
+              userId: user!.id!,
+              name: user!.name!,
+              email: user!.email!,
+            } as ServiceProvider,
+            tx
+          );
+        }
 
-      const {
-        gender,
-        dob,
-        address,
-        verificationDocument1,
-        verificationDocument2,
-      } = validatedFields;
-
-      // save address
-      await createServiceProviderAddress(
-        serviceProvider.id,
-        {
-          provinceId: address.provinceId,
-          districtId: address.districtId,
-          municipalityId: address.municipalityId,
-          wardNo: address.wardNo,
-          tole: address.tole ?? null,
-        } as Address,
-        tx
-      );
-
-      // save profile
-      const profile = await createServiceProviderProfile(
-        {
-          serviceProviderId: serviceProvider.id,
-          gender: genderTypeMap[gender as keyof typeof genderTypeMap],
+        const {
+          gender,
           dob,
-        } as ServiceProviderProfile,
-        tx
-      );
+          address,
+          verificationDocument1,
+          verificationDocument2,
+        } = validatedFields;
 
-      // update service provider
-      await updateServiceProvider(
-        serviceProvider.id,
-        {
-          profileId: profile.id,
-        },
-        tx
-      );
-
-      // verfication documents
-      const documents = [verificationDocument1, verificationDocument2];
-
-      for (const document of documents) {
-        await createVerificationDocumentFromSchema(
+        // save address
+        await createServiceProviderAddress(
           serviceProvider.id,
-          document as VerificationDocumentSchema,
+          {
+            provinceId: address.provinceId,
+            districtId: address.districtId,
+            municipalityId: address.municipalityId,
+            wardNo: address.wardNo,
+            tole: address.tole ?? null,
+          } as Address,
           tx
         );
+
+        // save profile
+        const profile = await createServiceProviderProfile(
+          {
+            serviceProviderId: serviceProvider.id,
+            gender: genderTypeMap[gender as keyof typeof genderTypeMap],
+            dob,
+          } as ServiceProviderProfile,
+          tx
+        );
+
+        // update service provider
+        await updateServiceProvider(
+          serviceProvider.id,
+          {
+            profileId: profile.id,
+          },
+          tx
+        );
+
+        // verfication documents
+        const documents = [verificationDocument1, verificationDocument2];
+
+        for (const document of documents) {
+          await createVerificationDocumentFromSchema(
+            serviceProvider.id,
+            document as VerificationDocumentSchema,
+            tx
+          );
+        }
+      },
+      {
+        timeout: 15000,
       }
-    });
+    );
 
     return NextResponse.json({
       success: true,
