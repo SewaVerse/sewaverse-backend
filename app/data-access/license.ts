@@ -1,8 +1,10 @@
-import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 import { License, File as PrismaFile } from "@prisma/client";
+
+import db from "@/lib/db";
+
+import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 import { creatPrismaFileFromFile } from "./file";
 import { LicenseSchema } from "../schemas/licenseSchema";
-import db from "@/lib/db";
 
 export const createLicense = dbAsyncHandler(
   async (providerProfileId: string, data: LicenseSchema) => {

@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 import { genderTypes } from "../utils/enumMap";
-import { fileSchema } from "./fileSchema";
 
 export const emailSchema = z
   .string({ message: "Email is required" })
@@ -9,11 +8,11 @@ export const emailSchema = z
 
 export const passwordSchema = z
   .string({ message: "Password is required" })
-  .min(8, "Password must be at least 8 characters")
+  .min(6, "Password must be at least 6 characters")
   .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
   .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-  .regex(/[0-9]/, "Password must contain at least one number")
-  .regex(/[\W_]/, "Password must contain at least one special character");
+  .regex(/[0-9]/, "Password must contain at least one number");
+// .regex(/[\W_]/, "Password must contain at least one special character");
 
 export const phoneNumberSchema = z
   .string({ message: "Phone number is required" })

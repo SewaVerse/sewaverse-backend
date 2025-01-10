@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { getStateProvinceById } from "@/app/data-access/stateProvince";
+import ApiError from "@/app/utils/apiError";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
-import CustomError from "@/app/utils/customError";
 
 export const GET = asyncHandler(
   async (request: Request, { params }: { params: Promise<{ id: string }> }) => {
@@ -11,7 +11,7 @@ export const GET = asyncHandler(
     const state = await getStateProvinceById(id);
 
     if (!state) {
-      throw new CustomError("State not found");
+      throw new ApiError("State not found");
     }
     return NextResponse.json(
       { success: true, message: "State found", data: state },

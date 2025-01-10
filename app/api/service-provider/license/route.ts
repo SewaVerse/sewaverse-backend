@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 import { createLicense } from "@/app/data-access/license";
 import { getServiceProviderByUserId } from "@/app/data-access/serviceProvider";
 import { getServiceProviderProfileByServiceProviderId } from "@/app/data-access/serviceProviderProfile";
@@ -5,7 +7,6 @@ import { licenseSchema, LicenseSchema } from "@/app/schemas/licenseSchema";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { getcurrentUser } from "@/lib/auth";
-import { NextResponse } from "next/server";
 
 function parseLicense(formData: FormData): LicenseSchema {
   const json = formData.get("jsonData") as string;
@@ -42,13 +43,14 @@ export const POST = roleAsyncHandler(
       validatedFields;
 
     const user = await getcurrentUser();
-    let serviceProvider = await getServiceProviderByUserId(user?.id!);
+
+    const serviceProvider = await getServiceProviderByUserId(user!.id);
 
     const profile = await getServiceProviderProfileByServiceProviderId(
-      serviceProvider?.id!
+      serviceProvider!.id
     );
 
-    const data = await createLicense(profile?.id!, {
+    const data = await createLicense(profile!.id, {
       licenseOf,
       licenseFrom,
       licenseNumber,

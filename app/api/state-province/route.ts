@@ -18,7 +18,12 @@ export const GET = asyncHandler(async (request: NextRequest) => {
   }
 
   // Use the paginate function to fetch paginated state provinces
-  const paginationData = await paginate("stateProvince", where, page, limit);
+  const paginationData = await paginate({
+    model: "stateProvince",
+    page,
+    limit,
+    where: {},
+  });
 
   return NextResponse.json({
     success: true,

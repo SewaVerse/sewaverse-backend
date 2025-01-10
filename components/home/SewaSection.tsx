@@ -35,19 +35,19 @@ const SewaSection: React.FC<SewaSectionProps> = ({
   const [selectedCategory, setSelectedCategory] = useState(cateogryNames[0].id);
   return (
     <>
-      <div className="py-16  bg-white text-center">
+      <div className="py-16 bg-white text-center">
         <h2 className="text-3xl font-bold mb-8">{name}</h2>
-        <div className="flex  justify-between items-center ">
-          {" "}
+        <div className="flex sm:flex-row flex-col justify-between items-center px-4 w-full">
           <ChevronLeft style={{ color: "#D9D9D9" }} />
           {cateogryNames.map((category) => (
             <Button
               variant={"brand"}
               key={category.id}
               className={clsx(
-                "mt-2  shadow-md hover:shadow-lg px-8 py-4 w-48",
+                "mt-2 shadow-md hover:shadow-lg px-8 py-4 w-48",
                 selectedCategory !== category.id && "bg-white text-black",
-                selectedCategory === category.id && "scale-y-110"
+                selectedCategory === category.id && "scale-y-110",
+                "sm:m-0 m-2"
               )}
               onClick={() => setSelectedCategory(category.id)}
             >
@@ -58,7 +58,7 @@ const SewaSection: React.FC<SewaSectionProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center justify-between ">
+      <div className="flex items-center justify-between">
         <ChevronLeft style={{ color: "#D9D9D9" }} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-9 col-auto">
           {details.map((service, index) => (
@@ -97,8 +97,8 @@ const SewaSection: React.FC<SewaSectionProps> = ({
                       width={10}
                       height={10}
                     />
-                    <div className="text-gray-700 flex flex-col  ">
-                      {service.name}{" "}
+                    <div className="text-gray-700 flex flex-col">
+                      {service.name}
                       <span className="flex items-center text-[#878787]">
                         <MapPin className="text-zinc-500 h-4" />
                         <span style={{ color: "#878787" }}>Kathmandu</span>

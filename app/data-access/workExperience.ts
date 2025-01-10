@@ -1,8 +1,10 @@
-import db from "@/lib/db";
-import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
-import { WorkExperience } from "@prisma/client";
-import { WorkExperienceSchema } from "../schemas/workExperienceSchema";
 import { File as PrismaFile } from "@prisma/client";
+import { WorkExperience } from "@prisma/client";
+
+import db from "@/lib/db";
+
+import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
+import { WorkExperienceSchema } from "../schemas/workExperienceSchema";
 import { creatPrismaFileFromFile } from "./file";
 
 export const createWorkExperience = dbAsyncHandler(

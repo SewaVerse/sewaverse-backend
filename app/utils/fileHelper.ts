@@ -3,7 +3,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-import { File as PrismaFile } from "@prisma/client";
+import { Prisma, File as PrismaFile } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
 import { getFileById, updateFileById } from "../data-access/file";
@@ -33,9 +33,18 @@ const checkFileExists = async (filePath: string): Promise<boolean> => {
 
 export const getLocalFileUrl = async (
   id: string,
-  updatePath: boolean = true
+  updatePath: boolean = true,
+  tx: Prisma.TransactionClient | null = null
 ) => {
-  const file = await getFileById(id);
+  return  (id || updatePath || tx) && "";
+};
+
+export const getLocalFileUrlBackup = async (
+  id: string,
+  updatePath: boolean = true,
+  tx: Prisma.TransactionClient | null = null
+) => {
+  const file = await getFileById(id, tx);
 
   if (!file) return "";
 
@@ -58,6 +67,8 @@ export const getLocalFileUrl = async (
   const filename = `${uniqueId}.${fileExtension}`; // Change extension if needed
   const filePath = path.join(process.cwd(), "public", "thunks", filename);
 
+  console.warn(filePath, data);
+
   // Save file to the `public/thunks` directory
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   await fs.writeFile(filePath, data); // Pass `data` directly
@@ -66,7 +77,7 @@ export const getLocalFileUrl = async (
 
   if (updatePath) {
     // save file url
-    await updateFileById(id, { localUrl: fullPath } as PrismaFile);
+    await updateFileById(id, { localUrl: fullPath } as PrismaFile, tx);
   }
 
   return fullPath;

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 
-import CustomError from "../customError";
+import ApiError from "../apiError";
 
 /**
  * Async handler to catch errors in Next.js API routes.
@@ -15,7 +15,7 @@ export function asyncHandler<Args extends any[]>(
       return await fn(...args);
     } catch (error: any) {
       console.error("API Error:", error.message || error);
-      if (error instanceof CustomError) {
+      if (error instanceof ApiError) {
         return NextResponse.json(
           { success: false, message: error.message },
           { status: error.code }

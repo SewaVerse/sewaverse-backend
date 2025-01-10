@@ -16,6 +16,9 @@ export const PUBLIC_ROUTES = [
   "/services",
   "/sewaproviderstep3",
   "/booking",
+  "/profile",
+  "/popup",
+  "/profile/edit",
 ];
 
 /**

@@ -12,9 +12,9 @@ import {
   UserRegisterSchema,
   userRegisterSchema,
 } from "@/app/schemas/authSchema";
+import ApiError from "@/app/utils/apiError";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
 import { hash } from "@/app/utils/common";
-import CustomError from "@/app/utils/customError";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import prisma from "@/lib/db";
 import { sendVerificationEmail } from "@/lib/mail";
@@ -56,7 +56,7 @@ export const POST = asyncHandler(async (request: Request) => {
   });
 
   if (existingUser) {
-    throw new CustomError("User with this email already exists");
+    throw new ApiError("User with this email already exists");
   }
 
   // Hash the password
@@ -71,7 +71,7 @@ export const POST = asyncHandler(async (request: Request) => {
     acceptTerms,
   } as User);
 
-  if (!user.id) throw new CustomError("Failed to create user");
+  if (!user.id) throw new ApiError("Failed to create user");
 
   // create user profile
   const userProfile = await createUserProfile({

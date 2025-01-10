@@ -3,9 +3,8 @@ import { SessionProvider } from "next-auth/react";
 import { Open_Sans, Roboto, Work_Sans } from "next/font/google";
 
 import { auth } from "@/auth";
-import Footer from "@/components/footer";
-import Header from "@/components/header";
 
+import TanStackContext from "./context/TanStackContext";
 import ToasterContext from "./context/ToasterContext";
 import "./globals.css";
 
@@ -32,10 +31,8 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  modal,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode;
 }>) {
   const session = await auth();
 
@@ -46,13 +43,10 @@ export default async function RootLayout({
         className={`${Work_SansFont.variable} ${robotoFont.variable} ${Open_SansFont.variable} antialiased `}
       >
         <SessionProvider session={session}>
-          <div className="flex flex-col md:min-h-[100svh]">
-            <Header />
-            <main className="flex-1 flex flex-col">{children}</main>
-            <Footer />
-          </div>
-          <ToasterContext />
-          {modal}
+          <TanStackContext>
+            <div className="flex flex-col md:min-h-[100svh]">{children}</div>
+            <ToasterContext />
+          </TanStackContext>
         </SessionProvider>
       </body>
     </html>

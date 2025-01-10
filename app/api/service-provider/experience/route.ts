@@ -1,3 +1,6 @@
+import { NextResponse } from "next/server";
+
+import { getServiceProviderByUserId } from "@/app/data-access/serviceProvider";
 import {
   getExistingServiceProviderProfile,
   getServiceProviderProfileByServiceProviderId,
@@ -6,19 +9,13 @@ import {
   createWorkExperience,
   getWorkExperience,
 } from "@/app/data-access/workExperience";
-import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
-import { currentNextAuthUser, getcurrentUser } from "@/lib/auth";
 import {
   WorkExperienceSchema,
   workExperienceSchema,
 } from "@/app/schemas/workExperienceSchema";
-import { NextResponse } from "next/server";
+import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import {
-  getServiceProviderByUserId,
-  
-} from "@/app/data-access/serviceProvider";
-
+import { currentNextAuthUser, getcurrentUser } from "@/lib/auth";
 
 function parseWorkExperience(formData: FormData): WorkExperienceSchema {
   const json = formData.get("jsonData") as string;
@@ -30,7 +27,6 @@ function parseWorkExperience(formData: FormData): WorkExperienceSchema {
   const data = JSON.parse(json) as WorkExperienceSchema;
 
   const experienceFile = formData.get("file") as File | null;
-
 
   if (experienceFile) {
     data.verificationFile = { file: experienceFile };
@@ -71,13 +67,13 @@ export const POST = roleAsyncHandler(
     } = validatedFields;
 
     const user = await getcurrentUser();
-    let serviceProvider = await getServiceProviderByUserId(user?.id!);
+    const serviceProvider = await getServiceProviderByUserId(user!.id);
 
     const profile = await getServiceProviderProfileByServiceProviderId(
-      serviceProvider?.id!
+      serviceProvider!.id
     );
 
-    const data = await createWorkExperience(profile?.id!, {
+    const data = await createWorkExperience(profile!.id, {
       jobTitle,
       company,
       duration,
@@ -104,11 +100,12 @@ export const POST = roleAsyncHandler(
 export const GET = roleAsyncHandler(
   "SERVICE_PROVIDER",
   async (request: Request) => {
+    console.error(request.url);
+
     const user = await currentNextAuthUser();
 
-    //const user = { id: "676d371669255c5de906f6ce" };
     const existingServiceProviderProfile =
-      await getExistingServiceProviderProfile(user?.id!);
+      await getExistingServiceProviderProfile(user!.id);
 
     if (!existingServiceProviderProfile) {
       return NextResponse.json(
