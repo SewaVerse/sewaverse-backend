@@ -36,6 +36,14 @@ export const getLocalFileUrl = async (
   updatePath: boolean = true,
   tx: Prisma.TransactionClient | null = null
 ) => {
+  return  (id || updatePath || tx) && "";
+};
+
+export const getLocalFileUrlBackup = async (
+  id: string,
+  updatePath: boolean = true,
+  tx: Prisma.TransactionClient | null = null
+) => {
   const file = await getFileById(id, tx);
 
   if (!file) return "";
@@ -62,8 +70,8 @@ export const getLocalFileUrl = async (
   console.warn(filePath, data);
 
   // Save file to the `public/thunks` directory
-  // await fs.mkdir(path.dirname(filePath), { recursive: true });
-  // await fs.writeFile(filePath, data); // Pass `data` directly
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+  await fs.writeFile(filePath, data); // Pass `data` directly
 
   const fullPath = `/thunks/${filename}`;
 
