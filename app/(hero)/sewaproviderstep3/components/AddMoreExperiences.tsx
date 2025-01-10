@@ -26,7 +26,7 @@ export default function AddMoreExperiences({
   openAddMoreExperience,
   setOpenAddMoreExperience,
 }: AddMoreExperiencesProps) {
-  const [experiences, setExperiences] = React.useState<Experience[]>([
+  const [experiences] = React.useState<Experience[]>([
     {
       id: 1,
       title: "Hair Dresser",

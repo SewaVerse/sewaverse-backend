@@ -28,7 +28,7 @@ export default function ShowcaseAnotherWork({
   openShowcaseAnotherWork,
   setOpenShowcaseAnotherWork,
 }: ShowcaseAnotherWorkProps) {
-  const [works, setWorks] = React.useState<Work[]>([
+  const [works] = React.useState<Work[]>([
     {
       id: 1,
       title: "Hair Styling",

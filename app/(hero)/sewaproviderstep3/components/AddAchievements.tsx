@@ -103,7 +103,8 @@ export default function AddAchievements({
 
           <div className="flex justify-between items-center gap-3">
           <p className="text-[12px] text-muted-foreground">
-                You can add multiple Achievements later from 'Edit Profile'.
+          You can add multiple Achievements later from &apos;Edit Profile&apos;.
+
               </p>
             <Button
               type="button"

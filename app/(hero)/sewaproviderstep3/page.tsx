@@ -186,7 +186,7 @@ const page = () => {
               experience in the grooming and hairstyling industry. His expertise
               lies in delivering both modern and classic haircuts, intricate
               beard styling, and tailored grooming services that cater to the
-              unique preferences of each client. Bishal's unwavering passion for
+              unique preferences of each client. Bishal&apos;s unwavering passion for
               his craft drives him to help his clients not only look their best
               but also feel confident and revitalized
             </p>

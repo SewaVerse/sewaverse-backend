@@ -65,7 +65,7 @@ export default function AddYourWorks({
           </div>
 
           <div className="flex justify-between items-center gap-4">
-            <div> <p className="text-[12px] text-muted-foreground">You can add multiple Works later from 'Edit Profile'.</p></div>
+            <div> <p className="text-[12px] text-muted-foreground">You can add multiple Works later from &apos;Edit Profile&apos;.</p></div>
             <div className="flex gap-4">
             <Button
               type="button"

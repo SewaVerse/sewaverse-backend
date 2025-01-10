@@ -49,10 +49,10 @@ const LeftSide = () => {
       <div className="lg:w-[1000px] lg:h-[492px] mt-2">
         <h1 className=" text-black text-[400] text-xl">Description</h1>
         <p className="text-muted-foreground leading-[24px] text-base">
-          "At our salon, we believe that a great haircut is more than just a
-          routine – it's an experience. Our talented team of stylists is
+        &quot;At our salon, we believe that a great haircut is more than just a
+          routine – it&apos;s an experience. Our talented team of stylists is
           dedicated to crafting a look that perfectly suits your personality,
-          lifestyle, and hair type. Whether you’re after a classic style, a
+          lifestyle, and hair type. Whether you&apos;re after a classic style, a
           trendy cut, or something completely new, we take the time to consult
           with you, ensuring that your vision comes to life. Using only the
           finest tools and techniques, we focus on precision and creativity to
@@ -63,7 +63,7 @@ const LeftSide = () => {
           {" "}
           From chic bobs and elegant layers to sharp fades and textured crops,
           we cater to men, women, and children of all ages. Our personalized
-          approach guarantees that you’ll leave our salon feeling refreshed,
+          approach guarantees that you&apos;ll leave our salon feeling refreshed,
           rejuvenated, and ready to take on the world with confidence. Combine
           your haircut with our range of styling and treatment options for the
           ultimate haircare experience. Step into a space where your hair goals
@@ -72,7 +72,7 @@ const LeftSide = () => {
         </p>
         <p className="mt-8 text-muted-foreground text-base">
           {" "}
-          " Would you like to tailor this for a specific clientele or service
+          &quot; Would you like to tailor this for a specific clientele or service
           type?
         </p>
       </div>

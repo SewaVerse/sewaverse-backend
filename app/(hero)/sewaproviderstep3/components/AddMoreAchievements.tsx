@@ -25,7 +25,7 @@ export default function AddMoreAchievements({
   openMoreAchievements,
   setOpenMoreAchievements,
 }: AddMoreAchievementsProps) {
-  const [achievements, setAchievements] = React.useState<Achievement[]>([
+  const [achievements ] = React.useState<Achievement[]>([
     {
       id: 1,
       title: "Hair Styling competition",
