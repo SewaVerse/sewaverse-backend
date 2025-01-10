@@ -15,7 +15,7 @@ import {
 } from "@/app/schemas/workExperienceSchema";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { currentNextAuthUser, getcurrentUser } from "@/lib/auth";
+import { currentNextAuthUser, getCurrentUser } from "@/lib/auth";
 
 function parseWorkExperience(formData: FormData): WorkExperienceSchema {
   const json = formData.get("jsonData") as string;
@@ -66,7 +66,7 @@ export const POST = roleAsyncHandler(
       verificationFile,
     } = validatedFields;
 
-    const user = await getcurrentUser();
+    const user = await getCurrentUser();
     const serviceProvider = await getServiceProviderByUserId(user!.id);
 
     const profile = await getServiceProviderProfileByServiceProviderId(

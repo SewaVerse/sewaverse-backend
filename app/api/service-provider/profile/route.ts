@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 import { getServiceProviderByUserIdWithInclude } from "@/app/data-access/serviceProvider";
 import { getServiceProviderProfile } from "@/app/data-access/serviceProviderProfile";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
-import { getcurrentUser } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 export const GET = roleAsyncHandler("SERVICE_PROVIDER", async () => {
-  const user = await getcurrentUser();
+  const user = await getCurrentUser();
 
   const { id } = user!;
 
