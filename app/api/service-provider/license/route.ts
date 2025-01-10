@@ -6,7 +6,7 @@ import { getServiceProviderProfileByServiceProviderId } from "@/app/data-access/
 import { licenseSchema, LicenseSchema } from "@/app/schemas/licenseSchema";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { getcurrentUser } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 function parseLicense(formData: FormData): LicenseSchema {
   const json = formData.get("jsonData") as string;
@@ -42,7 +42,7 @@ export const POST = roleAsyncHandler(
     const { licenseOf, licenseFrom, licenseNumber, licenseFile } =
       validatedFields;
 
-    const user = await getcurrentUser();
+    const user = await getCurrentUser();
 
     const serviceProvider = await getServiceProviderByUserId(user!.id);
 

@@ -4,7 +4,7 @@
 import { Role } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-import { auth } from "@/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 import ApiError from "../apiError";
 
@@ -25,8 +25,8 @@ const roleAsyncHandler = <Args extends unknown[]>(
 ) => {
   return async (request: Request, ...args: Args) => {
     try {
-      const session = await auth();
-      const authRoles = session.user?.roles;
+      const session = await getCurrentUser();
+      const authRoles = session.roles;
 
       if (!authRoles || !Array.isArray(authRoles)) {
         return new NextResponse(
