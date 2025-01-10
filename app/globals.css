@@ -100,7 +100,7 @@ body {
   p,
   button,
   input[type="text"] {
-    font-family: "inter", "sans-serif";
+    font-family: "open-sans", "sans-serif";
   }
 
   footer {
@@ -118,6 +118,15 @@ body {
 
     font-weight: 500;
   }
+}
+.scrollable-container::-webkit-scrollbar {
+  display: none;
+  scroll-behavior: smooth;
+}
+
+.scrollable-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 @layer base {

@@ -74,7 +74,7 @@ const Home = async () => {
 
         {/* Welcome Section (Left Side) */}
         <div className="absolute top-1/2 left-0 transform -translate-y-1/2 pl-16 text-white text-left z-10 font-poppins">
-          <h1 className="text-4xl font-bold mb-4">
+          <h1 className="text-4xl font-bold mb-4 font-open-sans">
             Welcome to the <br />
             Universe of Sewaverse
           </h1>

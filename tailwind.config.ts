@@ -64,7 +64,7 @@ export default {
   		fontFamily: {
   			'work-sans': 'var(--work-sans)', //heading font
   			'roboto': 'var(--roboto)', //body font
-  			'inter': 'var(--inter)' //paragrpah font
+  			'open-sans': 'var(--open-sans)' //paragrpah font
   		},
   		keyframes: {
   			'accordion-down': {
