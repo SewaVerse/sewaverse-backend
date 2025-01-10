@@ -139,7 +139,7 @@ export default function AddWorkExperience({
                         <Info size={12} className="cursor-pointer" />
                         <div className="hidden group-hover:block absolute -top-16 right-1 w-[300px] h-[44px] bg-[#565656] text-white p-2 rounded">
                           <p>
-                            The certificate won't be publicly displayed on your
+                            The certificate won&apos;t be publicly displayed on your
                             profile. It will be used for internal verification
                             purposes. You can adjust these settings later.
                           </p>
@@ -153,7 +153,7 @@ export default function AddWorkExperience({
                         <Info size={12} className="cursor-pointer" />
                         <div className="hidden group-hover:block absolute -top-16 right-1 w-[300px] h-[44px] bg-[#565656] text-white p-2 rounded">
                           <p>
-                            It's best. Your credentials will be publicly
+                            It&apos;s best. Your credentials will be publicly
                             visible, helping customers trust your expertise and
                             choose you with confidence.
                           </p>
@@ -169,7 +169,7 @@ export default function AddWorkExperience({
           <div className="flex justify-between items-center gap-3">
             <div>
               <p className="text-[12px] text-muted-foreground">
-                You can add multiple experiences later from 'Edit Profile'.
+                You can add multiple experiences later from &apos;Edit Profile&apos;.
               </p>
             </div>
             <div className="flex gap-3">

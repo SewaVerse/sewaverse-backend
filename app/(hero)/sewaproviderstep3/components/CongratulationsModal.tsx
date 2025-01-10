@@ -13,7 +13,7 @@ export default function CongratulationsModal({
    openMessage,
    setOpenMessage
 }:CongratulationsModalProps) {
-  console.log(openMessage);
+  console.warn(openMessage);
   
 
   return (

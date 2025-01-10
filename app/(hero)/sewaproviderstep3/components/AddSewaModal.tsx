@@ -5,20 +5,20 @@ import React, { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
@@ -213,7 +213,7 @@ export function AddSewaModal() {
               <span>- Rs. </span>
             </div>
             <div className="flex justify-between text-sm font-medium">
-              <span>Total amount you'll receive:</span>
+              <span>Total amount you&apos;ll receive:</span>
               <span>Rs. /hr</span>
             </div>
           </div>
