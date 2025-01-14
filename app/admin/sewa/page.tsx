@@ -5,9 +5,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { PaginationState } from "@tanstack/react-table";
 import { useState } from "react";
 
-import appendActionColumn, {
-  SortColumnDef,
-} from "@/app/utils/appendActionColumn";
+import { SortColumnDef } from "@/app/utils/appendActionColumn";
 import axiosClient from "@/axios";
 import { PaginationTable } from "@/components/table/DataTable";
 import TableLayout from "@/components/table/TableLayout";
@@ -66,11 +64,9 @@ const SewaPage = () => {
     placeholderData: keepPreviousData,
   });
 
-  const modifyColumns = appendActionColumn(
-    columns,
-    () => {},
-    () => {}
-  );
+  const onDelete = (row: Service) => {
+    console.warn(row.id);
+  };
 
   return (
     <PaginationTable
@@ -83,7 +79,8 @@ const SewaPage = () => {
         addText="Add Service"
         data={data?.services ?? []}
         isLoading={isLoading}
-        columns={modifyColumns}
+        columns={columns}
+        onDelete={onDelete}
       ></TableLayout>
     </PaginationTable>
   );

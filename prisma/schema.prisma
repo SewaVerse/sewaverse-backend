@@ -304,8 +304,8 @@ model VerificationDocument {
   serviceProviderId String                   @db.ObjectId
   documentType      VerificationDocumentType
   documentNo        String?
-  frontFileId       String?                  @unique @db.ObjectId
-  backFileId        String?                  @unique @db.ObjectId
+  frontFileId       String?                  @db.ObjectId
+  backFileId        String?                  @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -317,6 +317,10 @@ model VerificationDocument {
   @@unique([documentType, documentNo])
   @@index([serviceProviderId])
 }
+
+
+
+
 
 model OfferedService {
   id                String @id @default(auto()) @map("_id") @db.ObjectId
@@ -442,8 +446,8 @@ model File {
   services         Service[]
 
   // Relations for front and back files
-  frontDocuments VerificationDocument? @relation("FrontFile")
-  backDocuments  VerificationDocument? @relation("BackFile")
+  frontDocuments VerificationDocument[] @relation("FrontFile")
+  backDocuments  VerificationDocument[] @relation("BackFile")
 
   workExperiences WorkExperience[]
   licenses        License[]

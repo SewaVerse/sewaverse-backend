@@ -34,17 +34,28 @@ export const createVerificationDocumentFromSchema = dbAsyncHandler(
       );
     }
 
+    const savedVerificationDocument = {
+      serviceProviderId: serviceProviderId,
+      documentType:
+        verificationDocumentTypeMap[
+          data.documentType as keyof typeof verificationDocumentTypeMap
+        ],
+      documentNo: data.documentNumber ?? null,
+    } as VerificationDocument;
+
+    if (data.documentNumber) {
+      savedVerificationDocument.documentNo = data.documentNumber;
+    }
+    if (frontFile) {
+      savedVerificationDocument.frontFileId = frontFile.id;
+    }
+
+    if (backFile) {
+      savedVerificationDocument.backFileId = backFile.id;
+    }
+
     return await upsertVerificationDocument(
-      {
-        serviceProviderId: serviceProviderId,
-        documentType:
-          verificationDocumentTypeMap[
-            data.documentType as keyof typeof verificationDocumentTypeMap
-          ],
-        documentNo: data.documentNumber ?? null,
-        frontFileId: frontFile?.id ?? null,
-        backFileId: backFile?.id ?? null,
-      } as VerificationDocument,
+      savedVerificationDocument,
       prismaClient
     );
   }
