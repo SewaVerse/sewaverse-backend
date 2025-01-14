@@ -22,14 +22,14 @@ export const createVerificationDocumentFromSchema = dbAsyncHandler(
     let backFile: PrismaFile | null = null;
     if (data.frontFile) {
       frontFile = await creatPrismaFileFromFile(
-        data.frontFile.file,
+        data.frontFile.file!,
         prismaClient
       );
     }
 
     if (data.backFile) {
       backFile = await creatPrismaFileFromFile(
-        data.backFile.file,
+        data.backFile.file!,
         prismaClient
       );
     }
