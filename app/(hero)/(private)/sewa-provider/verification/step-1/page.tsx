@@ -123,7 +123,7 @@ export default function SewaProviderDetailPage() {
       },
       verificationDocument1: {
         documentType: "",
-        documentNumber: "",
+        documentNumber: undefined,
         frontFile: undefined,
         backFile: undefined,
       },

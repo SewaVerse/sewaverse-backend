@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
 interface PreviewImage {
@@ -46,11 +47,18 @@ const ImagePreviewSlider = ({
       <div className="relative h-80 bg-gray-100 rounded-lg overflow-hidden">
         {/* Image Container */}
         <div className="h-full w-full relative">
-          <img
+          {/* <img
             src={previewImages[currentIndex].url}
             alt={previewImages[currentIndex].name}
             className="h-full w-full object-contain"
+          /> */}
+          <Image
+            src={previewImages[currentIndex].url}
+            alt={previewImages[currentIndex].name}
+            layout="fill"
+            className="object-contain"
           />
+
           <p className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 text-white p-2 text-center">
             {previewImages[currentIndex].name}
           </p>
