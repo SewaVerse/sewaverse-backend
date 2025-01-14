@@ -7,7 +7,7 @@ export const GET = asyncHandler(async (request: Request) => {
   console.warn(request.url);
 
   const user = await getCurrentUser();
-  console.warn(user);
+  console.warn("API user",user);
 
   return NextResponse.json({
     success: true,

@@ -66,6 +66,8 @@ export const POST = roleAsyncHandler(
 
     const body = parseProviderVerificationDetail(formData);
 
+    console.warn("body", body);
+
     const [validationError, validatedFields] = validateRequestBody(
       providerVerificationDetailSchema,
       body
