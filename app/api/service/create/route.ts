@@ -1,7 +1,6 @@
 import { Service } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-import { creatPrismaFileFromFile } from "@/app/data-access/file";
 import { createService } from "@/app/data-access/service";
 import { fileSchema } from "@/app/schemas/fileSchema";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
@@ -11,8 +10,6 @@ import { getCurrentUser } from "@/lib/auth";
 export const POST = roleAsyncHandler(
   ["ADMIN", "SERVICE_PROVIDER"],
   async (request: Request) => {
-    console.error("Running POST request: Create Services");
-
     const user = await getCurrentUser();
 
     const formData = await request.formData();
@@ -33,14 +30,6 @@ export const POST = roleAsyncHandler(
 
     const { file } = validatedFields;
 
-    let imageId: string | null = null;
-
-    if (file) {
-      const createdFile = await creatPrismaFileFromFile(file);
-
-      imageId = createdFile.id;
-    }
-
     const service = await createService(
       {
         name,
@@ -49,7 +38,7 @@ export const POST = roleAsyncHandler(
         isActive,
         createdBy: user?.id,
       } as Service,
-      imageId
+      file ?? null
     );
 
     return NextResponse.json(

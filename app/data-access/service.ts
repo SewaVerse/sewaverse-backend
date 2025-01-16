@@ -3,18 +3,29 @@ import { Service } from "@prisma/client";
 import db from "@/lib/db";
 
 import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
+import { creatPrismaFileFromFile } from "./file";
 
 export const createService = dbAsyncHandler(
-  async (data: Service, imageId: string | null) => {
-    const service = await db.service.create({
-      data: {
-        name: data.name,
-        description: data.description || null,
-        parentServiceId: data.parentServiceId || null,
-        imageId,
-        isActive: data.isActive || true,
-        createdBy: data.createdBy,
-      },
+  async (data: Service, file: File | null) => {
+    const service = await db.$transaction(async (transaction) => {
+      let imageId: string | null = null;
+
+      if (file) {
+        const createdFile = await creatPrismaFileFromFile(file);
+
+        imageId = createdFile.id;
+      }
+      const createdService = await transaction.service.create({
+        data: {
+          name: data.name,
+          description: data.description || null,
+          parentServiceId: data.parentServiceId || null,
+          imageId,
+          isActive: data.isActive || true,
+          createdBy: data.createdBy,
+        },
+      });
+      return createdService;
     });
 
     return service;
