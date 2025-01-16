@@ -20,7 +20,7 @@ import ApiError from "../apiError";
  * and returns an appropriate response.
  */
 const roleAsyncHandler = <Args extends unknown[]>(
-  role: Role, // Add `role` as a parameter to the wrapper
+  roles: Role[] | Role, // Add `role` as a parameter to the wrapper
   fn: (request: Request, ...args: Args) => Promise<NextResponse>
 ) => {
   return async (request: Request, ...args: Args) => {
@@ -35,9 +35,16 @@ const roleAsyncHandler = <Args extends unknown[]>(
         );
       }
 
-      if (!authRoles.includes(role)) {
+      const isValidRole =
+        roles instanceof Array
+          ? roles.some((role) => authRoles.includes(role))
+          : authRoles.includes(roles);
+
+      if (!isValidRole) {
         return new NextResponse(
-          `Access denied. The user does not have the required '${role}' role.`,
+          `Access denied. The user does not have the required '${
+            roles instanceof Array ? roles.join(", ") : roles
+          }' role.`,
           { status: 403 }
         );
       }

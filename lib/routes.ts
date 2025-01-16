@@ -29,6 +29,7 @@ export const PRIVATE_API_ROUTES = [
   "/api/user",
   "/api/service-provider",
   "/api/admin",
+  "/api/service",
   "/sewaprovider",
 ];
 

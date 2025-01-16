@@ -13,6 +13,7 @@ export const createService = dbAsyncHandler(
         parentServiceId: data.parentServiceId || null,
         imageId,
         isActive: data.isActive || true,
+        createdBy: data.createdBy,
       },
     });
 
@@ -25,6 +26,23 @@ export const getServiceById = dbAsyncHandler(async (id: string) => {
     where: { id },
   });
 });
+
+export const getServicesByCreatedUserId = dbAsyncHandler(
+  async (createdUserId: string) => {
+    return await db.service.findMany({
+      where: { createdBy: createdUserId },
+      include: {
+        parentService: true,
+        createdUser: {
+          select: {
+            name: true,
+          },
+        },
+        file: true,
+      },
+    });
+  }
+);
 
 // export const updateServiceById = dbAsyncHandler(
 //   async (id: string, data: Service) => {
