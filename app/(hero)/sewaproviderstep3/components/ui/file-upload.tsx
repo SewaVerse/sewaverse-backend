@@ -15,15 +15,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   onFileSelect,
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0) {
         const file = acceptedFiles[0];
-        setSelectedFile(file);
         setPreview(URL.createObjectURL(file)); // Generate preview URL
-        onFileSelect(file);
+        onFileSelect(file); // Pass file to parent component
       }
     },
     [onFileSelect]
@@ -38,7 +36,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     });
 
   const handleRemoveFile = () => {
-    setSelectedFile(null);
     setPreview(null);
   };
 

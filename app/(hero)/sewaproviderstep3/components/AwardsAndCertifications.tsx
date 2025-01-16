@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Card, CardContent } from "@/components/ui/card";
 
 interface Award {
@@ -25,10 +27,12 @@ export default function AwardsAndCertifications({
               <Card className="w-full">
                 <CardContent className="p-4 aspect-[4/3]">
                   {award.certificateUrl ? (
-                    <img
+                    <Image
                       src={award.certificateUrl || "/placeholder.svg"}
                       alt={award.title}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      sizes="100vw"
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-200 flex items-center justify-center">
