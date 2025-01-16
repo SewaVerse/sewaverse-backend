@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { District, Municipality, StateProvince } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -103,6 +104,8 @@ export default function SewaProviderDetailPage() {
   const [selectedDocument, setSelectedDocument] = useState("");
   const [previewImages, setPreviewImages] = useState<PreviewImage[]>([]);
 
+  const router = useRouter();
+
   useEffect(() => {
     fetchProvinces().then((fetchedProvinces) => {
       setProvinceOptions(fetchedProvinces);
@@ -123,7 +126,7 @@ export default function SewaProviderDetailPage() {
       },
       verificationDocument1: {
         documentType: "",
-        documentNumber: undefined,
+        documentNumber: "",
         frontFile: undefined,
         backFile: undefined,
       },
@@ -180,6 +183,8 @@ export default function SewaProviderDetailPage() {
         },
       };
 
+      console.warn(jsonPayload);
+
       // Add JSON payload to FormData
       formData.append("jsonData", JSON.stringify(jsonPayload));
 
@@ -223,6 +228,7 @@ export default function SewaProviderDetailPage() {
       await response.json();
 
       toast.success("Submitted Successfully!");
+      router.push("/sewa-provider/verification/step-2");
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message || "An unexpected error occurred.");
@@ -305,34 +311,6 @@ export default function SewaProviderDetailPage() {
                           {...field}
                         />
                       </FormControl>
-                      {/* <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-[240px] pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover> */}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -410,6 +388,39 @@ export default function SewaProviderDetailPage() {
                   )}
                 />
               </div>
+
+              {selectedDocument && (
+                <FormField
+                  control={form.control}
+                  name="verificationDocument1.documentNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="p-1 font-work-sans text-base">
+                        {selectedDocument === "citizenship"
+                          ? "Citizenship No."
+                          : selectedDocument === "nationalcard"
+                          ? "NIN"
+                          : "License Number"}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder={
+                            selectedDocument === "citizenship"
+                              ? "Enter Citizenship Number"
+                              : selectedDocument === "nationalcard"
+                              ? "Enter NIN"
+                              : "Enter License Number"
+                          }
+                          className="input-class"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <div className="flex flex-col gap-4">
                 {selectedDocument === "drivinglicense" ? (
@@ -504,7 +515,7 @@ export default function SewaProviderDetailPage() {
                         PAN Number
                       </FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} placeholder="Enter PAN Number" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
