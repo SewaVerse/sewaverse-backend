@@ -1,7 +1,7 @@
-import { File as PrismaFile, Service } from "@prisma/client";
+import { Service } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-import { createFile } from "@/app/data-access/file";
+import { creatPrismaFileFromFile } from "@/app/data-access/file";
 import { createService } from "@/app/data-access/service";
 import { fileSchema } from "@/app/schemas/fileSchema";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
@@ -36,19 +36,9 @@ export const POST = roleAsyncHandler(
     let imageId: string | null = null;
 
     if (file) {
-      const fileBuffer = await file.arrayBuffer();
-      const buffer = Buffer.from(fileBuffer);
+      const createdFile = await creatPrismaFileFromFile(file);
 
-      const savedFile = await createFile(
-        {
-          name: file.name,
-          size: file.size,
-          type: file.type,
-        } as PrismaFile,
-        buffer
-      );
-
-      imageId = savedFile.id;
+      imageId = createdFile.id;
     }
 
     const service = await createService(
