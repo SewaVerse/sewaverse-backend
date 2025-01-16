@@ -1,9 +1,9 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import { CirclePlus } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 import AddAchievements from "./components/AddAchievements";
 import AddLicense from "./components/AddLicense";
@@ -18,19 +18,62 @@ import MyWorks from "./components/MyWorks";
 import Profile from "./components/Profile";
 import WorkExperiences from "./components/WorkExperiences";
 
-const page = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+interface WorkExperience {
+  id: number;
+  title: string;
+  company: string;
+  years: string;
+  category: string;
+  description: string;
+  certificateUrl?: string;
+}
+
+interface License {
+  id: number;
+  licenseOf: string;
+  licenseNumber: string;
+  issuedBy: string;
+  certificateUrl?: string;
+}
+
+interface Award {
+  id: number;
+  title: string;
+  year: string;
+  from: string;
+  certificateUrl?: string;
+}
+
+const Page = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [licenseOpen, setLicenseOpen] = useState<boolean>(false);
   const [awardOpen, setAwardOpen] = useState<boolean>(false);
   const [worksOpen, setWorksOpen] = useState<boolean>(false);
-  const [openMoreAchievements, setOpenMoreAchievements] = useState<boolean>(false);
+  const [openMoreAchievements, setOpenMoreAchievements] =
+    useState<boolean>(false);
   const [openMessage, setOpenMessage] = useState(false);
-  // const router = useRouter()
+  const [text, setText] = useState<string>();
+  const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>([]);
+  const [licenses, setLicenses] = useState<License[]>([]);
+  const [awards, setAwards] = useState<Award[]>([]);
 
   const handleClick = () => {
-    setOpenMessage(true); 
-    
+    setOpenMessage(true);
+  };
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(event.target.value);
+  };
+
+  const handleAddWorkExperience = (newExperience: WorkExperience) => {
+    setWorkExperiences([...workExperiences, newExperience]);
+  };
+
+  const handleAddLicense = (newLicense: License) => {
+    setLicenses([...licenses, newLicense]);
+  };
+
+  const handleAddAward = (newAward: Award) => {
+    setAwards([...awards, newAward]);
   };
 
   return (
@@ -54,17 +97,12 @@ const page = () => {
           </p>
 
           <form className="mt-4 space-y-4">
-            <div className="border border-solid h-[400px] w-[350px] lg:w-[330px] rounded-lg py-2 px-4   ">
-              <p className="text-lg">About Me</p>
-              <p className="text-muted-foreground">
-                Share your story, expertise and experiences in your own unique
-                words. Make your clients trust in you !
-              </p>
-              {/* <textarea
-              className="h-[400px] w-[350px] lg:w-[330px]  rounded-lg py-2 px-4 text-left text-sm "
-              placeholder="Share your story, expertise, and experiences in your own unique words. M"
-            /> */}
-            </div>
+            <Textarea
+              className="h-80 font-work-sans"
+              value={text}
+              onChange={handleInputChange}
+              placeholder={`About Me\nShare your story, expertise, and experiences in your own unique words. Make your clients trust in you!`}
+            />
 
             <div className="border border-solid border-black rounded-md h-[100px] flex items-center justify-between px-4">
               <label className="block text-sm font-medium text-black">
@@ -145,18 +183,14 @@ const page = () => {
             </div>
 
             <Button
-            type="button"
+              type="button"
               variant={"brand"}
               className="w-full mt-2 text-white shadow-md hover:shadow-lg px-8 py-4"
-             
               onClick={handleClick}
             >
               Next
             </Button>
-            <Button
-              className="w-full mt-2 text-white shadow-md hover:shadow-lg px-8 py-4"
-              
-            >
+            <Button className="w-full mt-2 text-white shadow-md hover:shadow-lg px-8 py-4">
               Previous
             </Button>
 
@@ -170,33 +204,24 @@ const page = () => {
         <div className="hidden lg:block lg:flex-1 lg:border lg:mr-10">
           <h3 className="text-lg">Preview</h3>
           <div className="opacity-50 bg-gray-50">
-
-          <div className=" h-[35vh] bg-[#BCBDDC] "></div>
-          {/* for profile */}
-           <Profile />
+            <div className=" h-[35vh] bg-[#BCBDDC] "></div>
+            {/* for profile */}
+            <Profile />
           </div>
           {/* for navbar */}
           <div className="container mx-auto ">
-            <HeroSection/>
+            <HeroSection />
             <h2 className="text-xl px-10 font-bold tracking-tight mt-2">
               About Me
             </h2>
-            <p className="px-10   text-lg text-[#464646]">
-              A seasoned professional barber with over a decade of dedicated
-              experience in the grooming and hairstyling industry. His expertise
-              lies in delivering both modern and classic haircuts, intricate
-              beard styling, and tailored grooming services that cater to the
-              unique preferences of each client. Bishal&apos;s unwavering passion for
-              his craft drives him to help his clients not only look their best
-              but also feel confident and revitalized
-            </p>
+            <p className="px-10 text-lg font-normal text-justify">{text}</p>
 
             {/* my works */}
-            <WorkExperiences />
+            <WorkExperiences experiences={workExperiences} />
             {/* License */}
-            <License />
+            <License licenses={licenses} />
 
-            <AwardsAndCertifications />
+            <AwardsAndCertifications awards={awards} />
             {/* my works */}
             <MyWorks />
 
@@ -205,6 +230,7 @@ const page = () => {
               <AddWorkExperience
                 modalOpen={modalOpen}
                 onOpenChange={setModalOpen}
+                onSave={handleAddWorkExperience}
               />
             )}
             {/* Add works license Modal */}
@@ -212,6 +238,7 @@ const page = () => {
               <AddLicense
                 licenseOpen={licenseOpen}
                 onOpenChange={setLicenseOpen}
+                onSave={handleAddLicense}
               />
             )}
             {/* for awards and achievements */}
@@ -219,6 +246,7 @@ const page = () => {
               <AddAchievements
                 awardOpen={awardOpen}
                 onOpenChange={setAwardOpen}
+                onSave={handleAddAward}
               />
             )}
 
@@ -233,22 +261,19 @@ const page = () => {
               <AddYourWorks worksOpen={worksOpen} onOpenChange={setWorksOpen} />
             )}
             {/* CongratulationsModal */}
-            {
-              openMessage &&(
-                <CongratulationsModal openMessage = {openMessage} setOpenMessage = {setOpenMessage}/>
-
-              )
-            }
-           
-           {/* for Add sewa */}
-           {/* <AddSewaModal /> */}
+            {openMessage && (
+              <CongratulationsModal
+                openMessage={openMessage}
+                setOpenMessage={setOpenMessage}
+              />
+            )}
+            {/* for Add sewa */}
+            {/* <AddSewaModal /> */}
           </div>
         </div>
-        
       </div>
-     
     </>
   );
 };
 
-export default page;
+export default Page;

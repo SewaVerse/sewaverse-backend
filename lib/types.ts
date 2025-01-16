@@ -10,3 +10,14 @@ export interface ProfileData {
   coreSkills: string[];
   profileImage: string | null;
 }
+
+export interface WorkExperience {
+  id: number;
+  title: string;
+  company: string;
+  years: string;
+  category: string;
+  description: string;
+  certificateUrl?: string;
+}
+

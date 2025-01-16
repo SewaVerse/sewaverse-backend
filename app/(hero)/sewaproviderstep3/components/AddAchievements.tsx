@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,19 +12,45 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { FileUpload } from "./ui/file-upload";
+
+interface Award {
+  id: number;
+  title: string;
+  year: string;
+  from: string;
+  certificateUrl?: string;
+}
+
 interface AddAchievementsProps {
   awardOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  onSave: (award: Award) => void;
 }
 
 export default function AddAchievements({
   awardOpen,
   onOpenChange,
+  onSave,
 }: AddAchievementsProps) {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    year: "",
+    from: "",
+  });
+  const [certificateFile, setCertificateFile] = useState<File | null>(null);
 
-  const handleCertificateClick = () => {
-    fileInputRef.current?.click(); // Trigger the file input click
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newAward: Award = {
+      id: Date.now(),
+      ...formData,
+      certificateUrl: certificateFile
+        ? URL.createObjectURL(certificateFile)
+        : undefined,
+    };
+    onSave(newAward);
+    onOpenChange(false);
   };
 
   return (
@@ -37,7 +63,7 @@ export default function AddAchievements({
             </DialogTitle>
           </div>
         </DialogHeader>
-        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="title">
@@ -45,6 +71,10 @@ export default function AddAchievements({
               </Label>
               <Input
                 id="title"
+                value={formData.title}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 placeholder="Ex: Hair Styling Competition"
                 required
               />
@@ -52,60 +82,44 @@ export default function AddAchievements({
 
             <div className="space-y-2">
               <Label htmlFor="year">Award Year</Label>
-              <Input id="year" placeholder="Ex: 2024" />
+              <Input
+                id="year"
+                value={formData.year}
+                onChange={(e) =>
+                  setFormData({ ...formData, year: e.target.value })
+                }
+                placeholder="Ex: 2024"
+              />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="from">Award From</Label>
-              <Input id="from" placeholder="Institution name" />
+              <Input
+                id="from"
+                value={formData.from}
+                onChange={(e) =>
+                  setFormData({ ...formData, from: e.target.value })
+                }
+                placeholder="Institution name"
+              />
             </div>
 
             <div className="space-y-2">
               <Label>Certificate</Label>
-              <div
-                className="border-2 border-dashed rounded-lg p-6 cursor-pointer"
-                onClick={handleCertificateClick} // Attach the click handler to the div
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <svg
-                    className="mx-auto h-12 w-12 text-gray-400"
-                    stroke="currentColor"
-                    fill="none"
-                    viewBox="0 0 48 48"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                      strokeWidth={2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <div className="text-sm text-muted-foreground text-center">
-                    Drag your certificate image here or click to upload
-                  </div>
-                  <div className="text-xs text-muted-foreground text-center">
-                    Acceptable file types: jpg, png, jpeg
-                  </div>
-                </div>
-                <input
-                  type="file"
-                  ref={fileInputRef} // Attach ref to the input
-                  className="hidden"
-                  accept="image/jpeg,image/png"
-                  id="certificate-upload"
-                />
-              </div>
-              
+
+              <FileUpload
+                accept="image/*"
+                maxSize={1024 * 1024 * 5} // 5MB
+                onFileSelect={(file) => setCertificateFile(file)}
+              />
             </div>
-            
           </div>
 
           <div className="flex justify-between items-center gap-3">
-          <p className="text-[12px] text-muted-foreground">
-          You can add multiple Achievements later from &apos;Edit Profile&apos;.
-
-              </p>
+            <p className="text-[12px] text-muted-foreground">
+              You can add multiple Achievements later from &apos;Edit
+              Profile&apos;.
+            </p>
             <Button
               type="button"
               variant="outline"
