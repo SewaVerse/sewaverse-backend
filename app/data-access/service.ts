@@ -1,4 +1,4 @@
-import { Service } from "@prisma/client";
+import { Prisma, Service } from "@prisma/client";
 
 import db from "@/lib/db";
 
@@ -6,7 +6,10 @@ import { dbAsyncHandler } from "../utils/asyncHelper/dbAsyncHandler";
 import { creatPrismaFileFromFile } from "./file";
 
 export const createService = dbAsyncHandler(
-  async (data: Service, file: File | null) => {
+  async (
+    data: Prisma.ServiceUncheckedCreateInput,
+    file: File | null = null
+  ) => {
     const service = await db.$transaction(async (transaction) => {
       let imageId: string | null = null;
 
@@ -55,14 +58,14 @@ export const getServicesByCreatedUserId = dbAsyncHandler(
   }
 );
 
-// export const updateServiceById = dbAsyncHandler(
-//   async (id: string, data: Service) => {
-//     return await db.service.update({
-//       where: { id },
-//       data,
-//     });
-//   }
-// );
+export const updateServiceById = dbAsyncHandler(
+  async (id: string, data: Prisma.ServiceUncheckedUpdateInput) => {
+    return await db.service.update({
+      where: { id },
+      data,
+    });
+  }
+);
 
 export const deleteServiceById = dbAsyncHandler(async (id: string) => {
   return await db.service.delete({
@@ -72,6 +75,33 @@ export const deleteServiceById = dbAsyncHandler(async (id: string) => {
 
 export const getAllServices = dbAsyncHandler(async () => {
   return await db.service.findMany({ where: { isActive: true } });
+});
+
+type ServiceHierarchy = Omit<
+  Service,
+  "isActive" | "imageId" | "createdAt" | "updatedAt"
+> & {
+  services: ServiceHierarchy[];
+};
+
+export const getServicesHierarchy = dbAsyncHandler(async () => {
+  const fetchHierarchy = async (
+    parentServiceId: string | null
+  ): Promise<ServiceHierarchy[]> => {
+    const services = await db.service.findMany({
+      omit: { isActive: true, imageId: true, createdAt: true, updatedAt: true },
+      where: { isActive: true, parentServiceId },
+    });
+
+    return await Promise.all(
+      services.map(async (service) => ({
+        ...service,
+        services: await fetchHierarchy(service.id),
+      }))
+    );
+  };
+
+  return await fetchHierarchy(null); // Start with the root level
 });
 
 export const getPaginatedServices = dbAsyncHandler(

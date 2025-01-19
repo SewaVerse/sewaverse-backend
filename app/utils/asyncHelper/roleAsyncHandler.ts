@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 import { Role } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { getCurrentUser } from "@/lib/auth";
 
@@ -21,9 +21,9 @@ import ApiError from "../apiError";
  */
 const roleAsyncHandler = <Args extends unknown[]>(
   roles: Role[] | Role, // Add `role` as a parameter to the wrapper
-  fn: (request: Request, ...args: Args) => Promise<NextResponse>
+  fn: (request: NextRequest, ...args: Args) => Promise<NextResponse>
 ) => {
-  return async (request: Request, ...args: Args) => {
+  return async (request: NextRequest, ...args: Args) => {
     try {
       const session = await getCurrentUser();
       const authRoles = session.roles;

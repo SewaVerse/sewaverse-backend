@@ -1,18 +1,16 @@
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
+import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import paginate from "@/app/utils/pagination";
 import { getPaginationParams } from "@/app/utils/paginationHelper";
 
-export const GET = asyncHandler(async (request: NextRequest) => {
+export const GET = roleAsyncHandler("ADMIN", async (request: NextRequest) => {
   const searchParams = request.nextUrl.searchParams;
 
   const { page, limit } = getPaginationParams(searchParams);
 
-  const serviceWhere: Prisma.ServiceWhereInput = {
-    isActive: true,
-  };
+  const serviceWhere: Prisma.ServiceWhereInput = {};
 
   const include: Prisma.ServiceInclude = {
     file: true,

@@ -1,15 +1,25 @@
 "use client";
 
 import { Service } from "@prisma/client";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { PaginationState } from "@tanstack/react-table";
+import { AxiosError, AxiosResponse } from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import { SortColumnDef } from "@/app/utils/appendActionColumn";
+import { BaseResponse } from "@/app/utils/interfaces/ApiInterface";
 import axiosClient from "@/axios";
 import { PaginationTable } from "@/components/table/DataTable";
 import TableLayout from "@/components/table/TableLayout";
 import { Button } from "@/components/ui/button";
+
+import AddEditService from "./AddEditService";
 
 type ServiceWithParentService = Service & {
   parentServiceName: string | null;
@@ -45,6 +55,7 @@ const columns: SortColumnDef<ServiceWithParentService>[] = [
 ];
 
 const SewaPage = () => {
+  const queryClient = useQueryClient();
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -64,8 +75,28 @@ const SewaPage = () => {
     placeholderData: keepPreviousData,
   });
 
+  const { mutate } = useMutation<
+    AxiosResponse,
+    AxiosError<BaseResponse>,
+    string
+  >({
+    mutationFn: (id: string) => axiosClient.delete(`/service/${id}`),
+    onSuccess: (res) => {
+      close();
+      toast.success(res.data.message || "Operation completed successfully!");
+    },
+    onError: (res) => {
+      toast.error(res.response?.data?.message || "Operation failed!");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["services"],
+      });
+    },
+  });
+
   const onDelete = (row: Service) => {
-    console.warn(row.id);
+    mutate(row.id);
   };
 
   return (
@@ -76,12 +107,15 @@ const SewaPage = () => {
     >
       <TableLayout
         heading="Services"
+        addEditDialogText="Service"
         addText="Add Service"
         data={data?.services ?? []}
         isLoading={isLoading}
         columns={columns}
         onDelete={onDelete}
-      ></TableLayout>
+      >
+        <AddEditService services={data?.services ?? []} />
+      </TableLayout>
     </PaginationTable>
   );
 };
