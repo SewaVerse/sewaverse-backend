@@ -1,10 +1,13 @@
 "use client";
 import { CirclePlus } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { AwardType, LicenseType, WorkExperience, WorkType } from "@/lib/types";
 
+import ProfileCard from "../../../../../../components/profile-card";
 import AddAchievements from "./components/AddAchievements";
 import AddLicense from "./components/AddLicense";
 import AddMoreAchievements from "./components/AddMoreAchievements";
@@ -15,34 +18,29 @@ import CongratulationsModal from "./components/CongratulationsModal";
 import HeroSection from "./components/HeroSection";
 import License from "./components/License";
 import MyWorks from "./components/MyWorks";
-import Profile from "./components/Profile";
-import WorkExperiences from "./components/WorkExperiences";
+import WorkExperiencesView from "./components/WorkExperiences";
 
-interface WorkExperience {
-  id: number;
-  title: string;
-  company: string;
-  years: string;
-  category: string;
-  description: string;
-  certificateUrl?: string;
-}
+const profileData = {
+  name: "Bishal Shrestha",
+  joinDate: "5th Jan, 2024",
+  servicesDelivered: 100,
+  profession: "Barber",
+  experience: "5 Years",
+  rating: 4.5,
+  offeredServices: ["Hair Cutting"],
+  locations: ["Kathmandu", "Bhaktapur", "Lalitpur"],
+  coreSkills: ["Hair Dressing", "Hair Colouring", "Hair Cutting"],
+};
 
-interface License {
-  id: number;
-  licenseOf: string;
-  licenseNumber: string;
-  issuedBy: string;
-  certificateUrl?: string;
-}
-
-interface Award {
-  id: number;
-  title: string;
-  year: string;
-  from: string;
-  certificateUrl?: string;
-}
+// interface WorkExperience {
+//   id: number;
+//   title: string;
+//   company: string;
+//   years: string;
+//   category: string;
+//   description: string;
+//   certificateUrl?: string;
+// }
 
 const Page = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -54,26 +52,116 @@ const Page = () => {
   const [openMessage, setOpenMessage] = useState(false);
   const [text, setText] = useState<string>();
   const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>([]);
-  const [licenses, setLicenses] = useState<License[]>([]);
-  const [awards, setAwards] = useState<Award[]>([]);
+  const [licenses, setLicenses] = useState<LicenseType[]>([]);
+  const [awards, setAwards] = useState<AwardType[]>([]);
+  const [works, setWorks] = useState<WorkType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleClick = () => {
-    setOpenMessage(true);
-  };
+  // const handleClick = () => {
+  //   setOpenMessage(true);
+  // };
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
   };
 
-  const handleAddWorkExperience = (newExperience: WorkExperience) => {
+  const handleAddWorkExperience = (data: {
+    jobTitle: string;
+    company: string;
+    duration: string;
+    description?: string;
+    startDate?: Date | null;
+    endDate?: Date | null;
+    category?: string;
+    isCurrent?: boolean;
+    serviceId?: string;
+    verificationFile?: { file?: File | undefined };
+  }) => {
+    const newExperience: WorkExperience = {
+      id: Date.now(),
+      jobTitle: data.jobTitle,
+      company: data.company,
+      duration: data.duration,
+      description: data.description || "",
+    };
     setWorkExperiences([...workExperiences, newExperience]);
   };
 
-  const handleAddLicense = (newLicense: License) => {
+  const handleAddLicense = (data: {
+    licenseOf: string;
+    licenseFrom: string;
+    licenseNumber: string;
+    licenseFile?: { file?: File | undefined };
+  }) => {
+    const newLicense: LicenseType = {
+      id: Date.now(),
+      licenseOf: data.licenseOf,
+      licenseNumber: data.licenseNumber,
+      issuedBy: data.licenseFrom,
+    };
     setLicenses([...licenses, newLicense]);
   };
 
-  const handleAddAward = (newAward: Award) => {
+  const handleAddAward = (data: {
+    title: string;
+    year: string;
+    awardFrom: string;
+    awardFile?: { file?: File | undefined };
+  }) => {
+    const newAward: AwardType = {
+      id: Date.now(),
+      title: data.title,
+      year: data.year,
+      awardFrom: data.awardFrom,
+      awardFile: data.awardFile,
+    };
     setAwards([...awards, newAward]);
+  };
+
+  const handleAddWork = (data: {
+    title: string;
+    description?: string;
+    workFile?: { file?: File | undefined };
+  }) => {
+    const newWork: WorkType = {
+      id: Date.now(),
+      title: data.title,
+      description: data.description || "",
+      workFile: data.workFile,
+    };
+    setWorks([...works, newWork]);
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/service-provider/about", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ about: text }),
+      });
+
+      if (!response.ok) {
+        const errorDetails = await response.json();
+        console.warn("Top error", errorDetails);
+        throw new Error(
+          errorDetails.message || "Failed to update about section."
+        );
+      }
+
+      const responseData = await response.json();
+      toast.success(
+        responseData.message || "About section updated successfully!"
+      );
+      setLoading(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.warn("Bottom error.", error.message || error);
+        toast.error(error.message || "An unexpected error occurred.");
+      }
+    }
   };
 
   return (
@@ -118,7 +206,7 @@ const Page = () => {
                 <span className="text-green-500">
                   <CirclePlus />
                 </span>
-                <span className="text-[12px] text-gray-700 mt-2">
+                <span className="text-[10px] text-gray-700 mt-2">
                   Add Experience
                 </span>
               </div>
@@ -138,7 +226,7 @@ const Page = () => {
                 <span className="text-green-500">
                   <CirclePlus />
                 </span>
-                <span className="text-[12px] text-gray-700 mt-2">
+                <span className="text-[10px] text-gray-700 mt-2">
                   Add Licence
                 </span>
               </div>
@@ -157,7 +245,7 @@ const Page = () => {
                 <span className="text-green-500">
                   <CirclePlus />
                 </span>
-                <span className="text-[12px] text-gray-700 mt-2">
+                <span className="text-[10px] text-gray-700 mt-2">
                   Add Certification
                 </span>
               </div>
@@ -176,7 +264,7 @@ const Page = () => {
                 <span className="text-green-500">
                   <CirclePlus />
                 </span>
-                <span className="text-[12px] text-gray-700 mt-2">
+                <span className="text-[10px] text-gray-700 mt-2">
                   Add Works
                 </span>
               </div>
@@ -186,11 +274,14 @@ const Page = () => {
               type="button"
               variant={"brand"}
               className="w-full mt-2 text-white shadow-md hover:shadow-lg px-8 py-4"
-              onClick={handleClick}
+              onClick={handleSubmit}
             >
-              Next
+              {loading ? "Submitting..." : "Next"}
             </Button>
-            <Button className="w-full mt-2 text-white shadow-md hover:shadow-lg px-8 py-4">
+            <Button
+              variant={"brand"}
+              className="w-full mt-2 text-white shadow-md hover:shadow-lg px-8 py-4"
+            >
               Previous
             </Button>
 
@@ -206,24 +297,22 @@ const Page = () => {
           <div className="opacity-50 bg-gray-50">
             <div className=" h-[35vh] bg-[#BCBDDC] "></div>
             {/* for profile */}
-            <Profile />
+            <ProfileCard {...profileData} />
           </div>
           {/* for navbar */}
-          <div className="container mx-auto ">
+          <div className="container mx-auto px-10">
             <HeroSection />
-            <h2 className="text-xl px-10 font-bold tracking-tight mt-2">
-              About Me
-            </h2>
-            <p className="px-10 text-lg font-normal text-justify">{text}</p>
+            <h2 className="text-2xl font-bold py-6 ">About Me</h2>
+            <p className="text-lg font-normal mb-4 text-justify">{text}</p>
 
             {/* my works */}
-            <WorkExperiences experiences={workExperiences} />
+            <WorkExperiencesView experiences={workExperiences} />
             {/* License */}
             <License licenses={licenses} />
 
             <AwardsAndCertifications awards={awards} />
             {/* my works */}
-            <MyWorks />
+            <MyWorks works={works} />
 
             {/* Add Work Experience Modal */}
             {modalOpen && (
@@ -258,7 +347,11 @@ const Page = () => {
             )}
             {/* for works.. */}
             {worksOpen && (
-              <AddYourWorks worksOpen={worksOpen} onOpenChange={setWorksOpen} />
+              <AddYourWorks
+                worksOpen={worksOpen}
+                onOpenChange={setWorksOpen}
+                onSave={handleAddWork}
+              />
             )}
             {/* CongratulationsModal */}
             {openMessage && (

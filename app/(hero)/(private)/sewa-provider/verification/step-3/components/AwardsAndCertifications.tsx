@@ -1,23 +1,16 @@
 import Image from "next/image";
 
 import { Card, CardContent } from "@/components/ui/card";
-
-interface Award {
-  id: number;
-  title: string;
-  year: string;
-  from: string;
-  certificateUrl?: string;
-}
+import { AwardType } from "@/lib/types";
 
 export default function AwardsAndCertifications({
   awards,
 }: {
-  awards: Award[];
+  awards: AwardType[];
 }) {
   return (
-    <section className="w-full py-6 md:px-2 lg:py-3">
-      <div className="container px-4 md:px-6">
+    <section className="w-full py-6 lg:py-6">
+      <div className="container">
         <h2 className="text-2xl font-bold tracking-tight mb-2">
           Awards & Certifications
         </h2>
@@ -25,13 +18,13 @@ export default function AwardsAndCertifications({
           {awards.map((award) => (
             <div key={award.id} className="flex flex-col items-center">
               <Card className="w-full">
-                <CardContent className="p-4 aspect-[4/3]">
-                  {award.certificateUrl ? (
+                <CardContent className="p-4 aspect-[4/3] relative  rounded-lg">
+                  {award.awardFile ? (
                     <Image
-                      src={award.certificateUrl || "/placeholder.svg"}
+                      src={award.awardFile.file?.name || '/placeholder-image.jpg'}
                       alt={award.title}
                       fill
-                      className="object-cover"
+                      className="object-cover rounded-lg"
                       sizes="100vw"
                     />
                   ) : (
@@ -41,11 +34,11 @@ export default function AwardsAndCertifications({
                   )}
                 </CardContent>
               </Card>
-              <h1 className="mt-3 text-lg font-medium gradient-text">
+              <h1 className="mt-3 text-xl font-semibold gradient-text uppercase">
                 {award.title}
               </h1>
-              <p className="text-sm font-medium text-gray-500">
-                {award.year} - {award.from}
+              <p className="text-sm font-medium text-gray-500 uppercase">
+                {award.year} - {award.awardFrom}
               </p>
             </div>
           ))}

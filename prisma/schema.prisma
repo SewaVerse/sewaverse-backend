@@ -369,7 +369,7 @@ model WorkExperience {
   description       String?
   startDate         DateTime?
   endDate           DateTime?
-  isCurrent         Boolean
+  isCurrent         Boolean?
   serviceId         String    @db.ObjectId
   fileId            String?   @db.ObjectId
 
@@ -398,7 +398,7 @@ model Award {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
   providerProfileId String   @db.ObjectId
   title             String
-  date              DateTime
+  year              String
   awardFrom         String
 
   fileId String? @db.ObjectId
