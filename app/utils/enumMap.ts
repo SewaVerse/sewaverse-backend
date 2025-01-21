@@ -1,4 +1,5 @@
 import {
+  BookingStatus,
   Gender,
   MunicipalityType,
   PriceType,
@@ -27,6 +28,23 @@ export const priceTypeMap: Record<(typeof priceTypes)[number], PriceType> = {
   session: "SESSION",
   unit: "UNIT",
   project: "PROJECT",
+};
+
+export const bookingStatus = [
+  "pending",
+  "confirmed",
+  "completed",
+  "canceled",
+] as const;
+
+export const bookingStatusMap: Record<
+  (typeof bookingStatus)[number],
+  BookingStatus
+> = {
+  pending: "PENDING",
+  confirmed: "CONFIRMED",
+  completed: "COMPLETED",
+  canceled: "CANCELED",
 };
 
 export const verificationDocumentTypes = [
