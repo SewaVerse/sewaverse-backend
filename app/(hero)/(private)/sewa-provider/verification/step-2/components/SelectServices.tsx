@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+import AddCategory from "./AddCategory";
+
 interface Service {
   id: string;
   name: string;
@@ -58,6 +60,7 @@ export default function SelectServices({
     Set<string>
   >(new Set());
   const [loading, setLoading] = useState(true);
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -87,7 +90,7 @@ export default function SelectServices({
     });
     setSelectedMainCategories(mainCategories);
     setSelectedSubCategories(subCategories);
-    setExpandedCategories(mainCategories);
+    setExpandedCategories(mainCategories); // Expand categories that are selected
   }, [selectedServices]);
 
   const toggleCategory = (categoryId: string) => {
@@ -117,8 +120,16 @@ export default function SelectServices({
             });
           return newSubSet;
         });
+        // Also collapse the category when unchecking
+        setExpandedCategories((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(categoryId);
+          return newSet;
+        });
       } else {
         newSet.add(categoryId);
+        // Automatically expand the category when selecting
+        setExpandedCategories((prev) => new Set(prev).add(categoryId));
       }
       return newSet;
     });
@@ -138,6 +149,8 @@ export default function SelectServices({
         setSelectedMainCategories((prevMain) =>
           new Set(prevMain).add(mainCategoryId)
         );
+        // Also ensure the category is expanded
+        setExpandedCategories((prev) => new Set(prev).add(mainCategoryId));
       }
       return newSet;
     });
@@ -173,29 +186,27 @@ export default function SelectServices({
         )}
       </div>
 
-      {expandedCategories.has(category.id) &&
-        selectedMainCategories.has(category.id) &&
-        category.services.length > 0 && (
-          <div className="ml-6 space-y-2">
-            {category.services.map((subCategory) => (
-              <div key={subCategory.id} className="flex items-center gap-2">
-                <Checkbox
-                  id={subCategory.id}
-                  checked={selectedSubCategories.has(subCategory.id)}
-                  onCheckedChange={() =>
-                    toggleSubCategorySelection(subCategory.id, category.id)
-                  }
-                />
-                <label
-                  htmlFor={subCategory.id}
-                  className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {subCategory.name}
-                </label>
-              </div>
-            ))}
-          </div>
-        )}
+      {expandedCategories.has(category.id) && category.services.length > 0 && (
+        <div className="ml-6 space-y-2">
+          {category.services.map((subCategory) => (
+            <div key={subCategory.id} className="flex items-center gap-2">
+              <Checkbox
+                id={subCategory.id}
+                checked={selectedSubCategories.has(subCategory.id)}
+                onCheckedChange={() =>
+                  toggleSubCategorySelection(subCategory.id, category.id)
+                }
+              />
+              <label
+                htmlFor={subCategory.id}
+                className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                {subCategory.name}
+              </label>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 
@@ -232,13 +243,33 @@ export default function SelectServices({
         </p>
         {loading ? (
           <div className="flex items-center justify-center py-8">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
           </div>
         ) : (
           <ScrollArea className="h-[300px] pr-4">
-            <div className="space-y-4">{services.map(renderCategory)}</div>
+            <div className="space-y-4 font-work-sans ">
+              {services.map(renderCategory)}
+            </div>
           </ScrollArea>
         )}
+        <DialogFooter className="text-xs font-work-sans">
+          <div className="flex flex-col md:flex-row gap-6 md:justify-between">
+            <div className="text-start hidden md:block">
+              If your desired services are not listed here.
+            </div>
+            <div
+              className="gradient-text text-center cursor-pointer "
+              onClick={() => setIsAddCategoryOpen(true)}
+            >
+              Add new service
+            </div>
+          </div>
+        </DialogFooter>
+
+        <AddCategory
+          open={isAddCategoryOpen}
+          onOpenChange={setIsAddCategoryOpen}
+        />
         <DialogFooter>
           <Button
             variant="outline"
@@ -246,7 +277,9 @@ export default function SelectServices({
           >
             Cancel
           </Button>
-          <Button onClick={handleDone}>Done</Button>
+          <Button onClick={handleDone} variant="brand">
+            Done
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

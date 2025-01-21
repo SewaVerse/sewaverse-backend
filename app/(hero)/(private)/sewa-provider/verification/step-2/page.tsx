@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CirclePlus, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -73,9 +74,10 @@ export default function SewaProviderStepTwo() {
       skills: [],
       location: [],
       serviceSubCategory: [],
-      // description: "",
     },
   });
+
+  const router = useRouter();
 
   const handleServiceSelect = (selected: SelectedService[]) => {
     setSelectedServices(selected);
@@ -140,21 +142,26 @@ export default function SewaProviderStepTwo() {
     form.setValue("serviceSubCategory", []);
   };
 
-  // Initialize form with useForm hook
-
   const onSubmit = async (data: ProviderVerificationTwo) => {
     try {
-      // First warn the raw form data
-      console.warn("Raw Form Data:", {
+      // Log the raw form data object
+      console.warn("1. Raw Form Data Object:", {
         profession: data.profession,
         skills: data.skills,
         experience: data.experience,
         serviceSubCategory: data.serviceSubCategory,
         location: data.location,
-        file: data.file instanceof File ? data.file : "No file selected",
+        file:
+          data.file instanceof File
+            ? {
+                name: data.file.name,
+                type: data.file.type,
+                size: data.file.size,
+              }
+            : "No file selected",
       });
 
-      // Then create and append to FormData
+      // Create FormData
       const formData = new FormData();
       formData.append("profession", data.profession);
       formData.append("skills", data.skills.join(","));
@@ -166,6 +173,9 @@ export default function SewaProviderStepTwo() {
         formData.append("file", data.file);
       }
 
+      // Log the FormData entries
+
+      // Uncomment this section when ready to make the API call
       const response = await fetch(
         "/api/service-provider/verification/detail/business-profile",
         {
@@ -178,22 +188,18 @@ export default function SewaProviderStepTwo() {
         const error = await response.json();
         throw new Error(error.message || "Failed to update profile");
       }
-      const result = await response.json();
 
-      console.warn("result", result);
+      await response.json();
 
       toast.success("Profile updated successfully!");
+      router.push("/sewa-provider/verification/step-3");
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("5. Error Details:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to update profile"
       );
     }
   };
-
-  // console.warn("Form errors:", form.formState.errors);
-  // const watchAllFields = form.watch();
-  // console.warn("Watched fields:", watchAllFields);
 
   return (
     <div className="flex flex-col lg:flex-row gap-6">
@@ -287,7 +293,7 @@ export default function SewaProviderStepTwo() {
             <div className="space-y-4">
               <div className="border-2 border-slate-300 rounded-md flex items-center justify-between p-4 font-work-sans">
                 <FormLabel className="text-sm font-medium text-gray-700">
-                  Offered Service <br />
+                  Offered Services <br />
                   <span className="text-muted-foreground text-xs">
                     (Required*)
                   </span>
@@ -449,10 +455,13 @@ export default function SewaProviderStepTwo() {
 
             <Button
               type="submit"
-              variant="brand"
-              className="w-full mt-2 shadow-md hover:shadow-lg"
+              variant={"brand"}
+              className="w-full mt-6"
+              // disabled={
+              //   !form.formState.isValid || form.formState.isSubmitting
+              // }
             >
-              Next
+              {form.formState.isSubmitting ? "Submitting..." : "Proceed"}
             </Button>
           </form>
         </Form>

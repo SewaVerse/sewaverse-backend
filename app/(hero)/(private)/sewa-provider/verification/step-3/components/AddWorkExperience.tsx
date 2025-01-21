@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -31,10 +31,25 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-import FileUpload  from "../components/ui/file-upload";
+import FileUpload from "../components/ui/file-upload";
 
 type FormValues = z.infer<typeof workExperienceSchema>;
 
+interface Profile {
+  serviceSubCategory: string[];
+  // ... other fields
+}
+
+interface ServiceProvider {
+  profile: Profile;
+  // ... other fields
+}
+
+interface ApiResponse {
+  success: boolean;
+  message: string;
+  serviceProvider: ServiceProvider;
+}
 interface AddWorkExperienceProps {
   modalOpen: boolean;
   onOpenChange: (open: boolean) => void;
@@ -50,7 +65,27 @@ export default function AddWorkExperience({
     null
   );
   const [loading, setLoading] = React.useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/service-provider/profile");
+        const data: ApiResponse = await response.json();
+
+        if (data.success && data.serviceProvider.profile) {
+          setCategories(data.serviceProvider.profile.serviceSubCategory);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   const form = useForm<FormValues>({
     resolver: zodResolver(workExperienceSchema),
     defaultValues: {
@@ -62,10 +97,6 @@ export default function AddWorkExperience({
       serviceId: "678897207b094b846f1fd04b",
     },
   });
-
-
-
-  
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -198,16 +229,22 @@ export default function AddWorkExperience({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select category" />
+                          <SelectValue
+                            placeholder={
+                              isLoading ? "Loading..." : "Select category"
+                            }
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="hairdressing">
-                          Hair Dressing
-                        </SelectItem>
-                        <SelectItem value="styling">Styling</SelectItem>
-                        <SelectItem value="coloring">Coloring</SelectItem>
-                        <SelectItem value="cutting">Cutting</SelectItem>
+                        {categories.map((category) => (
+                          <SelectItem
+                            key={category}
+                            value={category.toLowerCase()}
+                          >
+                            {category}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

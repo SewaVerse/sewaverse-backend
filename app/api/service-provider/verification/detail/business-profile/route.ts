@@ -19,13 +19,29 @@ export const POST = roleAsyncHandler(
 
     console.warn(formData);
 
-    const profession = formData.get("profession") as string;
-    const skills = (formData.get("skills") as string)?.split(",") || [];
-    const experience = formData.get("experience") as string;
-    const location = (formData.get("location") as string)?.split(",") || [];
-    // const description = formData.get("description") as string;
-    const serviceSubCategory =
-      (formData.get("serviceSubCategory") as string)?.split(",") || [];
+    // const profession = formData.get("profession") as string;
+    // const skills = (formData.get("skills") as string)?.split(",") || [];
+    // const experience = formData.get("experience") as string;
+    // const location = (formData.get("location") as string)?.split(",") || [];
+    // // const description = formData.get("description") as string;
+    // const serviceSubCategory =
+    //   (formData.get("serviceSubCategory") as string)?.split(",") || [];
+
+     const profession = formData.get("profession") as string;
+     const experience = formData.get("experience") as string;
+
+     // Parse arrays from comma-separated strings
+     const location = formData.get("location")
+       ? (formData.get("location") as string).split(",")
+       : [];
+
+     const serviceSubCategory = formData.get("serviceSubCategory")
+       ? (formData.get("serviceSubCategory") as string).split(",")
+       : [];
+
+     const skills = formData.get("skills")
+       ? (formData.get("skills") as string).split(",")
+       : [];
 
     const validatedFields = {
       profession,
@@ -45,8 +61,6 @@ export const POST = roleAsyncHandler(
     }
 
     const user = await currentNextAuthUser();
-
-    console.warn(user!.id);
 
     const existingUser = await getServiceProviderProfile(user!.id!);
 

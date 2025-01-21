@@ -124,6 +124,8 @@ export const POST = roleAsyncHandler(
             serviceProviderId: serviceProvider.id,
             gender: genderTypeMap[gender as keyof typeof genderTypeMap],
             dob,
+            profession: "",
+            experience: "",
           } as ServiceProviderProfile,
           tx
         );

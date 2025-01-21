@@ -176,7 +176,6 @@ model ServiceProviderProfile {
   gender             Gender
   profession         String
   skills             String[]
-  description        String?
   imageId            String?  @db.ObjectId
   serviceSubCategory String[]
   overallRating      Float    @default(0)
