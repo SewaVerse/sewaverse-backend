@@ -1,18 +1,23 @@
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-import FileUpload from "@/components/form/FileUpload";
+import FileUpload from "@/app/(hero)/(private)/sewa-provider/verification/step-3/components/ui/file-upload";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface UploadProfilePictureProps {
-  onImageUpload: (url: string) => void;
   openUploadProfile: boolean;
   setOpenUploadProfile: (value: boolean) => void;
+  onImageUpload: (url: string) => void;
 }
 
 interface FormData {
-  file: FileList;
+  file: File | null;
 }
 
 const UploadProfilePicture = ({
@@ -20,12 +25,20 @@ const UploadProfilePicture = ({
   setOpenUploadProfile,
   onImageUpload,
 }: UploadProfilePictureProps) => {
-  const methods = useForm<FormData>();
+  const methods = useForm<FormData>({
+    defaultValues: {
+      file: null,
+    },
+  });
 
   const onSubmit = async (data: FormData) => {
     try {
+      if (!data.file) {
+        throw new Error("Please select an image");
+      }
+
       const formData = new FormData();
-      formData.append("file", data.file[0]);
+      formData.append("file", data.file);
 
       const response = await fetch("/api/service-provider/business-profile", {
         method: "POST",
@@ -39,6 +52,7 @@ const UploadProfilePicture = ({
 
       const result = await response.json();
       onImageUpload(result.url);
+      setOpenUploadProfile(false);
       toast.success("Profile picture uploaded successfully!");
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -51,19 +65,16 @@ const UploadProfilePicture = ({
   return (
     <Dialog open={openUploadProfile} onOpenChange={setOpenUploadProfile}>
       <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Upload Profile Picture</DialogTitle>
+        </DialogHeader>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
             <FileUpload
-              form={methods}
-              name="file"
-              description="Upload profile picture (Max size: 5MB)"
-              // accept="image/*"
+              accept="image/*"
+              maxSize={5 * 1024 * 1024}
+              onFileSelect={(file) => methods.setValue("file", file)}
             />
-            {methods.formState.errors.file && (
-              <p className="text-red-500 text-sm">
-                {methods.formState.errors.file.message}
-              </p>
-            )}
             <Button
               type="submit"
               variant="brand"

@@ -254,9 +254,9 @@ export default function SewaProviderDetailPage() {
   };
 
   return (
-    <div className="min-h-screen py-10 px-4 md:px-8 w-full mx-auto">
-      <div className="flex flex-col md:flex-row justify-around items-center gap-10">
-        <div className="bg-white rounded-lg shadow-lg p-6 w-full md:max-w-lg">
+    <div className="min-h-screen w-full mx-auto">
+      <div className="flex flex-col md:flex-row justify-around items-center gap-8">
+        <div className="rounded-lg shadow-lg p-6 w-full md:w-1/3">
           <p className="text-center font-medium text-gray-500 text-xl mb-2">
             Step 1/3
           </p>

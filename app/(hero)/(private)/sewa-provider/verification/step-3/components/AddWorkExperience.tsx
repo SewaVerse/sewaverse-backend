@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-import { FileUpload } from "../components/ui/file-upload";
+import FileUpload  from "../components/ui/file-upload";
 
 type FormValues = z.infer<typeof workExperienceSchema>;
 
@@ -62,6 +62,10 @@ export default function AddWorkExperience({
       serviceId: "678897207b094b846f1fd04b",
     },
   });
+
+
+
+  
 
   const onSubmit = async (data: FormValues) => {
     try {

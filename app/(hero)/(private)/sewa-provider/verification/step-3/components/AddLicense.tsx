@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { FileUpload } from "../components/ui/file-upload";
+import FileUpload from "../components/ui/file-upload";
 
 type FormValues = z.infer<typeof licenseSchema>;
 
@@ -163,7 +163,7 @@ export default function AddLicense({
               <FileUpload
                 accept="image/*"
                 maxSize={1024 * 1024 * 5} // 5MB
-                onFileSelect={(file) => setLicenseFile(file)}
+                onFileSelect={(file: File) => setLicenseFile(file)}
               />
             </div>
 

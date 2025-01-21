@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import { WorkExperience } from "@/lib/types";
 
-
 const workExperienceSchema = z.object({
   id: z.number(),
   jobTitle: z.string(),
@@ -50,7 +49,7 @@ export default function WorkExperiencesView({
         }
       })
       .filter(Boolean) as ValidatedWorkExperience[];
-
+    console.warn(validExperiences);
     setValidatedExperiences(validExperiences);
   }, [experiences]);
 

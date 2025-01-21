@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { AwardType, LicenseType, WorkExperience, WorkType } from "@/lib/types";
 
-import ProfileCard from "../../../../../../components/profile-card";
+import { ProfileCard } from "../../../../../../components/profile-card";
 import AddAchievements from "./components/AddAchievements";
 import AddLicense from "./components/AddLicense";
 import AddMoreAchievements from "./components/AddMoreAchievements";
@@ -166,9 +166,9 @@ const Page = () => {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-6 p-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         {/* sidebar */}
-        <div className="w-full lg:w-1/5 lg:ml-10 max-h-[1220px] rounded-lg shadow p-6">
+        <div className="w-full lg:w-1/4 lg:ml-10 max-h-[1220px] rounded-lg shadow p-4">
           <h3
             className="text-lg font-semibold text-center mb-2"
             style={{ color: "#878787" }}
@@ -179,115 +179,114 @@ const Page = () => {
             Make Your Profile Shine: <br />
             Add More Details!
           </h3>
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="text-sm text-gray-500 mt-4 text-justify">
             Let your customers get to know you better! Build credibility and
             gain their trust. Show them why they should choose YOU.
           </p>
 
           <form className="mt-4 space-y-4">
             <Textarea
-              className="h-80 font-work-sans"
+              className="h-80 font-work-sans border-2 border-slate-500"
               value={text}
               onChange={handleInputChange}
               placeholder={`About Me\nShare your story, expertise, and experiences in your own unique words. Make your clients trust in you!`}
             />
 
-            <div className="border border-solid border-black rounded-md h-[100px] flex items-center justify-between px-4">
+            <div className="border-2 border-slate-500 rounded-md h-[100px] flex items-center justify-between px-4">
               <label className="block text-sm font-medium text-black">
-                Experience <br />
-                <p className="text-muted-foreground text-[15px]">
+                Work Experience <br />
+                <p className="text-muted-foreground text-xs lg:text-sm">
                   Showcase your skills and experience.{" "}
                 </p>
               </label>
               <div
                 onClick={() => setModalOpen(true)}
-                className="border border-dotted border-black rounded-md h-[75px] w-[140px] lg:w-[120px] flex flex-col items-center justify-center"
+                className="border-2 border-dashed border-slate-500 rounded-md h-[75px] w-[140px] lg:w-[120px] flex flex-col items-center justify-center"
               >
                 <span className="text-green-500">
                   <CirclePlus />
                 </span>
-                <span className="text-[10px] text-gray-700 mt-2">
+                <span className="text-xs text-gray-700 mt-2">
                   Add Experience
                 </span>
               </div>
             </div>
 
-            <div className="border border-solid border-black rounded-md h-[100px] flex items-center justify-between px-4">
+            <div className="border-2 border-slate-500 rounded-md h-[100px] flex items-center justify-between px-4">
               <label className="block text-sm font-medium text-black">
                 Licence <br />
-                <p className="text-muted-foreground text-[10px] lg:text-[15px]">
+                <p className="text-muted-foreground text-xs lg:text-sm">
                   Verify your qualification & standout more.
                 </p>
               </label>
               <div
                 onClick={() => setLicenseOpen(true)}
-                className="border border-dotted border-black rounded-md h-[75px] w-[115px] lg:w-[140px] flex flex-col items-center justify-center"
+                className="border-2 border-dashed border-slate-500 rounded-md h-[75px] w-[115px] lg:w-[140px] flex flex-col items-center justify-center"
               >
                 <span className="text-green-500">
                   <CirclePlus />
                 </span>
-                <span className="text-[10px] text-gray-700 mt-2">
-                  Add Licence
-                </span>
+                <span className="text-xs text-gray-700 mt-2">Add Licence</span>
               </div>
             </div>
-            <div className="border border-solid border-black rounded-md h-[100px] flex items-center justify-between px-4">
+            <div className="border-2 border-slate-500 rounded-md h-[100px] flex items-center justify-between px-4">
               <label className="block text-sm font-medium text-black">
                 Awards & Achievements <br />
-                <p className="text-muted-foreground text-[14px]">
+                <p className="text-muted-foreground text-xs lg:text-sm">
                   Build Reliability & Trust of Clients.{" "}
                 </p>
               </label>
               <div
                 onClick={() => setAwardOpen(true)}
-                className="border border-dotted border-black rounded-md h-[75px] w-[120px] lg:w-[115px] flex flex-col items-center justify-center"
+                className="border-2 border-dashed border-slate-500 rounded-md h-[75px] w-[120px] lg:w-[115px] flex flex-col items-center justify-center"
               >
                 <span className="text-green-500">
                   <CirclePlus />
                 </span>
-                <span className="text-[10px] text-gray-700 mt-2">
+                <span className="text-xs text-gray-700 mt-2">
                   Add Certification
                 </span>
               </div>
             </div>
-            <div className="border border-solid border-black rounded-md h-[95px] flex items-center justify-between px-4">
+            <div className="border-2 border-slate-500 rounded-md h-[95px] flex items-center justify-between px-4">
               <label className="block text-sm font-medium text-black">
                 My Works <br />
-                <p className="text-muted-foreground text-[10px] lg:text-[15px]">
+                <p className="text-muted-foreground text-xs lg:text-sm">
                   Show your previous works and attract customers.
                 </p>
               </label>
               <div
                 onClick={() => setWorksOpen(true)}
-                className="border border-dotted border-black rounded-md h-[75px]  w-[140px] lg:w-[170px] flex flex-col items-center justify-center"
+                className="border-2 border-dashed border-slate-500 rounded-md h-[75px]  w-[140px] lg:w-[170px] flex flex-col items-center justify-center"
               >
                 <span className="text-green-500">
                   <CirclePlus />
                 </span>
-                <span className="text-[10px] text-gray-700 mt-2">
-                  Add Works
-                </span>
+                <span className="text-xs text-gray-700 mt-2">Add Works</span>
               </div>
             </div>
 
             <Button
               type="button"
               variant={"brand"}
-              className="w-full mt-2 text-white shadow-md hover:shadow-lg px-8 py-4"
+              className="w-full mt-2 shadow-md hover:shadow-lg"
               onClick={handleSubmit}
             >
               {loading ? "Submitting..." : "Next"}
             </Button>
             <Button
               variant={"brand"}
-              className="w-full mt-2 text-white shadow-md hover:shadow-lg px-8 py-4"
+              className="w-full mt-2 text-white shadow-md hover:shadow-lg"
             >
               Previous
             </Button>
 
-            <p className="w-full mt-2 text-gray-400 underline hover:text-gray-700 text-center">
+            <Button
+              variant={"ghost"}
+              className="w-full underline text-muted-foreground hover:bg-white"
+            >
               Skip
-            </p>
+            </Button>
           </form>
         </div>
 
@@ -297,7 +296,7 @@ const Page = () => {
           <div className="opacity-50 bg-gray-50">
             <div className=" h-[35vh] bg-[#BCBDDC] "></div>
             {/* for profile */}
-            <ProfileCard {...profileData} />
+            <ProfileCard {...profileData} imageUrl="" />
           </div>
           {/* for navbar */}
           <div className="container mx-auto px-10">

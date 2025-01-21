@@ -43,10 +43,11 @@ const DeleteAlert: React.FC<DeleteAlertProps> = ({
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
+            className="bg-red-700 hover:bg-red-500"
             onClick={() => {
-              onOpenChange(false);
               onDelete();
               setState(null);
+              onOpenChange(false);
             }}
           >
             Continue

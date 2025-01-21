@@ -9,7 +9,7 @@ interface FileUploadProps {
   onFileSelect: (file: File) => void;
 }
 
-export const FileUpload: React.FC<FileUploadProps> = ({
+const FileUpload: React.FC<FileUploadProps> = ({
   accept,
   maxSize,
   onFileSelect,
@@ -43,7 +43,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     <div>
       <div
         {...getRootProps()}
-        className="border-2 border-dashed rounded-lg p-6 cursor-pointer hover:border-primary relative"
+        className="border-2 border-dashed rounded-lg p-2 cursor-pointer hover:border-primary relative"
       >
         <input {...getInputProps()} />
         {preview ? (
@@ -53,7 +53,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
               alt="Preview"
               width={128}
               height={128}
-              className="w-auto h-32 object-cover rounded-md"
+              className="w-full h-28 object-cover rounded-md"
             />
             {/* X icon for deletion */}
             <div
@@ -84,3 +84,5 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     </div>
   );
 };
+
+export default FileUpload;

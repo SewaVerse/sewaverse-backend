@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { FileUpload } from "./ui/file-upload";
+import  FileUpload  from "./ui/file-upload";
 
 // interface Award {
 //   id: number;

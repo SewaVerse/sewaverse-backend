@@ -1,8 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { myWorkSchema, MyWorkSchema } from "@/app/schemas/myWorkSchema";
 import { Button } from "@/components/ui/button";
@@ -23,13 +23,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { FileUpload } from "./ui/file-upload";
+import  FileUpload  from "./ui/file-upload";
 
 interface Work {
   id: number;
   title: string;
   description?: string;
-  file?: File;
+  myWorkFile: { file?: File };
 }
 
 interface AddYourWorksProps {
@@ -41,123 +41,119 @@ interface AddYourWorksProps {
 export default function AddYourWorks({
   worksOpen,
   onOpenChange,
-  onSave,
 }: AddYourWorksProps) {
-  const [myWork, setMyWork] = useState<File | null>(null);
+  // const [myWork, setMyWork] = useState<File | null>(null);
 
   const form = useForm<MyWorkSchema>({
     resolver: zodResolver(myWorkSchema), // Use the zod schema for validation
-    defaultValues: {
-      title: "",
-      description: "",
-      myWorkfile: undefined,
-    },
+    // defaultValues: {
+    //   title: "",
+    //   description: "",
+    //   myWorkFile: undefined,
+    // },
   });
 
-  const onSubmit = (data: MyWorkSchema) => {
-    console.warn("Form Data:", data);
+  const onSubmit = async (data: MyWorkSchema) => {
+    try {
+      console.warn("Form Data:", data);
 
-    const newWork: Work = {
-      id: Date.now(),
-      title: data.title,
-      description: data.description,
-      file: myWork!,
-    };
+      const formData = new FormData();
 
-    onSave(newWork);
-    onOpenChange(false);
-    form.reset(); // Reset form after submission
+      const jsonPayload = {
+        title: data.title,
+        description: data.description,
+      };
+
+      formData.append("jsonData", JSON.stringify(jsonPayload));
+
+      if (data.myWorkFile?.file) {
+        formData.append("file", data.myWorkFile.file);
+      }
+
+      const response = await fetch("/api/service-provider/mywork", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+
+      toast.success("Work added successfully!");
+      form.reset();
+      onOpenChange(false);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to add work"
+      );
+    }
   };
 
   return (
     <Dialog open={worksOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-xl font-bold">
-              Showcase your previous works
-            </DialogTitle>
-          </div>
+          <DialogTitle className="text-xl font-bold">
+            Showcase your previous works
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name of Work</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="workName"
-                        placeholder="Ex: Hair Styling"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name of Work</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Ex: Hair Styling" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        id="description"
-                        placeholder="Provide Short Description of works"
-                        className="min-h-[100px] resize-none"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} placeholder="Describe your work" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <div className="space-y-2">
-                <FormLabel>License Document</FormLabel>
-                <FileUpload
-                  accept="image/*"
-                  maxSize={1024 * 1024 * 5} // 5MB
-                  onFileSelect={(file) => {
-                    setMyWork(file);
-                    form.setValue("myWorkfile", file ? { file } : undefined);
-                  }}
-                />
-                {form.formState.errors.myWorkfile && (
-                  <p className="text-red-500 text-sm">
-                    {form.formState.errors.myWorkfile.message}
-                  </p>
-                )}
-              </div>
-            </div>
+            <FormField
+              control={form.control}
+              name="myWorkFile.file"
+              render={({ field: { onChange } }) => (
+                <FormItem>
+                  <FormLabel>Work Image</FormLabel>
+                  <FormControl>
+                    <FileUpload
+                      accept="image/*"
+                      maxSize={1024 * 1024 * 5}
+                      onFileSelect={(file) => onChange(file)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="flex justify-between items-center gap-4">
-              <div>
-                <p className="text-[12px] text-muted-foreground">
-                  You can add multiple Works later from &apos;Edit
-                  Profile&apos;.
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => onOpenChange(false)}
-                  className="gradient-text"
-                >
-                  Cancel
-                </Button>
-                <Button type="submit" variant="brand">
-                  Save
-                </Button>
-              </div>
-            </div>
+            <Button
+              type="submit"
+              variant="brand"
+              disabled={form.formState.isSubmitting}
+              className="w-full"
+            >
+              {form.formState.isSubmitting ? "Adding..." : "Add Work"}
+            </Button>
           </form>
         </Form>
       </DialogContent>

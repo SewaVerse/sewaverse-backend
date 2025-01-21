@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 
-import { createMyWork } from "@/app/data-access/myWork";
+import { createMyWork, updateMyWorkById } from "@/app/data-access/myWork";
 import { getServiceProviderByUserId } from "@/app/data-access/serviceProvider";
 import { getServiceProviderProfileByServiceProviderId } from "@/app/data-access/serviceProviderProfile";
 import { myWorkSchema, MyWorkSchema } from "@/app/schemas/myWorkSchema";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { getCurrentUser } from "@/lib/auth";
-import { MyWork } from "@prisma/client";
 
 function parsemyWorks(formData: FormData): MyWorkSchema {
   const json = formData.get("jsonData") as string;
@@ -40,8 +39,7 @@ export const POST = roleAsyncHandler(
       return NextResponse.json(validationError, { status: 400 });
     }
 
-    const { title, description, myWorkFile } =
-      validatedFields;
+    const { title, description, myWorkFile } = validatedFields;
 
     const user = await getCurrentUser();
 
@@ -51,11 +49,24 @@ export const POST = roleAsyncHandler(
       serviceProvider!.id
     );
 
-    const data = await createMyWork(profile!.id, {
-     title,
-     description,
-     myWorkFile,
-    } as MyWork);
+    const data = {
+      title,
+      description,
+      providerProfileId: profile!.id,
+    };
+
+    if (validatedFields.id) {
+      await updateMyWorkById(validatedFields.id, data);
+      return NextResponse.json({ success: true, message: "Success", data });
+    }
+
+    await createMyWork(data, myWorkFile?.file);
+
+    // const data = await createMyWork(profile!.id, {
+    //  title,
+    //  description,
+    //  myWorkFile,
+    // } as MyWork);
 
     return NextResponse.json(
       { success: true, message: "Success", data },

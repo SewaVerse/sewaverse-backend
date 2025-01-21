@@ -24,7 +24,7 @@ export const routes: RouteType[] = [
   },
   {
     title: "Services",
-    url: "/admin/sewa",
+    url: "/admin/services",
     icon: "Handshake",
   },
 ];
