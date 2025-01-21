@@ -35,9 +35,43 @@ export const createService = dbAsyncHandler(
   }
 );
 
+export const createParentChildService = dbAsyncHandler(
+  async (
+    parentService: Prisma.ServiceUncheckedCreateInput,
+    childService: Prisma.ServiceUncheckedCreateInput
+  ) => {
+    return await db.service.create({
+      data: {
+        name: parentService.name,
+        description: parentService.description || null,
+        isActive: parentService.isActive,
+        createdBy: parentService.createdBy,
+
+        services: {
+          create: {
+            name: childService.name,
+            description: childService.description || null,
+            isActive: childService.isActive,
+            createdBy: childService.createdBy,
+          },
+        },
+      },
+      include: {
+        services: true,
+      },
+    });
+  }
+);
+
 export const getServiceById = dbAsyncHandler(async (id: string) => {
   return await db.service.findUnique({
     where: { id },
+  });
+});
+
+export const getServiceByName = dbAsyncHandler(async (name: string) => {
+  return await db.service.findUnique({
+    where: { name },
   });
 });
 

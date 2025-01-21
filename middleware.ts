@@ -42,7 +42,7 @@ export default auth(async (req) => {
     let tokenPayload = null;
 
     // speciallly for mobile
-    if (accessToken) {
+    if (accessToken && accessToken !== "null") {
       tokenPayload = await decodeToken(accessToken);
     }
 
