@@ -17,18 +17,21 @@ export const POST = roleAsyncHandler(
 
     const imageId = await imageUpload(formData);
 
-    console.error(formData);
+    console.warn(formData);
 
     const profession = formData.get("profession") as string;
-    const skills = formData.get("skills") as string;
-    const description = formData.get("description") as string;
+    const skills = (formData.get("skills") as string)?.split(",") || [];
+    const experience = formData.get("experience") as string;
+    const location = (formData.get("location") as string)?.split(",") || [];
+    // const description = formData.get("description") as string;
     const serviceSubCategory =
       (formData.get("serviceSubCategory") as string)?.split(",") || [];
 
     const validatedFields = {
       profession,
+      experience,
+      location,
       skills,
-      description,
       serviceSubCategory,
       imageId,
     };
@@ -43,6 +46,8 @@ export const POST = roleAsyncHandler(
 
     const user = await currentNextAuthUser();
 
+    console.warn(user!.id);
+
     const existingUser = await getServiceProviderProfile(user!.id!);
 
     if (!existingUser) {
@@ -55,7 +60,9 @@ export const POST = roleAsyncHandler(
     await updateServiceProviderProfile(existingUser.id, {
       profession: validated.profession,
       skills: validated.skills,
-      description: validated.description,
+      experience: validated.experience,
+      location: validated.location,
+      // description: validated.description,
       imageId: imageId,
       serviceSubCategory: validated.serviceSubCategory,
     });

@@ -8,16 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { LicenseType } from "@/lib/types";
 
-interface License {
-  id: number;
-  licenseOf: string;
-  licenseNumber: string;
-  issuedBy: string;
-  certificateUrl?: string;
-}
-
-export default function License({ licenses }: { licenses: License[] }) {
+export default function License({ licenses }: { licenses: LicenseType[] }) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const handleImageClick = (certificateUrl: string) => {
@@ -26,7 +19,7 @@ export default function License({ licenses }: { licenses: License[] }) {
 
   return (
     <section className="w-full py-6">
-      <div className="container px-4 md:px-10">
+      <div className="container">
         <h2 className="text-2xl font-bold tracking-tight mb-4">Licenses</h2>
         <div className="grid gap-4 md:grid-cols-2">
           {licenses.map((license) => (

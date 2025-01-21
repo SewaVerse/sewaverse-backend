@@ -25,7 +25,7 @@ export default function AddMoreAchievements({
   openMoreAchievements,
   setOpenMoreAchievements,
 }: AddMoreAchievementsProps) {
-  const [achievements ] = React.useState<Achievement[]>([
+  const [achievements] = React.useState<Achievement[]>([
     {
       id: 1,
       title: "Hair Styling competition",
@@ -69,14 +69,7 @@ export default function AddMoreAchievements({
                 className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border"
               >
                 <span className="text-sm">{achievement.title}</span>
-                <div className="h-12 w-16 relative border">
-                  {/* <Image
-                    src={achievement.certificateUrl}
-                    alt={achievement.title}
-                    fill
-                    className="object-contain rounded-sm"
-                  /> */}
-                </div>
+                <div className="h-12 w-16 relative border"></div>
               </div>
             ))}
           </div>

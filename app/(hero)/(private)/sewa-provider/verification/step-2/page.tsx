@@ -1,177 +1,487 @@
-// "use client";
+"use client";
 
-// import { CirclePlus } from "lucide-react";
-// import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CirclePlus, X } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
-// import { Button } from "@/components/ui/button";
+import {
+  providerVerificationTwo,
+  type ProviderVerificationTwo,
+} from "@/app/schemas/providerVerificationTwo";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-// import AwardsAndCertifications from "../../../../sewaproviderstep3/components/AwardsAndCertifications";
-// import HeroSection from "../../../../sewaproviderstep3/components/HeroSection";
-// import License from "../../../../sewaproviderstep3/components/License";
-// import MyWorks from "../../../../sewaproviderstep3/components/MyWorks";
-// import Profile from "../../../../sewaproviderstep3/components/Profile";
-// import WorkExperiences from "../../../../sewaproviderstep3/components/WorkExperiences";
-// import SelectServices from "./components/SelectServices";
-// import UploadProfilePicture from "./components/UploadProfilePicture";
+import AwardsAndCertifications from "../step-3/components/AwardsAndCertifications";
+import HeroSection from "../step-3/components/HeroSection";
+import License from "../step-3/components/License";
+import MyWorks from "../step-3/components/MyWorks";
+import FileUpload from "../step-3/components/ui/file-upload";
+import WorkExperiences from "../step-3/components/WorkExperiences";
+import SelectServices from "./components/SelectServices";
 
-// export default function SewaProviderStep1() {
-//   // const [showPopup, setShowPopup] = useState(false);
+// Define the form data type
+// type FormData = {
+//   profession: string;
+//   skills: string[]; // Array of strings
+//   experience: string;
+//   serviceSubCategory: string[];
+//   location: string[];
+//   file?: File;
+//   description: string;
+// };
 
-//   // const handleNext1Click = (e: React.MouseEvent<HTMLDivElement>) => {
-//   //   e.preventDefault(); // Prevent form submission
-//   //   setShowPopup(true);
-//   // };
+interface SelectedService {
+  categoryId: string;
+  categoryName: string;
+  subCategories: { id: string; name: string }[];
+}
 
-//   // const closePopup = () => {
-//   //   setShowPopup(false);
-//   // };
+export default function SewaProviderStepTwo() {
+  const [openSelectServices, setOpenSelectServices] = useState<boolean>(false);
+  const [selectedServices, setSelectedServices] = useState<SelectedService[]>(
+    []
+  );
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [skillInput, setSkillInput] = useState<string>("");
+  const [skills, setSkills] = useState<string[]>([]);
 
-//   const [openUploadProfile, setOpenUploadProfile] = useState<boolean>(false);
-//   const [openSelectServices, setOpenSelectServices] = useState<boolean>(false);
+  const form = useForm<ProviderVerificationTwo>({
+    resolver: zodResolver(providerVerificationTwo),
+    defaultValues: {
+      profession: "",
+      experience: "",
+      skills: [],
+      location: [],
+      serviceSubCategory: [],
+      // description: "",
+    },
+  });
 
-//   return (
-//     <div className="flex flex-col lg:flex-row gap-8 p-6">
-//       <div className="w-full lg:w-1/5 h-[80vh]  rounded-lg shadow border p-6 lg:ml-10">
-//         <h3 className="text-lg font-semibold text-center mb-2">Step 2/3</h3>
-//         <h3 className="text-lg font-semibold text-center">
-//           Create your business profile
-//         </h3>
-//         <p className="text-sm text-gray-500 mt-4 text-justify font-open-sans font-light">
-//           Create your business profile Your Profile is Your First Impression. It
-//           is the face of your services. Customers rely on it to learn about your
-//           expertise and decide if you&apos;re the right fit for their needs.
-//           Ensure it&apos;s accurate, professional, and showcases your strengths.
-//         </p>
+  const handleServiceSelect = (selected: SelectedService[]) => {
+    setSelectedServices(selected);
+    const allSubCategories = selected.flatMap((s) =>
+      s.subCategories.map((sc) => sc.name)
+    );
+    form.setValue("serviceSubCategory", allSubCategories);
+  };
 
-//         <form className="mt-4 space-y-6">
-//           <div className="border border-solid border-black rounded-md h-20 flex items-center justify-between px-4">
-//             <label className="block text-sm font-medium text-gray-700 font-work-sans">
-//               Profile Picture <br />
-//               <span className="text-gray-500">(Required*)</span>
-//             </label>
-//             <div
-//               onClick={() => setOpenUploadProfile(true)}
-//               className="border border-dotted border-black rounded-md h-[57px] w-[158px] flex flex-col items-center justify-center"
-//             >
-//               <span className="text-green-500">
-//                 <CirclePlus />
-//               </span>
-//               <span className="text-[12px] text-gray-700 font-open-sans">
-//                 Upload Picture
-//               </span>
-//             </div>
-//           </div>
+  const handleLocationChange = (value: string) => {
+    if (!selectedLocations.includes(value)) {
+      const newLocations = [...selectedLocations, value];
+      setSelectedLocations(newLocations);
+      form.setValue("location", newLocations, {
+        shouldValidate: true,
+      });
+    }
+  };
 
-//           <div>
-//             <input
-//               type="text"
-//               placeholder="Profession (Required*)"
-//               className="w-full p-2 border border-solid border-black rounded-lg "
-//             />
-//           </div>
-//           <div>
-//             <select
-//               className="w-full p-2 border border-solid border-black rounded-lg font-work-sans"
-//               defaultValue=""
-//             >
-//               <option value="" disabled>
-//                 Experienced (Required*)
-//               </option>
-//               <option value="freshers"> Fresher</option>
-//               <option value="1"> 1 year</option>
-//               <option value="2"> 2 years</option>
-//               <option value="3"> 3 years</option>
-//               <option value="4"> 4 years</option>
-//               <option value="5"> 5+ years</option>
-//               <option value="10">10+ years</option>
-//             </select>
-//           </div>
+  const handleAddSkill = (newSkill: string) => {
+    if (newSkill.trim() && !skills.includes(newSkill.trim())) {
+      const updatedSkills = [...skills, newSkill.trim()];
+      setSkills(updatedSkills);
+      form.setValue("skills", updatedSkills, {
+        shouldValidate: true,
+      });
+    }
+    setSkillInput("");
+  };
 
-//           <div className="border border-solid border-black rounded-md h-20 flex items-center justify-between px-4 font-work-sans">
-//             <label className="block text-sm font-medium text-gray-700">
-//               Offered Service <br />
-//               <span className="text-gray-500">(Required*)</span>
-//             </label>
-//             <div
-//               className="border border-dotted border-black rounded-md h-[57px] w-[158px] flex flex-col items-center justify-center cursor-pointer"
-//               onClick={() => setOpenSelectServices(true)}
-//             >
-//               <span className="text-green-500">
-//                 <CirclePlus />
-//               </span>
-//               <span className="text-[12px] text-gray-700">Add Sewa</span>
-//             </div>
-//           </div>
+  const handleRemoveSkill = (skillToRemove: string) => {
+    const updatedSkills = skills.filter((skill) => skill !== skillToRemove);
+    setSkills(updatedSkills);
+    form.setValue("skills", updatedSkills, {
+      shouldValidate: true,
+    });
+  };
 
-//           <div>
-//             {/* <label className="block text-sm font-medium text-gray-700">
-//               Profession <span className="text-red-500">(Required*)</span>
-//             </label> */}
-//             <input
-//               type="text"
-//               placeholder="Skills (Required*)"
-//               className="w-full p-2 border border-solid border-black rounded-lg "
-//             />
-//           </div>
-//           <div>
-//             <select
-//               className="w-full p-2 border border-solid border-black rounded-lg"
-//               defaultValue=""
-//             >
-//               <option value="" disabled>
-//                 Location of Service (Required*)
-//               </option>
-//               <option value="location1">Location 1</option>
-//               <option value="location2">Location 2</option>
-//               <option value="location3">Location 3</option>
-//             </select>
-//           </div>
+  const handleRemoveSubCategory = (
+    categoryId: string,
+    subCategoryId: string
+  ) => {
+    setSelectedServices((prev) =>
+      prev
+        .map((service) => {
+          if (service.categoryId === categoryId) {
+            return {
+              ...service,
+              subCategories: service.subCategories.filter(
+                (sub) => sub.id !== subCategoryId
+              ),
+            };
+          }
+          return service;
+        })
+        .filter((service) => service.subCategories.length > 0)
+    );
+  };
 
-//           <Button
-//             variant={"brand"}
-//             className="w-full mt-2 text-white shadow-md hover:shadow-lg px-8 py-4"
-//           >
-//             Next
-//           </Button>
-//         </form>
-//       </div>
+  const handleRemoveAllServices = () => {
+    setSelectedServices([]);
+    form.setValue("serviceSubCategory", []);
+  };
 
-//       <div className="flex-1 hidden lg:block lg:mr-10 border">
-//         <div className="bg-blue-100 h-[35vh] p-6 rounded-lg shadow  "> </div>
-//         <Profile />
-//         <div className="bg-gray-50 opacity-50 cursor-not-allowed">
-//           <HeroSection />
-//           <h2 className="text-xl px-10 font-bold tracking-tight mt-2">
-//             About Me
-//           </h2>
-//           <WorkExperiences />
-//           <License />
-//           <AwardsAndCertifications />
-//           <MyWorks />
-//         </div>
-//       </div>
+  // Initialize form with useForm hook
 
-//       {/* popup  */}
-//       {/* add profile */}
-//       {openUploadProfile && (
-//         <UploadProfilePicture
-//           openUploadProfile={openUploadProfile}
-//           setOpenUploadProfile={setOpenUploadProfile}
-//         />
-//       )}
-//       {/* select Service */}
-//       {openSelectServices && (
-//         <SelectServices
-//           openSelectServices={openSelectServices}
-//           setOpenSelectServices={setOpenSelectServices}
-//         />
-//       )}
-//     </div>
-//   );
-// }
+  const onSubmit = async (data: ProviderVerificationTwo) => {
+    try {
+      // First warn the raw form data
+      console.warn("Raw Form Data:", {
+        profession: data.profession,
+        skills: data.skills,
+        experience: data.experience,
+        serviceSubCategory: data.serviceSubCategory,
+        location: data.location,
+        file: data.file instanceof File ? data.file : "No file selected",
+      });
 
-const VerificationStepTwo = () => {
-  return <div>VerificationStepTwo Page</div>;
-};
+      // Then create and append to FormData
+      const formData = new FormData();
+      formData.append("profession", data.profession);
+      formData.append("skills", data.skills.join(","));
+      formData.append("experience", data.experience);
+      formData.append("serviceSubCategory", data.serviceSubCategory.join(","));
+      formData.append("location", data.location.join(","));
 
-export default VerificationStepTwo;
+      if (data.file) {
+        formData.append("file", data.file);
+      }
+
+      const response = await fetch(
+        "/api/service-provider/verification/detail/business-profile",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update profile");
+      }
+      const result = await response.json();
+
+      console.warn("result", result);
+
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update profile"
+      );
+    }
+  };
+
+  // console.warn("Form errors:", form.formState.errors);
+  // const watchAllFields = form.watch();
+  // console.warn("Watched fields:", watchAllFields);
+
+  return (
+    <div className="flex flex-col lg:flex-row gap-6">
+      <div className="w-full md:w-1/4 rounded-lg shadow border p-4 lg:ml-10">
+        <h3 className="text-lg font-semibold text-center mb-2">Step 2/3</h3>
+        <h3 className="text-lg font-semibold text-center">
+          Create your business profile
+        </h3>
+        <p className="text-sm text-muted-foreground mt-4 text-justify font-open-sans mb-4">
+          Create your professional business profile—it&apos;s your first
+          impression. Highlight your expertise, showcase your strengths, and
+          help customers see why you&apos;re the right choice.
+        </p>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="file"
+              render={() => (
+                <FormItem>
+                  <FormLabel className="font-work-sans">
+                    Upload Profile Picture
+                  </FormLabel>
+                  <FormControl>
+                    <FileUpload
+                      accept="image/*"
+                      maxSize={5 * 1024 * 1024}
+                      onFileSelect={(file) => {
+                        form.setValue("file", file, {
+                          shouldValidate: true,
+                        });
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="profession"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder="Profession (Required*)"
+                      className="border-2 border-slate-300 rounded-md font-work-sans"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="experience"
+              render={({ field }) => (
+                <FormItem>
+                  <Select
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                    }}
+                    value={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="border-2 border-slate-300 rounded-md font-work-sans">
+                        <SelectValue placeholder="Experience (Required*)" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="font-work-sans">
+                      <SelectItem value="freshers">Fresher</SelectItem>
+                      <SelectItem value="1">1 year</SelectItem>
+                      <SelectItem value="2">2 years</SelectItem>
+                      <SelectItem value="3">3 years</SelectItem>
+                      <SelectItem value="4">4 years</SelectItem>
+                      <SelectItem value="5">5+ years</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="space-y-4">
+              <div className="border-2 border-slate-300 rounded-md flex items-center justify-between p-4 font-work-sans">
+                <FormLabel className="text-sm font-medium text-gray-700">
+                  Offered Service <br />
+                  <span className="text-muted-foreground text-xs">
+                    (Required*)
+                  </span>
+                </FormLabel>
+                <div
+                  className="h-10 border-2 border-dashed border-slate-500 cursor-pointer flex items-center p-2 rounded-md"
+                  onClick={() => setOpenSelectServices(true)}
+                >
+                  <CirclePlus className="mr-2 h-4 w-4 text-green-500" />
+                  <span className="text-xs text-muted-foreground">
+                    Add Sewa
+                  </span>
+                </div>
+              </div>
+
+              {selectedServices.length > 0 && (
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-work-sans">
+                      Selected Services
+                    </CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleRemoveAllServices}
+                      className="text-red-500 hover:text-red-600"
+                    >
+                      Remove All
+                    </Button>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[100px] w-full pr-4">
+                      <div className="flex flex-wrap gap-2 font-work-sans">
+                        {selectedServices.flatMap((service) =>
+                          service.subCategories.map((sub) => (
+                            <Badge
+                              key={sub.id}
+                              variant="secondary"
+                              className="flex items-center gap-1 px-2 py-1 bg-transparent border border-slate-300 hover:bg-slate-200"
+                            >
+                              <span className="text-sm font-normal ">
+                                {sub.name}
+                              </span>
+                              <div
+                                onClick={() =>
+                                  handleRemoveSubCategory(
+                                    service.categoryId,
+                                    sub.id
+                                  )
+                                }
+                                className="p-1 border-slate-300"
+                              >
+                                <X className="size-3 text-red-500 cursor-pointer" />
+                                {/* <span className="sr-only">Remove</span> */}
+                              </div>
+                            </Badge>
+                          ))
+                        )}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+
+            <FormField
+              control={form.control}
+              name="skills"
+              render={({}) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder="Skills (Required*)"
+                      className="border-2 border-slate-300 rounded-md font-work-sans"
+                      value={skillInput}
+                      onChange={(e) => setSkillInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleAddSkill(skillInput);
+                        }
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {skills.map((skill, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center border rounded-md px-3 py-1 text-sm font-work-sans hover:bg-slate-200"
+                      >
+                        <span>{skill}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSkill(skill)}
+                          className="ml-2 text-red-500"
+                        >
+                          <X className="size-3 cursor-pointer" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <Select
+                    onValueChange={(value) => handleLocationChange(value)}
+                    value={field.value[0] || ""}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="border-2 border-slate-300 rounded-md font-work-sans">
+                        <SelectValue placeholder="Select Locations" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="font-work-sans">
+                      <SelectItem value="Kathmandu">Kathmandu</SelectItem>
+                      <SelectItem value="Lalitpur">Lalitpur</SelectItem>
+                      <SelectItem value="Bhaktapur">Bhaktapur</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="mt-2">
+              {selectedLocations.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {selectedLocations.map((location, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center border rounded-md px-3 py-1 text-sm font-work-sans hover:bg-slate-200"
+                    >
+                      <span>{location}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newLocations = selectedLocations.filter(
+                            (loc) => loc !== location
+                          );
+                          setSelectedLocations(newLocations);
+                          form.setValue("location", newLocations); // Update form value
+                        }}
+                        className="ml-2 text-red-500"
+                      >
+                        <X className="size-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              variant="brand"
+              className="w-full mt-2 shadow-md hover:shadow-lg"
+            >
+              Next
+            </Button>
+          </form>
+        </Form>
+      </div>
+
+      <div className="flex-1 hidden lg:block lg:mr-10 border">
+        <div className="bg-blue-300 h-[35vh] p-6 rounded-lg shadow"></div>
+        <div className="z-10 relative top-20">
+          {/* Preview section can be added here */}
+        </div>
+
+        <div className="bg-gray-50 opacity-50 cursor-not-allowed px-10">
+          <HeroSection />
+          <h2 className="text-2xl font-bold mt-4 mb-8">About Me</h2>
+          <WorkExperiences experiences={[]} />
+          <License licenses={[]} />
+          <AwardsAndCertifications awards={[]} />
+          <MyWorks works={[]} />
+        </div>
+      </div>
+
+      {openSelectServices && (
+        <SelectServices
+          openSelectServices={openSelectServices}
+          setOpenSelectServices={setOpenSelectServices}
+          onServiceSelect={handleServiceSelect}
+          selectedServices={selectedServices}
+        />
+      )}
+    </div>
+  );
+}

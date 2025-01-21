@@ -1,99 +1,93 @@
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
-import { fileSchema } from "@/app/schemas/fileSchema";
-import FileUpload from "@/components/form/FileUpload";
+import FileUpload from "@/app/(hero)/(private)/sewa-provider/verification/step-3/components/ui/file-upload";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 
-type FormData = {
-  file: File | undefined;
-};
-
 interface UploadProfilePictureProps {
   openUploadProfile: boolean;
-  setOpenUploadProfile: (open: boolean) => void;
+  setOpenUploadProfile: (value: boolean) => void;
+  onImageUpload: (url: string) => void;
 }
 
-export default function UploadProfilePicture({
+interface FormData {
+  file: File | null;
+}
+
+const UploadProfilePicture = ({
   openUploadProfile,
   setOpenUploadProfile,
-}: UploadProfilePictureProps) {
-  const form = useForm<FormData>({
-    resolver: zodResolver(fileSchema),
+  onImageUpload,
+}: UploadProfilePictureProps) => {
+  const methods = useForm<FormData>({
     defaultValues: {
-      file: undefined,
+      file: null,
     },
   });
 
-  const onSubmit = (data: FormData) => {
-    if (!data.file) {
-      console.error("File is missing");
-      return;
+  const onSubmit = async (data: FormData) => {
+    try {
+      if (!data.file) {
+        throw new Error("Please select an image");
+      }
+
+      const formData = new FormData();
+      formData.append("file", data.file);
+
+      const response = await fetch("/api/service-provider/business-profile", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to upload image");
+      }
+
+      const result = await response.json();
+      onImageUpload(result.url);
+      setOpenUploadProfile(false);
+      toast.success("Profile picture uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to upload image"
+      );
     }
-
-    // console.log("File data:", data);
-
-    const formData = new FormData();
-    formData.append("file", data.file);
-
-    // console.log("FormData ready to submit:", formData);
   };
 
   return (
     <Dialog open={openUploadProfile} onOpenChange={setOpenUploadProfile}>
-      <DialogContent className="sm:max-w-[600px] h-[500px]">
-        <DialogHeader className="text-center">
-          <DialogTitle className="text-center">
-            Upload Profile Picture
-          </DialogTitle>
-          <DialogDescription className="text-center">
-            Upload an image file to create your identity.
-          </DialogDescription>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Upload Profile Picture</DialogTitle>
         </DialogHeader>
-
-        {/* <div className="text-center space-y-4 py-4">
-          <div className="space-y-2">
-            <h2 className="text-2xl font-semibold">
-              Upload your profile picture
-            </h2>
-            <p className="text-base text-muted-foreground">
-              Convey professionalism and approachability. Let people know you.
-            </p>
-          </div> */}
-
-        {/* Wrap the form inside FormProvider */}
-        <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* FileUpload Component */}
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
             <FileUpload
-              form={form}
-              name="file"
-              description="Upload an image file (Max size: 5MB)."
+              accept="image/*"
+              maxSize={5 * 1024 * 1024}
+              onFileSelect={(file) => methods.setValue("file", file)}
             />
-
-            {/* Display validation error for the file */}
-            {form.formState.errors.file && (
-              <p className="text-red-500 text-sm">
-                {form.formState.errors.file.message}
-              </p>
-            )}
-
-            <Button type="submit" variant={"brand"} className="w-full">
-              Upload
+            <Button
+              type="submit"
+              variant="brand"
+              className="w-full"
+              disabled={methods.formState.isSubmitting}
+            >
+              {methods.formState.isSubmitting ? "Uploading..." : "Upload"}
             </Button>
           </form>
         </FormProvider>
-        {/* </div> */}
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default UploadProfilePicture;
