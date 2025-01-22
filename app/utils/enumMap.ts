@@ -1,6 +1,8 @@
 import {
+  BookingStatus,
   Gender,
   MunicipalityType,
+  PriceType,
   VerificationDocumentType,
 } from "@prisma/client";
 
@@ -10,6 +12,39 @@ export const genderTypeMap: Record<(typeof genderTypes)[number], Gender> = {
   male: "MALE",
   female: "FEMALE",
   others: "OTHERS",
+};
+
+export const priceTypes = [
+  "hourly",
+  "task",
+  "session",
+  "unit",
+  "project",
+] as const;
+
+export const priceTypeMap: Record<(typeof priceTypes)[number], PriceType> = {
+  hourly: "HOURLY",
+  task: "TASK",
+  session: "SESSION",
+  unit: "UNIT",
+  project: "PROJECT",
+};
+
+export const bookingStatus = [
+  "pending",
+  "confirmed",
+  "completed",
+  "canceled",
+] as const;
+
+export const bookingStatusMap: Record<
+  (typeof bookingStatus)[number],
+  BookingStatus
+> = {
+  pending: "PENDING",
+  confirmed: "CONFIRMED",
+  completed: "COMPLETED",
+  canceled: "CANCELED",
 };
 
 export const verificationDocumentTypes = [

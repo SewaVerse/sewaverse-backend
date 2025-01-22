@@ -33,6 +33,13 @@ export const genderSchema = z
     }
   );
 
+export const dateSchema = z
+  .string()
+  .refine((val) => !isNaN(Date.parse(val)), {
+    message: "Invalid date format",
+  })
+  .transform((val) => new Date(val));
+
 export const dobSchema = z
   .string({ message: "Date of birth is required" }) // Ensures dob is not empty
   .refine((value) => !isNaN(Date.parse(value)), {

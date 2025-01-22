@@ -174,14 +174,16 @@ model ServiceProviderProfile {
   serviceProviderId  String   @unique @db.ObjectId
   dob                String
   gender             Gender
-  profession         String?
-  skills             String?
-  description        String?
+  profession         String
+  skills             String[]
   imageId            String?  @db.ObjectId
   serviceSubCategory String[]
   overallRating      Float    @default(0)
   totalRatings       Int      @default(0)
   about              String?
+  experience         String
+  location           String[]
+
 
   file            File?            @relation(fields: [imageId], references: [id])
   serviceProvider ServiceProvider? @relation(fields: [serviceProviderId], references: [id], onDelete: Cascade)
@@ -332,10 +334,10 @@ model OfferedService {
 
   price          Float
   priceType      PriceType
-  discount       Float
-  location       String
-  workExperience String
-  overallRating  Float     @default(0)
+  discount       Float?
+  location       String?
+  workExperience String?
+  overallRating  Float     @default(0) 
   published      Boolean   @default(true)
   adminVerified  Boolean   @default(false)
 
@@ -344,9 +346,23 @@ model OfferedService {
 
   service         Service         @relation(fields: [serviceId], references: [id])
   serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id])
+
+  images          OfferedServiceImageMapping[]
   bookings        Booking[]
   ratings         Rating[]
   reviews         Review[]
+}
+
+model OfferedServiceImageMapping {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  offeredServiceId  String  @db.ObjectId
+  imageId           String  @db.ObjectId
+
+
+  offeredService    OfferedService  @relation(fields: [offeredServiceId], references: [id], onDelete: Cascade)
+  image             File             @relation(fields: [imageId], references: [id])
+
+  @@index([offeredServiceId])
 }
 
 model ServiceLocation {
@@ -369,7 +385,7 @@ model WorkExperience {
   description       String?
   startDate         DateTime?
   endDate           DateTime?
-  isCurrent         Boolean
+  isCurrent         Boolean?
   serviceId         String    @db.ObjectId
   fileId            String?   @db.ObjectId
   showFile          Boolean   @default(true)
@@ -399,7 +415,7 @@ model Award {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
   providerProfileId String   @db.ObjectId
   title             String
-  date              DateTime
+  year              String
   awardFrom         String
 
   fileId String? @db.ObjectId
@@ -411,7 +427,7 @@ model Award {
 model MyWork {
   id                String @id @default(auto()) @map("_id") @db.ObjectId
   title             String
-  description       String
+  description       String?
   providerProfileId String @db.ObjectId
 
   createdAt DateTime @default(now())
@@ -454,6 +470,7 @@ model File {
   licenses        License[]
   awards          Award[]
   workImages      WorkImageMapping[]
+  offeredImages   OfferedServiceImageMapping[]
 }
 
 model FileBinary {

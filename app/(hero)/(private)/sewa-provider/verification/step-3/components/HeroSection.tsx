@@ -1,7 +1,7 @@
 const HeroSection = () => {
   return (
     <div>
-      <div className="flex justify-between items-center px-10 mt-10 text-lg">
+      <div className="flex justify-between items-center mt-10 text-lg">
         <p className="gradient-text">About Me</p>
         <p>Experience</p>
         <p>Awards & Achievements</p>

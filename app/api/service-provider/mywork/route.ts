@@ -1,22 +1,21 @@
 import { NextResponse } from "next/server";
 
-import { createAward } from "@/app/data-access/award";
+import { createMyWork, updateMyWorkById } from "@/app/data-access/myWork";
 import { getServiceProviderByUserId } from "@/app/data-access/serviceProvider";
 import { getServiceProviderProfileByServiceProviderId } from "@/app/data-access/serviceProviderProfile";
-import { awardSchema, AwardSchema } from "@/app/schemas/awardSchema";
+import { myWorkSchema, MyWorkSchema } from "@/app/schemas/myWorkSchema";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 import { getCurrentUser } from "@/lib/auth";
 
-function parseAward(formData: FormData): AwardSchema {
+function parsemyWorks(formData: FormData): MyWorkSchema {
   const json = formData.get("jsonData") as string;
+  const data = JSON.parse(json) as MyWorkSchema;
 
-  const data = JSON.parse(json) as AwardSchema;
+  const myWorkFile = formData.get("file") as File | null;
 
-  const awardFile = formData.get("file") as File | null;
-
-  if (awardFile) {
-    data.awardFile = { file: awardFile };
+  if (myWorkFile) {
+    data.myWorkFile = { file: myWorkFile };
   }
 
   return data;
@@ -25,12 +24,14 @@ function parseAward(formData: FormData): AwardSchema {
 export const POST = roleAsyncHandler(
   "SERVICE_PROVIDER",
   async (request: Request) => {
+    console.error("Running POST Request: Add Works");
+
     const formData = await request.formData();
 
-    const body = parseAward(formData);
+    const body = parsemyWorks(formData);
 
     const [validationError, validatedFields] = validateRequestBody(
-      awardSchema,
+      myWorkSchema,
       body
     );
 
@@ -38,21 +39,34 @@ export const POST = roleAsyncHandler(
       return NextResponse.json(validationError, { status: 400 });
     }
 
-    const { title, year, awardFrom, awardFile } = validatedFields;
+    const { title, description, myWorkFile } = validatedFields;
 
     const user = await getCurrentUser();
+
     const serviceProvider = await getServiceProviderByUserId(user!.id);
 
     const profile = await getServiceProviderProfileByServiceProviderId(
       serviceProvider!.id
     );
 
-    const data = await createAward(profile!.id, {
+    const data = {
       title,
-      year,
-      awardFrom,
-      awardFile,
-    } as AwardSchema);
+      description,
+      providerProfileId: profile!.id,
+    };
+
+    if (validatedFields.id) {
+      await updateMyWorkById(validatedFields.id, data);
+      return NextResponse.json({ success: true, message: "Success", data });
+    }
+
+    await createMyWork(data, myWorkFile?.file);
+
+    // const data = await createMyWork(profile!.id, {
+    //  title,
+    //  description,
+    //  myWorkFile,
+    // } as MyWork);
 
     return NextResponse.json(
       { success: true, message: "Success", data },
