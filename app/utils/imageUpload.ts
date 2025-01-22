@@ -1,6 +1,4 @@
-import { File as PrismaFile } from "@prisma/client";
-
-import { createFile } from "@/app/data-access/file";
+import { creatPrismaFileFromFile } from "@/app/data-access/file";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
 
 import { fileSchema } from "../schemas/fileSchema";
@@ -20,16 +18,9 @@ export const imageUpload = async (
 
   const { file } = validatedFields;
 
-  const fileBuffer = await file!.arrayBuffer();
-  const buffer = Buffer.from(fileBuffer);
+  if (!file) return null;
 
-  const prismaFile = {
-    name: file!.name,
-    size: file!.size,
-    type: file!.type,
-  } as PrismaFile;
-
-  const savedFile = await createFile(prismaFile, buffer);
+  const savedFile = await creatPrismaFileFromFile(file);
 
   return savedFile.id;
 };
