@@ -11,6 +11,7 @@ import {
   providerVerificationTwo,
   type ProviderVerificationTwo,
 } from "@/app/schemas/providerVerificationTwo";
+import { ProfileCard } from "@/components/profile-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -65,6 +66,7 @@ export default function SewaProviderStepTwo() {
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [skillInput, setSkillInput] = useState<string>("");
   const [skills, setSkills] = useState<string[]>([]);
+  const [locationInput, setLocationInput] = useState<string>("");
 
   const form = useForm<ProviderVerificationTwo>({
     resolver: zodResolver(providerVerificationTwo),
@@ -79,6 +81,27 @@ export default function SewaProviderStepTwo() {
 
   const router = useRouter();
 
+  const handleAddLocation = (newLocation: string) => {
+    if (newLocation.trim() && !selectedLocations.includes(newLocation.trim())) {
+      const newLocations = [...selectedLocations, newLocation.trim()];
+      setSelectedLocations(newLocations);
+      form.setValue("location", newLocations, {
+        shouldValidate: true,
+      });
+    }
+    setLocationInput("");
+  };
+
+  const handleRemoveLocation = (locationToRemove: string) => {
+    const newLocations = selectedLocations.filter(
+      (loc) => loc !== locationToRemove
+    );
+    setSelectedLocations(newLocations);
+    form.setValue("location", newLocations, {
+      shouldValidate: true,
+    });
+  };
+
   const handleServiceSelect = (selected: SelectedService[]) => {
     setSelectedServices(selected);
     const allSubCategories = selected.flatMap((s) =>
@@ -87,15 +110,15 @@ export default function SewaProviderStepTwo() {
     form.setValue("serviceSubCategory", allSubCategories);
   };
 
-  const handleLocationChange = (value: string) => {
-    if (!selectedLocations.includes(value)) {
-      const newLocations = [...selectedLocations, value];
-      setSelectedLocations(newLocations);
-      form.setValue("location", newLocations, {
-        shouldValidate: true,
-      });
-    }
-  };
+  // const handleLocationChange = (value: string) => {
+  //   if (!selectedLocations.includes(value)) {
+  //     const newLocations = [...selectedLocations, value];
+  //     setSelectedLocations(newLocations);
+  //     form.setValue("location", newLocations, {
+  //       shouldValidate: true,
+  //     });
+  //   }
+  // };
 
   const handleAddSkill = (newSkill: string) => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
@@ -144,22 +167,22 @@ export default function SewaProviderStepTwo() {
 
   const onSubmit = async (data: ProviderVerificationTwo) => {
     try {
-      // Log the raw form data object
-      console.warn("1. Raw Form Data Object:", {
-        profession: data.profession,
-        skills: data.skills,
-        experience: data.experience,
-        serviceSubCategory: data.serviceSubCategory,
-        location: data.location,
-        file:
-          data.file instanceof File
-            ? {
-                name: data.file.name,
-                type: data.file.type,
-                size: data.file.size,
-              }
-            : "No file selected",
-      });
+      // // Log the raw form data object
+      // console.warn("1. Raw Form Data Object:", {
+      //   profession: data.profession,
+      //   skills: data.skills,
+      //   experience: data.experience,
+      //   serviceSubCategory: data.serviceSubCategory,
+      //   location: data.location,
+      //   file:
+      //     data.file instanceof File
+      //       ? {
+      //           name: data.file.name,
+      //           type: data.file.type,
+      //           size: data.file.size,
+      //         }
+      //       : "No file selected",
+      // });
 
       // Create FormData
       const formData = new FormData();
@@ -403,55 +426,43 @@ export default function SewaProviderStepTwo() {
             <FormField
               control={form.control}
               name="location"
-              render={({ field }) => (
+              render={({}) => (
                 <FormItem>
-                  <Select
-                    onValueChange={(value) => handleLocationChange(value)}
-                    value={field.value[0] || ""}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="border-2 border-slate-300 rounded-md font-work-sans">
-                        <SelectValue placeholder="Select Locations" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="font-work-sans">
-                      <SelectItem value="Kathmandu">Kathmandu</SelectItem>
-                      <SelectItem value="Lalitpur">Lalitpur</SelectItem>
-                      <SelectItem value="Bhaktapur">Bhaktapur</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <Input
+                      placeholder="Add Location (Required*)"
+                      className="border-2 border-slate-300 rounded-md font-work-sans"
+                      value={locationInput}
+                      onChange={(e) => setLocationInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleAddLocation(locationInput);
+                        }
+                      }}
+                    />
+                  </FormControl>
                   <FormMessage />
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {selectedLocations.map((location, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center border rounded-md px-3 py-1 text-sm font-work-sans hover:bg-slate-200"
+                      >
+                        <span>{location}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveLocation(location)}
+                          className="ml-2 text-red-500"
+                        >
+                          <X className="size-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </FormItem>
               )}
             />
-
-            <div className="mt-2">
-              {selectedLocations.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {selectedLocations.map((location, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center border rounded-md px-3 py-1 text-sm font-work-sans hover:bg-slate-200"
-                    >
-                      <span>{location}</span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newLocations = selectedLocations.filter(
-                            (loc) => loc !== location
-                          );
-                          setSelectedLocations(newLocations);
-                          form.setValue("location", newLocations); // Update form value
-                        }}
-                        className="ml-2 text-red-500"
-                      >
-                        <X className="size-3" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
 
             <Button
               type="submit"
@@ -468,9 +479,28 @@ export default function SewaProviderStepTwo() {
       </div>
 
       <div className="flex-1 hidden lg:block lg:mr-10 border">
-        <div className="bg-blue-300 h-[35vh] p-6 rounded-lg shadow"></div>
-        <div className="z-10 relative top-20">
-          {/* Preview section can be added here */}
+        {/* <div className="bg-blue-300 h-[35vh] p-6 rounded-lg shadow"></div> */}
+        <div className="flex items-center justify-center cursor-not-allowed">
+          <ProfileCard
+            name={""}
+            joinDate={""}
+            servicesDelivered={0}
+            profession={""}
+            experience={""}
+            rating={0}
+            offeredServices={[]}
+            locations={[]}
+            coreSkills={[]} // name={formData.name || "Your Name"}
+            // joinDate={new Date().toLocaleDateString()}
+            // servicesDelivered={0}
+            // profession={formData.profession || "Your Profession"}
+            // experience={formData.experience || "Experience"}
+            // rating={0}
+            // offeredServices={formData.services}
+            // locations={formData.locations}
+            // coreSkills={formData.skills}
+            // imageUrl={formData.imageUrl}
+          />
         </div>
 
         <div className="bg-gray-50 opacity-50 cursor-not-allowed px-10">

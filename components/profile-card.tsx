@@ -124,7 +124,7 @@ interface ProfileProps {
   servicesDelivered: number;
   profession: string;
   experience: string;
-  rating: number;
+  rating: number | null;
   offeredServices: string[];
   locations: string[];
   coreSkills: string[];
@@ -200,7 +200,7 @@ export function ProfileCard({
               <div>
                 <p className="text-lg text-muted-foreground">Rating</p>
                 <p className="flex items-center text-lg gradient-text font-semibold">
-                  {Array.from({ length: Math.floor(rating) }).map((_, i) => (
+                  {Array.from({ length: Math.floor(rating ?? 0) }).map((_, i) => (
                     <Star
                       key={i}
                       className="w-5 h-5 fill-yellow-400 text-yellow-400"

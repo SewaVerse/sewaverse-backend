@@ -19,7 +19,6 @@ import AddCategory from "./AddCategory";
 interface Service {
   id: string;
   name: string;
-  description: string | null;
   parentServiceId: string | null;
   services: Service[];
 }

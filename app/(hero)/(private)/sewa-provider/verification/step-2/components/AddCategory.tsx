@@ -1,13 +1,13 @@
-// AddCategory.tsx
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type React from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import {
-  categorySchema,
-  type CategoryFormValues,
-} from "@/app/schemas/categorySchema";
+  parentChildServiceSchema,
+  type ParentChildServiceSchema,
+} from "@/app/schemas/serviceSchema";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -29,22 +29,51 @@ import { Input } from "@/components/ui/input";
 interface AddCategoryProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSuccess?: () => void; // Optional callback for successful creation
 }
 
-const AddCategory: React.FC<AddCategoryProps> = ({ open, onOpenChange }) => {
-  const form = useForm<CategoryFormValues>({
-    resolver: zodResolver(categorySchema),
+const AddCategory: React.FC<AddCategoryProps> = ({
+  open,
+  onOpenChange,
+  onSuccess,
+}) => {
+  const form = useForm<ParentChildServiceSchema>({
+    resolver: zodResolver(parentChildServiceSchema),
     defaultValues: {
-      category: "",
-      subCategory: "",
+      parentServiceName: "",
+      childServiceName: "",
     },
   });
 
-  const onSubmit = (data: CategoryFormValues) => {
-    // Handle form submission here, e.g., API call or state update
-    console.warn("Form data:", data);
-    form.reset();
-    onOpenChange(false); // Close dialog after submission
+  const onSubmit = async (data: ParentChildServiceSchema) => {
+    try {
+      const response = await fetch("/api/service/create-parent-child", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create category");
+      }
+
+      await response.json();
+
+      toast.success("Category created successfully");
+
+      form.reset();
+      onOpenChange(false);
+
+      onSuccess?.();
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create category"
+      );
+      console.error("Error creating category:", error);
+    }
   };
 
   return (
@@ -60,7 +89,7 @@ const AddCategory: React.FC<AddCategoryProps> = ({ open, onOpenChange }) => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="category"
+              name="parentServiceName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
@@ -73,7 +102,7 @@ const AddCategory: React.FC<AddCategoryProps> = ({ open, onOpenChange }) => {
             />
             <FormField
               control={form.control}
-              name="subCategory"
+              name="childServiceName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Sub Category</FormLabel>
@@ -84,8 +113,13 @@ const AddCategory: React.FC<AddCategoryProps> = ({ open, onOpenChange }) => {
                 </FormItem>
               )}
             />
-            <Button variant="brand" className="w-full" type="submit">
-              Add
+            <Button
+              variant="brand"
+              className="w-full"
+              type="submit"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? "Adding..." : "Add"}
             </Button>
           </form>
         </Form>
