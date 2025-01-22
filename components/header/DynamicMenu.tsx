@@ -63,7 +63,7 @@ const DynamicMenu = () => {
             <ProfileAvatar />
           </div>
         ) : (
-          <>
+          <div className="flex gap-4">
             <Link href="/login">
               <Button variant={"ghost"} className="px-2">
                 Login
@@ -72,7 +72,7 @@ const DynamicMenu = () => {
             <Link href={{ pathname: "/account-type", query: { role: "user" } }}>
               <Button variant={"brand"}>Sign up</Button>
             </Link>
-          </>
+          </div>
         )}
       </div>
     </>
