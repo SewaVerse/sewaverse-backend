@@ -334,10 +334,10 @@ model OfferedService {
 
   price          Float
   priceType      PriceType
-  discount       Float
-  location       String
-  workExperience String
-  overallRating  Float     @default(0)
+  discount       Float?
+  location       String?
+  workExperience String?
+  overallRating  Float     @default(0) 
   published      Boolean   @default(true)
   adminVerified  Boolean   @default(false)
 
@@ -346,9 +346,23 @@ model OfferedService {
 
   service         Service         @relation(fields: [serviceId], references: [id])
   serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id])
+
+  images          OfferedServiceImageMapping[]
   bookings        Booking[]
   ratings         Rating[]
   reviews         Review[]
+}
+
+model OfferedServiceImageMapping {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  offeredServiceId  String  @db.ObjectId
+  imageId           String  @db.ObjectId
+
+
+  offeredService    OfferedService  @relation(fields: [offeredServiceId], references: [id], onDelete: Cascade)
+  image             File             @relation(fields: [imageId], references: [id])
+
+  @@index([offeredServiceId])
 }
 
 model ServiceLocation {
@@ -456,6 +470,7 @@ model File {
   licenses        License[]
   awards          Award[]
   workImages      WorkImageMapping[]
+  offeredImages   OfferedServiceImageMapping[]
 }
 
 model FileBinary {

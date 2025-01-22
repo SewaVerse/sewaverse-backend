@@ -10,3 +10,10 @@ export const serviceSchema = z.object({
 });
 
 export type ServiceSchema = z.infer<typeof serviceSchema>;
+
+export const parentChildServiceSchema = z.object({
+  parentServiceName: z.string().min(1, "Parent service name is required"),
+  childServiceName: z.string().min(1, "Child service name is required"),
+});
+
+export type ParentChildServiceSchema = z.infer<typeof parentChildServiceSchema>;

@@ -11,7 +11,7 @@ export const servicesData = [
     name: "Emma Clark",
     rating: 4.5,
     location: "Kathmandu",
-    discount:'Rs.25,000',
+    discount: "Rs.25,000",
     price: 10000,
     serviceIcon: "/images/servicesImage/Beautician.svg",
     profile1: "/images/servicesImage/profile1.svg",
@@ -66,7 +66,6 @@ export const servicesData = [
     serviceIcon: "/images/servicesImage/Childcare.svg",
     profile1: "/images/servicesImage/profile1.svg",
   },
-  
 ];
 
 const SewaList = () => {
@@ -87,9 +86,11 @@ const SewaList = () => {
                 className="absolute inset-0 bottom- rounded-t-r-sm"
               />
             </div>
-            <div className="
-            absolute left-16   lg:hidden md:hidden ">
-                <FaRegHeart size={20} color="white"  />
+            <div
+              className="
+            absolute left-16   lg:hidden md:hidden "
+            >
+              <FaRegHeart size={20} color="white" />
             </div>
 
             <div className="lg:w-full lg:px-8">
@@ -107,14 +108,14 @@ const SewaList = () => {
                     <span className="text-muted-foreground">(200 reviews)</span>
                   </p>
                 </span>
-                 <div>
-                 <h1 className="hidden text-sm lg:text-2xl lg:block text-muted-foreground line-through ">
-                   {service.discount}
-                </h1>
-                <h1 className="hidden text-sm lg:text-3xl lg:block font-bold">
-                  Rs. {service.price}
-                </h1>
-                 </div>
+                <div>
+                  <h1 className="hidden text-sm lg:text-2xl lg:block text-muted-foreground line-through ">
+                    {service.discount}
+                  </h1>
+                  <h1 className="hidden text-sm lg:text-3xl lg:block font-bold">
+                    Rs. {service.price}
+                  </h1>
+                </div>
               </div>
 
               <hr className="hidden lg:block lg:border-dotted border-[1px] lg:mt-1" />
@@ -144,7 +145,9 @@ const SewaList = () => {
 
                   {/* Button */}
                   <div className="hidden lg:flex lg:gap-3 lg:items-center">
-                  <Button variant="brand" size="lg">Add to Wishlist  <FaRegHeart size={12}   /></Button>
+                    <Button variant="brand">
+                      Add to Wishlist <FaRegHeart size={12} />
+                    </Button>
                     <Button variant="brand">Book now</Button>
                   </div>
                 </div>

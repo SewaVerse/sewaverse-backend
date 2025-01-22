@@ -1,10 +1,8 @@
-
 import Image from "next/image";
 import { FaRegHeart, FaStar } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 
 import { Button } from "@/components/ui/button";
-
 
 export const servicesData = [
   {
@@ -96,16 +94,28 @@ const SewaProviderList = () => {
             <div className="lg:w-full lg:px-8 flex lg:justify-between lg:mt-4   relative">
               <div>
                 <h1 className=" flex items-center  text-sm font-bold md:text-2xl lg:font-bold lg:text-3xl">
-                  {service.name}   <FaStar size={10} color="orange" className="ml-[1px] lg:hidden " /><span className="text-sm lg:hidden">4.5</span>
+                  {service.name}{" "}
+                  <FaStar
+                    size={10}
+                    color="orange"
+                    className="ml-[1px] lg:hidden "
+                  />
+                  <span className="text-sm lg:hidden">4.5</span>
                 </h1>
-                <p className="text-[13px] md:text-lg lg:text-xl">{service.title} </p>
-                <p className="text-[13px] md:text-lg lg:text-xl">{service.subtitle}</p>
+                <p className="text-[13px] md:text-lg lg:text-xl">
+                  {service.title}{" "}
+                </p>
+                <p className="text-[13px] md:text-lg lg:text-xl">
+                  {service.subtitle}
+                </p>
                 <div className="flex justify-between">
                   <span className="lg:p-1">
                     <p className="hidden lg:flex lg:items-center gap-1 lg:text-lg">
                       <FaStar size={14} color="orange" />
                       {service.rating}{" "}
-                      <span className="text-muted-foreground">(200 reviews)</span>
+                      <span className="text-muted-foreground">
+                        (200 reviews)
+                      </span>
                     </p>
                   </span>
                 </div>
@@ -121,26 +131,25 @@ const SewaProviderList = () => {
                 <div className="w-[100px] h-[1px] bg-[#D7D7D7] rotate-90 mt-14 "></div>
 
                 <div className=" mr-5 w-full text-[13px] md:text-2xl lg:text-xl">
-                  <h1 >{service.start}</h1>
-                  <p >{service.Delivered}</p>
-                  <p >{service.experience}</p>
+                  <h1>{service.start}</h1>
+                  <p>{service.Delivered}</p>
+                  <p>{service.experience}</p>
                   <div className="flex items-center gap-1 mt-2 lg:hidden md:hidden">
-                  <FaRegHeart size={16}   />
-                  <Button variant='brand' size='sm'>Book now</Button>
+                    <FaRegHeart size={16} />
+                    <Button variant="brand" size="sm">
+                      Book now
+                    </Button>
                   </div>
                 </div>
               </div>
               <div className=" hidden lg:absolute lg:left-[600px] lg:top-32 lg:flex gap-5 ">
-          <Button variant="brand" size="lg">Add to Favourites  <FaRegHeart size={12}   /></Button>
-          <Button variant="brand" size='lg'>Book Now</Button>
-          </div>
-          
+                <Button variant="brand">
+                  Add to Favourites <FaRegHeart size={12} />
+                </Button>
+                <Button variant="brand">Book Now</Button>
+              </div>
             </div>
-          
-          
-           
           </div>
-          
         </div>
       ))}
     </div>

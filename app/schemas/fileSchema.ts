@@ -25,3 +25,5 @@ export const fileSchema = z.object({
     })
     .optional(), // Allow undefined initially
 });
+
+export type FileSchema = z.infer<typeof fileSchema>;
