@@ -1,5 +1,6 @@
 "use client";
 import { CirclePlus } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -274,12 +275,14 @@ const Page = () => {
             >
               {loading ? "Submitting..." : "Next"}
             </Button>
-            <Button
-              variant={"brand"}
-              className="w-full mt-2 text-white shadow-md hover:shadow-lg"
-            >
-              Previous
-            </Button>
+            <Link href="/sewa-provider/verification/step-2">
+              <Button
+                variant={"brand"}
+                className="w-full mt-2 text-white shadow-md hover:shadow-lg"
+              >
+                Previous
+              </Button>
+            </Link>
 
             <Button
               variant={"ghost"}
