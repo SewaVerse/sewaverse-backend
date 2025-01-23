@@ -10,7 +10,7 @@ export const GET = roleAsyncHandler(["ADMIN", "SERVICE_PROVIDER"], async () => {
 
   if (!user) throw new ApiError("User not found", 404);
 
-  const services = await getServicesByCreatedUserId(user?.id);
+  const services = await getServicesByCreatedUserId(user.id);
 
   return NextResponse.json(
     {

@@ -43,6 +43,7 @@ export const createParentChildService = dbAsyncHandler(
     return await db.service.create({
       data: {
         name: parentService.name,
+        parentServiceId: null,
         description: parentService.description || null,
         isActive: parentService.isActive,
         createdBy: parentService.createdBy,
@@ -117,6 +118,38 @@ type ServiceHierarchy = Omit<
 > & {
   services: ServiceHierarchy[];
 };
+
+export const getServicesHierarchyByUserId = dbAsyncHandler(
+  async (userId: string) => {
+    const fetchHierarchy = async (
+      userId: string,
+      parentServiceId: string | null
+    ): Promise<ServiceHierarchy[]> => {
+      const services = await db.service.findMany({
+        omit: {
+          imageId: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        where: {
+          AND: [
+            { parentServiceId },
+            { OR: [{ isActive: true }, { createdBy: userId }] },
+          ],
+        },
+      });
+
+      return await Promise.all(
+        services.map(async (service) => ({
+          ...service,
+          services: await fetchHierarchy(userId, service.id),
+        }))
+      );
+    };
+
+    return await fetchHierarchy(userId, null); // Start with the root level
+  }
+);
 
 export const getServicesHierarchy = dbAsyncHandler(async () => {
   const fetchHierarchy = async (
