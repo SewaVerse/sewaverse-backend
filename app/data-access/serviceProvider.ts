@@ -104,7 +104,7 @@ export const updateServiceProviderProfile = dbAsyncHandler(
       throw new Error("Profile not found");
     }
 
-    const services = currentProfile.serviceSubCategory.map((str) => ({
+    const services = data?.serviceSubCategory?.map((str) => ({
       serviceId: str,
     }));
 
@@ -122,7 +122,7 @@ export const updateServiceProviderProfile = dbAsyncHandler(
         serviceMappings: {
           deleteMany: {}, // clear exisitings
           createMany: {
-            data: services,
+            data: services ?? [],
           },
         },
       },
