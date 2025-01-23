@@ -18,6 +18,6 @@ export const GET = roleAsyncHandler(["ADMIN", "SERVICE_PROVIDER"], async () => {
       message: "Services fetched successfully",
       data: services,
     },
-    { status: 201 }
+    { status: 200 }
   );
 });

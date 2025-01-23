@@ -430,7 +430,7 @@ export default function SewaProviderStepTwo() {
                 <FormItem>
                   <FormControl>
                     <Input
-                      placeholder="Add Location (Required*)"
+                      placeholder="Location of Service (Required*)"
                       className="border-2 border-slate-300 rounded-md font-work-sans"
                       value={locationInput}
                       onChange={(e) => setLocationInput(e.target.value)}

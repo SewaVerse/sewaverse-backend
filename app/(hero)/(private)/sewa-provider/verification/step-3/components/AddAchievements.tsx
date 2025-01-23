@@ -4,9 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import * as z from "zod";
 
-import { awardSchema } from "@/app/schemas/awardSchema";
+import { AwardSchema, awardSchema } from "@/app/schemas/awardSchema";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -34,12 +33,12 @@ import  FileUpload  from "./ui/file-upload";
 //   certificateUrl?: string;
 // }
 
-type FormValues = z.infer<typeof awardSchema>;
+// type AwardSchema = z.infer<typeof awardSchema>;
 
 interface AddAchievementsProps {
   awardOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: (award: FormValues) => void;
+  onSave: (award: AwardSchema) => void;
 }
 
 export default function AddAchievements({
@@ -50,7 +49,7 @@ export default function AddAchievements({
   const [certificateFile, setCertificateFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<FormValues>({
+  const form = useForm<AwardSchema>({
     resolver: zodResolver(awardSchema),
     defaultValues: {
       title: "",
@@ -59,7 +58,7 @@ export default function AddAchievements({
     },
   });
 
-  const handleSubmit = async (data: FormValues) => {
+  const handleSubmit = async (data: AwardSchema) => {
     try {
       setLoading(true);
 

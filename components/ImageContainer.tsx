@@ -25,7 +25,7 @@ const ImageContainer = ({ children }: { children: React.ReactNode }) => {
                     <span className="block">Every Services</span>
                     <span className="block">You Want!</span>
                   </h2>
-                  <p className="text-sm font-poppins font-normal">
+                  <p className="text-sm font-work-sans font-normal">
                     Book reliable pros for anything from plumbing to personal
                     care, all in one easy platform.
                   </p>

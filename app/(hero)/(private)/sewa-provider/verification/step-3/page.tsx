@@ -1,7 +1,7 @@
 "use client";
 import { CirclePlus } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
@@ -21,17 +21,42 @@ import License from "./components/License";
 import MyWorks from "./components/MyWorks";
 import WorkExperiencesView from "./components/WorkExperiences";
 
-const profileData = {
-  name: "Bishal Shrestha",
-  joinDate: "5th Jan, 2024",
-  servicesDelivered: 100,
-  profession: "Barber",
-  experience: "5 Years",
-  rating: 4.5,
-  offeredServices: ["Hair Cutting"],
-  locations: ["Kathmandu", "Bhaktapur", "Lalitpur"],
-  coreSkills: ["Hair Dressing", "Hair Colouring", "Hair Cutting"],
-};
+// const profileData = {
+//   name: "Bishal Shrestha",
+//   joinDate: "5th Jan, 2024",
+//   servicesDelivered: 100,
+//   profession: "Barber",
+//   experience: "5 Years",
+//   rating: 4.5,
+//   offeredServices: ["Hair Cutting"],
+//   locations: ["Kathmandu", "Bhaktapur", "Lalitpur"],
+//   coreSkills: ["Hair Dressing", "Hair Colouring", "Hair Cutting"],
+//   imageUrl: "",
+// };
+
+interface ProfileResponse {
+  success: boolean;
+  message: string;
+  serviceProvider: {
+    name: string;
+    profile: {
+      profession: string;
+      experience: string;
+      skills: string[];
+      serviceSubCategory: string[];
+      location: string[];
+      image: {
+        localUrl: string;
+      };
+    };
+    workExperiences: Array<{
+      jobTitle: string;
+      company: string;
+      duration: string;
+      description: string;
+    }>;
+  };
+}
 
 // interface WorkExperience {
 //   id: number;
@@ -57,10 +82,58 @@ const Page = () => {
   const [awards, setAwards] = useState<AwardType[]>([]);
   const [works, setWorks] = useState<WorkType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [profileData, setProfileData] = useState({
+    name: "",
+    joinDate: "",
+    servicesDelivered: 0,
+    profession: "",
+    experience: "",
+    rating: 0,
+    offeredServices: [] as string[],
+    locations: [] as string[],
+    coreSkills: [] as string[],
+    imageUrl: "",
+  });
 
-  // const handleClick = () => {
-  //   setOpenMessage(true);
-  // };
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch("/api/service-provider/profile");
+        const data: ProfileResponse = await response.json();
+
+        if (data.success) {
+          const { serviceProvider } = data;
+          setProfileData({
+            name: serviceProvider.name,
+            joinDate: Date.now().toString(),
+            //  new Date(serviceProvider.createdAt).toLocaleDateString(
+            //    "en-US",
+            //    {
+            //      year: "numeric",
+            //      month: "long",
+            //      day: "numeric",
+            //    }
+            //  ),
+            servicesDelivered: 0, // Default value as not provided in API
+            profession: serviceProvider.profile.profession,
+            experience: `${serviceProvider.profile.experience} Years`,
+            rating: 0, // Default value as not provided in API
+            offeredServices: serviceProvider.profile.serviceSubCategory,
+            locations: serviceProvider.profile.location,
+            coreSkills: serviceProvider.profile.skills,
+            imageUrl: serviceProvider.profile.image?.localUrl || "",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
   };
@@ -284,22 +357,23 @@ const Page = () => {
               </Button>
             </Link>
 
-            <Button
-              variant={"ghost"}
-              className="w-full underline text-muted-foreground hover:bg-white"
-            >
-              Skip
-            </Button>
+            <Link href={"/sewa-provider/home"}>
+              <Button
+                variant={"ghost"}
+                className="w-full underline text-muted-foreground hover:bg-white"
+              >
+                Skip
+              </Button>
+            </Link>
           </form>
         </div>
 
         {/* right section */}
-        <div className="hidden lg:block lg:flex-1 lg:border lg:mr-10">
-          <h3 className="text-lg">Preview</h3>
+        <div className="hidden lg:block lg:flex-1 lg:border lg:mr-10 cursor-not-allowed">
           <div className="opacity-50 bg-gray-50">
             <div className=" h-[35vh] bg-[#BCBDDC] "></div>
             {/* for profile */}
-            <ProfileCard {...profileData} imageUrl="" />
+            <ProfileCard {...profileData} />
           </div>
           {/* for navbar */}
           <div className="container mx-auto px-10">

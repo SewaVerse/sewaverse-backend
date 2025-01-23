@@ -54,7 +54,7 @@ interface AddWorkExperienceProps {
   modalOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onSave?: (data: FormValues) => void;
-}
+}   
 
 export default function AddWorkExperience({
   modalOpen,

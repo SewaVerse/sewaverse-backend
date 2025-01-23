@@ -69,6 +69,7 @@ export default function SelectServices({
         if (data.success) {
           setServices(data.data);
         }
+        console.warn("response", data.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching services:", error);
@@ -233,16 +234,17 @@ export default function SelectServices({
 
   return (
     <Dialog open={openSelectServices} onOpenChange={setOpenSelectServices}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className=" sm:max-w-[425px] ">
         <DialogHeader>
           <DialogTitle>Select Services</DialogTitle>
         </DialogHeader>
+
         <p className="text-sm text-muted-foreground">
           Select categories based on the sewa you will be providing
         </p>
         {loading ? (
           <div className="flex items-center justify-center py-8">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"></div>
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#90278E] border-t-transparent"></div>
           </div>
         ) : (
           <ScrollArea className="h-[300px] pr-4">
