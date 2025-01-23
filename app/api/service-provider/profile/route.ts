@@ -26,7 +26,8 @@ export const GET = roleAsyncHandler("SERVICE_PROVIDER", async () => {
     throw new Error("Service provider profile not found");
   }
 
-  const { file, workExperiences, licenses, awards, ...rest } = profile;
+  const { file, workExperiences, licenses, awards, serviceMappings, ...rest } =
+    profile;
   const serviceProviderWithProfile = {
     name: serviceProvider.name,
     email: serviceProvider.email,
@@ -43,6 +44,7 @@ export const GET = roleAsyncHandler("SERVICE_PROVIDER", async () => {
     workExperiences,
     licenses,
     awards,
+    serviceCategories: serviceMappings?.map((m) => m.service) ?? [],
   };
 
   return NextResponse.json({

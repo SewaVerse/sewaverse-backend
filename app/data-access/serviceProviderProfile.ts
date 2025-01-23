@@ -37,6 +37,13 @@ export const getServiceProviderProfile = dbAsyncHandler(
         workExperiences: true,
         licenses: true,
         awards: true,
+        serviceMappings: {
+          include: {
+            service: {
+              omit: { isActive: true, createdAt: true, updatedAt: true },
+            },
+          },
+        },
       },
     });
   }

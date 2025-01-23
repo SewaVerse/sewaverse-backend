@@ -140,6 +140,7 @@ model Service {
   createdUser     User             @relation(fields: [createdBy], references: [id], onDelete: Cascade)
   offeredServices OfferedService[]
   workExperiences WorkExperience[]
+  serviceMappings ProviderProfileServiceMapping[]
 }
 
 model ServiceProvider {
@@ -184,7 +185,6 @@ model ServiceProviderProfile {
   experience         String
   location           String[]
 
-
   file            File?            @relation(fields: [imageId], references: [id])
   serviceProvider ServiceProvider? @relation(fields: [serviceProviderId], references: [id], onDelete: Cascade)
 
@@ -192,6 +192,19 @@ model ServiceProviderProfile {
   licenses        License[]
   awards          Award[]
   myWorks         MyWork[]
+  serviceMappings ProviderProfileServiceMapping[]
+}
+
+
+model ProviderProfileServiceMapping {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  profileId          String   @db.ObjectId
+  serviceId          String   @db.ObjectId
+
+
+  profile           ServiceProviderProfile @relation(fields: [profileId], references: [id])
+  service           Service                @relation(fields: [serviceId], references: [id])
+
 }
 
 model CompanyDetails {
@@ -337,7 +350,7 @@ model OfferedService {
   discount       Float?
   location       String?
   workExperience String?
-  overallRating  Float     @default(0) 
+  overallRating  Float     @default(0)
   published      Boolean   @default(true)
   adminVerified  Boolean   @default(false)
 
@@ -347,20 +360,19 @@ model OfferedService {
   service         Service         @relation(fields: [serviceId], references: [id])
   serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id])
 
-  images          OfferedServiceImageMapping[]
-  bookings        Booking[]
-  ratings         Rating[]
-  reviews         Review[]
+  images   OfferedServiceImageMapping[]
+  bookings Booking[]
+  ratings  Rating[]
+  reviews  Review[]
 }
 
 model OfferedServiceImageMapping {
-  id                String @id @default(auto()) @map("_id") @db.ObjectId
-  offeredServiceId  String  @db.ObjectId
-  imageId           String  @db.ObjectId
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  offeredServiceId String @db.ObjectId
+  imageId          String @db.ObjectId
 
-
-  offeredService    OfferedService  @relation(fields: [offeredServiceId], references: [id], onDelete: Cascade)
-  image             File             @relation(fields: [imageId], references: [id])
+  offeredService OfferedService @relation(fields: [offeredServiceId], references: [id], onDelete: Cascade)
+  image          File           @relation(fields: [imageId], references: [id])
 
   @@index([offeredServiceId])
 }
@@ -412,8 +424,8 @@ model License {
 }
 
 model Award {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  providerProfileId String   @db.ObjectId
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  providerProfileId String @db.ObjectId
   title             String
   year              String
   awardFrom         String
@@ -425,10 +437,10 @@ model Award {
 }
 
 model MyWork {
-  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
   title             String
   description       String?
-  providerProfileId String @db.ObjectId
+  providerProfileId String  @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
