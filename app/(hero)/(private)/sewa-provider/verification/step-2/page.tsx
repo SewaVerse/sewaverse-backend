@@ -68,6 +68,8 @@ export default function SewaProviderStepTwo() {
   const [skills, setSkills] = useState<string[]>([]);
   const [locationInput, setLocationInput] = useState<string>("");
 
+  const router = useRouter();
+
   const form = useForm<ProviderVerificationTwo>({
     resolver: zodResolver(providerVerificationTwo),
     defaultValues: {
@@ -78,8 +80,6 @@ export default function SewaProviderStepTwo() {
       serviceSubCategory: [],
     },
   });
-
-  const router = useRouter();
 
   const handleAddLocation = (newLocation: string) => {
     if (newLocation.trim() && !selectedLocations.includes(newLocation.trim())) {
@@ -104,21 +104,11 @@ export default function SewaProviderStepTwo() {
 
   const handleServiceSelect = (selected: SelectedService[]) => {
     setSelectedServices(selected);
-    const allSubCategories = selected.flatMap((s) =>
-      s.subCategories.map((sc) => sc.name)
+    const allSubCategoryIds = selected.flatMap((s) =>
+      s.subCategories.map((sc) => sc.id)
     );
-    form.setValue("serviceSubCategory", allSubCategories);
+    form.setValue("serviceSubCategory", allSubCategoryIds);
   };
-
-  // const handleLocationChange = (value: string) => {
-  //   if (!selectedLocations.includes(value)) {
-  //     const newLocations = [...selectedLocations, value];
-  //     setSelectedLocations(newLocations);
-  //     form.setValue("location", newLocations, {
-  //       shouldValidate: true,
-  //     });
-  //   }
-  // };
 
   const handleAddSkill = (newSkill: string) => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
@@ -158,6 +148,13 @@ export default function SewaProviderStepTwo() {
         })
         .filter((service) => service.subCategories.length > 0)
     );
+
+    // Update form value to remove the subcategory ID
+    const currentSubCategories = form.getValues("serviceSubCategory");
+    form.setValue(
+      "serviceSubCategory",
+      currentSubCategories.filter((id) => id !== subCategoryId)
+    );
   };
 
   const handleRemoveAllServices = () => {
@@ -167,23 +164,6 @@ export default function SewaProviderStepTwo() {
 
   const onSubmit = async (data: ProviderVerificationTwo) => {
     try {
-      // // Log the raw form data object
-      // console.warn("1. Raw Form Data Object:", {
-      //   profession: data.profession,
-      //   skills: data.skills,
-      //   experience: data.experience,
-      //   serviceSubCategory: data.serviceSubCategory,
-      //   location: data.location,
-      //   file:
-      //     data.file instanceof File
-      //       ? {
-      //           name: data.file.name,
-      //           type: data.file.type,
-      //           size: data.file.size,
-      //         }
-      //       : "No file selected",
-      // });
-
       // Create FormData
       const formData = new FormData();
       formData.append("profession", data.profession);
@@ -196,9 +176,9 @@ export default function SewaProviderStepTwo() {
         formData.append("file", data.file);
       }
 
-      // Log the FormData entries
+      console.warn("Data", data);
+      console.warn("Form Data", formData);
 
-      // Uncomment this section when ready to make the API call
       const response = await fetch(
         "/api/service-provider/verification/detail/business-profile",
         {
@@ -430,7 +410,7 @@ export default function SewaProviderStepTwo() {
                 <FormItem>
                   <FormControl>
                     <Input
-                      placeholder="Add Location (Required*)"
+                      placeholder="Location of Service (Required*)"
                       className="border-2 border-slate-300 rounded-md font-work-sans"
                       value={locationInput}
                       onChange={(e) => setLocationInput(e.target.value)}
@@ -463,6 +443,7 @@ export default function SewaProviderStepTwo() {
                 </FormItem>
               )}
             />
+            {/* <LocationDialog /> */}
 
             <Button
               type="submit"
@@ -483,7 +464,7 @@ export default function SewaProviderStepTwo() {
         <div className="flex items-center justify-center cursor-not-allowed">
           <ProfileCard
             name={""}
-            joinDate={""}
+            createdAt={""}
             servicesDelivered={0}
             profession={""}
             experience={""}

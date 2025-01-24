@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
-import { Open_Sans, Roboto, Work_Sans } from "next/font/google";
+import { Open_Sans, Work_Sans } from "next/font/google";
 
 import { auth } from "@/auth";
 
@@ -12,11 +12,11 @@ const Work_SansFont = Work_Sans({
   subsets: ["latin"],
   variable: "--work-sans",
 });
-const robotoFont = Roboto({
-  subsets: ["latin"],
-  variable: "--roboto",
-  weight: ["400", "500", "700"],
-});
+// const robotoFont = Roboto({
+//   subsets: ["latin"],
+//   variable: "--roboto",
+//   weight: ["400", "500", "700"],
+// });
 const Open_SansFont = Open_Sans({
   subsets: ["latin"],
   variable: "--open-sans",
@@ -40,7 +40,7 @@ export default async function RootLayout({
     <html lang="en">
       <body
         // className={`${geistSans.variable} ${geistMono.variable}  ${poppinsFont.variable} antialiased `}
-        className={`${Work_SansFont.variable} ${robotoFont.variable} ${Open_SansFont.variable} antialiased `}
+        className={`${Work_SansFont.variable} ${Open_SansFont.variable} antialiased `}
       >
         <SessionProvider session={session}>
           <TanStackContext>
