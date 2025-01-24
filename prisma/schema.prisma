@@ -13,6 +13,68 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Company {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  address      String?
+  contactEmail String?
+  contactPhone String?
+
+  createdAt DateTime @default(now())
+
+  financialYears FinancialYear[]
+  journalEntries JournalEntry[]
+}
+
+model FinancialYear {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  companyId String   @db.ObjectId
+  startDate DateTime
+  endDate   DateTime
+  isActive  Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+
+  company        Company        @relation(fields: [companyId], references: [id])
+  journalEntries JournalEntry[]
+}
+
+model LedgerAccount {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  parentId  String?  @db.ObjectId
+  createdAt DateTime @default(now())
+
+  parent   LedgerAccount?  @relation("LedgerAccountHierarchy", fields: [parentId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  children LedgerAccount[] @relation("LedgerAccountHierarchy")
+  postings Posting[]
+}
+
+model JournalEntry {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  companyId       String   @db.ObjectId
+  financialYearId String   @db.ObjectId
+  description     String
+  entryDate       DateTime
+  createdAt       DateTime @default(now())
+
+  company       Company       @relation(fields: [companyId], references: [id])
+  financialYear FinancialYear @relation(fields: [financialYearId], references: [id])
+  postings      Posting[]
+}
+
+model Posting {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  journalEntryId String   @db.ObjectId
+  accountId      String   @db.ObjectId
+  debitAmount    Float    @default(0)
+  creditAmount   Float    @default(0)
+  createdAt      DateTime @default(now())
+
+  journalEntry JournalEntry  @relation(fields: [journalEntryId], references: [id])
+  account      LedgerAccount @relation(fields: [accountId], references: [id])
+}
+
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
@@ -136,8 +198,8 @@ model Service {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  services        Service[]        @relation("ServiceHierarchy")
-  createdUser     User             @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  services        Service[]                       @relation("ServiceHierarchy")
+  createdUser     User                            @relation(fields: [createdBy], references: [id], onDelete: Cascade)
   offeredServices OfferedService[]
   workExperiences WorkExperience[]
   serviceMappings ProviderProfileServiceMapping[]
@@ -195,16 +257,13 @@ model ServiceProviderProfile {
   serviceMappings ProviderProfileServiceMapping[]
 }
 
-
 model ProviderProfileServiceMapping {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  profileId          String   @db.ObjectId
-  serviceId          String   @db.ObjectId
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  profileId String @db.ObjectId
+  serviceId String @db.ObjectId
 
-
-  profile           ServiceProviderProfile @relation(fields: [profileId], references: [id])
-  service           Service                @relation(fields: [serviceId], references: [id])
-
+  profile ServiceProviderProfile @relation(fields: [profileId], references: [id])
+  service Service                @relation(fields: [serviceId], references: [id])
 }
 
 model CompanyDetails {
