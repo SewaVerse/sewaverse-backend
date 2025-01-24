@@ -1,129 +1,198 @@
 "use client";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { FaLocationDot, FaRegHeart, FaStar } from "react-icons/fa6";
 
+import { useQuery } from "@tanstack/react-query";
+import { Award, CheckCircle, Heart, MapPin, Star } from "lucide-react";
+import Image from "next/image";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+interface SewaProvider {
+  id: string;
+  name: string;
+  title: string;
+  subtitle: string;
+  rating: number;
+  location: string;
+  price: number;
+  experience: string;
+  delivered: string;
+  profileImage: string;
+  profiles: {
+    profession: string;
+    experience: number;
+    overallRating: number;
+    location: string[];
+  }[];
+  offeredServices: {
+    title: string;
+    price: number;
+  }[];
+}
+
+const fetchServiceProviders = async (): Promise<SewaProvider[]> => {
+  const response = await fetch("/api/public/service-provider");
+  const apiResponse = await response.json();
+
+  return apiResponse.data.data.map((provider: SewaProvider) => ({
+    id: provider.id,
+    name: provider.name,
+    title: provider.offeredServices[0]?.title || "Service Provider",
+    subtitle: provider.profiles[0]?.profession || "",
+    rating: provider.profiles[0]?.overallRating || 0,
+    location: provider.profiles[0]?.location?.[0] || "Unknown",
+    price: provider.offeredServices[0]?.price || 0,
+    experience: `${provider.profiles[0]?.experience || 0} years experience`,
+    delivered: `${provider.offeredServices.length} services offered`,
+    profileImage: "", // Add image URL logic
+  }));
+};
 
 export function ServiceProviderCard() {
-  const [servicesData, setServicesData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // Fetch data from the backend API
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "/api/public/service-provider?page=1&limit=10"
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const data = await response.json();
-        console.warn("Fetched Data:", data); // Console log the API data
-        setServicesData(data?.data?.items || []); // Update the state with fetched data
-      } catch (error) {
-        console.error(error);
-        setError(error.message || "Failed to fetch data");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { data: providers, isLoading } = useQuery({
+    queryKey: ["serviceProviders"],
+    queryFn: fetchServiceProviders,
+  });
 
   if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
+    return <LoadingSkeleton />;
   }
 
   return (
-    <div className="flex flex-wrap gap-6 justify-center">
-      {servicesData.map((service: any, index: number) => (
-        <Card
-          key={index}
-          className="w-[300px] md:w-[300px] h-auto sm:h-[12vh] md:h-auto shadow-md rounded-lg overflow-hidden bg-white"
-        >
-          {/* Service Icon */}
-          <div className="relative">
-            <Image
-              src={
-                service.serviceIcon ||
-                "/images/servicesImage/sewaproviderImage.svg"
-              }
-              alt={`${service.title} Icon`}
-              width={250}
-              height={100}
-              className="rounded-t-lg object-contain w-full"
-            />
-            <div className="absolute bottom-0 left-4 w-16 h-7 p-1 bg-blue-900 rounded">
-              <p className="text-white text-sm text-center">
-                Rs. {service.price}
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      {providers?.map((provider) => (
+        <ProviderCard key={provider.id} provider={provider} />
+      ))}
+    </div> 
+  );
+}
+
+function ProviderCard({ provider }: { provider: SewaProvider }) {
+  return (
+    <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg">
+      <CardHeader className="p-0">
+        <div className="relative aspect-[4/3] w-full overflow-hidden group">
+          <Image
+            src={provider.profileImage || "/placeholder.svg"}
+            alt={`${provider.name}'s profile`}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+            <div>
+              <h3 className="font-semibold text-white text-lg mb-1">
+                {provider.name}
+              </h3>
+              <Badge
+                variant="secondary"
+                className="bg-primary/80 text-primary-foreground"
+              >
+                Rs. {provider.price}
+              </Badge>
+            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="rounded-full"
+                  >
+                    <Heart className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add to favorites</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="p-2">
+        <div className="space-y-2">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="font-medium text-primary">{provider.title}</p>
+              <p className="text-sm text-muted-foreground">
+                {provider.subtitle}
               </p>
             </div>
-          </div>
-
-          {/* Card Content */}
-          <CardContent className="p-1">
-            <div className="flex items-baseline md:gap-14 lg:gap-12 ">
-              <div className="flex flex-col">
-                <h1 className="text-sm font-semibold text-gray-800">
-                  {service.name || "Unknown"}
-                </h1>
-                <p className="text-[12px] text-gray-700 md:text-sm  lg:text-sm">
-                  {service.title || "Service Title"}
-                </p>
-                <p className="text-[12px] text-gray-700 md:text-sm  lg:text-sm">
-                  {service.subtitle || "Service Subtitle"}
-                </p>
-
-                <div className="flex items-center text-muted-foreground">
-                  <FaLocationDot size={14} />
-                  <p className="text-[12px]">
-                    {service.location || "Unknown Location"}
-                  </p>
-                </div>
-              </div>
-              <div>
-                <span className="flex items-center gap-1  ">
-                  <FaStar size={14} color="orange" />
-                  <h1 className="text-sm">{service.rating || "N/A"}</h1>
-                </span>
-              </div>
-            </div>
-          </CardContent>
-
-          <hr className="border-dotted" />
-
-          <div>
-            <div className="flex items-center gap-10 md:gap-16 p-2 ">
-              <span className="">
-                <p className="text-muted-foreground text-[10px] md:text-sm ">
-                  {service.Delivered || "N/A"}
-                </p>
-
-                <p className="text-muted-foreground text-[10px] md:text-sm ">
-                  {service.experience || "N/A"}
-                </p>
+            <div className="flex items-center bg-yellow-100 px-2 py-1 rounded">
+              <Star className="w-4 h-4 text-yellow-500 mr-1" />
+              <span className="text-sm font-medium text-yellow-700">
+                {provider.rating}
               </span>
-              <div className="flex flex-col items-center gap-y-1  md:items-end md:gap-y-2 ">
-                <FaRegHeart className=" text-[10px] md:text-sm  lg:text-lg" />
-                <Button
-                  variant="brand"
-                  size="sm"
-                  className="border-black hidden lg:block md:block  text-[10px]   md:text-sm  lg:text-sm"
-                >
-                  Book now
-                </Button>
-              </div>
             </div>
           </div>
+          <div className="flex items-center text-sm text-muted-foreground">
+            <MapPin className="w-4 h-4 mr-1 text-primary" />
+            <span>{provider.location}</span>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="p-2 pt-0 flex flex-col justify-between items-center border-t">
+        <div className="flex flex-col items-center">
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Award className="w-4 h-4 text-primary" />
+            <span>{provider.experience}</span>
+          </div>
+          <div className="flex items-center text-sm text-muted-foreground">
+            <CheckCircle className="w-4 h-4 mr-1 text-primary" />
+            <span>{provider.delivered}</span>
+          </div>
+        </div>
+        <Button variant="default" size="sm" className="font-semibold">
+          Book now
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      {[...Array(8)].map((_, index) => (
+        <Card key={index} className="overflow-hidden">
+          <CardHeader className="p-0">
+            <Skeleton className="aspect-[4/3] w-full" />
+          </CardHeader>
+          <CardContent className="p-4">
+            <div className="flex justify-between items-start mb-2">
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[150px]" />
+                <Skeleton className="h-3 w-[100px]" />
+                <Skeleton className="h-3 w-[100px]" />
+              </div>
+              <Skeleton className="h-6 w-10" />
+            </div>
+            <Skeleton className="h-4 w-[120px] mt-2" />
+          </CardContent>
+          <CardFooter className="p-4 pt-0 flex justify-between items-center">
+            <div className="space-y-1">
+              <Skeleton className="h-3 w-[100px]" />
+              <Skeleton className="h-3 w-[80px]" />
+            </div>
+            <div className="flex flex-col items-end gap-2">
+              <Skeleton className="h-8 w-8 rounded-full" />
+              <Skeleton className="h-8 w-20" />
+            </div>
+          </CardFooter>
         </Card>
       ))}
     </div>

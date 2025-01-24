@@ -21,24 +21,18 @@ import License from "./components/License";
 import MyWorks from "./components/MyWorks";
 import WorkExperiencesView from "./components/WorkExperiences";
 
-// const profileData = {
-//   name: "Bishal Shrestha",
-//   joinDate: "5th Jan, 2024",
-//   servicesDelivered: 100,
-//   profession: "Barber",
-//   experience: "5 Years",
-//   rating: 4.5,
-//   offeredServices: ["Hair Cutting"],
-//   locations: ["Kathmandu", "Bhaktapur", "Lalitpur"],
-//   coreSkills: ["Hair Dressing", "Hair Colouring", "Hair Cutting"],
-//   imageUrl: "",
-// };
-
+// interface ServiceCategory {
+//   id: string;
+//   name: string;
+//   description: string | null;
+//   parentServiceId: string;
+// }
 interface ProfileResponse {
   success: boolean;
   message: string;
   serviceProvider: {
     name: string;
+    createdAt: string;
     profile: {
       profession: string;
       experience: string;
@@ -54,6 +48,11 @@ interface ProfileResponse {
       company: string;
       duration: string;
       description: string;
+    }>;
+    serviceCategories: Array<{
+      name: string;
+      description: string | null;
+      parentServiceId: string;
     }>;
   };
 }
@@ -84,7 +83,7 @@ const Page = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [profileData, setProfileData] = useState({
     name: "",
-    joinDate: "",
+    createdAt: "",
     servicesDelivered: 0,
     profession: "",
     experience: "",
@@ -101,11 +100,29 @@ const Page = () => {
         const response = await fetch("/api/service-provider/profile");
         const data: ProfileResponse = await response.json();
 
+        // const renderOfferedServices = () => {
+        //   return profileData.serviceProvider.offeredServices.map((service) => {
+        //     const category = profileData.serviceProvider.serviceCategories.find(
+        //       (cat) => cat.id === service.serviceId
+        //     );
+        //     return (
+        //       <div key={service.id} className="flex items-center gap-2">
+        //         <span>{service.title}</span>
+        //         {category && (
+        //           <span className="text-sm text-muted-foreground">
+        //             ({category.name})
+        //           </span>
+        //         )}
+        //       </div>
+        //     );
+        //   });
+        // };
+
         if (data.success) {
           const { serviceProvider } = data;
           setProfileData({
             name: serviceProvider.name,
-            joinDate: Date.now().toString(),
+            createdAt: serviceProvider.createdAt,
             //  new Date(serviceProvider.createdAt).toLocaleDateString(
             //    "en-US",
             //    {
@@ -118,7 +135,7 @@ const Page = () => {
             profession: serviceProvider.profile.profession,
             experience: `${serviceProvider.profile.experience} Years`,
             rating: 0, // Default value as not provided in API
-            offeredServices: serviceProvider.profile.serviceSubCategory,
+            offeredServices: serviceProvider.serviceCategories.map(category => category.name),
             locations: serviceProvider.profile.location,
             coreSkills: serviceProvider.profile.skills,
             imageUrl: serviceProvider.profile.image?.localUrl || "",

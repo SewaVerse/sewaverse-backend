@@ -69,7 +69,6 @@ export default function SelectServices({
         if (data.success) {
           setServices(data.data);
         }
-        console.warn("response", data.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching services:", error);

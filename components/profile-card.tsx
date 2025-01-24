@@ -120,7 +120,7 @@ import { Button } from "./ui/button";
 
 interface ProfileProps {
   name: string;
-  joinDate: string;
+  createdAt: string;
   servicesDelivered: number;
   profession: string;
   experience: string;
@@ -133,7 +133,7 @@ interface ProfileProps {
 
 export function ProfileCard({
   name,
-  joinDate,
+  createdAt,
   servicesDelivered,
   profession,
   experience,
@@ -176,7 +176,11 @@ export function ProfileCard({
             </div>
 
             <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 mt-2 text-muted-foreground font-medium">
-              <p className="text-sm md:text-base">Joined on: {joinDate}</p>
+              {/* <p className="text-sm md:text-base">
+                Joined on: {format(new Date(createdAt), "EEEE, MMMM do yyyy")}
+              </p> */}
+              <p className="text-sm md:text-base">Joined on: {createdAt}</p>
+
               <span className="hidden md:inline">|</span>
               <p className="text-sm md:text-base">
                 {servicesDelivered} Services Delivered
@@ -200,12 +204,14 @@ export function ProfileCard({
               <div>
                 <p className="text-lg text-muted-foreground">Rating</p>
                 <p className="flex items-center text-lg gradient-text font-semibold">
-                  {Array.from({ length: Math.floor(rating ?? 0) }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-5 h-5 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
+                  {Array.from({ length: Math.floor(rating ?? 0) }).map(
+                    (_, i) => (
+                      <Star
+                        key={i}
+                        className="w-5 h-5 fill-yellow-400 text-yellow-400"
+                      />
+                    )
+                  )}
                   <span className="ml-1">{rating}</span>
                 </p>
               </div>
@@ -221,7 +227,7 @@ export function ProfileCard({
                     key={index}
                     className="text-lg font-semibold gradient-text"
                   >
-                    {service}
+                    {service} |
                   </h1>
                 ))}
               </div>
