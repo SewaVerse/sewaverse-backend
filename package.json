@@ -11,7 +11,7 @@
     "prisma:format": "npx prisma format",
     "prisma:generate": "npx prisma generate",
     "prisma:push": "npx prisma generate && npx prisma db push",
-    "db:seed": "npx tsx prisma/seed/seed.ts"
+    "db:seed": "npx tsx prisma/seed.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",

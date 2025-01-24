@@ -1,10 +1,12 @@
 import db from "@/lib/db";
 
-import seedCompany from "./companySeed";
+import seedCompany from "./seed/companySeed";
+import seedUser from "./seed/userSeed";
 
 async function seed() {
   await db.$transaction(async (tx) => {
     await seedCompany(tx);
+    await seedUser(tx);
   });
 }
 

@@ -21,4 +21,6 @@ export default async function seedCompany(
   await prismaClient.company.create({
     data: companyData,
   });
+
+  console.warn("Company seeded successfully.");
 }
