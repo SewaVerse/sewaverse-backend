@@ -70,6 +70,7 @@ const ProfileNavigationSection = () => {
             key={link.name}
             className={clsx(
               "font-bold",
+              !hash && link.default && "gradient-text",
               hash === link.href.split("#")[1] && "gradient-text"
             )}
           >
