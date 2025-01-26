@@ -9,12 +9,12 @@ const ProfilePage = () => {
 
       <div className="md:mx-[7rem] lg:mx-[14.25rem]">
         {/* ProfileComponent section */}
-        <div className="z-10 absolute top-[18rem] left-1/2 transform -translate-x-1/2">
+        <div className="z-10 absolute top-[24rem] left-1/2 transform -translate-x-1/2">
           <ProfileComponent />
         </div>
 
         {/* Profile content section */}
-        <div className="mt-[19.5rem]">
+        <div className="mt-[28rem] md:mt-[23rem]">
           <ProfileDetails />
         </div>
       </div>

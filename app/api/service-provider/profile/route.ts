@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 import { getServiceProviderByUserIdWithInclude } from "@/app/data-access/serviceProvider";
 import { getServiceProviderProfile } from "@/app/data-access/serviceProviderProfile";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
-import { getcurrentUser } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 export const GET = roleAsyncHandler("SERVICE_PROVIDER", async () => {
-  const user = await getcurrentUser();
+  const user = await getCurrentUser();
 
   const { id } = user!;
 
@@ -26,7 +26,8 @@ export const GET = roleAsyncHandler("SERVICE_PROVIDER", async () => {
     throw new Error("Service provider profile not found");
   }
 
-  const { file, workExperiences, licenses, awards, ...rest } = profile;
+  const { file, workExperiences, licenses, awards, serviceMappings, ...rest } =
+    profile;
   const serviceProviderWithProfile = {
     name: serviceProvider.name,
     email: serviceProvider.email,
@@ -43,6 +44,7 @@ export const GET = roleAsyncHandler("SERVICE_PROVIDER", async () => {
     workExperiences,
     licenses,
     awards,
+    serviceCategories: serviceMappings?.map((m) => m.service) ?? [],
   };
 
   return NextResponse.json({

@@ -11,7 +11,7 @@ import {
 } from "@/app/schemas/providerSteps/aboutSchema";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { getcurrentUser } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 export const POST = roleAsyncHandler(
   "SERVICE_PROVIDER",
@@ -31,7 +31,7 @@ export const POST = roleAsyncHandler(
 
     console.error("data", about);
 
-    const user = await getcurrentUser();
+    const user = await getCurrentUser();
     const serviceProvider = await getServiceProviderByUserId(user!.id);
 
     const profile = await getServiceProviderProfileByServiceProviderId(

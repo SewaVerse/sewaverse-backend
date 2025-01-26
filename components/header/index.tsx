@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import DynamicMenu from "./DynamicMenu";
 import { Input } from "../ui/input";
+import DynamicMenu from "./DynamicMenu";
 
 const Header = () => {
   return (
@@ -18,14 +18,14 @@ const Header = () => {
             />
           </Link>
 
-          <div className="md:flex md:flex-1 me-10 hidden relative">
+          <div className="md:flex md:w-[35rem] me-10 hidden relative">
             <Input
               placeholder="Search services..."
               type="search"
               className="text-sm h-full pe-[8rem] w-full"
             />
             <div className="absolute top-0 right-0  flex h-full ">
-              <div className="flex items-center px-2  my-1 border-l-2">
+              <div className="flex items-center px-5  my-1 border-l-2">
                 <Image
                   src="/images/location.svg"
                   width={20}
@@ -45,8 +45,7 @@ const Header = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-5">
-          <p className="hidden md:block">Why Sewaverse</p>
+        <div className="flex items-center flex-1 gap-5">
           <DynamicMenu />
         </div>
       </div>

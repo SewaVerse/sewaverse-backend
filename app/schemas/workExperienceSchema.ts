@@ -15,7 +15,8 @@ export const workExperienceSchema = z.object({
     .date({ invalid_type_error: "End date must be a valid date" })
     .optional()
     .nullable(),
-  isCurrent: z.boolean(),
+  category: z.string().optional(),
+  isCurrent: z.boolean().optional(),
   serviceId: z.string(),
   verificationFile: fileSchema.optional(),
 });

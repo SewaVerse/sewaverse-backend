@@ -6,7 +6,7 @@ import { getServiceProviderProfileByServiceProviderId } from "@/app/data-access/
 import { awardSchema, AwardSchema } from "@/app/schemas/awardSchema";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { getcurrentUser } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 function parseAward(formData: FormData): AwardSchema {
   const json = formData.get("jsonData") as string;
@@ -38,9 +38,9 @@ export const POST = roleAsyncHandler(
       return NextResponse.json(validationError, { status: 400 });
     }
 
-    const { title, date, awardFrom, awardFile } = validatedFields;
+    const { title, year, awardFrom, awardFile } = validatedFields;
 
-    const user = await getcurrentUser();
+    const user = await getCurrentUser();
     const serviceProvider = await getServiceProviderByUserId(user!.id);
 
     const profile = await getServiceProviderProfileByServiceProviderId(
@@ -49,7 +49,7 @@ export const POST = roleAsyncHandler(
 
     const data = await createAward(profile!.id, {
       title,
-      date,
+      year,
       awardFrom,
       awardFile,
     } as AwardSchema);

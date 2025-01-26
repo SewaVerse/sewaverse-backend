@@ -63,8 +63,11 @@ export const createServiceProviderProfile = dbAsyncHandler(
     tx: Prisma.TransactionClient | null = null
   ) => {
     const prismaClient = tx || db;
+    // console.warn("data", ...data);
     return await prismaClient.serviceProviderProfile.create({
-      data,
+      data: {
+        ...data,
+      },
     });
   }
 );
@@ -101,16 +104,27 @@ export const updateServiceProviderProfile = dbAsyncHandler(
       throw new Error("Profile not found");
     }
 
+    const services = data?.serviceSubCategory?.map((str) => ({
+      serviceId: str,
+    }));
+
     await db.serviceProviderProfile.update({
       where: { id: profileId },
       data: {
         about: data.about ?? currentProfile.about,
         profession: data.profession ?? currentProfile.profession,
         skills: data.skills ?? currentProfile.skills,
-        description: data.description ?? currentProfile.description,
+        experience: data.experience ?? currentProfile.experience,
+        location: data.location ?? currentProfile.location,
         imageId: data.imageId ?? currentProfile.imageId,
         serviceSubCategory:
           data.serviceSubCategory ?? currentProfile.serviceSubCategory,
+        serviceMappings: {
+          deleteMany: {}, // clear exisitings
+          createMany: {
+            data: services ?? [],
+          },
+        },
       },
     });
   }

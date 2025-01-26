@@ -73,8 +73,7 @@ export default {
   		},
   		fontFamily: {
   			'work-sans': 'var(--work-sans)',
-  			roboto: 'var(--roboto)',
-  			inter: 'var(--inter)'
+  			'open-sans': 'var(--open-sans)'
   		},
   		keyframes: {
   			'accordion-down': {

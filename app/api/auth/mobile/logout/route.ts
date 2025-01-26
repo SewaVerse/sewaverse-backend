@@ -4,10 +4,10 @@ import { NextResponse } from "next/server";
 import { getUserByEmail, updateUserById } from "@/app/data-access/user";
 import ApiError from "@/app/utils/apiError";
 import { asyncHandler } from "@/app/utils/asyncHelper/asyncHandler";
-import { getcurrentUser } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 export const POST = asyncHandler(async () => {
-  const sessionUser = await getcurrentUser();
+  const sessionUser = await getCurrentUser();
 
   if (!sessionUser) throw new ApiError("Invalid token", 401);
 

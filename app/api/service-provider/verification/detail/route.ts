@@ -22,7 +22,7 @@ import ApiError from "@/app/utils/apiError";
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import { genderTypeMap } from "@/app/utils/enumMap";
 import { validateRequestBody } from "@/app/utils/validateRequestBody";
-import { currentNextAuthUser } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
 
 function parseProviderVerificationDetail(
@@ -66,6 +66,8 @@ export const POST = roleAsyncHandler(
 
     const body = parseProviderVerificationDetail(formData);
 
+    console.warn("body", body);
+
     const [validationError, validatedFields] = validateRequestBody(
       providerVerificationDetailSchema,
       body
@@ -74,7 +76,7 @@ export const POST = roleAsyncHandler(
       return NextResponse.json(validationError, { status: 400 }); // If there's an error, return it directly
     }
 
-    const user = await currentNextAuthUser();
+    const user = await getCurrentUser();
 
     let serviceProvider = await getServiceProviderByUserId(user!.id!);
 
@@ -122,6 +124,8 @@ export const POST = roleAsyncHandler(
             serviceProviderId: serviceProvider.id,
             gender: genderTypeMap[gender as keyof typeof genderTypeMap],
             dob,
+            profession: "",
+            experience: "",
           } as ServiceProviderProfile,
           tx
         );

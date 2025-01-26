@@ -11,7 +11,6 @@ export const currentNextAuthUser = async () => {
 
 export const currentRoles = async () => {
   const session = await auth();
-
   return session?.user?.roles;
 };
 
@@ -19,7 +18,7 @@ export const currentRoles = async () => {
  * Get current user from next auth or headers
  * @returns user
  */
-export const getcurrentUser = async () => {
+export const getCurrentUser = async () => {
   const session = await auth();
 
   if (session) return session?.user;

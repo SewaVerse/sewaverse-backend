@@ -32,7 +32,7 @@ export const POST = asyncHandler(async (request: Request) => {
     throw new ApiError("Email not verified.");
   }
 
-  const passwordsMatch = await bcrypt.compare(password, user.password);
+  const passwordsMatch = bcrypt.compareSync(password, user.password);
 
   if (!passwordsMatch) throw new ApiError("Invalid credentials.");
 
@@ -66,6 +66,7 @@ export const POST = asyncHandler(async (request: Request) => {
         email: user.email,
         roles: user.roles.map((role) => role.role),
         profileId: user.userProfileId,
+        userType: user.userType,
       },
     },
     { status: 200 }
