@@ -19,6 +19,17 @@ export const PUBLIC_ROUTES = [
   "/popup",
   "/profile/edit",
   "/services",
+  "/userprofile",
+  "/userprofile/Booking",
+  "/userprofile/myprofile",
+  "/userprofile/leadership",
+  "/userprofile/offers",
+  "/userprofile/review",
+  "/userprofile/wishlist",
+  
+
+
+  
 ];
 
 /**
