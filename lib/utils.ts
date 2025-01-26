@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getImageUrlFromPrismaFile(
+export function getImageUrl(
   file: Prisma.FileGetPayload<{ include: { fileBinaries: true } }> | null
 ): string {
   if (!file) return "";
