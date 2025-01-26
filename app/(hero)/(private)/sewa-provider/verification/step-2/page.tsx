@@ -76,7 +76,7 @@ export default function SewaProviderStepTwo() {
       profession: "",
       experience: "",
       skills: [],
-      location: ["kathmandu"],
+      location: [],
       serviceSubCategory: [],
     },
   });
