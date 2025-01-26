@@ -30,11 +30,8 @@
     "@radix-ui/react-select": "^2.1.4",
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
-<<<<<<< HEAD
     "@radix-ui/react-tabs": "^1.1.2",
-=======
     "@radix-ui/react-switch": "^1.1.2",
->>>>>>> e74f0d6c3a003cdf145b33219be83ac29b196668
     "@radix-ui/react-toast": "^1.2.2",
     "@radix-ui/react-tooltip": "^1.1.7",
     "@shadcn/ui": "^0.0.4",
@@ -48,10 +45,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
-<<<<<<< HEAD
-=======
     "embla-carousel-autoplay": "^8.5.2",
->>>>>>> e74f0d6c3a003cdf145b33219be83ac29b196668
     "embla-carousel-react": "^8.5.2",
     "jose": "^5.9.6",
     "lucide-react": "^0.468.0",
