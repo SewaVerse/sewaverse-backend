@@ -3,20 +3,14 @@ import HeroSection from "./_components/HeroSection";
 
 const ServicePage = () => {
   return (
-    <>
-      <div className="flex">
-        <div className="lg:w-1/3 ">
-          
+    <div className="flex mx-16 mt-4">
+      <div className="w-1/4 hidden md:block">
         <FilterSection />
-        </div>
-       <div className="lg:w-full   ">
-        <HeroSection/>
-        
-     {/* <SewaSection/> */}
-       </div>
       </div>
-     
-    </>
+      <div className="w-full">
+        <HeroSection />
+      </div>
+    </div>
   );
 };
 

@@ -1,142 +1,223 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip";
+import { useQueries } from "@tanstack/react-query";
+import axios from "axios";
+import { Heart, MapPin, Star } from "lucide-react";
 import Image from "next/image";
-import { FaRegHeart, FaStar } from "react-icons/fa";
-import { FaLocationDot } from "react-icons/fa6";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
-export const servicesData = [
-  {
-    title: "Painting | Exterior | Interior",
-    subtitle: "All kinds of painting work",
-    name: "Emma Clark",
-    rating: 4.5,
-    location: "Kathmandu",
-    offer: "30% OFF",
-    price: 2000,
-    discount: "Rs.25,000",
-    serviceIcon: "/images/servicesImage/Beautician.svg",
-    profile1: "/images/servicesImage/profile1.svg",
-  },
-  {
-    title: "Plumbing Services",
-    subtitle: "Expert plumbing work",
-    name: "John Doe",
-    rating: 4.8,
-    price: 3000,
-    location: "Lalitpur",
-    serviceIcon: "/images/servicesImage/HomeWater.svg",
-    profile1: "/images/servicesImage/profile1.svg",
-  },
-  {
-    title: "Mechanic Services",
-    subtitle: "Car and bike repairs",
-    name: "Michel deo",
-    rating: 4.2,
-    location: "Bhaktapur",
-    price: 4000,
-    serviceIcon: "/images/servicesImage/Mechanics.svg",
-    profile1: "/images/servicesImage/profile1.svg",
-  },
-  {
-    title: "Childcare Services",
-    subtitle: "Professional babysitting",
-    name: "Sophia Lee",
-    rating: 4.9,
-    location: "Kathmandu",
-    price: 5000,
-    serviceIcon: "/images/servicesImage/Childcare.svg",
-    profile1: "/images/servicesImage/profile1.svg",
-  },
-];
+import { SewaCardSkeleton } from "./SewaCardSkeleton";
 
-export function CardWithForm() {
+// Interfaces
+interface ServiceProvider {
+  id: string;
+  serviceProviderId: string;
+  userId: string;
+  name: string;
+  email: string;
+  profileId: string;
+  providerType: string;
+  isVerified: boolean;
+  isAdminVerified: boolean;
+  experiences?: string;
+  deliveredServices?: number;
+  totalServices?: number;
+}
+
+interface ProviderDetailsResponse {
+  success: boolean;
+  data: {
+    data: ServiceProvider[];
+  };
+}
+
+const fetchOfferedServices = async () => {
+  const response = await axios.get("/api/public/offered-service");
+  return response.data.data.data;
+};
+
+const fetchServiceProviders = async () => {
+  const response = await axios.get<ProviderDetailsResponse>(
+    "/api/public/service-provider"
+  );
+  return response.data.data.data.map((provider) => ({
+    ...provider,
+    experiences: `${Math.floor(Math.random() * 10)} years`,
+    deliveredServices: Math.floor(Math.random() * 50),
+    totalServices: Math.floor(Math.random() * 20),
+  }));
+};
+
+export function SewaCard() {
+  const [servicesQuery, providersQuery] = useQueries({
+    queries: [
+      {
+        queryKey: ["offeredServices"],
+        queryFn: fetchOfferedServices,
+      },
+      {
+        queryKey: ["serviceProviders"],
+        queryFn: fetchServiceProviders,
+      },
+    ],
+  });
+
+  // Loading state
+  if (servicesQuery.isLoading || providersQuery.isLoading) {
+    return <SewaCardSkeleton />;
+  }
+
+  // Error handling
+  if (servicesQuery.error || providersQuery.error) {
+    return (
+      <div>
+        Error: {servicesQuery.error?.message || providersQuery.error?.message}
+      </div>
+    );
+  }
+
+  // Enhance services with provider details
+  const enhancedServices = servicesQuery.data?.map(
+    (service: ServiceProvider) => {
+      const provider = providersQuery.data?.find(
+        (p) => p.id === service.serviceProviderId
+      );
+      return {
+        ...service,
+        providerExperience: provider?.experiences,
+        deliveredServices: provider?.deliveredServices,
+        totalServices: provider?.totalServices,
+      };
+    }
+  );
+
   return (
-    <div className="flex flex-wrap gap-6 justify-center">
-      {servicesData.map((service, index) => (
-        <Card
-          key={index}
-          className="w-[300px] md:w-[300px] h-auto sm:h-[12vh] md:h-auto shadow-md rounded-lg overflow-hidden bg-white"
-        >
-          {/* Service Icon */}
-          <div className="relative">
-            <Image
-              src={service.serviceIcon}
-              alt={`${service.title} Icon`}
-              width={250}
-              height={100}
-              className="rounded-t-lg object-contain w-full"
-            />
-            <div
-              className={`absolute bottom-3 left-4 w-16 ${
-                service.discount ? "h-9" : "h-7"
-              } p-1 bg-blue-900 rounded flex items-center flex-col`}
-            >
-              {service.discount && (
-                <p className="text-muted-foreground text-[10px] text-center line-through">
-                  {service.discount}
-                </p>
-              )}
-              <p className="text-white text-sm">Rs. {service.price}</p>
-            </div>
-
-            {/* for absolute */}
-            {service.offer && (
-              <div className="absolute top-0 right-12 w-[45px] h-[52px] bg-red-600 rounded-b-sm">
-                <p className="text-white p-1">{service.offer}</p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      {enhancedServices?.map(
+        (
+          service: ServiceProvider & {
+            price: number;
+            title: string;
+            description: string;
+            overallRating?: string;
+            location?: string;
+            serviceProvider: {
+              name: string;
+            };
+          }
+        ) => (
+          <Card
+            key={service.id}
+            className="hover:shadow-lg transition-shadow max-w-lg"
+          >
+            <CardHeader className="p-0">
+              <div className="relative aspect-[16/9]">
+                <Image
+                  src="/images/servicesImage/Mechanics.svg"
+                  alt={service.title}
+                  fill
+                  className="object-cover h-60 rounded-t-lg transition-transform duration-300 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+                  <div>
+                    {/* <h3 className="font-semibold text-white text-xl mb-1">
+                    {service.serviceProvider.name}
+                  </h3> */}
+                    <Badge className="bg-brand-gradient text-white">
+                      Rs. {service.price}
+                    </Badge>
+                  </div>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size="sm"
+                          className="rounded-full bg-brand-gradient"
+                        >
+                          <Heart className="h-2 w-2" color="white" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent className="bg-white rounded">
+                        <p className="gradient-text text-xs font-medium p-1">
+                          Add to favorites
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
               </div>
-            )}
-
-            <FaRegHeart
-              size={20}
-              className=" absolute text-gray-300 bottom-2 right-6 text-lg  md:text-sm  lg:text-lg "
-            />
-          </div>
-
-          {/* Card Content */}
-          <CardContent className="p-2">
-            <div className="flex flex-col">
-              <h1 className="text-lg font-semibold text-gray-800">
-                {service.title}
-              </h1>
-              <p className="text-sm text-gray-600">{service.subtitle}</p>
-            </div>
-          </CardContent>
-
-          <hr className="border-dotted" />
-
-          <div className="flex justify-between items-center md:justify-around text-[13px] md:text-lg p-1">
-            <div className="flex items-center">
-              <Image
-                src={service.profile1}
-                alt="profile1"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-            </div>
-            <div className="flex gap-2">
-              <div className="flex flex-col">
-                <h1>{service.name}</h1>
-                <span className="flex items-center">
-                  <FaLocationDot size={14} />
-                  <p className="text-muted-foreground">{service.location}</p>
-                </span>
+            </CardHeader>
+            <CardContent className="p-2">
+              <div className="space-y-2">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="text-sm font-semibold">{service.title}</p>
+                    <p className="text-xs text-muted-foreground font-medium">
+                      {service.description}
+                    </p>
+                  </div>
+                  <div className="flex items-center bg-yellow-100 px-2 py-1 rounded">
+                    <Star className="w-4 h-4 text-yellow-500 mr-1" />
+                    <span className="text-xs font-medium text-yellow-700">
+                      {service.overallRating || "N/A"}
+                    </span>
+                  </div>
+                </div>
+                {/* <div className="flex items-center text-sm text-muted-foreground">
+                <MapPin className="w-4 h-4 mr-1 font-medium text-primary" />
+                <span>{service.serviceProvider.providerType}</span>
+              </div> */}
+              </div>
+            </CardContent>
+            <CardFooter className="p-2 pt-2 flex items-center justify-between border-t">
+              {/* image and name  */}
+              <div className="flex items-center gap-3">
+                <div>
+                  <Image
+                    src="/images/servicesImage/Mechanics.svg"
+                    alt={service.serviceProvider.name}
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                </div>
+                <div className="flex flex-col items-start">
+                  <div className="flex items-center text-muted-foreground">
+                    <span className="font-medium text-xs">
+                      {service.serviceProvider.name}
+                    </span>
+                  </div>
+                  <div className="flex items-center text-muted-foreground">
+                    <MapPin className="w-3 h-3 " color="gray" />
+                    <span className="font-medium text-xs">
+                      {service.location ? service.location : "Location"}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <span className="flex items-center gap-1 ">
-                  <FaStar size={14} color="orange" />
-                  <h1>{service.rating}</h1>
-                </span>
-              </div>
-            </div>
-            <div className="hidden md:block ml-2">
-              <Button variant="brand">Book now</Button>
-            </div>
-          </div>
-        </Card>
-      ))}
+              <Button variant="brand" size="sm" className="font-semibold">
+                Book now
+              </Button>
+            </CardFooter>
+          </Card>
+        )
+      )}
     </div>
   );
 }
+
+export default SewaCard;
