@@ -176,10 +176,6 @@ export function SewaCard() {
                     </span>
                   </div>
                 </div>
-                {/* <div className="flex items-center text-sm text-muted-foreground">
-                <MapPin className="w-4 h-4 mr-1 font-medium text-primary" />
-                <span>{service.serviceProvider.providerType}</span>
-              </div> */}
               </div>
             </CardContent>
             <CardFooter className="p-2 pt-2 flex items-center justify-between border-t">
