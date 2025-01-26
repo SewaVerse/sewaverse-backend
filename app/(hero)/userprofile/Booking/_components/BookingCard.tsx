@@ -23,11 +23,11 @@ interface Booking {
     provider: string;
     location: string;
   };
-  status: "Completed" | "Ongoing" | "Cancelled";
+  status: string | "Completed" | "Ongoing" | "Cancelled";
   price: number;
 }
 
-interface BookingCardProps extends Booking {}
+type BookingCardProps = Booking;
 
 const BookingCard: React.FC<BookingCardProps> = ({
   date,
@@ -81,7 +81,9 @@ const BookingCard: React.FC<BookingCardProps> = ({
           <div className="flex gap-1 md:justify-between">
             <Link href={"/userprofile/Booking/1/cancel"}>
               <div className="md:basis-5/6 flex flex-col items-start ">
-                <h1 className="md:text-3xl text-base font-semibold">{service.title}</h1>
+                <h1 className="md:text-3xl text-base font-semibold">
+                  {service.title}
+                </h1>
                 <p className="text-sm text-muted-foreground">
                   Booking Id: {service.bookingId}
                 </p>

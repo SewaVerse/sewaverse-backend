@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { Camera } from "lucide-react";
@@ -105,7 +103,7 @@ export default function EditUserPRofile({
       setFormData((prev) => ({
         ...prev,
         [field]: {
-          ...prev[field as keyof ProfileForm],
+          ...prev,
           [subfield]: e.target.value,
         },
       }));

@@ -11,7 +11,7 @@ interface RightSideProps {
   activeSection: string;
 }
 
-const RightSide = ({ activeSubsection, activeSection }: RightSideProps) => {
+const RightSide = ({ activeSection }: RightSideProps) => {
   // state for Reward History
   const [rewardHistory, setRewardHistory] = useState<boolean>(false);
   // state for Reward redeem..
@@ -23,9 +23,8 @@ const RightSide = ({ activeSubsection, activeSection }: RightSideProps) => {
 
       {activeSection === "myAccount" && (
         <div>
-        
           <SewaPoint
-            activeSubsection={activeSubsection}
+            // activeSubsection={activeSubsection}
             rewardHistory={rewardHistory}
             setRewardHistory={setRewardHistory}
             redeemRewards={redeemRewards}
@@ -36,7 +35,6 @@ const RightSide = ({ activeSubsection, activeSection }: RightSideProps) => {
               <RewardsHistory />
             </div>
           )}
-        
         </div>
       )}
     </div>
