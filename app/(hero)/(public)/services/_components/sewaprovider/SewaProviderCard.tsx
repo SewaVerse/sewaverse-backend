@@ -74,13 +74,12 @@ export function ServiceProviderCard() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 p-4">
       {providers?.map((provider: ServiceProvider) => {
-        // Get first profile (assuming there's at least one)
         const profile = provider.profiles[0] || {};
 
         return (
           <Card
             key={provider.id}
-            className="w-full mx-auto hover:shadow-lg transition-shadow min-w-lg"
+            className="w-full mx-auto hover:shadow-lg transition-shadow min-w-lg cursor-pointer"
           >
             <CardHeader className="p-0">
               <div className="relative aspect-[16/9]">

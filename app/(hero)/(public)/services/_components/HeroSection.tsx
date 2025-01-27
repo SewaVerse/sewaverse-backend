@@ -53,7 +53,7 @@ const HeroSection = () => {
         {/* Sewa Tab */}
         <div
           className={`h-[2px] ${
-            activeTab === "sewa" ? "bg-brand" : "bg-gray-200"
+            activeTab === "sewa" ? "bg-brand-gradient" : "bg-gray-200"
           } w-full hidden md:block lg:block ${
             activeTab === "sewa" ? "block" : "hidden"
           }`}
@@ -62,7 +62,7 @@ const HeroSection = () => {
         {/* Sewa Provider Tab */}
         <div
           className={`h-[2px] ${
-            activeTab === "sewaprovider" ? "bg-brand" : "bg-gray-200"
+            activeTab === "sewaprovider" ? "bg-brand-gradient" : "bg-gray-200"
           } w-full hidden md:block lg:block ${
             activeTab === "sewaprovider" ? "block" : "hidden"
           }`}

@@ -1,6 +1,11 @@
+import { Separator } from "@radix-ui/react-separator";
 import { HomeIcon } from "lucide-react";
 import Image from "next/image";
 import { RiArrowDropDownLine } from "react-icons/ri";
+
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 interface OfferService {
   serviceTitle: string;
@@ -19,69 +24,84 @@ interface LeftSideProps {
 
 const LeftSide = ({ offerService }: LeftSideProps) => {
   return (
-    <div className="mx-4 lg:mx-14 lg:mb-10">
+    <div className="container mx-auto px-4">
       {offerService.map((data, index) => (
-        <div
-          key={index}
-          className="w-[410px] lg:w-[950px] lg:h-[492px] lg:mt-2 bg-red"
-        >
-          <div className="flex items-center ml-2 lg:ml-0 lg:mt-2">
-            <HomeIcon size={18} />
-            <RiArrowDropDownLine className="-rotate-90" />
-            <p className="text-muted-foreground text-sm lg:text-base">
-              Home Maintainance
-            </p>
-            <RiArrowDropDownLine className="-rotate-90" />
-            <p className="text-base gradient-text lg:text-base">
-              {data.slogan}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-48 lg:justify-between mt-1 text-base mx-2">
-            <h1 className="lg:text-2xl font-[500]">{data.serviceTitle}</h1>
-            <p className="lg:text-2xl md:text-2xl font-[500] text-muted-foreground">
-              Sewa No.1
-            </p>
-          </div>
-          <div>
-            <Image
-              src={data.serviceIcon}
-              alt={data.serviceTitle}
-              width={1}
-              height={1}
-              className="object-cover w-[395px] lg:w-[1250px] lg:h-[490px] rounded-md relative"
-            />
-
-            <div className="bg-gray-300 w-8 h-8 absolute top-[18rem] left-5 lg:top-[23.25rem] md:top-[23.25rem] lg:left-[3.7rem] cursor-pointer rounded-full flex items-center">
-              <RiArrowDropDownLine size={40} className="rotate-90" />
-            </div>
-            <div className="bg-gray-200 w-8 h-8 absolute top-[18rem] left-[23rem] lg:top-[23.25rem] md:top-[23.25rem] lg:left-[60.5rem] cursor-pointer rounded-full flex items-center">
-              <RiArrowDropDownLine size={40} className="-rotate-90" />
+        <Card key={index} className="w-full">
+          <CardHeader>
+            <div className="flex items-center gap-1 text-sm text-muted-foreground flex-wrap">
+              <HomeIcon className="h-4 w-4" />
+              <RiArrowDropDownLine className="-rotate-90 h-5 w-5" />
+              <span>Home Maintenance</span>
+              <RiArrowDropDownLine className="-rotate-90 h-5 w-5" />
+              <span className="font-medium gradient-text ">{data.slogan}</span>
             </div>
 
-            {/* Slider */}
-            <div className="bg-brand absolute lg:top-[33rem] top-[27.5rem] left-8 md:top-[33rem] text-white font-bold w-[90px] rounded-lg p-2 lg:left-20">
-              <p className="line-through">Rs.{data.originalPrice}</p>
-              <p>Rs.{data.discountPrice}</p>
+            <div className="mt-4 flex flex-col justify-between md:flex-row md:items-center">
+              <h1 className="text-2xl font-semibold tracking-tight lg:text-3xl">
+                {data.serviceTitle}
+              </h1>
+              {/* Optional: Add rating component here */}
+            </div>
+          </CardHeader>
+
+          <CardContent>
+            <div className="relative w-full overflow-hidden rounded-lg">
+              <AspectRatio ratio={16 / 9}>
+                <Image
+                  src={data.serviceIcon}
+                  alt={data.serviceTitle}
+                  fill
+                  className="rounded-lg object-cover"
+                />
+              </AspectRatio>
+
+              {/* Navigation Arrows */}
+              <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                <button className="rounded-full bg-gray-100/80 p-2 shadow-sm transition-colors hover:bg-gray-200/90">
+                  <RiArrowDropDownLine className="h-6 w-6 rotate-90" />
+                </button>
+              </div>
+              <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                <button className="rounded-full bg-gray-100/80 p-2 shadow-sm transition-colors hover:bg-gray-200/90">
+                  <RiArrowDropDownLine className="h-6 w-6 -rotate-90" />
+                </button>
+              </div>
+
+              {/* Price Badge */}
+              <div className="absolute bottom-2 left-2 md:bottom-4 md:left-4 lg:bottom-6 lg:left-6">
+                <Card className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                  <CardContent className="p-1 md:p-3">
+                    <div className="space-y-0.5 md:space-y-1">
+                      <p className="text-xs line-through text-muted-foreground md:text-sm">
+                        Rs.{data.originalPrice}
+                      </p>
+                      <p className="text-sm font-bold ">
+                        Rs.{data.discountPrice}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Discount Badge */}
+              <div className="absolute right-4 top-4 ">
+                <Badge
+                  variant="destructive"
+                  className="px-1 py-1 md:px-3 md:py-2 text-sm"
+                >
+                  {data.discountPercentage} OFF
+                </Badge>
+              </div>
             </div>
 
-            {/* Offer */}
-            <div className="absolute right-6 top-32 lg:top-[8.5rem] lg:left-[59rem] w-[50px] h-[52px] bg-red-600 rounded-b-sm">
-              <p className="text-white p-1 text-center uppercase">
-                {data.discountPercentage} off
-              </p>
+            {/* Description Section */}
+            <Separator className="my-6" />
+            <div className="space-y-4 text-muted-foreground">
+              <p className="leading-relaxed">{data.description}</p>
+              <p className="text-sm">{data.extraInfo}</p>
             </div>
-          </div>
-          {/* Description */}
-          <div className="w-[395px] lg:w-[950px] h-auto mt-2">
-            <p className="text-muted-foreground leading-[24px] text-base">
-              {data.description}
-            </p>
-            <p className="mt-2 text-muted-foreground text-base ">
-              {data.extraInfo}
-            </p>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       ))}
     </div>
   );

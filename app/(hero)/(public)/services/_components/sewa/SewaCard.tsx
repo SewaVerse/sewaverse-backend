@@ -120,7 +120,7 @@ export function SewaCard() {
         ) => (
           <Card
             key={service.id}
-            className="hover:shadow-lg transition-shadow max-w-lg"
+            className="hover:shadow-lg transition-shadow max-w-lg cursor-pointer"
           >
             <CardHeader className="p-0">
               <div className="relative aspect-[16/9]">

@@ -7,6 +7,7 @@ import { CiLocationOn } from "react-icons/ci";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -65,81 +66,48 @@ export default function BookingForm() {
   }
 
   return (
-    <div className="hidden lg:block lg:border w-[400px] h-auto mt-5 shadow-lg rounded-md p-4 mb-4">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <h1 className="text-center text-2xl font-bold mb-4">
-            Book an appointment
-          </h1>
-
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-base">
-                Price: <span className="font-bold">Rs. 200 / sq</span>{" "}
-                <span className="text-muted-foreground text-sm">-30%</span>
-              </p>
-            </div>
-            <div>
-              <p className="flex items-center gap-2 text-lg">
-                <CiLocationOn />
-                Service Available
-              </p>
-              <p className="flex justify-end">in your location</p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="service"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-black">Service</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Mechanic Services"
-                      className="shadow-md"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
+    <Card className="w-full max-w-md mx-auto lg:max-w-xl shadow-lg">
+      <CardHeader>
+        <h1 className="text-center text-2xl font-bold">Book an appointment</h1>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Price & Location Section */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-base">
+                  Price: <span className="font-bold">Rs. 200 / sq</span>{" "}
+                  <span className="text-muted-foreground text-sm">-30%</span>
+                </p>
+              </div>
+              <div className="text-center sm:text-right">
+                <p className="flex items-center gap-2 justify-center sm:justify-end">
+                  <CiLocationOn className="h-5 w-5" />
+                  <span className="text-sm sm:text-base">
+                    Service Available
+                  </span>
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  in your location
+                </p>
               </div>
             </div>
 
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-black">Location</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Balaju, Kathmandu"
-                      className="shadow-md"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-2 gap-4">
+            {/* Form Fields */}
+            <div className="space-y-6">
               <FormField
                 control={form.control}
-                name="date"
+                name="service"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-black">Date</FormLabel>
+                    <FormLabel>Service</FormLabel>
                     <FormControl>
-                      <Input type="date" className="shadow-md" {...field} />
+                      <Input
+                        placeholder="Mechanic Services"
+                        className="w-full"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -148,61 +116,106 @@ export default function BookingForm() {
 
               <FormField
                 control={form.control}
-                name="time"
+                name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-black">Time</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="shadow-md">
-                          <SelectValue placeholder="Select time" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectGroup>
-                          {timeSlots.map((slot) => (
-                            <SelectItem key={slot.value} value={slot.value}>
-                              {slot.label}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+                    <FormLabel>Location</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Balaju, Kathmandu"
+                        className="w-full"
+                        {...field}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </div>
-          </div>
 
-          <div className="flex justify-between pt-4">
-            <Button
-              variant="outline"
-              type="button"
-              className="gradient-text"
-              onClick={() => console.warn("Added to wishlist")}
-            >
-              <HeartIcon className="mr-2 h-4 w-4" />
-              Add to wishlist
-            </Button>
-            <Button
-              variant="outline"
-              type="button"
-              className="gradient-text"
-              onClick={() => console.warn("Shared")}
-            >
-              <Share2Icon className="mr-2 h-4 w-4" />
-              Share
-            </Button>
-            <Button variant="brand" type="submit">
-              Book Now
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Date</FormLabel>
+                      <FormControl>
+                        <Input type="date" className="w-full" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="time"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Time</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select time" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectGroup>
+                            {timeSlots.map((slot) => (
+                              <SelectItem
+                                key={slot.value}
+                                value={slot.value}
+                                className="text-sm"
+                              >
+                                {slot.label}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
+              <div className="flex gap-4 justify-center sm:justify-start">
+                <Button
+                  variant="outline"
+                  type="button"
+                  className="gap-2"
+                  onClick={() => console.warn("Added to wishlist")}
+                >
+                  <HeartIcon className="h-4 w-4" />
+                  <span className="sr-only sm:not-sr-only">Wishlist</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  type="button"
+                  className="gap-2"
+                  onClick={() => console.warn("Shared")}
+                >
+                  <Share2Icon className="h-4 w-4" />
+                  <span className="sr-only sm:not-sr-only">Share</span>
+                </Button>
+              </div>
+              <Button
+                variant="brand"
+                type="submit"
+                className="w-full sm:w-auto"
+              >
+                Book Now
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

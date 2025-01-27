@@ -2,8 +2,8 @@ import LeftSide from "./components/LeftSide";
 import RightSide from "./components/RightSide";
 const offerService = [
   {
-    serviceTitle: "Mechanic Services",
-    slogan: "Sewa No.1",
+    serviceTitle: "Wiring Services",
+    slogan: "Mechanical",
     serviceIcon: "/images/servicesImage/Mechanics.svg",
     discountPrice: "15000",
     originalPrice: "25000",
@@ -17,7 +17,7 @@ const offerService = [
 
 const profileData = {
   name: "Bishal Shrestha",
-  profession: "painter",
+  profession: "Painter",
   rating: 4.5,
   profile: "/images/servicesImage/profile1.svg",
   start: "Joined in Jan, 2024",
@@ -28,9 +28,14 @@ const profileData = {
 const Page = () => {
   return (
     <div>
-      <div className="flex items-start">
-        <LeftSide offerService={offerService} />
-        <RightSide profileData={profileData} />
+      <div className="flex flex-col gap-6 md:gap-0 md:flex-row  my-4 mx-2 md:mx-12">
+        <div className="">
+          <LeftSide offerService={offerService} />
+        </div>
+
+        <div className=" ">
+          <RightSide profileData={profileData} />
+        </div>
       </div>
     </div>
   );
