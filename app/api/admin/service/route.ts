@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import roleAsyncHandler from "@/app/utils/asyncHelper/roleAsyncHandler";
 import paginate from "@/app/utils/pagination";
-import { getPaginationParams } from "@/app/utils/paginationHelper";
+import { getPaginationParams } from "@/app/utils/paramHelper";
 
 export const GET = roleAsyncHandler("ADMIN", async (request: NextRequest) => {
   const searchParams = request.nextUrl.searchParams;
