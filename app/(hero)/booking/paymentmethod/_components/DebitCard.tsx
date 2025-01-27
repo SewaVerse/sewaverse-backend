@@ -54,7 +54,7 @@ const DebitCard = ({ visaImage }: DebitCardProps) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    console.warn(values);
   }
 
   return (
@@ -166,9 +166,9 @@ const DebitCard = ({ visaImage }: DebitCardProps) => {
                     <div className="space-y-1 leading-none">
                       <FormLabel>Save Card</FormLabel>
                       <FormDescription>
-                        We will save this card for your convenience. If
-                        required, you can remove the card in the "Payment
-                        Options" section in the "Account" menu.
+                        {
+                          "We will save this card for your convenience. If required, you can remove the card in the 'Payment Options' section in the 'Account' menu."
+                        }
                       </FormDescription>
                     </div>
                   </FormItem>

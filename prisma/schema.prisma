@@ -175,7 +175,7 @@ model ServiceProviderProfile {
   serviceProviderId  String   @unique @db.ObjectId
   dob                String
   gender             Gender
-  profession         String
+  profession         String?
   skills             String[]
   imageId            String?  @db.ObjectId
   serviceSubCategory String[]

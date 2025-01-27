@@ -6,6 +6,23 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Generates a fallback name based on the given name string.
+ *
+ * If the name is null, it returns "U". Otherwise, it takes the first letter of each
+ * word in the name and uppercases it, then joins them together with no separator.
+ *
+ * @example getFallbackName("John Doe") => "JD"
+ * @example getFallbackName(null) => "U"
+ */
+export const getFallbackName = (name: string | null) =>
+  name
+    ? name
+        .split(" ")
+        .map((part) => part[0].toUpperCase())
+        .join("")
+    : "U";
+
 export function getImageUrl(
   file: Prisma.FileGetPayload<{ include: { fileBinaries: true } }> | null
 ): string {

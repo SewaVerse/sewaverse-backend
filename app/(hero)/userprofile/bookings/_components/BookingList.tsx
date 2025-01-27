@@ -155,7 +155,14 @@ export default function BookingList({ filterStatus }: BookingListProps) {
   return (
     <div>
       {filteredBookings.map((booking, index) => (
-        <BookingCard key={index} {...booking} />
+        <BookingCard
+          key={index}
+          date={booking.date}
+          time={booking.time}
+          service={booking.service}
+          status={booking.status}
+          price={booking.price}
+        />
       ))}
     </div>
   );

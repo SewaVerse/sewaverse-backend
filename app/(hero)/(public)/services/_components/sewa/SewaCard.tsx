@@ -8,6 +8,7 @@ import { useQueries } from "@tanstack/react-query";
 import axios from "axios";
 import { Heart, MapPin, Star } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -45,6 +46,8 @@ interface ProviderDetailsResponse {
 
 const fetchOfferedServices = async () => {
   const response = await axios.get("/api/public/offered-service");
+
+  console.warn("Response, ", response.data.data.data);
   return response.data.data.data;
 };
 
@@ -54,9 +57,9 @@ const fetchServiceProviders = async () => {
   );
   return response.data.data.data.map((provider) => ({
     ...provider,
-    experiences: `${Math.floor(Math.random() * 10)} years`,
-    deliveredServices: Math.floor(Math.random() * 50),
-    totalServices: Math.floor(Math.random() * 20),
+    // experiences: `${Math.floor(Math.random() * 10)} years`,
+    // deliveredServices: Math.floor(Math.random() * 50),
+    // totalServices: Math.floor(Math.random() * 20),
   }));
 };
 
@@ -204,10 +207,11 @@ export function SewaCard() {
                   </div>
                 </div>
               </div>
-
-              <Button variant="brand" size="sm" className="font-semibold">
-                Book now
-              </Button>
+              <Link href="/booking">
+                <Button variant="brand" size="sm" className="font-semibold">
+                  Book now
+                </Button>
+              </Link>
             </CardFooter>
           </Card>
         )

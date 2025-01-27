@@ -1,6 +1,5 @@
-"use client"
+"use client";
 import Image from "next/image";
-import { useState } from "react";
 import { IoIosChatboxes } from "react-icons/io";
 import { MdChevronRight } from "react-icons/md";
 import { TfiEmail } from "react-icons/tfi";
@@ -15,21 +14,26 @@ const successIcon = "/images/servicesImage/successIcon.svg";
 
 const Page = () => {
   // State to track if payment is complete
-  const [isPaymentComplete, setIsPaymentComplete] = useState(true);
+  //const [isPaymentComplete, setIsPaymentComplete] = useState(true);
 
-  const bookingNumber:number = 2313131239782; 
-  const amount:string = "25,000";
+  const isPaymentComplete: boolean = true;
+
+  const bookingNumber: number = 2313131239782;
+  const amount: string = "25,000";
 
   return (
     <div className="md:px-16 md:py-5 px-5">
-      {
-        isPaymentComplete ? (
-          <PaymentComplete />
-
-        ):(
-          <div className=" w-full md:h-[530px] border p-6 mx-auto shadow-md ">
+      {isPaymentComplete ? (
+        <PaymentComplete />
+      ) : (
+        <div className=" w-full md:h-[530px] border p-6 mx-auto shadow-md ">
           <div className="flex flex-col items-center text-center">
-            <Image src={successIcon} alt="Success Icon" width={70} height={70} />
+            <Image
+              src={successIcon}
+              alt="Success Icon"
+              width={70}
+              height={70}
+            />
             <h1 className="text-3xl font-semibold mt-4 gradient-text">
               Thank you for your booking!
             </h1>
@@ -58,12 +62,13 @@ const Page = () => {
               <p className="md:pt-5 md:-ml-32 text-base text-muted-foreground">
                 To view delivery details and track the service delivery, go to
                 <span className="gradient-text whitespace-nowrap ml-2">
-                  My Accounts <MdChevronRight className="inline text-blue-500" />{" "}
-                  My Bookings
+                  My Accounts{" "}
+                  <MdChevronRight className="inline text-blue-500" /> My
+                  Bookings
                 </span>
               </p>
             </div>
-  
+
             <hr className="md:w-[800px] border-[1px] mt-6" />
             <p className="mt-5 text-base text-muted-foreground">
               Please have the amount ready on service day.
@@ -71,19 +76,20 @@ const Page = () => {
             <p className="text-2xl gradient-text">Rs. 25,000</p>
           </div>
         </div>
+      )}
 
-        )
-      }
-     
       {/* Booking Details */}
       <BookingDetails />
       {/* PaymentSummary */}
       <PaymentSummary />
       {/* Conditionally render PaymentComplete */}
-    
 
       <div className="flex gap-10 items-center md:justify-between mb-4 mt-4">
-        <Button variant={"brand"}> <IoIosChatboxes />Chat with Sewa provider</Button>
+        <Button variant={"brand"}>
+          {" "}
+          <IoIosChatboxes />
+          Chat with Sewa provider
+        </Button>
         <Button variant={"brand"}>Browse more Sewas</Button>
       </div>
     </div>

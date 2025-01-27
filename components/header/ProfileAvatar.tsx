@@ -6,6 +6,8 @@ import { useSession } from "next-auth/react"; // To access user session
 import Link from "next/link";
 import { RiAdminLine } from "react-icons/ri";
 
+import { getFallbackName } from "@/lib/utils";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,12 +23,7 @@ const ProfileAvatar = () => {
 
   const isAdmin = session?.user?.roles.includes("ADMIN");
 
-  const fallbackName = session?.user?.name
-    ? session.user.name
-        .split(" ")
-        .map((part) => part[0].toUpperCase())
-        .join("")
-    : "U";
+  const fallbackName = getFallbackName(session?.user?.name ?? "");
 
   return (
     <DropdownMenu>
@@ -61,8 +58,12 @@ const ProfileAvatar = () => {
           Dashboard
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <User />
-          Profile
+          <Link href="/profile">
+            <DropdownMenuItem>
+              <User />
+              Profile
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>

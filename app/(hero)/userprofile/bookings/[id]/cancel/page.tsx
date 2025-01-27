@@ -94,7 +94,7 @@ const page = () => {
                       time, or service)
                     </SelectItem>
                     <SelectItem value="Delay in Service Provider's Response">
-                      Delay in Service Provider's Response
+                      {"Delay in Service Provider's Response"}
                     </SelectItem>
                     <SelectItem value="Service Provider Requested Cancellation">
                       Service Provider Requested Cancellation

@@ -1,21 +1,15 @@
+import { WorkExperience } from "@prisma/client";
 import { Edit } from "lucide-react";
 
 import ExperienceItem from "./ExperienceItem";
 
-export interface Experience {
-  title: string;
-  subtitle: string;
-  duration: string;
-  documentLink: string;
-}
-
-interface WorkExperienceProps {
-  experiences: Experience[];
-}
-
-export default function WorkExperience({ experiences }: WorkExperienceProps) {
+export default function WorkExperienceSection({
+  experiences,
+}: {
+  experiences: WorkExperience[];
+}) {
   return (
-    <div className="w-full max-w-8xl py-2">
+    <section className="w-full max-w-8xl">
       <div className="flex justify-between items-center py-2 ">
         <h1 className="font-bold text-2xl">Work Experience</h1>
         <Edit size={14} className="cursor-pointer" />
@@ -25,6 +19,6 @@ export default function WorkExperience({ experiences }: WorkExperienceProps) {
           <ExperienceItem key={index} {...exp} />
         ))}
       </div>
-    </div>
+    </section>
   );
 }
