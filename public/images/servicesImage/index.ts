@@ -5,6 +5,9 @@ export const servicesData = {
     paintingIcon: "/images/servicesImage/Painting.svg",
     childcareIcon: "/images/servicesImage/Childcare.svg",
     profile1: '/images/servicesImage/profile1.svg',
+    Cash:"/images/Cash.svg",
+    Khalti:"/images/Khalti.svg",
+    debitCard:'/images/debitcard.svg'
   
   };
   

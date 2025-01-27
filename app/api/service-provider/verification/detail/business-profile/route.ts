@@ -20,14 +20,6 @@ export const POST = roleAsyncHandler(
 
     console.warn(formData);
 
-    // const profession = formData.get("profession") as string;
-    // const skills = (formData.get("skills") as string)?.split(",") || [];
-    // const experience = formData.get("experience") as string;
-    // const location = (formData.get("location") as string)?.split(",") || [];
-    // // const description = formData.get("description") as string;
-    // const serviceSubCategory =
-    //   (formData.get("serviceSubCategory") as string)?.split(",") || [];
-
     const profession = formData.get("profession") as string;
     const experience = formData.get("experience") as string;
 

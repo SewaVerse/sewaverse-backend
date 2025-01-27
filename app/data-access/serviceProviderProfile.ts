@@ -33,10 +33,51 @@ export const getServiceProviderProfile = dbAsyncHandler(
     return await db.serviceProviderProfile.findUnique({
       where: { serviceProviderId },
       include: {
-        file: true,
-        workExperiences: true,
-        licenses: true,
-        awards: true,
+        file: {
+          include: {
+            fileBinaries: true,
+          },
+        },
+        workExperiences: {
+          include: {
+            file: {
+              include: {
+                fileBinaries: true,
+              },
+            },
+          },
+        },
+        licenses: {
+          include: {
+            file: {
+              include: {
+                fileBinaries: true,
+              },
+            },
+          },
+        },
+        awards: {
+          include: {
+            file: {
+              include: {
+                fileBinaries: true,
+              },
+            },
+          },
+        },
+        myWorks: {
+          include: {
+            workImages: {
+              include: {
+                image: {
+                  include: {
+                    fileBinaries: true,
+                  },
+                },
+              },
+            },
+          },
+        },
         serviceMappings: {
           include: {
             service: {

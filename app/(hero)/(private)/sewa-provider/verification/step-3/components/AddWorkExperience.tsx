@@ -42,6 +42,11 @@ interface Profile {
 
 interface ServiceProvider {
   profile: Profile;
+  serviceCategories: Array<{
+    id: string;
+    name: string;
+    parentServiceId: string;
+  }>;
   // ... other fields
 }
 
@@ -65,7 +70,9 @@ export default function AddWorkExperience({
     null
   );
   const [loading, setLoading] = React.useState(false);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categoriesMap, setCategoriesMap] = useState<{ [key: string]: string }>(
+    {}
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -75,8 +82,16 @@ export default function AddWorkExperience({
         const data: ApiResponse = await response.json();
 
         if (data.success && data.serviceProvider.profile) {
-          setCategories(data.serviceProvider.profile.serviceSubCategory);
+          const categoryMap = data.serviceProvider.serviceCategories.reduce(
+            (acc, category) => {
+              acc[category.name.toLowerCase()] = category.id;
+              return acc;
+            },
+            {} as { [key: string]: string }
+          );
+          setCategoriesMap(categoryMap);
         }
+        return data;
       } catch (error) {
         console.error("Error fetching categories:", error);
       } finally {
@@ -86,6 +101,7 @@ export default function AddWorkExperience({
 
     fetchCategories();
   }, []);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(workExperienceSchema),
     defaultValues: {
@@ -94,7 +110,7 @@ export default function AddWorkExperience({
       duration: "",
       category: "",
       description: "",
-      serviceId: "678897207b094b846f1fd04b",
+      serviceId: "",
     },
   });
 
@@ -102,18 +118,22 @@ export default function AddWorkExperience({
     try {
       setLoading(true);
 
-      // Create FormData instance
+      const selectedCategory = data.category!.toLowerCase();
+      const serviceId = categoriesMap[selectedCategory] || "";
+
       const formData = new FormData();
 
-      // Add file if it exists
       if (verificationFile) {
         formData.append("file", verificationFile);
       }
 
-      // Add other form data as JSON
-      formData.append("jsonData", JSON.stringify(data));
+      const formDataWithServiceId = {
+        ...data,
+        serviceId: serviceId,
+      };
 
-      // Make API call
+      formData.append("jsonData", JSON.stringify(formDataWithServiceId));
+
       const response = await fetch("/api/service-provider/experience", {
         method: "POST",
         body: formData,
@@ -224,7 +244,14 @@ export default function AddWorkExperience({
                       Category<span className="text-red-500">*</span>
                     </FormLabel>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        // Optional: You can log the corresponding serviceId here if needed
+                        console.warn(
+                          "Selected Category ID:",
+                          categoriesMap[value.toLowerCase()]
+                        );
+                      }}
                       defaultValue={field.value}
                     >
                       <FormControl>
@@ -237,12 +264,10 @@ export default function AddWorkExperience({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem
-                            key={category}
-                            value={category.toLowerCase()}
-                          >
-                            {category}
+                        {Object.keys(categoriesMap).map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category.charAt(0).toUpperCase() +
+                              category.slice(1)}
                           </SelectItem>
                         ))}
                       </SelectContent>
