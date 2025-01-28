@@ -1,130 +1,120 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-import { CameraIcon, PhoneCallIcon, VerifiedIcon } from "lucide-react";
-import Image from "next/image";
-import { useRef, useState } from "react";
-import { CiLocationOn } from "react-icons/ci";
-import { TfiEmail } from "react-icons/tfi";
 
+import { MailIcon, PhoneIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { getSessionData } from "@/lib/sessionUtils";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
-import ChangePassword from "./ChnagePassword";
-import EditUserPRofile from "./EditUserProfile";
+import ChangePassword from "./ChangePassword";
+import EditUserProfile from "./EditUserProfile";
 
-interface userData {
+interface UserData {
   name: string;
   email: string;
   image: string;
   address: string;
-  status: string;
+  // status: string;
   phone: number;
 }
 
-// for active profile
 interface MyProfileProps {
-  userData: userData;
+  userData: UserData;
 }
+
 const MyProfile = ({ userData }: MyProfileProps) => {
-  // state for open change password popup.
-  const [openChangePassword, setOpenChangePassword] = useState<boolean>(false);
-  //   state for open edit profile popup....
-  const [openEditProfile, setOpenEditProfile] = useState<boolean>(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { data: session, status } = useSession();
 
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
 
-  const handleCameraClick = () => {
-    fileInputRef.current?.click();
-  };
+  const sessionData = getSessionData(session);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      setPreviewImage(previewUrl);
-    }
-  };
+  if (!sessionData) {
+    return <p>No session data available. Please sign in.</p>;
+  }
 
   return (
-    <div>
-      <div className="w-full h-auto border mb-4 shadow-md">
-        <div className="flex flex-col items-center">
-          {/* for image */}
-          <div className="w-[250px] h-[250px] rounded-full mt-3 relative  border overflow-hidden">
-            <Image
-              src={previewImage || userData.image}
-              alt="profile"
-              width={250}
-              height={250}
-              className="object-cover w-[250px] h-[250px]"
-            />
-          </div>
-          <div
-            className="absolute top-[22rem] right-[30rem] cursor-pointer p-1 border bg-white rounded-full"
-            onClick={handleCameraClick}
-          >
-            <CameraIcon size={25} />
-          </div>
-          <span className="border p-1 rounded-md text-sm bg-blue-300 text-white flex items-center mt-2">
-            <VerifiedIcon size={14} />
-            {userData.status.includes("Verified") ? "Verified" : "Unverified"}
-          </span>
-
-          {/* Hidden file input */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            className="hidden"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-          {/* users details */}
-
-          <h1 className="text-2xl font-semibold mt-2">{userData.name}</h1>
-          <p className="flex items-center gap-1 text-lg p-1">
-            <PhoneCallIcon size={14} color="blue" />
-            {userData.phone}
-          </p>
-          <p className="flex items-center gap-1 text-lg p-1">
-            <TfiEmail size={14} color="blue" />
-            {userData.email}
-          </p>
-          <p className="flex items-center gap-1 text-lg p-1">
-            <CiLocationOn color="blue" />
-            {userData.address}
-          </p>
+    <Card className="w-full max-w-4xl mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center">
+          My Profile
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col items-center space-y-2">
+        <div className="relative">
+          <Avatar className="w-32 h-32 border-4 border-primary">
+            <AvatarImage src={userData.image} alt={sessionData.name} />
+            <AvatarFallback>{sessionData.name.charAt(0)}</AvatarFallback>
+          </Avatar>
         </div>
-        <div className="flex justify-between mt-2 mx-3 mb-4">
-          <Button
-            variant={"brand"}
-            type="button"
-            onClick={() => setOpenChangePassword(true)}
-          >
-            Change Password
-          </Button>
-          <Button
-            variant={"brand"}
-            type="button"
-            onClick={() => setOpenEditProfile(true)}
-          >
-            Edit Profile
-          </Button>
+
+        <h2 className="text-2xl font-semibold">
+          {capitalizeFirstLetter(sessionData.name)}
+        </h2>
+
+        <div className="flex flex-col items-center w-full max-w-md">
+          <div className="flex items-center space-x-2">
+            <PhoneIcon className="h-4 w-4 text-muted-foreground" />
+            <span>{userData.phone}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <MailIcon className="h-4 w-4 text-muted-foreground" />
+            <span>{sessionData.email}</span>
+          </div>
+          {/* <div className="flex items-center space-x-2 md:col-span-2">
+            <MapPinIcon className="h-4 w-4 text-muted-foreground" />
+            <span>{userData.address}</span>
+          </div> */}
         </div>
-      </div>
-      {openChangePassword && (
-        <ChangePassword
-          openChangePassword={openChangePassword}
-          setOpenChangePassword={setOpenChangePassword}
-        />
-      )}
-      {/* for edit profile */}
-      {openEditProfile && (
-        <EditUserPRofile
-          openEditProfile={openEditProfile}
-          setOpenEditProfile={setOpenEditProfile}
-        />
-      )}
-    </div>
+      </CardContent>
+      <CardFooter className="flex flex-col justify-between md:flex-row gap-4 md:gap-0">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant={"brand"}>Edit Profile</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[600px] sm:h-auto md:max-h-[900px]">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-semibold text-center">
+                My Profile
+              </DialogTitle>
+            </DialogHeader>
+            <EditUserProfile />
+          </DialogContent>
+        </Dialog>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="brand">Change Password</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-semibold text-center">
+                Change Password
+              </DialogTitle>
+            </DialogHeader>
+            <ChangePassword />
+          </DialogContent>
+        </Dialog>
+      </CardFooter>
+    </Card>
   );
 };
 
