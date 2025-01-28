@@ -1,0 +1,99 @@
+import Image from "next/image";
+
+import { Button } from "@/components/ui/button";
+
+
+const gift = "/images/servicesImage/gift.svg";
+const copyIcon = "/images/servicesImage/copy.svg";
+
+// Define the type for a promocode
+interface sewaData {
+  code: string;
+  discount: string;
+  providedBy: string;
+  service: string;
+  dateRange: string;
+  status: string;
+}
+
+interface SewaVerseProps {
+  sewaData: sewaData[]; // Make the prop optional
+}
+
+const SewaVerse = ({ sewaData }: SewaVerseProps) => {
+  return (
+   <div>
+         <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
+           {sewaData.map((promo, index) => (
+             <div
+               key={index}
+               className="md:w-[500px] h-auto border bg-[#F3F3F3] mt-3 rounded-lg"
+             >
+               <div className="flex items-center gap-10 p-3">
+                 {/* Gift Image */}
+                 <div className="basis-1/4">
+                   <Image
+                     src={gift}
+                     alt="Gift Icon"
+                     height={80}
+                     width={80}
+                     className="w-full object-contain"
+                   />
+                   <span className="text-sm  py-2 text-center text-muted-foreground md:hidden block">
+                     *T&C Apply
+                   </span>
+                 </div>
+   
+                 <div className="flex items-start">
+                   {/* Promo Details */}
+                   <div className="flex flex-col justify-between flex-1">
+                     <h1 className="md:text-2xl font-semibold flex items-center md:gap-5">
+                       {promo.code}{" "}
+                       <span className="text-sm text-muted-foreground hidden md:block">
+                         *T&C Apply
+                       </span>
+                     </h1>
+                     <h1 className="md:text-xl ">{promo.discount}</h1>
+                     <p className="gradient-text">{promo.service}</p>
+                       <p className="gradient-text">{promo.providedBy}</p>
+                     <p className="text-gray-600">{promo.dateRange}</p>
+   
+                     {/* Conditional Rendering Based on Status */}
+                     
+                     <div className="flex gap-10 justify-end pt-2">
+                      <Button className="h-8 px-4" variant="brand">
+                        {promo.status}
+                      </Button>
+                      <Button variant="brand" className="h-8 px-4">
+                        Use Now
+                      </Button>
+                    </div>
+   
+                    
+   
+                    
+                   </div>
+   
+                   {/* Copy Icon */}
+                   <div className=" w-[50px] md:w-[31px] ">
+                     <Image
+                       src={copyIcon}
+                       alt="Copy Icon"
+                       width={31}
+                       height={34}
+                       className="cursor-pointer object-cover"
+                       aria-label={`Copy promocode ${promo.code}`}
+                    
+                       
+                     />
+                   </div>
+                 </div>
+               </div>
+             </div>
+           ))}
+         </div>
+       </div>
+  );
+};
+
+export default SewaVerse;
