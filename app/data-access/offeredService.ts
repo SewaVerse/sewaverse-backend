@@ -59,3 +59,12 @@ export const updateOfferedService = dbAsyncHandler(
     });
   }
 );
+
+export const getOfferedServiceById = dbAsyncHandler(
+  async (id: string, include?: Prisma.OfferedServiceInclude) => {
+    return await db.offeredService.findUnique({
+      where: { id },
+      include,
+    });
+  }
+);

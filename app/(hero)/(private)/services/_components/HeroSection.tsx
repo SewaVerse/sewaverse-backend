@@ -29,7 +29,7 @@ const HeroSection = () => {
   return (
     <div className="md:ml-10 lg:ml-10">
       {/* Hero Section */}
-      <div className="flex justify-around items-center mt-2">
+      <div className="flex justify-around items-center">
         <h1
           onClick={() => setActiveTab("sewa")}
           className={`text-[12px] lg:text-[18px] cursor-pointer ${
@@ -53,7 +53,7 @@ const HeroSection = () => {
         {/* Sewa Tab */}
         <div
           className={`h-[2px] ${
-            activeTab === "sewa" ? "bg-brand" : "bg-gray-200"
+            activeTab === "sewa" ? "bg-brand-gradient" : "bg-gray-200"
           } w-full hidden md:block lg:block ${
             activeTab === "sewa" ? "block" : "hidden"
           }`}
@@ -62,7 +62,7 @@ const HeroSection = () => {
         {/* Sewa Provider Tab */}
         <div
           className={`h-[2px] ${
-            activeTab === "sewaprovider" ? "bg-brand" : "bg-gray-200"
+            activeTab === "sewaprovider" ? "bg-brand-gradient" : "bg-gray-200"
           } w-full hidden md:block lg:block ${
             activeTab === "sewaprovider" ? "block" : "hidden"
           }`}
@@ -92,7 +92,7 @@ const HeroSection = () => {
           ) : (
             <h1>Discount</h1>
           )}
-          {activeTab === "sewaprovider" ? <h1>Experience</h1> : null}
+          {activeTab === "sewaprovider" ? <h1>Provider Type</h1> : null}
 
           <span className="hidden md:flex lg:flex gap-2 cursor-pointer">
             <TfiMenuAlt

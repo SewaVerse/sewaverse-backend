@@ -49,7 +49,7 @@ export default function WorkExperiencesView({
         }
       })
       .filter(Boolean) as ValidatedWorkExperience[];
-    console.warn(validExperiences);
+    console.warn("Work Experiences", validExperiences);
     setValidatedExperiences(validExperiences);
   }, [experiences]);
 

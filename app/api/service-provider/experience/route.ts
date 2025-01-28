@@ -44,6 +44,8 @@ export const POST = roleAsyncHandler(
   async (request: Request) => {
     const formData = await request.formData();
 
+    console.warn("Form data", formData);
+
     const body = parseWorkExperience(formData);
     const [validationError, validatedFields] = validateRequestBody(
       workExperienceSchema,
