@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-import BookingSection from "../Booking/page"; // Import the specific sections
+import BookingSection from "../bookings/page"; // Import the specific sections
 import RewardsHistory from "../myprofile/RewardsHistory";
 import SewaPoint from "../myprofile/SewaPoint";
 import MyWishList from "../wishlist/page";

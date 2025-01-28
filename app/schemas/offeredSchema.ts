@@ -5,7 +5,7 @@ import { fileSchema } from "./fileSchema";
 
 export const offeredServiceSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
   serviceId: z.string().min(1, "Service is required"),
   price: z.number().min(0, "Price must be greater than or equal to 0"),
   priceType: z

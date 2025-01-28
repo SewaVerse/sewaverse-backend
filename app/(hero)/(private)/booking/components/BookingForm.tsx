@@ -1,8 +1,9 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { HeartIcon, Share2Icon } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast"; // Import react-hot-toast
 import { CiLocationOn } from "react-icons/ci";
 import * as z from "zod";
 
@@ -17,21 +18,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
-const timeSlots = [
-  { label: "Morning (6 AM - 12 PM)", value: "morning" },
-  { label: "Afternoon (12 PM - 4 PM)", value: "afternoon" },
-  { label: "Evening (4 PM - 8 PM)", value: "evening" },
-  { label: "Night (8 PM - 11 PM)", value: "night" },
-] as const;
+// const timeSlots = [
+//   { label: "Morning (6 AM - 12 PM)", value: "morning" },
+//   { label: "Afternoon (12 PM - 4 PM)", value: "afternoon" },
+//   { label: "Evening (4 PM - 8 PM)", value: "evening" },
+//   { label: "Night (8 PM - 11 PM)", value: "night" },
+// ] as const;
 
 const formSchema = z.object({
   service: z.string().min(2, {
@@ -50,47 +43,97 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function BookingForm() {
+interface BookingFormProps {
+  serviceTitle: string;
+  offeredServiceId: string;
+  location: string | undefined;
+  price: number;
+  priceType: string;
+}
+
+export default function BookingForm({
+  serviceTitle,
+  offeredServiceId,
+  location,
+  price,
+  priceType,
+}: BookingFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      service: "",
-      location: "",
+      service: serviceTitle,
+      location: location ?? "Nepal",
       date: "",
       time: "",
     },
   });
 
-  function onSubmit(values: FormValues) {
-    console.warn(values);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function onSubmit(values: FormValues) {
+    setIsSubmitting(true);
+
+    const bookingData = {
+      offeredServiceId,
+      location: values.location,
+      bookingDate: values.date,
+    };
+
+    try {
+      // Make the API call
+      const response = await axios.post("/api/user/booking", bookingData);
+
+      // console.warn(
+      //   "bookingData",
+      //   bookingData.offeredServiceId,
+      //   bookingData.location,
+      //   bookingData.bookingDate
+      // );
+
+      console.warn("response", response.data);
+
+      toast.success("Booking successful!");
+
+      form.reset({
+        service: serviceTitle,
+        location: location ?? "Nepal",
+        date: "",
+        time: "",
+      });
+    } catch (err) {
+      // Display error toast
+      toast.error("Failed to book the service. Please try again.");
+      console.error("Booking failed:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto lg:max-w-xl shadow-lg">
+    <Card className="min-w-lg max-w-md lg:max-w-lg shadow-lg">
       <CardHeader>
-        <h1 className="text-center text-2xl font-bold">Book an appointment</h1>
+        <h1 className="text-center text-xl font-bold">Book an appointment</h1>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Price & Location Section */}
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 ">
               <div>
-                <p className="text-base">
-                  Price: <span className="font-bold">Rs. 200 / sq</span>{" "}
-                  <span className="text-muted-foreground text-sm">-30%</span>
+                <p className="text-base font-normal font-work-sans">
+                  Price: Rs. {price}/{priceType}
                 </p>
               </div>
-              <div className="text-center sm:text-right">
-                <p className="flex items-center gap-2 justify-center sm:justify-end">
-                  <CiLocationOn className="h-5 w-5" />
-                  <span className="text-sm sm:text-base">
-                    Service Available
+              <div className="">
+                <div className="flex gap-2">
+                  <CiLocationOn className="h-6 w-6" />
+                  <span className="flex flex-col text-sm sm:text-base font-work-sans">
+                    Available Location
+                    <p className="text-muted-foreground text-sm">
+                      {location ?? "Nepal"}
+                    </p>
                   </span>
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  in your location
-                </p>
+                </div>
               </div>
             </div>
 
@@ -104,9 +147,10 @@ export default function BookingForm() {
                     <FormLabel>Service</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Mechanic Services"
-                        className="w-full"
+                        placeholder={serviceTitle}
+                        className="w-full font-semibold"
                         {...field}
+                        disabled
                       />
                     </FormControl>
                     <FormMessage />
@@ -119,10 +163,10 @@ export default function BookingForm() {
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Your Location</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Balaju, Kathmandu"
+                        placeholder={location}
                         className="w-full"
                         {...field}
                       />
@@ -132,7 +176,7 @@ export default function BookingForm() {
                 )}
               />
 
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="">
                 <FormField
                   control={form.control}
                   name="date"
@@ -147,7 +191,7 @@ export default function BookingForm() {
                   )}
                 />
 
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="time"
                   render={({ field }) => (
@@ -179,7 +223,7 @@ export default function BookingForm() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
               </div>
             </div>
 
@@ -190,7 +234,7 @@ export default function BookingForm() {
                   variant="outline"
                   type="button"
                   className="gap-2"
-                  onClick={() => console.warn("Added to wishlist")}
+                  onClick={() => toast("Added to wishlist!")}
                 >
                   <HeartIcon className="h-4 w-4" />
                   <span className="sr-only sm:not-sr-only">Wishlist</span>
@@ -199,7 +243,7 @@ export default function BookingForm() {
                   variant="outline"
                   type="button"
                   className="gap-2"
-                  onClick={() => console.warn("Shared")}
+                  onClick={() => toast("Shared!")}
                 >
                   <Share2Icon className="h-4 w-4" />
                   <span className="sr-only sm:not-sr-only">Share</span>
@@ -209,8 +253,9 @@ export default function BookingForm() {
                 variant="brand"
                 type="submit"
                 className="w-full sm:w-auto"
+                disabled={isSubmitting}
               >
-                Book Now
+                {isSubmitting ? "Booking..." : "Book Now"}
               </Button>
             </div>
           </form>

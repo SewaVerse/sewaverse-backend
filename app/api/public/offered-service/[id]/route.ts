@@ -51,7 +51,7 @@ export const GET = asyncHandler(async (request: NextRequest) => {
     {
       success: true,
       message: "OfferedService fetched successfully",
-      data: offeredService, 
+      data: offeredService,
     },
     { status: 200 }
   );

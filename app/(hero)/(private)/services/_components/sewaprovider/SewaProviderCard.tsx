@@ -1,9 +1,9 @@
 "use client";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Award, Heart, MapPin, Star } from "lucide-react";
-import Image from "next/image";
 import { FaHandHolding } from "react-icons/fa";
 
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { capitalizeFirstLetter, getFallbackName } from "@/lib/utils";
 
 import { LoadingSkeleton } from "./SewaProviderSkeleton";
 
@@ -46,7 +47,7 @@ interface ServiceProvider {
   providerType: string;
   offeredServices: OfferedService[]; // You might want to define a more specific type
   profiles: Array<{
-    profession?: string;
+    profession: string;
     location?: string[];
     overallRating?: string;
     experience?: string;
@@ -72,7 +73,7 @@ export function ServiceProviderCard() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-4">
       {providers?.map((provider: ServiceProvider) => {
         const profile = provider.profiles[0] || {};
 
@@ -83,17 +84,21 @@ export function ServiceProviderCard() {
           >
             <CardHeader className="p-0">
               <div className="relative aspect-[16/9]">
-                <Image
-                  src="/images/servicesImage/Mechanics.svg"
-                  alt={provider.name}
-                  fill
-                  className="object-cover rounded-t-lg"
-                />
+                <Avatar className="w-full h-full rounded-t-lg">
+                  <AvatarImage
+                    src="/images/hero/hero-1.jpg"
+                    alt={provider.name}
+                    className="object-cover"
+                  />
+                  <AvatarFallback className="w-full h-full">
+                    {getFallbackName(provider.name)}
+                  </AvatarFallback>
+                </Avatar>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
                   <div>
                     <h3 className="font-semibold text-white text-base">
-                      {provider.name}
+                      {capitalizeFirstLetter(provider.name)}
                     </h3>
                     {/* <Badge className="bg-brand-gradient text-white">
                       {profile.profession || "No Profession"}
@@ -123,7 +128,7 @@ export function ServiceProviderCard() {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="text-sm font-semibold">
-                      {profile.profession || "Professional Services"}
+                      {capitalizeFirstLetter(profile.profession) || ""}
                     </p>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <MapPin className="w-4 h-4 mr-1 text-primary" />

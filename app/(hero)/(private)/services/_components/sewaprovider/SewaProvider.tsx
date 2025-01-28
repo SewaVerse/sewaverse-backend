@@ -1,11 +1,7 @@
 import { ServiceProviderCard } from "./SewaProviderCard";
 
 const SewaProvider = () => {
-  return (
-    <div>
-      <ServiceProviderCard />
-    </div>
-  );
+  return <ServiceProviderCard />;
 };
 
 export default SewaProvider;

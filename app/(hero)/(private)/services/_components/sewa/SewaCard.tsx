@@ -18,6 +18,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { truncateDescription } from "@/lib/utils";
 
 import { SewaCardSkeleton } from "./SewaCardSkeleton";
 
@@ -45,7 +46,7 @@ interface ProviderDetailsResponse {
 }
 
 const fetchOfferedServices = async () => {
-  const response = await axios.get("/api/public/offered-service");
+  const response = await axios.get(`/api/public/offered-service`);
 
   console.warn("Response, ", response.data.data.data);
   return response.data.data.data;
@@ -57,9 +58,6 @@ const fetchServiceProviders = async () => {
   );
   return response.data.data.data.map((provider) => ({
     ...provider,
-    // experiences: `${Math.floor(Math.random() * 10)} years`,
-    // deliveredServices: Math.floor(Math.random() * 50),
-    // totalServices: Math.floor(Math.random() * 20),
   }));
 };
 
@@ -107,7 +105,7 @@ export function SewaCard() {
   );
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       {enhancedServices?.map(
         (
           service: ServiceProvider & {
@@ -169,7 +167,7 @@ export function SewaCard() {
                   <div>
                     <p className="text-sm font-semibold">{service.title}</p>
                     <p className="text-xs text-muted-foreground font-medium">
-                      {service.description}
+                      {truncateDescription(service.description)}
                     </p>
                   </div>
                   <div className="flex items-center bg-yellow-100 px-2 py-1 rounded">
@@ -207,7 +205,7 @@ export function SewaCard() {
                   </div>
                 </div>
               </div>
-              <Link href="/booking">
+              <Link href={`/booking?id=${service.id}`}>
                 <Button variant="brand" size="sm" className="font-semibold">
                   Book now
                 </Button>

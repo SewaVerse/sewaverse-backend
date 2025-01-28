@@ -48,3 +48,30 @@ export function getImageUrl(
   const base64String = bufferData.toString("base64");
   return `data:${file.type};base64,${base64String}`;
 }
+
+export function convertDateToReadable(dateString: string) {
+  const dateObj = new Date(dateString);
+  return dateObj.toISOString().split("T")[0];
+}
+
+export function truncateDescription(description: string, wordLimit = 10) {
+  const words = description.split(" ");
+  if (words.length <= wordLimit) {
+    return description;
+  }
+
+  return words.slice(0, wordLimit).join(" ") + "...";
+}
+
+export function capitalizeFirstLetter(name: string) {
+  if (!name) {
+    return "";
+  }
+
+  const words = name.split(" ");
+  const capitalizedWords = words.map((word) => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  });
+
+  return capitalizedWords.join(" ");
+}
