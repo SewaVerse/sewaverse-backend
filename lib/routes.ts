@@ -22,6 +22,8 @@ export const PUBLIC_ROUTES = [
   "/userprofile/offers",
   "/userprofile/review",
   "/userprofile/wishlist",
+ "/about-us",
+  "/tryfooter",
 ];
 
 /**
