@@ -31,6 +31,7 @@ model FinancialYear {
   companyId String   @db.ObjectId
   startDate DateTime
   endDate   DateTime
+  finYear   String
   isActive  Boolean  @default(false)
 
   createdAt DateTime @default(now())
@@ -41,8 +42,9 @@ model FinancialYear {
 
 model LedgerAccount {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
+  name      String   @unique
   parentId  String?  @db.ObjectId
+  isSystemAccount  Boolean  @default(false)
   createdAt DateTime @default(now())
 
   parent   LedgerAccount?  @relation("LedgerAccountHierarchy", fields: [parentId], references: [id], onDelete: Restrict, onUpdate: NoAction)
