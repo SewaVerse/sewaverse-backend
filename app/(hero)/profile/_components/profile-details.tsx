@@ -1,26 +1,17 @@
+import clsx from "clsx";
 import { Edit } from "lucide-react";
+import Link from "next/link";
 
+import useHash from "@/hooks/useHash";
+
+import { ProfileResponse } from "../page";
 import AwardsAndAchievements from "./AwardsAndAchievements";
+import LicenseSection from "./License";
 import WorksSection from "./MyWorks";
 import QuestionsList from "./QuestionAnswer/question-list";
 import { RatingReviews } from "./RatingsReview/ratings-reviews";
 import Reviews from "./RatingsReview/reviews";
-import WorkExperience from "./WorkExperience.tsx/WorkExperience";
-
-const experiences = [
-  {
-    title: "Backend Developer",
-    subtitle: "Web Developer",
-    duration: "More than 3 years",
-    documentLink: "#",
-  },
-  {
-    title: "Frontend Developer",
-    subtitle: "Web Developer",
-    duration: "2 years",
-    documentLink: "#",
-  },
-];
+import WorkExperienceSection from "./WorkExperience.tsx/WorkExperience";
 
 const ratingData = {
   overallRating: 4.0,
@@ -34,73 +25,111 @@ const ratingData = {
   ],
 };
 
-export const ProfileDetails = () => {
+type ProfileDetailsProps = Pick<
+  ProfileResponse,
+  "profile" | "workExperiences" | "awards" | "licenses" | "myWorks"
+>;
+
+const Links = [
+  {
+    name: "About Me",
+    href: "#about-me",
+    default: true,
+  },
+  {
+    name: "Experience",
+    href: "#experience",
+  },
+  {
+    name: "Awards & Achievements",
+    href: "#awards-achievements",
+  },
+  {
+    name: "My Works",
+    href: "#my-works",
+  },
+  {
+    name: "Ratings & Reviews",
+    href: "#ratings-reviews",
+  },
+  {
+    name: "Offered Services",
+    href: "#offered-services",
+  },
+];
+
+const ProfileNavigationSection = () => {
+  const hash = useHash();
+
+  return (
+    <div className="my-5">
+      <span className="flex justify-between font-semibold text-[12px] sm:text-[12px] md:text-base text-muted-foreground w-full">
+        {Links.map((link) => (
+          <Link
+            href={link.href}
+            key={link.name}
+            className={clsx(
+              "font-bold",
+              !hash && link.default && "gradient-text",
+              hash === link.href.split("#")[1] && "gradient-text"
+            )}
+          >
+            {link.name}
+          </Link>
+        ))}
+      </span>
+    </div>
+  );
+};
+
+export const ProfileDetails: React.FC<ProfileDetailsProps> = ({
+  profile,
+  workExperiences,
+  awards,
+  licenses,
+  myWorks,
+}) => {
   return (
     <div className="px-[1.3rem]">
-      <span className="flex justify-between font-semibold text-[12px] sm:text-[12px] md:text-base text-muted-foreground w-full">
-        <h1>About</h1>
-        <h1>Experience</h1>
-        <h1>Awards & Achievements</h1>
-        <h1>My Works</h1>
-        <h1>Ratings & Reviews</h1>
-        <h1>Offered Services</h1>
-      </span>
-      <span>
-        <span className="flex justify-between items-center py-2 text-sm sm:text-sm md:text-lg">
-          <h1 className="font-bold text-2xl">About Me</h1>
-          <Edit size={14} />
-        </span>
+      <div className="sticky  bg-white top-0 z-20 py-0.5">
+        <ProfileNavigationSection />
+      </div>
+      <div className="[&>div]:scroll-mt-[3.5rem] flex flex-col gap-4">
+        <div id="about-me">
+          <span className="flex justify-between items-center py-2 text-sm sm:text-sm md:text-lg">
+            <h1 className="font-bold text-2xl">About Me</h1>
+            <Edit size={14} />
+          </span>
 
-        <p className="text-justify text-[12px] sm:text-[13px] md:text-base">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic tempora
-          minus laborum magnam error tempore est sit a! Neque nihil nisi iure
-          excepturi ipsa ipsam, hic nesciunt voluptatibus necessitatibus ullam.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita
-          repudiandae itaque, inventore aperiam explicabo distinctio praesentium
-          facere temporibus commodi quasi impedit cupiditate quaerat,
-          repellendus at sint reprehenderit reiciendis totam ullam?
-        </p>
-      </span>
-
-      {/* work experience section */}
-
-      <WorkExperience experiences={experiences} />
-
-      {/* license section */}
-
-      <div>
-        <span className="flex justify-between items-center py-2 ">
-          <h1 className="font-bold text-2xl">License</h1>
-          <Edit size={14} />
-        </span>
-        <div className="flex justify-between items-center shadow-neutral-500 rounded-xl border p-1 w-[29.8125rem] px-4">
-          <div>
-            <h1 className="text-xl font-semibold">Backend Developer</h1>
-            <p className="text-muted-foreground font-medium text-sm">
-              License form ABC Institute
-            </p>
-          </div>
-          <div className="border h-[67px] w-[99px] "></div>
+          <p className="text-justify text-[12px] sm:text-[13px] md:text-base">
+            {profile.about}
+          </p>
         </div>
-      </div>
+        {/* work experience section */}
+        <div id="experience">
+          <WorkExperienceSection experiences={workExperiences} />
+        </div>
+        {/* license section */}
 
-      {/* awards section */}
-
-      <div>
-        <AwardsAndAchievements />
-      </div>
-
-      <div>
-        <WorksSection />
-      </div>
-      <div>
-        <RatingReviews {...ratingData} />
-      </div>
-      <div>
-        <Reviews />
-      </div>
-      <div>
-        <QuestionsList />
+        <div id="licenses">
+          <LicenseSection licenses={licenses} />
+        </div>
+        {/* awards section */}
+        <div id="awards-achievements">
+          <AwardsAndAchievements awards={awards} />
+        </div>
+        <div id="my-works">
+          <WorksSection myWorks={myWorks} />
+        </div>
+        <div id="ratings-reviews">
+          <RatingReviews {...ratingData} />
+        </div>
+        <div>
+          <Reviews />
+        </div>
+        <div>
+          <QuestionsList />
+        </div>
       </div>
     </div>
   );

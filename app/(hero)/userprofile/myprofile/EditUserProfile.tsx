@@ -111,7 +111,7 @@ export default function EditUserProfile({
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    console.warn(values);
     setOpenEditProfile(false);
   };
 

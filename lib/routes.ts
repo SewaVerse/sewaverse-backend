@@ -14,11 +14,7 @@ export const PUBLIC_ROUTES = [
   "/sewaproviderstep2",
   "/sewaprovidercontent",
   "/sewaproviderstep3",
-  "/booking",
-  "/profile",
   "/popup",
-  "/profile/edit",
-  "/services",
   "/userprofile",
   "/userprofile/Booking",
   "/userprofile/myprofile",
@@ -26,12 +22,8 @@ export const PUBLIC_ROUTES = [
   "/userprofile/offers",
   "/userprofile/review",
   "/userprofile/wishlist",
-  "/about-us",
-  "/tryfooter"
-  
-
-
-  
+ "/about-us",
+  "/tryfooter",
 ];
 
 /**

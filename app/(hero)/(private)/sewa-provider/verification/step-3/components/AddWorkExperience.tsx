@@ -121,6 +121,8 @@ export default function AddWorkExperience({
       const selectedCategory = data.category!.toLowerCase();
       const serviceId = categoriesMap[selectedCategory] || "";
 
+      console.warn("Service ID:", serviceId);
+
       const formData = new FormData();
 
       if (verificationFile) {
@@ -131,6 +133,8 @@ export default function AddWorkExperience({
         ...data,
         serviceId: serviceId,
       };
+
+      console.warn("Form Data with Service ID:", formDataWithServiceId);
 
       formData.append("jsonData", JSON.stringify(formDataWithServiceId));
 
@@ -146,7 +150,7 @@ export default function AddWorkExperience({
 
       const result = await response.json();
 
-      console.warn("Result", result.message);
+      console.warn("json response", result.message);
 
       toast.success("Work experience added successfully");
       onSave?.(data);

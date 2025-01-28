@@ -52,11 +52,11 @@ const WishList = ({ wishListData }: WishListProps) => {
   };
 
   // Function to delete an entire WishlistItem
-  const deleteWishlistItem = (itemId: number) => {
-    setWishlist((prevWishlist) =>
-      prevWishlist.filter((item) => item.id !== itemId)
-    );
-  };
+  // const deleteWishlistItem = (itemId: number) => {
+  //   setWishlist((prevWishlist) =>
+  //     prevWishlist.filter((item) => item.id !== itemId)
+  //   );
+  // };
 
   return (
     <div className="md:w-[70%]">

@@ -59,8 +59,8 @@ export default function ChangePassword({
   });
 
   const onSubmit = (data: PasswordFormValues) => {
-    console.log("Form submitted:", data);
-   
+    console.warn("Form submitted:", data);
+
     setOpenChangePassword(false);
     form.reset();
   };

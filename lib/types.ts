@@ -48,3 +48,42 @@ export interface WorkType {
   description: string;
   workFile?: { file?: File | undefined };
 }
+
+export interface OfferedService {
+  id: string;
+  serviceProviderId: string;
+  serviceId: string;
+  title: string;
+  description: string;
+  price: number;
+  priceType: string;
+  discount: number;
+  location: string | null;
+  workExperience: string | null;
+  overallRating: number;
+  published: boolean;
+  adminVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+  service: {
+    id: string;
+    name: string;
+    description: string | null;
+    parentServiceId: string;
+    imageId: string | null;
+    isActive: boolean;
+    createdBy: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  serviceProvider: {
+    createdAt: string;
+    id: string;
+    serviceProviderId: string;
+    userId: string;
+    name: string;
+    email: string;
+    profileId: string;
+    providerType: string;
+  };
+}
