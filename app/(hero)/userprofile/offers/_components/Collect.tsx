@@ -1,11 +1,11 @@
-import PromoList from "./PromoList";
+import PromoList from "./PromoList"
 
 const Collect = () => {
   return (
     <div>
-      <PromoList filterStatus="Collect" />
+      <PromoList filterStatus="Collect"/>
     </div>
-  );
-};
+  )
+}
 
-export default Collect;
+export default Collect

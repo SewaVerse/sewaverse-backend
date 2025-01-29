@@ -10,6 +10,7 @@ const SessionDataDisplay = () => {
   if (status === "loading") {
     return <p>Loading session data...</p>;
   }
+  console.warn("session", session?.user?.serviceProviderId);
 
   // Get session data using the utility function
   const sessionData = getSessionData(session);
@@ -23,6 +24,7 @@ const SessionDataDisplay = () => {
       <h2 className="text-xl font-bold mb-4">Session Data</h2>
       <div className="text-sm bg-gray-100 p-3 rounded">
         {/* <>UserProfile Id:{sessionData.userProfileId}</> */}
+
         <p>
           <strong>ID:</strong> {sessionData.id}
         </p>

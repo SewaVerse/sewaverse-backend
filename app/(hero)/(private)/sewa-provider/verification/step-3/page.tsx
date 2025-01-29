@@ -1,6 +1,7 @@
 "use client";
 import { CirclePlus } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -94,6 +95,7 @@ const Page = () => {
     imageUrl: "",
   });
 
+  const router = useRouter();
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -135,7 +137,9 @@ const Page = () => {
             profession: serviceProvider.profile.profession,
             experience: `${serviceProvider.profile.experience} Years`,
             rating: 0, // Default value as not provided in API
-            offeredServices: serviceProvider.serviceCategories.map(category => category.name),
+            offeredServices: serviceProvider.serviceCategories.map(
+              (category) => category.name
+            ),
             locations: serviceProvider.profile.location,
             coreSkills: serviceProvider.profile.skills,
             imageUrl: serviceProvider.profile.image?.localUrl || "",
@@ -246,6 +250,8 @@ const Page = () => {
       toast.success(
         responseData.message || "About section updated successfully!"
       );
+      router.push("/sewa-provider/home");
+
       setLoading(false);
     } catch (error) {
       if (error instanceof Error) {

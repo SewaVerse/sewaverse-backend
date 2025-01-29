@@ -4,70 +4,80 @@ const promocodesData = [
   {
     code: "EX1234SS5",
     discount: "10% DISCOUNT",
-    validFor: ["All Sewa", "Sewaverse"],
+    service: "All sewa",
+    providedBy: "SewaVerse",
     dateRange: "Starts on 25-26 Jan | Expires on 25-26 Jan",
     status: "Collect",
   },
   {
-    code: "EX1234SS5",
-    discount: "10% DISCOUNT",
-    validFor: ["All Sewa", "Sewaverse"],
-    dateRange: "Starts on 25-26 Jan | Expires on 25-26 Jan",
-    status: "new",
-  },
-  {
     code: "EX5678SS9",
     discount: "15% DISCOUNT",
-    validFor: ["All Sewa", "SewaProvider"],
+    service: "Sewa 1,2",
+    providedBy: "Bishal Shrstha",
     dateRange: "Starts on 01-02 Feb | Expires on 01-02 Feb",
-    status: "Expired",
+    status: "recently",
   },
   {
     code: "EX5678SS9",
     discount: "15% DISCOUNT",
-    validFor: ["All Sewa", "SewaProvider"],
-    dateRange: "Starts on 01-02 Feb | Expires on 01-02 Feb",
-    status: "Expired",
-  },
-  {
-    code: "EX5678SS9",
-    discount: "15% DISCOUNT",
-    validFor: ["All Sewa", "SewaProvider"],
-    dateRange: "Starts on 01-02 Feb | Expires on 01-02 Feb",
-    status: "Expired",
-  },
-  {
-    code: "EX5678SS9",
-    discount: "15% DISCOUNT",
-    validFor: ["All Sewa", "SewaProvider"],
+    service: "All sewa",
+    providedBy: "sewaverse",
     dateRange: "Starts on 01-02 Feb | Expires on 01-02 Feb",
     status: "Collect",
   },
   {
     code: "EX5678SS9",
     discount: "15% DISCOUNT",
-    validFor: ["All Sewa", "SewaProvider"],
+    service: "All sewa",
+    providedBy: "sewaverse",
+    dateRange: "Starts on 01-02 Feb | Expires on 01-02 Feb",
+    status: "Collect",
+  },
+  {
+    code: "EX5678SS9",
+    discount: "15% DISCOUNT",
+    service: "All sewa",
+    providedBy: "sewaverse",
+    dateRange: "Starts on 01-02 Feb | Expires on 01-02 Feb",
+    status: "Collect",
+  },
+  {
+    code: "EX5678SS9",
+    discount: "15% DISCOUNT",
+    service: "Sewa 1,2",
+    providedBy: "Bishal Shrstha",
     dateRange: "Starts on 01-02 Feb | Expires on 01-02 Feb",
     status: "recently",
   },
   {
     code: "EX5678SS9",
     discount: "15% DISCOUNT",
-    validFor: ["All Sewa", "SewaProvider"],
+    service: "Sewa 1,2",
+    providedBy: "Bishal Shrstha",
     dateRange: "Starts on 01-02 Feb | Expires on 01-02 Feb",
     status: "recently",
   },
   {
     code: "EX5678SS9",
     discount: "15% DISCOUNT",
-    validFor: ["All Sewa", "SewaProvider"],
+    service: "Sewa 1,2",
+    providedBy: "Bishal Shrstha",
     dateRange: "Starts on 01-02 Feb | Expires on 01-02 Feb",
     status: "recently",
   },
   {
     code: "EX5678SS9",
     discount: "15% DISCOUNT",
-    validFor: ["All Sewa", "SewaProvider"],
+    service: "Sewa 1,2",
+    providedBy: "Bishal Shrstha",
+    dateRange: "Starts on 01-02 Feb | Expires on 01-02 Feb",
+    status: "recently",
+  },
+  {
+    code: "EX5678SS9",
+    discount: "15% DISCOUNT",
+    service: "Sewa 1,2",
+    providedBy: "Bishal Shrstha",
     dateRange: "Starts on 01-02 Feb | Expires on 01-02 Feb",
     status: "recently",
   },
@@ -78,9 +88,10 @@ interface PromoListProp {
 }
 
 const PromoList = ({ filterStatus }: PromoListProp) => {
+  // Filter promocodes based on the filterStatus prop
   const filteredPromocodes = filterStatus
     ? promocodesData.filter((promo) => promo.status === filterStatus)
-    : promocodesData;
+    : promocodesData; // If no filterStatus is provided, show all promocodes
 
   return (
     <div>

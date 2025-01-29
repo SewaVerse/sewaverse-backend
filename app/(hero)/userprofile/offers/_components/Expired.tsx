@@ -1,9 +1,9 @@
-import PromoList from "./PromoList";
+import AllPromos from "./AllPromos";
 
 const Expired = () => {
   return (
     <div>
-      <PromoList filterStatus="Expired" />
+      <AllPromos  />
     </div>
   );
 };

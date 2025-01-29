@@ -75,7 +75,6 @@ const ProfilePage = () => {
             name={name}
             createdAt={createdAt}
             profile={profile}
-            workExperiences={workExperiences}
             serviceCategories={serviceCategories}
           />
         </div>

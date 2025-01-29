@@ -67,6 +67,9 @@ export const {
             const sewaProvider = await getServiceProviderByUserId(user.id!);
 
             if (sewaProvider) {
+              token.serviceProviderId = sewaProvider.id;
+              if (sewaProvider.profiles.length > 0)
+                token.serviceProviderProfileId = sewaProvider.profiles[0].id;
               token.serviceProviderVerification = {
                 verificationStep: sewaProvider.verificationStep,
                 isVerified: sewaProvider.isVerified,
@@ -92,6 +95,8 @@ export const {
         session.user.roles = token.roles as string[];
         session.user.isOAuth = token.isOAuth as boolean;
         session.user.accessToken = token.accessToken as string;
+        session.user.serviceProviderId = token?.serviceProviderId;
+        session.user.serviceProviderProfileId = token?.serviceProviderProfileId;
 
         if (token.serviceProviderVerification) {
           session.user.serviceProviderVerification =

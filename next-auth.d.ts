@@ -14,6 +14,8 @@ declare module "next-auth" {
       isOAuth: boolean;
       isEmailVerified: boolean;
       serviceProviderVerification?: ServiceProviderVerification;
+      serviceProviderId: string | null;
+      serviceProviderProfileId: string | null;
     } & DefaultSession["user"];
   }
 }
@@ -22,5 +24,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     roles?: string[];
     serviceProviderVerification?: ServiceProviderVerification;
+    serviceProviderId: string | null;
+    serviceProviderProfileId: string | null;
   }
 }

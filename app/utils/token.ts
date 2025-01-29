@@ -8,6 +8,12 @@ type TokenPayload = {
   isEmailVerified: boolean;
   isOAuth: boolean;
   roles: Role[];
+  serviceProviderId: string | null;
+  serviceProviderProfileId: string | null;
+  serviceProviderVerification: {
+    verificationStep: number;
+    isVerified: boolean;
+  } | null;
 };
 
 export const generateToken = async (payload: TokenPayload) => {

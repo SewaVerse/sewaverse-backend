@@ -1,5 +1,7 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { MailIcon, PhoneIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -38,16 +40,30 @@ interface MyProfileProps {
   userData: UserData;
 }
 
+const fetchUserById = async (userId: string) => {
+  const response = await axios.get(`/api/user/byuserid/${userId}`);
+  console.warn(response.data.data);
+  return response.data.data;
+};
+
 const MyProfile = ({ userData }: MyProfileProps) => {
   const { data: session, status } = useSession();
+  const sessionData = getSessionData(session);
+  const {
+    data: user,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["user", sessionData?.id],
+    queryFn: () => fetchUserById(sessionData!.id),
+    enabled: !!sessionData?.id, // Only fetch if sessionData.id is available
+  });
 
-  if (status === "loading") {
+  if (status === "loading" || isLoading) {
     return <p>Loading...</p>;
   }
 
-  const sessionData = getSessionData(session);
-
-  if (!sessionData) {
+  if (!sessionData || isError) {
     return <p>No session data available. Please sign in.</p>;
   }
 
@@ -62,7 +78,9 @@ const MyProfile = ({ userData }: MyProfileProps) => {
         <div className="relative">
           <Avatar className="w-32 h-32 border-4 border-primary">
             <AvatarImage src={userData.image} alt={sessionData.name} />
-            <AvatarFallback>{sessionData.name.charAt(0)}</AvatarFallback>
+            <AvatarFallback className="text-xl">
+              {sessionData.name.charAt(0)}
+            </AvatarFallback>
           </Avatar>
         </div>
 
@@ -73,7 +91,9 @@ const MyProfile = ({ userData }: MyProfileProps) => {
         <div className="flex flex-col items-center w-full max-w-md">
           <div className="flex items-center space-x-2">
             <PhoneIcon className="h-4 w-4 text-muted-foreground" />
-            <span>{userData.phone}</span>
+            <span>
+              <span>{user.phoneNumber}</span>
+            </span>
           </div>
           <div className="flex items-center space-x-2">
             <MailIcon className="h-4 w-4 text-muted-foreground" />
@@ -90,13 +110,19 @@ const MyProfile = ({ userData }: MyProfileProps) => {
           <DialogTrigger asChild>
             <Button variant={"brand"}>Edit Profile</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px] sm:h-auto md:max-h-[900px]">
+          <DialogContent className="max-h-svh">
             <DialogHeader>
               <DialogTitle className="text-xl font-semibold text-center">
-                My Profile
+                Edit Profile
               </DialogTitle>
             </DialogHeader>
-            <EditUserProfile />
+            <EditUserProfile
+              initialData={{
+                name: sessionData.name,
+                email: sessionData.email,
+                phoneNumber: user.phoneNumber,
+              }}
+            />
           </DialogContent>
         </Dialog>
 
