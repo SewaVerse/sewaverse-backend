@@ -26,7 +26,7 @@ import { Separator } from "@/components/ui/separator";
 
 type TRole = "user" | "serviceProvider";
 type RegisterForm = z.infer<typeof userRegisterSchema>;
-
+  
 export default function Register() {
   const registerContext = use(RegisterContext);
 

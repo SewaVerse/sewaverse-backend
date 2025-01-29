@@ -1,7 +1,16 @@
-import { Role, User, UserProfile, UserRoleMapping } from "@prisma/client";
+import {
+  Address,
+  Prisma,
+  Role,
+  User,
+  UserProfile,
+  UserRoleMapping,
+} from "@prisma/client";
 
 import { dbAsyncHandler } from "@/app/utils/asyncHelper/dbAsyncHandler";
 import db from "@/lib/db";
+
+import { upsertAddress } from "./address";
 
 export const getUserByEmail = dbAsyncHandler(async (email: string) => {
   return await db.user.findUnique({
@@ -63,3 +72,32 @@ export const findUsersByRole = dbAsyncHandler(async (role: Role) => {
     where: { role },
   });
 });
+
+export const updateUserProfileByUserId = dbAsyncHandler(
+  async (id: string, data: UserProfile) => {
+    return await db.userProfile.update({
+      where: { userId: id },
+      data,
+    });
+  }
+);
+
+export const createUserAddress = dbAsyncHandler(
+  async (
+    userId: string,
+    data: Address,
+    tx: Prisma.TransactionClient | null = null
+  ) => {
+    const prismaClient = tx || db;
+    const saveAddress = await upsertAddress(data, prismaClient);
+
+    await prismaClient.userAddressMapping.create({
+      data: {
+        userProfileId: userId,
+        addressId: saveAddress.id,
+      },
+    });
+
+    return saveAddress;
+  }
+);

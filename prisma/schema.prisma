@@ -41,7 +41,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   password      String?
-  userProfileId String?   @db.ObjectId
+  // userProfileId String?   @db.ObjectId
   userType      UserType  @default(INDIVIDUAL)
 
   image       String?
@@ -53,7 +53,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userProfile UserProfile? @relation(fields: [userProfileId], references: [id])
+  userProfile UserProfile?
 
   roles            UserRoleMapping[]
   accounts         Account[]
@@ -97,14 +97,15 @@ model PasswordResetToken {
 
 model UserProfile {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String  @unique @db.ObjectId
   dob         String?
   imageId     String? @db.ObjectId
   gender      Gender?
-  phoneNumber String
+  phoneNumber String?
 
   file File? @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  users     User[]
   addresses UserAddressMapping[]
 }
 

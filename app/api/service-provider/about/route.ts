@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   getServiceProviderByUserId,
-  updateServiceProviderProfile,
+  updateProviderProfile,
 } from "@/app/data-access/serviceProvider";
 import { getServiceProviderProfileByServiceProviderId } from "@/app/data-access/serviceProviderProfile";
 import {
@@ -38,7 +38,7 @@ export const POST = roleAsyncHandler(
       serviceProvider!.id
     );
 
-    const updatedData = await updateServiceProviderProfile(profile!.id, {
+    const updatedData = await updateProviderProfile(profile!.id, {
       about,
     });
 

@@ -93,7 +93,6 @@ export const POST = asyncHandler(async (request: Request) => {
         name: user.name!,
         email: user.email,
         roles: user.roles.map((role) => role.role),
-        profileId: user.userProfileId,
         userType: user.userType,
       },
     },

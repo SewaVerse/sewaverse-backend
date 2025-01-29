@@ -2,7 +2,6 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 
-import { redLine } from "../page";
 
 const BottomSection = () => {
   return (
@@ -12,7 +11,7 @@ const BottomSection = () => {
           Why Sewaverse? <br />
           Our Value Proposition
         </h1>
-        <Image src={redLine} alt="redLine" width={170} height={30} />
+        <Image src={"/images"} alt="redLine" width={170} height={30} />
       </div>
       {/* for content */}
       <div className="flex md:mx-52 mx-2">

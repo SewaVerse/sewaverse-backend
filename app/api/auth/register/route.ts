@@ -74,13 +74,14 @@ export const POST = asyncHandler(async (request: Request) => {
   if (!user.id) throw new ApiError("Failed to create user");
 
   // create user profile
-  const userProfile = await createUserProfile({
+   await createUserProfile({
+    userId: user.id,
     phoneNumber,
   } as unknown as UserProfile);
 
   // update user
   await updateUserById(user.id, {
-    userProfileId: userProfile.id,
+    // userProfileId: userProfile.id,
   } as User);
 
   // Handle role mapping, defaulting to 'USER' if no role is provided

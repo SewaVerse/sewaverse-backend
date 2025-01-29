@@ -44,8 +44,6 @@ const ourMissionData ={
 }
 
 
-export const redLine = "/images/servicesImage/underline.svg";
-
 const Page = () => {
   return (
     <div>

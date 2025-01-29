@@ -97,6 +97,15 @@ export const getServiceProviderProfile = dbAsyncHandler(
   }
 );
 
+export const updateProviderProfile = dbAsyncHandler(
+  async (profileId: string, data: Partial<ServiceProviderProfile>) => {
+    return await db.serviceProviderProfile.update({
+      where: { id: profileId },
+      data,
+    });
+  }
+);
+
 export const updateServiceProviderProfile = dbAsyncHandler(
   async (profileId: string, data: Partial<ServiceProviderProfile>) => {
     const currentProfile = await db.serviceProviderProfile.findUnique({

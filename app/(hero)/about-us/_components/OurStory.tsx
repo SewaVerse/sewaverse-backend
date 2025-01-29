@@ -2,7 +2,6 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 
-import { redLine } from "../page";
 
 interface ourStoryData {
   title: string;
@@ -21,7 +20,7 @@ const OurStory = ({ ourStoryData }: ourStoryProps) => {
         <h1 className="gradient-text  md:text-4xl font-semibold">
           {ourStoryData.title}
         </h1>
-          <Image src={redLine} alt="redLine" width={100} height={20} className="md:w-[170px] md:h-[30px]" />
+          <Image src={"/images"} alt="redLine" width={100} height={20} className="md:w-[170px] md:h-[30px]" />
       </div>
       {/* for content */}
       <div className="md:flex gap-10 ">

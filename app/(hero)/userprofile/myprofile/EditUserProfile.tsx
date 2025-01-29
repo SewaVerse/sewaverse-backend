@@ -1,19 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { District, Municipality, StateProvince } from "@prisma/client";
 import { Camera } from "lucide-react";
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import Button from "@/components/form/Button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Form,
   FormControl,
@@ -29,22 +24,24 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select"; // Use shadcn/ui Select component
+import { getFallbackName } from "@/lib/utils";
 
-interface MyProfileProps {
-  openEditProfile: boolean;
-  setOpenEditProfile: (open: boolean) => void;
+import LocationForm from "./components/AddressForm";
+
+interface EditUserProfileProps {
+  initialData: {
+    name: string;
+    email: string;
+    phoneNumber: string;
+  };
 }
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
-  dateOfBirth: z.object({
-    year: z.string().min(1, { message: "Year is required" }),
-    month: z.string().min(1, { message: "Month is required" }),
-    day: z.string().min(1, { message: "Day is required" }),
-  }),
+  dob: z.string().min(1, { message: "Please select a date of birth" }),
   gender: z.string().min(1, { message: "Please select a gender" }),
   phoneNo: z.string().min(10, {
     message: "Phone number must be at least 10 digits.",
@@ -53,407 +50,432 @@ const formSchema = z.object({
     message: "Please enter a valid email address.",
   }),
   address: z.object({
-    province: z.string().min(1, { message: "Province is required" }),
-    district: z.string().min(1, { message: "District is required" }),
-    municipality: z.string().min(1, { message: "Municipality is required" }),
-    wardNo: z.string().min(1, { message: "Ward No. is required" }),
-    tole: z.string(),
+    provinceId: z.string().min(1, { message: "Province is required" }),
+    districtId: z.string().min(1, { message: "District is required" }),
+    municipalityId: z.string().min(1, { message: "Municipality is required" }),
+    wardNo: z.number().min(1, { message: "Ward number is required" }),
+    tole: z.string().min(1, { message: "Tole is required" }),
   }),
 });
 
-const profile1: string = "/images/servicesImage/profile1.svg";
+interface Option {
+  value: string;
+  label: string;
+}
 
-const years = Array.from(
-  { length: 100 },
-  (_, i) => new Date().getFullYear() - i
-);
-const months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-const days = Array.from({ length: 31 }, (_, i) => i + 1);
+const fetchProvinces = async () => {
+  try {
+    const response = await fetch("/api/state-province");
+    const data = await response.json();
+    const formattedProvinces = data.data.map((province: StateProvince) => ({
+      value: province.id,
+      label: province.name,
+    }));
+    return formattedProvinces;
+  } catch (error) {
+    console.error("Error fetching provinces:", error);
+    return [];
+  }
+};
 
-export default function EditUserProfile({
-  openEditProfile,
-  setOpenEditProfile,
-}: MyProfileProps) {
-  const [profileImage, setProfileImage] = React.useState<string>(
-    "/placeholder.svg?height=100&width=100"
-  );
+const fetchDistricts = async (provinceId: string) => {
+  try {
+    const response = await fetch("/api/district?provinceId=" + provinceId);
+    const data = await response.json();
+    const formattedProvinces = data.data.map((district: District) => ({
+      value: district.id,
+      label: district.name,
+    }));
+    return formattedProvinces;
+  } catch (error) {
+    console.error("Error fetching provinces:", error);
+    return [];
+  }
+};
+
+type MunicipalityOption = Option & { wards: Option[] };
+
+const fetchMunicipalities = async (districtId: string) => {
+  try {
+    const response = await fetch("/api/municipality?districtId=" + districtId);
+    const data = await response.json();
+    const formattedProvinces = data.data.map((municipality: Municipality) => ({
+      value: municipality.id,
+      label: municipality.name,
+      wards: municipality.wards.map((ward) => ({
+        value: ward.toString(),
+        label: ward.toString(),
+      })),
+    }));
+    return formattedProvinces;
+  } catch (error) {
+    console.error("Error fetching provinces:", error);
+    return [];
+  }
+};
+
+export default function EditUserProfile({ initialData }: EditUserProfileProps) {
+  const [provinceOptions, setProvinceOptions] = useState<Option[]>([]);
+  const [districtOptions, setDistrictOptions] = useState<Option[]>([]);
+  const [municipalityOptions, setMunicipalityOptions] = useState<
+    MunicipalityOption[]
+  >([]);
+  const [wardOptions, setWardOptions] = useState<Option[]>([]);
+
+  useEffect(() => {
+    fetchProvinces().then((fetchedProvinces) => {
+      setProvinceOptions(fetchedProvinces);
+    });
+  }, []);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
-      dateOfBirth: {
-        year: "",
-        month: "",
-        day: "",
-      },
+      fullName: initialData.name,
+      dob: "",
       gender: "",
-      phoneNo: "",
-      email: "",
+      phoneNo: initialData.phoneNumber,
+      email: initialData.email,
       address: {
-        province: "",
-        district: "",
-        municipality: "",
-        wardNo: "",
+        provinceId: "",
+        districtId: "",
+        municipalityId: "",
+        wardNo: 0,
         tole: "",
       },
     },
   });
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleProvinceChange = async (provinceId: string) => {
+    form.setValue("address.districtId", "");
+    form.setValue("address.municipalityId", "");
+    form.setValue("address.wardNo", 0);
+    const districts = await fetchDistricts(provinceId);
+    setDistrictOptions(districts);
+    setMunicipalityOptions([]);
+    setWardOptions([]);
+  };
+
+  const handleDistrictChange = async (districtId: string) => {
+    form.setValue("address.municipalityId", "");
+    form.setValue("address.wardNo", 0);
+    const municipalities = await fetchMunicipalities(districtId);
+    setMunicipalityOptions(municipalities);
+    setWardOptions([]);
+  };
+
+  const handleMunicipalityChange = (municipalityId: string) => {
+    form.setValue("address.wardNo", 0);
+    const municipality = municipalityOptions.find(
+      (municipality) => municipality.value === municipalityId
+    );
+    setWardOptions(municipality?.wards ?? []);
   };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.warn(values);
-    setOpenEditProfile(false);
+
+    // Here you would typically send the data to your backend
   };
 
   return (
-    <Dialog open={openEditProfile} onOpenChange={setOpenEditProfile}>
-      <DialogContent className="sm:max-w-[600px] sm:h-auto md:max-h-[900px]">
-        <DialogHeader>
-          <DialogTitle className="text-xl  font-semibold gradient-text mt-3 text-center">
-            My Profile
-          </DialogTitle>
-        </DialogHeader>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+        <div className="flex flex-col items-center gap-2">
+          <Avatar className="rounded-full w-32 h-32 relative">
+            <AvatarImage src={"profileImage"} alt="Profile" />
+            <AvatarFallback>{getFallbackName(initialData.name)}</AvatarFallback>
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-[12px] md:space-y-2"
-          >
-            <div className="flex flex-col items-center gap-2">
-              <Avatar className="h-24 w-22 relative">
-                <AvatarImage
-                  src={
-                    profileImage !== "/placeholder.svg?height=100&width=100"
-                      ? profileImage
-                      : profile1
-                  }
-                  alt="Profile"
-                />
-              </Avatar>
-              <div className="absolute top-[9rem] md:left-80 left-60 bg-white border rounded-full p-1">
-                <Camera className="h-4 w-4" />
-              </div>
-              <div className="relative">
-                <input
-                  type="file"
-                  id="profilePicture"
-                  className="hidden"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-                <label
-                  htmlFor="profilePicture"
-                  className="flex items-center gap-2 text-sm cursor-pointer underline"
-                >
-                  Change profile picture
-                </label>
-              </div>
+            <div className="absolute top-24 left-20 bg-slate-300 border rounded-full p-1">
+              <Camera
+                className="h-4 w-4"
+                onClick={() =>
+                  document.getElementById("profilePicture")?.click()
+                }
+              />
             </div>
+          </Avatar>
+          {/* <div className="">
+            <input
+              type="file"
+              id="profilePicture"
+              className="hidden"
+              accept="image/*"
+             
+            /> */}
+          {/* <label
+              htmlFor="profilePicture"
+              className="flex items-center gap-2 text-sm cursor-pointer underline"
+            >
+              Change profile picture
+            </label> */}
+          {/* </div> */}
+        </div>
 
-            <FormField
-              control={form.control}
-              name="fullName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-black">
-                    Full Name<span className="text-red-500">*</span>
-                  </FormLabel>
+        <div className="flex gap-4 w-full">
+          {/* Full Name */}
+          <FormField
+            control={form.control}
+            name="fullName"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel className="">
+                  Full Name<span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder=""
+                    {...field}
+                    disabled
+                    className="font-medium"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Gender */}
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel className="">Gender</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <Input placeholder="Rohan Shrestha" {...field} />
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
                   </FormControl>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Phone Number */}
+          <FormField
+            control={form.control}
+            name="phoneNo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-black">
+                  Phone No.<span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder=""
+                    {...field}
+                    className="font-medium"
+                    disabled
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <div className="space-y-2">
-              <FormLabel className="text-black">Date of Birth</FormLabel>
-              <div className="grid grid-cols-3 gap-2">
-                <FormField
-                  control={form.control}
-                  name="dateOfBirth.year"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Year" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {years.map((year) => (
-                            <SelectItem key={year} value={year.toString()}>
-                              {year}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="dateOfBirth.month"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Month" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {months.map((month) => (
-                            <SelectItem key={month} value={month}>
-                              {month}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="dateOfBirth.day"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Day" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {days.map((day) => (
-                            <SelectItem key={day} value={day.toString()}>
-                              {day}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
+          {/* Email */}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="">
+                  E-mail<span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder=""
+                    className="font-medium"
+                    disabled
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
+        {/* Date of Birth */}
+        <div className="grid grid-cols-3 gap-4">
+          <FormField
+            control={form.control}
+            name="dob"
+            render={({ field }) => (
+              <FormItem>
+                <h1 className="font-medium text-base">Date of Birth</h1>
+                <FormControl>
+                  <Input className="font-work-sans" type="date" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* Address */}
+        <LocationForm
+          form={form}
+          provinceOptions={provinceOptions}
+          districtOptions={districtOptions}
+          municipalityOptions={municipalityOptions}
+          wardOptions={wardOptions}
+          handleProvinceChange={handleProvinceChange}
+          handleDistrictChange={handleDistrictChange}
+          handleMunicipalityChange={handleMunicipalityChange}
+        />
+
+        <FormField
+          control={form.control}
+          name="address.tole"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  placeholder="Tole"
+                  {...field}
+                  className="font-work-sans font-normal"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* <div className="space-y-2">
+          <FormLabel>Address</FormLabel>
+          <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="gender"
+              name="address.province"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-black">Gender</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select gender" />
+                        <SelectValue placeholder="Province" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="province1">Province 1</SelectItem>
+                      <SelectItem value="province2">Province 2</SelectItem>
+                      <SelectItem value="province3">Province 3</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name="phoneNo"
+              name="address.district"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-black">
-                    Phone No.<span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="9800000000" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-black">
-                    E-mail<span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="rohan123@gmail.com"
-                      {...field}
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="space-y-2">
-              <FormLabel>Address</FormLabel>
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="address.province"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Province" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="province1">Province 1</SelectItem>
-                          <SelectItem value="province2">Province 2</SelectItem>
-                          <SelectItem value="province3">Province 3</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="address.district"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="District" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="district1">District 1</SelectItem>
-                          <SelectItem value="district2">District 2</SelectItem>
-                          <SelectItem value="district3">District 3</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="address.municipality"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Municipality" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="municipality1">
-                            Municipality 1
-                          </SelectItem>
-                          <SelectItem value="municipality2">
-                            Municipality 2
-                          </SelectItem>
-                          <SelectItem value="municipality3">
-                            Municipality 3
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="address.wardNo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Ward No." />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Array.from({ length: 32 }, (_, i) => i + 1).map(
-                            (ward) => (
-                              <SelectItem key={ward} value={ward.toString()}>
-                                {ward}
-                              </SelectItem>
-                            )
-                          )}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                control={form.control}
-                name="address.tole"
-                render={({ field }) => (
-                  <FormItem>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <Input placeholder="Tole" {...field} />
+                      <SelectTrigger>
+                        <SelectValue placeholder="District" />
+                      </SelectTrigger>
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                    <SelectContent>
+                      <SelectItem value="district1">District 1</SelectItem>
+                      <SelectItem value="district2">District 2</SelectItem>
+                      <SelectItem value="district3">District 3</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address.municipality"
+              render={({ field }) => (
+                <FormItem>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Municipality" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="municipality1">
+                        Municipality 1
+                      </SelectItem>
+                      <SelectItem value="municipality2">
+                        Municipality 2
+                      </SelectItem>
+                      <SelectItem value="municipality3">
+                        Municipality 3
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address.wardNo"
+              render={({ field }) => (
+                <FormItem>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Ward No." />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Array.from({ length: 32 }, (_, i) => i + 1).map(
+                        (ward) => (
+                          <SelectItem key={ward} value={ward.toString()}>
+                            {ward}
+                          </SelectItem>
+                        )
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormField
+            control={form.control}
+            name="address.tole"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Tole" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div> */}
 
-            <div className="flex justify-center md:mt-3 py-2 md:mb-4">
-              <Button type="submit" variant="brand" className="w-[192px]">
-                Confirm
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+        {/* Submit Button */}
+        <div className="flex justify-center md:mt-3 py-2 md:mb-4">
+          <Button
+            type="submit"
+            isLoading={form.formState.isSubmitting}
+            disabled={form.formState.isSubmitting}
+            className="w-full"
+          >
+            Confirm
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useServices } from "@/hooks/useServices";
 
 import AddCategory from "./AddCategory";
 
@@ -21,12 +22,6 @@ interface Service {
   name: string;
   parentServiceId: string | null;
   services: Service[];
-}
-
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data: Service[];
 }
 
 interface SelectedService {
@@ -46,9 +41,8 @@ export default function SelectServices({
   openSelectServices,
   setOpenSelectServices,
   onServiceSelect,
-  selectedServices,
-}: SelectServicesProps) {
-  const [services, setServices] = useState<Service[]>([]);
+}: // selectedServices,
+SelectServicesProps) {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set()
   );
@@ -58,39 +52,9 @@ export default function SelectServices({
   const [selectedSubCategories, setSelectedSubCategories] = useState<
     Set<string>
   >(new Set());
-  const [loading, setLoading] = useState(true);
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await fetch("/api/service/hierarchy");
-        const data: ApiResponse = await response.json();
-        if (data.success) {
-          setServices(data.data);
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchServices();
-  }, []);
-
-  useEffect(() => {
-    // Initialize selected categories based on prop
-    const mainCategories = new Set<string>();
-    const subCategories = new Set<string>();
-    selectedServices.forEach((service) => {
-      mainCategories.add(service.categoryId);
-      service.subCategories.forEach((sub) => subCategories.add(sub.id));
-    });
-    setSelectedMainCategories(mainCategories);
-    setSelectedSubCategories(subCategories);
-    setExpandedCategories(mainCategories); // Expand categories that are selected
-  }, [selectedServices]);
+  const { data: services = [], isLoading, error } = useServices();
 
   const toggleCategory = (categoryId: string) => {
     setExpandedCategories((prev) => {
@@ -144,11 +108,9 @@ export default function SelectServices({
         newSet.delete(subCategoryId);
       } else {
         newSet.add(subCategoryId);
-        // Ensure main category is selected when a sub-category is selected
         setSelectedMainCategories((prevMain) =>
           new Set(prevMain).add(mainCategoryId)
         );
-        // Also ensure the category is expanded
         setExpandedCategories((prev) => new Set(prev).add(mainCategoryId));
       }
       return newSet;
@@ -233,7 +195,7 @@ export default function SelectServices({
 
   return (
     <Dialog open={openSelectServices} onOpenChange={setOpenSelectServices}>
-      <DialogContent className=" sm:max-w-[425px] ">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Select Services</DialogTitle>
         </DialogHeader>
@@ -241,13 +203,17 @@ export default function SelectServices({
         <p className="text-sm text-muted-foreground">
           Select categories based on the sewa you will be providing
         </p>
-        {loading ? (
+        {isLoading ? (
           <div className="flex items-center justify-center py-8">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#90278E] border-t-transparent"></div>
           </div>
+        ) : error ? (
+          <div className="text-red-500 text-center py-4">
+            Error loading services. Please try again later.
+          </div>
         ) : (
           <ScrollArea className="h-[300px] pr-4">
-            <div className="space-y-4 font-work-sans ">
+            <div className="space-y-4 font-work-sans">
               {services.map(renderCategory)}
             </div>
           </ScrollArea>
@@ -258,7 +224,7 @@ export default function SelectServices({
               If your desired services are not listed here.
             </div>
             <div
-              className="gradient-text text-center cursor-pointer "
+              className="gradient-text text-center cursor-pointer"
               onClick={() => setIsAddCategoryOpen(true)}
             >
               Add new service

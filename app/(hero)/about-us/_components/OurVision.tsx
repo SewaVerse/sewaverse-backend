@@ -1,8 +1,5 @@
 import Image from "next/image";
 
-import { redLine } from "../page";
-
-
 interface ourVisionData {
   name: string;
   title: string;
@@ -19,7 +16,7 @@ const OurVision = ({ ourVisionData }: OurVisionProps) => {
         <h1 className="md:text-4xl font-semibold gradient-text ">
           {ourVisionData.name}
         </h1>
-         <Image src={redLine} alt="redLine" width={100} height={20} className="md:w-[170px] md:h-[30px]" />
+         <Image src={"/images"} alt="redLine" width={100} height={20} className="md:w-[170px] md:h-[30px]" />
       </div>
 
       <div className=" md:mx-4">

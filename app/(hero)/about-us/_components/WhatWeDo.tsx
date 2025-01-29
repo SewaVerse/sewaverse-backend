@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-import { redLine } from "../page";
 const image1 = "/images/servicesImage/about-us1.svg";
 const image2 = "/images/servicesImage/about-us2.svg";
 
@@ -9,7 +8,7 @@ const WhatWeDo = () => {
     <div>
       <div className="flex flex-col items-center py-4  md:mx-52 mx-2">
         <h1 className="gradient-text md:text-4xl font-semibold">What We Do</h1>
-        <Image src={redLine} alt="redLine" width={170} height={30} />
+        <Image src={"/images"} alt="redLine" width={170} height={30} />
         <p className="text-xl py-2">
           Sewaverse brings together a diverse range of services, all accessible
           from a single digital platform. Here’s how we serve our community:
