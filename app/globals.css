@@ -125,10 +125,11 @@ body {
 
   .gradient-text {
     background-image: linear-gradient(
-      to right,
-      hsla(238, 52%, 38%, 1),
+      10deg,
+      hsla(238, 52%, 38%, 1) 60%,
       hsla(301, 57%, 36%, 1)
     );
+
     background-clip: text;
     color: transparent;
 

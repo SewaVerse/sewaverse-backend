@@ -46,6 +46,7 @@ const Home = async () => {
   ];
   return (
     <div className="font-poppins font-medium text-xl min-h-screen">
+      {/* <div className="bg-brand-gradient h-[18rem] w-full"></div> */}
       <div className="relative w-full h-screen">
         <Image
           src="/images/homepageimage.webp"
