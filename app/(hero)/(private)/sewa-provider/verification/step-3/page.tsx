@@ -396,7 +396,7 @@ const Page = () => {
           <div className="opacity-50 bg-gray-50">
             <div className=" h-[35vh] bg-[#BCBDDC] "></div>
             {/* for profile */}
-            <ProfileCard {...profileData} />
+            <ProfileCard {...profileData} /> 
           </div>
           {/* for navbar */}
           <div className="container mx-auto px-10">
