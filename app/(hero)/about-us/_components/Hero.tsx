@@ -18,18 +18,19 @@ const Hero = ({ heroData }: HeroProps) => {
       style={{
         backgroundImage: `url(${heroData.image})`,
         backgroundSize: "cover",
-        backgroundPosition: "",
+        backgroundPosition: "center -250px",
         backgroundRepeat: "no-repeat",
-        height: "145vh",
+        height: "80vh",
         width: "100%",
       }}
+      className="flex flex-col items-center justify-center gap-y-52"
     >
-      <div className="text-white  flex flex-col items-center justify-center py-80">
+      <div className="text-white flex flex-col items-center">
         <h1 className="text-6xl font-bold">{heroData.title}</h1>
         <p className="text-4xl  ">{heroData.description}</p>
       </div>
-      <div className=" flex flex-col  items-center ">
-        <Image src={heroData.smileImage} alt="smile" width={100} height={94} />
+      <div className="flex flex-col items-center gap-3">
+        <Image src={heroData.smileImage} alt="smile" width={80} height={80} />
         <p className="text-3xl font-semibold text-white">{heroData.subtitle}</p>
       </div>
     </div>

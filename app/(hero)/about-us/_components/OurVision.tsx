@@ -16,7 +16,13 @@ const OurVision = ({ ourVisionData }: OurVisionProps) => {
         <h1 className="md:text-4xl font-semibold gradient-text ">
           {ourVisionData.name}
         </h1>
-         <Image src={"/images"} alt="redLine" width={100} height={20} className="md:w-[170px] md:h-[30px]" />
+        <Image
+          src={"/images/redline.png"}
+          alt="redLine"
+          width={100}
+          height={20}
+          className="md:w-[170px] md:h-[30px]"
+        />
       </div>
 
       <div className=" md:mx-4">

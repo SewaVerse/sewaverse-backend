@@ -14,7 +14,7 @@ const OurValues = () => {
       <div className="flex flex-col items-center">
         <h1 className="md:text-4xl font-semibold gradient-text">Our Values</h1>
         <Image
-          src={"/images/"}
+          src={"/images/redline.png"}
           alt="redLine"
           width={100}
           height={20}

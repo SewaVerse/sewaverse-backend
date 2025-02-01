@@ -2,7 +2,6 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 
-
 interface ourStoryData {
   title: string;
   description1: string[];
@@ -20,7 +19,13 @@ const OurStory = ({ ourStoryData }: ourStoryProps) => {
         <h1 className="gradient-text  md:text-4xl font-semibold">
           {ourStoryData.title}
         </h1>
-          <Image src={"/images"} alt="redLine" width={100} height={20} className="md:w-[170px] md:h-[30px]" />
+        <Image
+          src={"/images/redline.png"}
+          alt="redLine"
+          width={100}
+          height={20}
+          className="md:w-[170px] md:h-[30px]"
+        />
       </div>
       {/* for content */}
       <div className="md:flex gap-10 ">
@@ -45,7 +50,9 @@ const OurStory = ({ ourStoryData }: ourStoryProps) => {
       </div>
       {/* signup button */}
       <div className="flex justify-center py-3">
-        <Button variant={"brand"} size={"md"}>Sign In   </Button>
+        <Button variant={"brand"} size={"md"}>
+          Sign In{" "}
+        </Button>
       </div>
     </div>
   );
