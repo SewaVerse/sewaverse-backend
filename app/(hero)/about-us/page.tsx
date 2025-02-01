@@ -51,7 +51,7 @@ const Page = () => {
   return (
     <div>
       <Hero heroData={heroData} />
-      <div className="md:px-16 py-2">
+      <div className="md:px-16 ">
         <OurStory ourStoryData={ourStoryData} />
         <OurVision ourVisionData={ourVisionData} />
         <OurMission ourMissionData={ourMissionData} />

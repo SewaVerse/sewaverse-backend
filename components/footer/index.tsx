@@ -1,6 +1,10 @@
+"use client"
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+
+import FeedbackForm from "@/app/(hero)/partner/_components/FeedbackForm";
 
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
@@ -59,6 +63,7 @@ const Terms = ({ className }: { className: string }) => {
 };
 
 const Footer = () => {
+  const [open, setOpen] = useState(false)
   return (
     <footer className="p-4 md:pt-5 md:pb-4 border-t shadow-md rounded-md">
       <div className="flex flex-col md:flex-row gap-5 h-full px-2 md:px-8">
@@ -71,9 +76,8 @@ const Footer = () => {
               height={180}
               className="h-auto w-auto"
             />
-            <p className="text-center md:ms-[4rem] md:text-left text-sm">
-              Seamlessly offer or receive services simply, conveniently and
-              with.
+            <p className="text-center justify-center md:ms-[4rem] md:text-left text-sm">
+              Offer or Receive Sewas with Ease and Convenience.
             </p>
             <div className="flex justify-center gap-4 md:justify-between items-center my-2">
               {socialLinks.map((socialLink) => (
@@ -99,7 +103,9 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row md:justify-around">
             <FooterAccordion title="Company">
               <ul className="flex flex-col gap-1">
-                <li>About Us</li>
+                <Link href={"/about-us"}>
+                  <li>About Us</li>
+                </Link>
                 <li>Sewaverse Academy</li>
                 <li>Careers</li>
                 <li>Newsroom</li>
@@ -115,15 +121,20 @@ const Footer = () => {
 
             <FooterAccordion title="Services">
               <ul className="flex flex-col gap-1">
+                <Link href="/beasewaprovider">
                 <li>Be a Sewa Provider</li>
+                </Link>
                 <li>Explore Services</li>
+                <Link href={"/partner"}>
                 <li>Partner with us</li>
+                </Link>
               </ul>
             </FooterAccordion>
             <FooterAccordion title="Contact us">
               <ul className="flex flex-col gap-1">
                 <li>Message Us</li>
-                <li>Provide Feedback</li>
+                <li onClick={() => setOpen(true)}>Provide Feedback</li>
+                
                 <li className="flex gap-2">
                   <Image
                     src={"/images/phone.svg"}
@@ -177,6 +188,9 @@ const Footer = () => {
         </p>
       </div>
       <Terms className="flex flex-col justify-center items-center gap-2 md:hidden" />
+      {
+        open && <FeedbackForm open={open} onOpenChange={setOpen}/>
+      }
     </footer>
   );
 };

@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 
 const BottomSection = () => {
   return (
-    <div>
-      <div className="flex flex-col items-center py-20">
-        <h1 className="gradient-text text-4xl font-semibold text-center ">
+    <div className="md:mt-12 ">
+      <div className="flex flex-col items-center ">
+        <h1 className="text-4xl font-semibold text-center gradient-text ">
           Why Sewaverse? <br />
           Our Value Proposition
         </h1>
@@ -18,10 +18,12 @@ const BottomSection = () => {
         />
       </div>
       {/* for content */}
-      <div className="flex md:mx-52 mx-2">
+      <div className="flex items-center gap-32 mx-2 mt-8">
         <div className="basis-1/2 ">
           <h1 className="text-xl font-semibold">Sewa Provider</h1>
           <p className="text-base">Empower Your Business Journey</p>
+          <h1 className="text-xl font-semibold text-center">Sewa Provider</h1>
+          <p className="text-base text-center">Empower Your Business Journey</p>
         </div>
         <div className="flex-1 text-center ">
           <h1 className=" text-xl font-semibold">Users</h1>
@@ -29,7 +31,7 @@ const BottomSection = () => {
         </div>
       </div>
 
-      <div className="flex md:gap-10 gap-2 px-2">
+      <div className="flex gap-2 px-2 py-2 md:gap-10">
         <div className="basis-1/2 bg-[#F7F7F7] p-1">
           <p className=" py-3 text-lg">
             <span className="font-semibold">Boost Your Reach:</span> Get

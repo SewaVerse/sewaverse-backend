@@ -52,9 +52,13 @@ export const POST = asyncHandler(async (request: Request) => {
     }
 
     return NextResponse.json(result, { status: 200 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json(
-      { success: false, message: error.message },
+      {
+        success: false,
+        message:
+          error instanceof Error ? error.message : "An unknown error occurred",
+      },
       { status: 400 }
     );
   }

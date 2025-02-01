@@ -2,10 +2,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-import { Button } from "@/components/ui/button";
+import Button from "@/components/form/Button";
 import { Input } from "@/components/ui/input";
 
 type ForgotPasswordForm = {
@@ -14,8 +15,10 @@ type ForgotPasswordForm = {
 
 const ForgotPasswordForm = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false); // State for loading
 
   const onSubmit = async (data: ForgotPasswordForm) => {
+    setLoading(true); // Start loading
     try {
       const response = await fetch("/api/auth/forgotPassword", {
         method: "POST",
@@ -30,19 +33,20 @@ const ForgotPasswordForm = () => {
       }
 
       const result = await response.json();
-      console.error("Password reset request successful:", result);
       toast.success(result.message);
       router.push("/login");
     } catch (error) {
       console.error("Error during password reset request:", error);
+      toast.error("Failed to send reset link. Please try again.");
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   const {
     register,
     handleSubmit,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    formState: { errors },
+    formState: {},
   } = useForm<ForgotPasswordForm>({
     defaultValues: {
       email: "",
@@ -51,7 +55,7 @@ const ForgotPasswordForm = () => {
 
   return (
     <div className="flex items-center justify-center h-full">
-      <div className="w-2/3 ">
+      <div className="w-2/3">
         <div className="text-center mb-6">
           <div className="flex justify-center mb-4">
             <Image
@@ -73,8 +77,13 @@ const ForgotPasswordForm = () => {
               placeholder="Enter Your email address"
             />
           </div>
-          <Button variant={"brand"} className="mt-2 w-full">
-            Send Reset Link
+          <Button
+            variant="brand"
+            className="mt-2 w-full"
+            isLoading={loading}
+            disabled={loading}
+          >
+            {loading ? "Sending..." : "Send Reset Link"}
           </Button>
         </form>
         <div className="text-center mt-4">
