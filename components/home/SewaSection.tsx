@@ -36,7 +36,7 @@ const SewaSection: React.FC<SewaSectionProps> = ({
   return (
     <>
       <div className="py-16 bg-white text-center">
-        <h2 className="text-3xl font-bold mb-8">{name}</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-8">{name}</h2>
         <div className="flex sm:flex-row flex-col justify-between items-center">
           {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-items-center"> */}
           <ChevronLeft style={{ color: "#D9D9D9" }} size={20} />

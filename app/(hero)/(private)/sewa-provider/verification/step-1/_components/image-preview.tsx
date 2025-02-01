@@ -28,7 +28,7 @@ const ImagePreviewSlider = ({
 
   if (previewImages.length === 0) {
     return (
-      <div className="w-full max-w-3xl mt-8">
+      <div className="w-[50rem] mt-8">
         <h2 className="text-xl font-semibold text-center mb-4">
           Preview of Documents
         </h2>

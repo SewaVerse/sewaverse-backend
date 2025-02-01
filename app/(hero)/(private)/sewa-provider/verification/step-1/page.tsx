@@ -49,7 +49,7 @@ const fetchProvinces = async () => {
     const data = await response.json();
     const formattedProvinces = data.data.map((province: StateProvince) => ({
       value: province.id,
-      label: province.name,  
+      label: province.name,
     }));
     return formattedProvinces;
   } catch (error) {
@@ -254,289 +254,187 @@ export default function SewaProviderDetailPage() {
   };
 
   return (
-    <div className="min-h-screen w-full mx-auto">
-      <div className="flex flex-col md:flex-row justify-around items-center gap-8">
-        <div className="rounded-lg shadow-lg p-6 w-full md:w-1/3">
-          <p className="text-center font-medium text-gray-500 text-xl mb-2">
-            Step 1/3
-          </p>
-          <h2 className="text-center text-2xl font-semibold mb-2">
-            Sewa Provider Details
-          </h2>
+    // <div className="min-h-screen w-full mx-auto">
+    <div className="contaainer mx-2 md:mx-12 flex flex-col md:flex-row justify-between items-center gap-8">
+      <div className="rounded-lg shadow-lg p-6 w-full md:w-1/3">
+        <p className="text-center font-medium text-gray-500 text-xl mb-2">
+          Step 1/3
+        </p>
+        <h2 className="text-center text-2xl font-semibold mb-2">
+          Sewa Provider Details
+        </h2>
 
-          <div className="flex flex-col justify-between items-center text-xl text-gray-500 font-medium mb-2">
-            <p>Individual</p>
-          </div>
-          <div className="w-full h-[3px] bg-brand-gradient mb-4"></div>
+        <div className="flex flex-col justify-between items-center text-xl text-gray-500 font-medium mb-2">
+          <p>Individual</p>
+        </div>
+        <div className="w-full h-[3px] bg-brand-gradient mb-4"></div>
 
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="gender"
-                  render={({ field }) => (
-                    <FormItem>
-                      <h1 className="font-medium text-base">Gender</h1>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select gender" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
-                          <SelectItem value="others">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="dob"
-                  render={({ field }) => (
-                    <FormItem>
-                      <h1 className="font-medium text-base">Date of Birth</h1>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <h1 className="font-medium text-base">Gender</h1>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
-                        <Input
-                          className="font-work-sans"
-                          type="date"
-                          {...field}
-                        />
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select gender" />
+                        </SelectTrigger>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div>
-                <LocationForm
-                  form={form}
-                  provinceOptions={provinceOptions}
-                  districtOptions={districtOptions}
-                  municipalityOptions={municipalityOptions}
-                  wardOptions={wardOptions}
-                  handleProvinceChange={handleProvinceChange}
-                  handleDistrictChange={handleDistrictChange}
-                  handleMunicipalityChange={handleMunicipalityChange}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="address.tole"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          placeholder="Tole"
-                          {...field}
-                          className="font-work-sans font-normal"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-medium">
-                    Verification Documents
-                  </h3>
-                  <p className="text-base gradient-text">Personal Documents</p>
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name="verificationDocument1.documentType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          setSelectedDocument(value); // Update state on selection
-                        }}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Document" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="font-open-sans">
-                          <SelectItem value="citizenship">
-                            Citizenship
-                          </SelectItem>
-                          <SelectItem value="nationalcard">
-                            National Identity Card
-                          </SelectItem>
-                          <SelectItem value="drivinglicense">
-                            Driver&apos;s License
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {selectedDocument && (
-                <FormField
-                  control={form.control}
-                  name="verificationDocument1.documentNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="p-1 font-work-sans text-base">
-                        {selectedDocument === "citizenship"
-                          ? "Citizenship No."
-                          : selectedDocument === "nationalcard"
-                          ? "NIN"
-                          : "License Number"}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder={
-                            selectedDocument === "citizenship"
-                              ? "Enter Citizenship Number"
-                              : selectedDocument === "nationalcard"
-                              ? "Enter NIN"
-                              : "Enter License Number"
-                          }
-                          className="input-class"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-
-              <div className="flex flex-col gap-4">
-                {selectedDocument === "drivinglicense" ? (
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name="verificationDocument1.frontFile.file"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="p-1 font-work-sans text-base">
-                            License Image
-                          </FormLabel>
-                          <FileUpload
-                            form={form}
-                            name="verificationDocument1.frontFile.file"
-                            onFileChange={(file) => {
-                              field.onChange(file);
-                              handleFileChange("License Image", file);
-                            }}
-                          />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                ) : (
-                  <>
-                    <div>
-                      <FormField
-                        control={form.control}
-                        name="verificationDocument1.frontFile.file"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="p-1 font-work-sans text-base">
-                              {selectedDocument === "citizenship"
-                                ? "Citizenship Front"
-                                : selectedDocument === "nationalcard"
-                                ? "NID Front"
-                                : "Front Side"}
-                            </FormLabel>
-                            <FileUpload
-                              form={form}
-                              name="verificationDocument1.frontFile.file"
-                              onFileChange={(file) => {
-                                field.onChange(file);
-                                handleFileChange("Front Side", file);
-                              }}
-                            />
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div>
-                      <FormField
-                        control={form.control}
-                        name="verificationDocument1.backFile.file"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="p-1 font-work-sans text-base">
-                              {selectedDocument === "citizenship"
-                                ? "Citizenship Back"
-                                : selectedDocument === "nationalcard"
-                                ? "NID Back"
-                                : "Back Side"}
-                            </FormLabel>
-                            <FileUpload
-                              form={form}
-                              name="verificationDocument1.backFile.file"
-                              onFileChange={(file) => {
-                                field.onChange(file);
-                                handleFileChange("Back Side", file);
-                              }}
-                            />
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </>
+                      <SelectContent>
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="others">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
                 )}
+              />
+
+              <FormField
+                control={form.control}
+                name="dob"
+                render={({ field }) => (
+                  <FormItem>
+                    <h1 className="font-medium text-base">Date of Birth</h1>
+                    <FormControl>
+                      <Input
+                        className="font-work-sans"
+                        type="date"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div>
+              <LocationForm
+                form={form}
+                provinceOptions={provinceOptions}
+                districtOptions={districtOptions}
+                municipalityOptions={municipalityOptions}
+                wardOptions={wardOptions}
+                handleProvinceChange={handleProvinceChange}
+                handleDistrictChange={handleDistrictChange}
+                handleMunicipalityChange={handleMunicipalityChange}
+              />
+
+              <FormField
+                control={form.control}
+                name="address.tole"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="Tole"
+                        {...field}
+                        className="font-work-sans font-normal"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-medium">Verification Documents</h3>
+                <p className="text-base gradient-text">Personal Documents</p>
               </div>
 
-              {/* PAN Card section */}
-              <div className="flex flex-col gap-4">
-                <FormField
-                  control={form.control}
-                  name="verificationDocument2.documentNumber" // Correctly using nested property
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-work-sans text-base">
-                        PAN Number
-                      </FormLabel>
+              <FormField
+                control={form.control}
+                name="verificationDocument1.documentType"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        setSelectedDocument(value); // Update state on selection
+                      }}
+                    >
                       <FormControl>
-                        <Input {...field} placeholder="Enter PAN Number" />
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Document" />
+                        </SelectTrigger>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                      <SelectContent className="font-open-sans">
+                        <SelectItem value="citizenship">Citizenship</SelectItem>
+                        <SelectItem value="nationalcard">
+                          National Identity Card
+                        </SelectItem>
+                        <SelectItem value="drivinglicense">
+                          Driver&apos;s License
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
+            {selectedDocument && (
+              <FormField
+                control={form.control}
+                name="verificationDocument1.documentNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="p-1 font-work-sans text-base">
+                      {selectedDocument === "citizenship"
+                        ? "Citizenship No."
+                        : selectedDocument === "nationalcard"
+                        ? "NIN"
+                        : "License Number"}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder={
+                          selectedDocument === "citizenship"
+                            ? "Enter Citizenship Number"
+                            : selectedDocument === "nationalcard"
+                            ? "Enter NIN"
+                            : "Enter License Number"
+                        }
+                        className="input-class"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            <div className="flex flex-col gap-4">
+              {selectedDocument === "drivinglicense" ? (
                 <div>
                   <FormField
                     control={form.control}
-                    name="verificationDocument2.frontFile.file"
+                    name="verificationDocument1.frontFile.file"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-work-sans text-base">
-                          PAN Image
+                        <FormLabel className="p-1 font-work-sans text-base">
+                          License Image
                         </FormLabel>
                         <FileUpload
                           form={form}
-                          name="verificationDocument2.frontFile.file"
+                          name="verificationDocument1.frontFile.file"
                           onFileChange={(file) => {
                             field.onChange(file);
-                            handleFileChange("PAN Front", file);
+                            handleFileChange("License Image", file);
                           }}
                         />
                         <FormMessage />
@@ -544,25 +442,125 @@ export default function SewaProviderDetailPage() {
                     )}
                   />
                 </div>
+              ) : (
+                <>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="verificationDocument1.frontFile.file"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="p-1 font-work-sans text-base">
+                            {selectedDocument === "citizenship"
+                              ? "Citizenship Front"
+                              : selectedDocument === "nationalcard"
+                              ? "NID Front"
+                              : "Front Side"}
+                          </FormLabel>
+                          <FileUpload
+                            form={form}
+                            name="verificationDocument1.frontFile.file"
+                            onFileChange={(file) => {
+                              field.onChange(file);
+                              handleFileChange("Front Side", file);
+                            }}
+                          />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="verificationDocument1.backFile.file"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="p-1 font-work-sans text-base">
+                            {selectedDocument === "citizenship"
+                              ? "Citizenship Back"
+                              : selectedDocument === "nationalcard"
+                              ? "NID Back"
+                              : "Back Side"}
+                          </FormLabel>
+                          <FileUpload
+                            form={form}
+                            name="verificationDocument1.backFile.file"
+                            onFileChange={(file) => {
+                              field.onChange(file);
+                              handleFileChange(`Back Side`, file);
+                            }}
+                          />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* PAN Card section */}
+            <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="verificationDocument2.documentNumber" // Correctly using nested property
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-work-sans text-base">
+                      PAN Number
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Enter PAN Number" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div>
+                <FormField
+                  control={form.control}
+                  name="verificationDocument2.frontFile.file"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-work-sans text-base">
+                        PAN Image
+                      </FormLabel>
+                      <FileUpload
+                        form={form}
+                        name="verificationDocument2.frontFile.file"
+                        onFileChange={(file) => {
+                          field.onChange(file);
+                          handleFileChange("PAN Front", file);
+                        }}
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
+            </div>
 
-              <Button
-                type="submit"
-                variant={"brand"}
-                className="w-full mt-6"
-                // disabled={
-                //   !form.formState.isValid || form.formState.isSubmitting
-                // }
-              >
-                {form.formState.isSubmitting ? "Submitting..." : "Proceed"}
-              </Button>
-            </form>
-          </Form>
-        </div>
+            <Button
+              type="submit"
+              variant={"brand"}
+              className="w-full mt-6"
+              // disabled={
+              //   !form.formState.isValid || form.formState.isSubmitting
+              // }
+            >
+              {form.formState.isSubmitting ? "Submitting..." : "Proceed"}
+            </Button>
+          </form>
+        </Form>
+      </div>
 
-        {/* Preview Section */}
+      {/* Preview Section */}
+      <div className="hidden md:block md:fixed md:top-12 md:right-24 md:w-1/2">
         <ImagePreviewSlider previewImages={previewImages} />
       </div>
     </div>
+    // </div>
   );
 }

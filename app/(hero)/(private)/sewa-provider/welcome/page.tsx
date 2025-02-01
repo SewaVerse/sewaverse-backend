@@ -14,9 +14,10 @@ export default async function SewaProviderWelcomePage() {
       <div className="flex flex-col items-center text-center px-6">
         <h1 className="text-2xl md:text-3xl font-semibold text-gray-800 my-4">
           Welcome{" "}
-          <span className="text-purple-600 capitalize">{user?.name}</span>,
-          Ready to take your business <br /> to the next{" "}
-          <span className="underline decoration-red-500">level</span>??
+          <span className="gradient-text capitalize font-bold">
+            {user?.name}
+          </span>
+          , Ready to take your business <br /> to the next <span>level</span> ??
         </h1>
 
         {/* Instructions */}
