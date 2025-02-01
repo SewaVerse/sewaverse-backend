@@ -4,12 +4,8 @@ import { useState } from "react";
 
 import { ProfileData } from "@/lib/types";
 
-import { LocationEdit } from "./_components/location";
-import OfferedServicesEdit from "./_components/offered-services";
-import { Profession } from "./_components/profession";
 import { ProfileCard } from "./_components/profile-card";
 import { ProfileForm } from "./_components/profile-form";
-import { SkillsEdit } from "./_components/skills";
 
 export default function ProfilePage() {
   const [profileData, setProfileData] = useState<ProfileData>({
@@ -33,13 +29,13 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
+    <div className="p-4 mx-auto max-w-7xl">
       <ProfileCard data={profileData} />
       <ProfileForm data={profileData} onUpdate={handleUpdateProfile} />
-      <Profession />
+      {/* <Profession />
       <SkillsEdit />
       <LocationEdit />
-      <OfferedServicesEdit />
+      <OfferedServicesEdit /> */}
     </div>
   );
 }

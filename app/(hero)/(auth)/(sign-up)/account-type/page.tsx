@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { use, useEffect } from "react";
+import { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import RegisterContext from "@/app/context/RegisterContext";
@@ -32,11 +32,14 @@ export default function ServiceProvider() {
       label: "Individual",
       icon: "/images/individual.svg",
       description: "Share your Skills, Earn with Sewaverse.",
+      description2:"To be ..."
     },
     {
       name: "company",
       label: "Company",
       icon: "/images/company.svg",
+      
+      description2: "Find what you need for your business.",
       description: "Expand your Reach, Grow with Sewaverse.",
     },
   ];
@@ -62,10 +65,13 @@ export default function ServiceProvider() {
   useEffect(() => {
     const allowedRoles = ["user", "serviceProvider"];
     const role = searchParams.get("role");
+    setUserAccountType(role!);
     if (!role || !allowedRoles.includes(role)) {
       // router.push("/");
     }
   }, [searchParams, router]);
+
+  const [userAccountType, setUserAccountType] = useState<string>("");
 
   return (
     <div className="flex items-center justify-center flex-1 py-6 px-4 sm:px-6 lg:px-14">
@@ -111,9 +117,15 @@ export default function ServiceProvider() {
                           />
                           <div className="text-left h-full flex flex-col">
                             <h4 className="text-xl">{option.label}</h4>
-                            <p className="max-w-[15rem] mt-auto text-sm">
-                              {option.description}
-                            </p>
+                            {userAccountType === "user" ? (
+                              <p className="max-w-[15rem] mt-auto text-sm">
+                                {option.description2}
+                              </p>
+                            ) : (
+                              <p className="max-w-[15rem] mt-auto text-sm">
+                                {option.description}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </Label>

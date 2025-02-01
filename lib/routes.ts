@@ -23,6 +23,9 @@ export const PUBLIC_ROUTES = [
   // "/userprofile/wishlist",
   "/about-us",
   "/tryfooter",
+  "/beasewaprovider",
+  "/partner",
+
   "/testroute",
 ];
 

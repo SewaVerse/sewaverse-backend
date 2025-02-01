@@ -27,6 +27,12 @@ export const routes: RouteType[] = [
     url: "/admin/services",
     icon: "Handshake",
   },
+  {
+    title: "User Management",
+    url: "/admin/user-management",
+    icon: "Handshake",
+  },
+  
 ];
 
 const AdminSidebar = async () => {

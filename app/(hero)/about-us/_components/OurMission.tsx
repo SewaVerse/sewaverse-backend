@@ -10,7 +10,8 @@ interface ourMissionProps{
 }
 const OurMission = ({ourMissionData}:ourMissionProps) => {
   return (
-       <div className="bg-[#F7F7F7] ">
+    <div className="md:py-2 bg-[#F7F7F7]">
+       <div className="  ">
           <div className="flex flex-col items-center py-5 ">
             <h1 className="md:text-4xl font-semibold gradient-text ">
               {ourMissionData.name}
@@ -29,6 +30,7 @@ const OurMission = ({ourMissionData}:ourMissionProps) => {
             </div>
           </div>
         </div>
+    </div>
   )
 }
 
