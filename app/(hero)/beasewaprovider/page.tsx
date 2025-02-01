@@ -1,13 +1,13 @@
 import { DollarSign, LockIcon, Phone } from "lucide-react";
 import Image from "next/image";
 import { GiExpander, GiWatch } from "react-icons/gi";
+import Link from "next/link";
 import { IoIosRocket } from "react-icons/io";
 
-import { Button } from "@/components/ui/button";
 const imageIcon = "/images/servicesImage/about-us.svg";
 const page = () => {
   return (
-    <div>
+    <div className="px-5">
       <h1 className="md:text-4xl font-semibold gradient-text text-center py-3">
         Join the Service Revolution
       </h1>
@@ -20,9 +20,9 @@ const page = () => {
             alt="image1"
             height={1}
             width={1}
-            className="object-cover w-full h-auto rounded-2xl "
+            className="object-cover w-full h-[65vh] rounded-2xl "
           />
-          <div className="   md:h-auto md:justify-center  md:ml-[500px] border-l md:mt-20 md:mb-20 absolute md:top-40 top-0 md:left-52 left-2 ">
+          <div className="md:h-auto md:justify-center  md:ml-[500px] border-l md:mt-20 md:mb-20 absolute md:top-10 top-0 md:left-52 left-2 ">
             <div className="flex md:items-center gap-2 px-2">
               <GiExpander color="white" size={20} />
               <p className="text-white font-semibold md:text-lg">
@@ -74,7 +74,12 @@ const page = () => {
 
       <div className="flex flex-col items-center py-2">
         <h1> Start now !</h1>
-        <Button variant={"brand"} className="mt-2 mb-4">Be a Sewa-provider</Button>
+        <Link
+          href={"/account-type?role=serviceProvider"}
+          className="mt-2 mb-4 py-2 px-3 bg-brand-gradient rounded-md text-primary-foreground shadow-sm hover:opacity-90"
+        >
+          Be a Sewa-provider
+        </Link>
       </div>
     </div>
   );

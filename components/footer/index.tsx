@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,27 +13,27 @@ import FooterAccordion from "./FooterAccordoin";
 const socialLinks = [
   {
     path: "/images/facebook.svg",
-    link: "https://www.facebook.com/",
+    link: "https://www.facebook.com/profile.php?id=61569445880788",
     alt: "facebook",
   },
   {
     path: "/images/linkedin.svg",
-    link: "https://www.facebook.com/",
+    link: "https://www.linkedin.com/company/sewaverse-official/posts/?feedView=all",
     alt: "linkedin",
   },
   {
     path: "/images/instagram.svg",
-    link: "https://www.instagram.com/",
+    link: "https://www.instagram.com/sewaverse/",
     alt: "instagram",
   },
   {
     path: "/images/tiktok.svg",
-    link: "https://www.tikok.com/",
+    link: "https://www.tiktok.com/@sewaverse?lang=en",
     alt: "tiktok",
   },
   {
     path: "/images/youtube.svg",
-    link: "https://www.youtube.com/",
+    link: "https://www.youtube.com/@Sewaverse",
     alt: "youtube",
   },
 ];
@@ -63,7 +63,7 @@ const Terms = ({ className }: { className: string }) => {
 };
 
 const Footer = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   return (
     <footer className="p-4 md:pt-5 md:pb-4 border-t shadow-md rounded-md">
       <div className="flex flex-col md:flex-row gap-5 h-full px-2 md:px-8">
@@ -122,19 +122,21 @@ const Footer = () => {
             <FooterAccordion title="Services">
               <ul className="flex flex-col gap-1">
                 <Link href="/beasewaprovider">
-                <li>Be a Sewa Provider</li>
+                  <li>Be a Sewa Provider</li>
                 </Link>
                 <li>Explore Services</li>
                 <Link href={"/partner"}>
-                <li>Partner with us</li>
+                  <li>Partner with us</li>
                 </Link>
               </ul>
             </FooterAccordion>
             <FooterAccordion title="Contact us">
               <ul className="flex flex-col gap-1">
                 <li>Message Us</li>
-                <li onClick={() => setOpen(true)}>Provide Feedback</li>
-                
+                <li className="cursor-pointer" onClick={() => setOpen(true)}>
+                  Provide Feedback
+                </li>
+
                 <li className="flex gap-2">
                   <Image
                     src={"/images/phone.svg"}
@@ -188,9 +190,7 @@ const Footer = () => {
         </p>
       </div>
       <Terms className="flex flex-col justify-center items-center gap-2 md:hidden" />
-      {
-        open && <FeedbackForm open={open} onOpenChange={setOpen}/>
-      }
+      {open && <FeedbackForm open={open} onOpenChange={setOpen} />}
     </footer>
   );
 };
