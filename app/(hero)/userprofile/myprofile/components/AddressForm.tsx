@@ -4,6 +4,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {
@@ -47,7 +48,9 @@ export default function LocationForm({
 }: LocationFormProps) {
   return (
     <div className="space-y-4 mb-4">
-      <h3 className="text-md font-medium">Address</h3>
+      <FormLabel className="">
+        Address<span className="text-red-500">*</span>
+      </FormLabel>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           control={form.control}

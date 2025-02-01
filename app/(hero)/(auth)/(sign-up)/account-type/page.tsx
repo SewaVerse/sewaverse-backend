@@ -31,13 +31,13 @@ export default function ServiceProvider() {
       name: "individual",
       label: "Individual",
       icon: "/images/individual.svg",
-      description: "Offer expertise and services to clients in need.",
+      description: "Share your Skills, Earn with Sewaverse.",
     },
     {
       name: "company",
       label: "Company",
       icon: "/images/company.svg",
-      description: "Manage multiple engagements on the platform as a company.",
+      description: "Expand your Reach, Grow with Sewaverse.",
     },
   ];
 
@@ -63,12 +63,12 @@ export default function ServiceProvider() {
     const allowedRoles = ["user", "serviceProvider"];
     const role = searchParams.get("role");
     if (!role || !allowedRoles.includes(role)) {
-      router.push("/");
+      // router.push("/");
     }
   }, [searchParams, router]);
 
   return (
-    <div className="flex items-center justify-center flex-1 py-6 px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-center flex-1 py-6 px-4 sm:px-6 lg:px-14">
       <div className="flex justify-center items-center w-full max-w-md ">
         <div className="text-center font-poppins">
           {/* Logo */}

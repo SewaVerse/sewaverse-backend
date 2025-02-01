@@ -56,7 +56,7 @@ const userRegisterSchema = z.object({
   acceptTerms: z
     .boolean({ required_error: "Accept terms is required" })
     .refine((val) => val === true, {
-      message: "You must accept the terms and conditions.",
+      message: "You should agree to our Terms of Service and Privacy Policy.",
     }),
 });
 

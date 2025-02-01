@@ -5,8 +5,11 @@ import { District, Municipality, StateProvince } from "@prisma/client";
 import { Camera } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import * as z from "zod";
 
+import { dobSchema } from "@/app/schemas/commonSchema";
+import axios from "@/axios";
 import Button from "@/components/form/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -41,7 +44,8 @@ const formSchema = z.object({
   fullName: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
-  dob: z.string().min(1, { message: "Please select a date of birth" }),
+  // dob: z.string().min(1, { message: "Please select a date of birth" }),
+  dob: dobSchema,
   gender: z.string().min(1, { message: "Please select a gender" }),
   phoneNo: z.string().min(10, {
     message: "Phone number must be at least 10 digits.",
@@ -146,6 +150,36 @@ export default function EditUserProfile({ initialData }: EditUserProfileProps) {
     },
   });
 
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const payload = {
+      dob: values.dob,
+      gender: values.gender,
+      address: {
+        provinceId: values.address.provinceId,
+        districtId: values.address.districtId,
+        municipalityId: values.address.municipalityId,
+        wardNo: values.address.wardNo,
+        tole: values.address.tole,
+      },
+    };
+    console.warn("Payload", payload);
+    try {
+      const response = await axios.post("/user", payload);
+
+      console.warn("Response", response.data);
+
+      if (response.status === 200) {
+        // Handle success - you can add toast notification or redirect here
+        console.warn("Profile updated successfully");
+        toast.success("Profile updated successfully");
+      }
+    } catch (error) {
+      // Handle error - you can add toast notification here
+      console.error("Error updating profile:", error);
+      toast.error("Error updating profile");
+    }
+  };
+
   const handleProvinceChange = async (provinceId: string) => {
     form.setValue("address.districtId", "");
     form.setValue("address.municipalityId", "");
@@ -170,12 +204,6 @@ export default function EditUserProfile({ initialData }: EditUserProfileProps) {
       (municipality) => municipality.value === municipalityId
     );
     setWardOptions(municipality?.wards ?? []);
-  };
-
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.warn(values);
-
-    // Here you would typically send the data to your backend
   };
 
   return (
@@ -236,28 +264,6 @@ export default function EditUserProfile({ initialData }: EditUserProfileProps) {
           />
 
           {/* Gender */}
-          <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel className="">Gender</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select gender" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
 
         <div className="flex flex-col md:flex-row gap-4">
@@ -308,16 +314,43 @@ export default function EditUserProfile({ initialData }: EditUserProfileProps) {
         </div>
 
         {/* Date of Birth */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="dob"
             render={({ field }) => (
               <FormItem>
-                <h1 className="font-medium text-base">Date of Birth</h1>
+                <FormLabel className="">
+                  Date of Birth<span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input className="font-work-sans" type="date" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel className="">
+                  Gender<span className="text-red-500">*</span>
+                </FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -343,7 +376,7 @@ export default function EditUserProfile({ initialData }: EditUserProfileProps) {
             <FormItem>
               <FormControl>
                 <Input
-                  placeholder="Tole"
+                  placeholder="Tole (Required)"
                   {...field}
                   className="font-work-sans font-normal"
                 />

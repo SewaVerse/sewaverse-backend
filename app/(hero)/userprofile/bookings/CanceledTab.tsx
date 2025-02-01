@@ -1,12 +1,11 @@
-import BookingList from "./_components/BookingList"
-
+import BookingList from "./_components/BookingList";
 
 const CanceledTab = () => {
   return (
     <div>
-      <BookingList filterStatus="Cancelled"/>
+      <BookingList filterStatus="CANCELED" />
     </div>
-  )
-}
+  );
+};
 
-export default CanceledTab
+export default CanceledTab;

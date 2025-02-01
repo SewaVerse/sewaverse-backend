@@ -19,6 +19,7 @@ export const offeredServiceSchema = z.object({
   discount: z.number().optional(),
   published: z.boolean().optional().default(true),
   images: z.array(fileSchema).optional(),
+  location: z.array(z.string()),
 });
 
 export type OfferedServiceSchema = z.infer<typeof offeredServiceSchema>;

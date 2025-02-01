@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -44,33 +44,42 @@ interface ServiceCategory {
   parentServiceId: string;
 }
 
-// interface ApiResponse {
-//   success: boolean;
-//   message: string;
-//   serviceProvider: ServiceCategory[];
-// }
-
 export function AddSewaModal() {
-  const [open, setOpen] = useState(true);
-  // const [categories, setCategories] = useState<
-  //   Record<
-  //     string,
-  //     { id: string; subCategories: { id: string; name: string }[] }
-  //   >
-  // >({});
+  const [open, setOpen] = useState(false);
+
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
+  const [locations, setLocations] = useState<string[]>([]);
+
   const [isLoading, setIsLoading] = useState(true);
+
+  const methods = useForm<OfferedServiceSchema>({
+    resolver: zodResolver(offeredServiceSchema),
+    defaultValues: {
+      title: "",
+      priceType: "hourly",
+      discount: 0,
+      published: true,
+      location: locations,
+    },
+  });
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await fetch("/api/service-provider/profile");
+
         const data = await response.json();
+        console.warn("Data", data);
 
         if (data.success) {
           setCategories(data.serviceProvider.serviceCategories);
+          if (data.serviceProvider.profile?.location) {
+            setLocations(data.serviceProvider.profile.location);
+            // Update the form's location field with the fetched locations
+            methods.setValue("location", data.serviceProvider.profile.location);
+          }
         } else {
           toast.error("Failed to load categories");
         }
@@ -83,27 +92,17 @@ export function AddSewaModal() {
     };
 
     fetchCategories();
-  }, []);
+  }, [methods]);
 
   const handleFileSelect = (files: File[]) => {
     setUploadedFiles(files);
   };
 
-  const methods = useForm<OfferedServiceSchema>({
-    resolver: zodResolver(offeredServiceSchema),
-    defaultValues: {
-      title: "",
-      priceType: "hourly",
-      discount: 0,
-      published: true,
-    },
-  });
-
   // const serviceId = watch("serviceId");
   const price = methods.watch("price");
   const discount = methods.watch("discount");
 
-  const onSubmit = async (data: OfferedServiceSchema) => {
+  const onSubmit = async (values: OfferedServiceSchema) => {
     if (uploadedFiles.length === 0) {
       toast.error("Please upload at least one image.");
       return;
@@ -114,7 +113,9 @@ export function AddSewaModal() {
 
       // Create FormData instance
       const formData = new FormData();
-      formData.append("jsonData", JSON.stringify(data));
+      formData.append("jsonData", JSON.stringify(values));
+
+      console.warn("Form Data", values);
 
       // Add all images
       uploadedFiles.forEach((file) => {
@@ -146,46 +147,6 @@ export function AddSewaModal() {
     }
   };
 
-  React.useEffect(() => {
-    // fetchCategories();
-  }, []);
-
-  // const fetchServiceHierarchy = async () => {
-  //   try {
-  //     const response = await fetch("/api/service/hierarchy");
-  //     const data = await response.json();
-
-  //     console.warn("Data", data);
-
-  //     if (data.success) {
-  //       const transformedCategories: Record<
-  //         string,
-  //         { id: string; subCategories: { id: string; name: string }[] }
-  //       > = {};
-
-  //       data.data.forEach(
-  //         (category: {
-  //           id: string;
-  //           name: string;
-  //           services: { id: string; name: string }[];
-  //         }) => {
-  //           transformedCategories[category.name] = {
-  //             id: category.id,
-  //             subCategories: category.services.map((service) => ({
-  //               id: service.id,
-  //               name: service.name,
-  //             })),
-  //           };
-  //         }
-  //       );
-
-  //       setCategories(transformedCategories);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching service hierarchy:", error);
-  //   }
-  // };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -197,35 +158,6 @@ export function AddSewaModal() {
             Add your Sewa
           </DialogTitle>
 
-          {/* <div className="flex items-center text-sm text-muted-foreground mb-2">
-            <Controller
-              name="serviceId"
-              control={form.control}
-              render={({ field }) => (
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger className="w-[200px] border-0 p-0 hover:bg-transparent focus:ring-0">
-                    <SelectValue placeholder="Select Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {Object.entries(categories).flatMap(
-                        ([categoryName, category]) =>
-                          category.subCategories.map((subCategory) => (
-                            <SelectItem
-                              className="font-work-sans"
-                              key={subCategory.id}
-                              value={subCategory.id}
-                            >
-                              {categoryName} - {subCategory.name}
-                            </SelectItem>
-                          ))
-                      )}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              )}
-            />
-          </div> */}
           <FormProvider {...methods}>
             <FormField
               control={methods.control}

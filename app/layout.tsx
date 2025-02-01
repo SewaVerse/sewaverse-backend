@@ -44,7 +44,7 @@ export default async function RootLayout({
       >
         <SessionProvider session={session}>
           <TanStackContext>
-            <div className="flex flex-col md:min-h-[100svh]">{children}</div>
+            <div className="flex flex-col md:min-h-[100svh] ">{children}</div>
             <ToasterContext />
           </TanStackContext>
         </SessionProvider>

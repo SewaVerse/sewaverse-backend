@@ -251,13 +251,15 @@ const Page = () => {
         responseData.message || "About section updated successfully!"
       );
       router.push("/sewa-provider/home");
-
+      router.push("/profile");
       setLoading(false);
     } catch (error) {
       if (error instanceof Error) {
         console.warn("Bottom error.", error.message || error);
         toast.error(error.message || "An unexpected error occurred.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -380,7 +382,7 @@ const Page = () => {
               </Button>
             </Link>
 
-            <Link href={"/sewa-provider/home"}>
+            <Link href={"/profile"}>
               <Button
                 variant={"ghost"}
                 className="w-full underline text-muted-foreground hover:bg-white"
@@ -393,10 +395,10 @@ const Page = () => {
 
         {/* right section */}
         <div className="hidden lg:block lg:flex-1 lg:border lg:mr-10 cursor-not-allowed">
-          <div className="opacity-50 bg-gray-50">
-            <div className=" h-[35vh] bg-[#BCBDDC] "></div>
+          <div className="opacity-50 bg-gray-50 items-center flex justify-center">
+            {/* <div className=" h-[35vh] bg-[#BCBDDC] "></div> */}
             {/* for profile */}
-            <ProfileCard {...profileData} /> 
+            <ProfileCard {...profileData} />
           </div>
           {/* for navbar */}
           <div className="container mx-auto px-10">

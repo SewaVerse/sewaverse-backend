@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import axiosClient from "@/axios";
 
+import { AddSewaModal } from "../(private)/sewa-provider/home/AddSewaModal";
 import ProfileComponent from "./_components/profile-card";
 import { ProfileDetails } from "./_components/profile-details";
 
@@ -92,6 +93,7 @@ const ProfilePage = () => {
           />
         </div>
       </div>
+      <AddSewaModal />
     </div>
   );
 };
