@@ -13,7 +13,7 @@ const sewaverseIcon = "/images/logo.svg";
 
 const MobileFooter = () => {
   const pathName = usePathname()
-  console.log(pathName)
+  console.warn(pathName)
   return (
     <div className="block md:hidden fixed bottom-0 left-0 right-0 w-full bg-white border-t">
       <nav>

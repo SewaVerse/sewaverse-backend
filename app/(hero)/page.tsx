@@ -142,9 +142,9 @@ const Home = async () => {
 
   return (
     <div className="font-poppins font-medium text-xl min-h-screen">
-      <div className="absolute top-10 left-0 right-0 z-10 px-16">
-        <div className="py-[2rem]  rounded-md my-4">
-          <ul className="flex flex-row justify-between space-x-6">
+      <div className="hidden md:block absolute top-12 left-0 right-0 z-10 px-16  mt-2">
+        <div className="py-4 rounded-t-md my-4 bg-black bg-opacity-25 ">
+          <ul className="flex flex-row justify-between space-x-6 px-1">
             {menuItems.map((item, index) => (
               <li
                 key={index}
@@ -160,6 +160,7 @@ const Home = async () => {
                   />
                 )}
                 {item.label}
+
                 <ChevronDown style={{ width: "19px", height: "16px" }} />
               </li>
             ))}
@@ -234,7 +235,7 @@ const Home = async () => {
             {/* Content */}
             <div className="absolute z-10 flex flex-col justify-center h-full px-10">
               <div className="absolute top-8 left-8 text-sm font-semibold tracking-wide text-white">
-                sewaverse
+                Sewaverse
               </div>
 
               <div className="text-left text-white max-w-xl mt-24">
