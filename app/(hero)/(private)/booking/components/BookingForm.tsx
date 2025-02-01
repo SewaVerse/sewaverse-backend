@@ -18,13 +18,24 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-// const timeSlots = [
-//   { label: "Morning (6 AM - 12 PM)", value: "morning" },
-//   { label: "Afternoon (12 PM - 4 PM)", value: "afternoon" },
-//   { label: "Evening (4 PM - 8 PM)", value: "evening" },
-//   { label: "Night (8 PM - 11 PM)", value: "night" },
-// ] as const;
+const timeSlots = [
+  { label: "6 AM - 8 AM", value: "6 AM - 8 AM" },
+  { label: "8 AM - 10 AM", value: "8 AM - 10 AM" },
+  { label: "10 AM - 12 PM", value: "10 AM - 12 PM" },
+  { label: "12 PM - 2 PM", value: "12 PM - 2 PM" },
+  { label: "2 PM - 4 PM", value: "2 PM - 4 PM" },
+  { label: "4 PM - 6 PM", value: "4 PM - 6 PM" },
+  { label: "6 PM - 8 PM", value: "6 PM - 8 PM" },
+] as const;
 
 const formSchema = z.object({
   service: z.string().min(2, {
@@ -37,7 +48,7 @@ const formSchema = z.object({
     message: "Please select a date.",
   }),
   time: z.string({
-    required_error: "Please select a time slot.",
+    required_error: "Please select a time.",
   }),
 });
 
@@ -77,6 +88,7 @@ export default function BookingForm({
       offeredServiceId,
       location: values.location,
       bookingDate: values.date,
+      bookingTime: values.time,
     };
 
     try {
@@ -191,7 +203,7 @@ export default function BookingForm({
                   )}
                 />
 
-                {/* <FormField
+                <FormField
                   control={form.control}
                   name="time"
                   render={({ field }) => (
@@ -223,7 +235,7 @@ export default function BookingForm({
                       <FormMessage />
                     </FormItem>
                   )}
-                /> */}
+                />
               </div>
             </div>
 

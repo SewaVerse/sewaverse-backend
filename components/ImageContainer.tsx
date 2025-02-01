@@ -41,7 +41,7 @@ const ImageContainer = ({ children }: { children: React.ReactNode }) => {
             <div className="px-4 md:px-6 flex flex-col justify-between md:w-1/2">
               {children}
               <p className="hidden md:block mb-5 text-xs text-gray-500 text-center">
-                ©2024 Sewaverse. All rights reserved. Terms of Service
+                ©2024 Sewaverse. All rights reserved.
               </p>
             </div>
           </div>

@@ -45,7 +45,7 @@ export default function Register() {
   }, [registerData, router]);
 
   const form = useForm<RegisterForm>({
-    resolver: zodResolver(userRegisterSchema), 
+    resolver: zodResolver(userRegisterSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -159,7 +159,7 @@ export default function Register() {
                           />
                         </FormControl>
                         <span className="text-sm text-gray-600">
-                          By signing in, you agree to the{" "}
+                          By signing in, you agree to our{" "}
                         </span>
                       </div>
 
@@ -171,10 +171,10 @@ export default function Register() {
                         <Link href="#" className="underline">
                           Privacy Policy
                         </Link>{" "}
-                        of Sewaverse.
+                        .
                       </div>
                     </div>
-                    <FormMessage />
+                    <FormMessage className="text-center" />
                   </FormItem>
                 )}
               />

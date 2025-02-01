@@ -2,6 +2,7 @@ import { User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
+import { getServiceProviderByUserId } from "@/app/data-access/serviceProvider";
 import { getUserByEmail, updateUserById } from "@/app/data-access/user";
 import { userLoginSchema, UserLoginSchema } from "@/app/schemas/authSchema";
 import ApiError from "@/app/utils/apiError";
@@ -38,15 +39,42 @@ export const POST = asyncHandler(async (request: Request) => {
 
   const roles = user.roles.map((role) => role.role);
 
-  // safe to generate token
-  const { token, expires } = await generateToken({
+  let serviceProviderId: string | null = null;
+  let serviceProviderProfileId: string | null = null;
+
+  let serviceProviderVerification: {
+    verificationStep: number;
+    isVerified: boolean;
+  } | null = null;
+
+  if (roles.includes("SERVICE_PROVIDER")) {
+    const sewaProvider = await getServiceProviderByUserId(user.id!);
+
+    if (sewaProvider) {
+      serviceProviderId = sewaProvider.id;
+      if (sewaProvider.profiles.length > 0)
+        serviceProviderProfileId = sewaProvider.profiles[0].id;
+      serviceProviderVerification = {
+        verificationStep: sewaProvider.verificationStep,
+        isVerified: sewaProvider.isVerified,
+      };
+    }
+  }
+
+  const tokenPayload = {
     id: user.id,
     name: user.name!,
     email: user.email!,
     isEmailVerified: !!user.emailVerified,
     isOAuth: false,
     roles,
-  });
+    serviceProviderId,
+    serviceProviderProfileId,
+    serviceProviderVerification,
+  };
+
+  // safe to generate token
+  const { token, expires } = await generateToken(tokenPayload);
 
   // update user token
   await updateUserById(user.id!, {
@@ -65,7 +93,6 @@ export const POST = asyncHandler(async (request: Request) => {
         name: user.name!,
         email: user.email,
         roles: user.roles.map((role) => role.role),
-        profileId: user.userProfileId,
         userType: user.userType,
       },
     },

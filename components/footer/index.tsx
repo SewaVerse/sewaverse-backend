@@ -76,9 +76,8 @@ const Footer = () => {
               height={180}
               className="h-auto w-auto"
             />
-            <p className="text-center md:ms-[4rem] md:text-left text-sm">
-              Seamlessly offer or receive services simply, conveniently and
-              with.
+            <p className="text-center justify-center md:ms-[4rem] md:text-left text-sm">
+              Offer or Receive Sewas with Ease and Convenience.
             </p>
             <div className="flex justify-center gap-4 md:justify-between items-center my-2">
               {socialLinks.map((socialLink) => (
@@ -105,7 +104,7 @@ const Footer = () => {
             <FooterAccordion title="Company">
               <ul className="flex flex-col gap-1">
                 <Link href={"/about-us"}>
-                <li>About Us</li>
+                  <li>About Us</li>
                 </Link>
                 <li>Sewaverse Academy</li>
                 <li>Careers</li>

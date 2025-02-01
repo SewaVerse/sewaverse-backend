@@ -3,6 +3,7 @@
 import { Star } from "lucide-react";
 import { useState } from "react";
 
+import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
@@ -76,108 +77,115 @@ const FilterSection = () => {
   };
 
   return (
-    <div className="hidden md:block w-full max-w-sm border rounded-md py-4">
-      <form className="space-y-6 px-4 md:px-8">
-        <div className="space-y-2 ">
-          <label className="text-sm font-medium">Sewa</label>
-          <Select value={selectedSewa} onValueChange={setSelectedSewa}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a Sewa" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {sewaOptions.map((option) => (
-                  <SelectItem key={option.id} value={option.id}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Location</label>
-          <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a location" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {locationOptions.map((option) => (
-                  <SelectItem key={option.id} value={option.id}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Price</label>
-          {priceRanges.map((range) => (
-            <div key={range.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={range.id}
-                checked={selectedPriceRanges.includes(range.id)}
-                onCheckedChange={(checked) =>
-                  handlePriceRangeChange(checked as boolean, range.id)
-                }
-              />
-              <label htmlFor={range.id} className="text-sm">
-                {range.label}
-              </label>
-            </div>
-          ))}
-          <div className="flex space-x-2">
-            <Input
-              type="number"
-              placeholder="Min"
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
-              className="w-1/2"
-            />
-            <Input
-              type="number"
-              placeholder="Max"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-1/2"
-            />
+    <Card>
+      <div className="w-full max-w-sm border rounded-md py-4">
+        <form className="space-y-6 px-4 md:px-8">
+          <div className="space-y-2 ">
+            <label className="text-sm font-medium">Sewa</label>
+            <Select value={selectedSewa} onValueChange={setSelectedSewa}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a Sewa" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {sewaOptions.map((option) => (
+                    <SelectItem key={option.id} value={option.id}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Rating</label>
-          {ratingOptions.map((option) => (
-            <div key={option.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`rating-${option.id}`}
-                checked={selectedRatings.includes(option.id)}
-                onCheckedChange={(checked) =>
-                  handleRatingChange(checked as boolean, option.id)
-                }
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Location</label>
+            <Select
+              value={selectedLocation}
+              onValueChange={setSelectedLocation}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a location" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {locationOptions.map((option) => (
+                    <SelectItem key={option.id} value={option.id}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Price</label>
+            {priceRanges.map((range) => (
+              <div key={range.id} className="flex items-center space-x-2">
+                <Checkbox
+                  id={range.id}
+                  checked={selectedPriceRanges.includes(range.id)}
+                  onCheckedChange={(checked) =>
+                    handlePriceRangeChange(checked as boolean, range.id)
+                  }
+                />
+                <label htmlFor={range.id} className="text-sm">
+                  {range.label}
+                </label>
+              </div>
+            ))}
+            <div className="flex space-x-2">
+              <Input
+                type="number"
+                placeholder="Min"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                className="w-1/2"
               />
-              <label
-                htmlFor={`rating-${option.id}`}
-                className="flex items-center"
-              >
-                {[...Array(Number.parseInt(option.id))].map((_, index) => (
-                  <Star
-                    key={index}
-                    className="w-4 h-4 fill-current text-yellow-400"
-                  />
-                ))}
-                {[...Array(5 - Number.parseInt(option.id))].map((_, index) => (
-                  <Star key={index} className="w-4 h-4 text-gray-300" />
-                ))}
-              </label>
+              <Input
+                type="number"
+                placeholder="Max"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className="w-1/2"
+              />
             </div>
-          ))}
-        </div>
-      </form>
-    </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Rating</label>
+            {ratingOptions.map((option) => (
+              <div key={option.id} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`rating-${option.id}`}
+                  checked={selectedRatings.includes(option.id)}
+                  onCheckedChange={(checked) =>
+                    handleRatingChange(checked as boolean, option.id)
+                  }
+                />
+                <label
+                  htmlFor={`rating-${option.id}`}
+                  className="flex items-center"
+                >
+                  {[...Array(Number.parseInt(option.id))].map((_, index) => (
+                    <Star
+                      key={index}
+                      className="w-4 h-4 fill-current text-yellow-400"
+                    />
+                  ))}
+                  {[...Array(5 - Number.parseInt(option.id))].map(
+                    (_, index) => (
+                      <Star key={index} className="w-4 h-4 text-gray-300" />
+                    )
+                  )}
+                </label>
+              </div>
+            ))}
+          </div>
+        </form>
+      </div>
+    </Card>
   );
 };
 

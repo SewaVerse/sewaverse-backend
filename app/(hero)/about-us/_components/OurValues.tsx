@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import { redLine } from "../page";
-
 const awardImage = "/images/servicesImage/awards.svg";
 const businessIamge = "/images/servicesImage/business.svg";
 const communityImage = "/images/servicesImage/Community.svg";
@@ -16,7 +14,7 @@ const OurValues = () => {
       <div className="flex flex-col items-center">
         <h1 className="font-semibold md:text-4xl gradient-text">Our Values</h1>
         <Image
-          src={redLine}
+          src={"/images/"}
           alt="redLine"
           width={100}
           height={20}
@@ -73,8 +71,8 @@ const OurValues = () => {
             <div>
               <h1 className="font-bold gradient-text md:text-xl">
                 Respect:{" "}
-                <span className="font-bold text-black md:text-lg">
-                  Treat others as you'd be treated.
+                <span className="md:text-lg text-black font-bold">
+                  Treat others as you&apos;d be treated.
                 </span>
               </h1>
               <p className="font-medium md:text-base">

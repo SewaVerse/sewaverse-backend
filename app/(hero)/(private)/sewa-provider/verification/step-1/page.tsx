@@ -49,7 +49,7 @@ const fetchProvinces = async () => {
     const data = await response.json();
     const formattedProvinces = data.data.map((province: StateProvince) => ({
       value: province.id,
-      label: province.name,
+      label: province.name,  
     }));
     return formattedProvinces;
   } catch (error) {

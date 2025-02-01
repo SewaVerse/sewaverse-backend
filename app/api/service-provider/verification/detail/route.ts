@@ -78,15 +78,17 @@ export const POST = roleAsyncHandler(
 
     const user = await getCurrentUser();
 
-    let serviceProvider = await getServiceProviderByUserId(user!.id!);
+    const existingServiceProvider = await getServiceProviderByUserId(user!.id!);
 
-    if (serviceProvider && serviceProvider.profileId) {
+    if (existingServiceProvider && existingServiceProvider.profileId) {
       throw new ApiError("Service provider verification detail already exists");
     }
 
+    let serviceProvider = null
+
     await db.$transaction(
       async (tx) => {
-        if (!serviceProvider) {
+        if (!existingServiceProvider) {
           serviceProvider = await createServiceProvider(
             {
               userId: user!.id!,
@@ -107,7 +109,7 @@ export const POST = roleAsyncHandler(
 
         // save address
         await createServiceProviderAddress(
-          serviceProvider.id,
+          serviceProvider!.id,
           {
             provinceId: address.provinceId,
             districtId: address.districtId,
@@ -121,7 +123,7 @@ export const POST = roleAsyncHandler(
         // save profile
         const profile = await createServiceProviderProfile(
           {
-            serviceProviderId: serviceProvider.id,
+            serviceProviderId: serviceProvider!.id,
             gender: genderTypeMap[gender as keyof typeof genderTypeMap],
             dob,
             profession: "",
@@ -132,7 +134,7 @@ export const POST = roleAsyncHandler(
 
         // update service provider
         await updateServiceProvider(
-          serviceProvider.id,
+          serviceProvider!.id,
           {
             profileId: profile.id,
           },
@@ -144,7 +146,7 @@ export const POST = roleAsyncHandler(
 
         for (const document of documents) {
           await createVerificationDocumentFromSchema(
-            serviceProvider.id,
+            serviceProvider!.id,
             document as VerificationDocumentSchema,
             tx
           );

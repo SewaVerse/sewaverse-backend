@@ -16,6 +16,8 @@ export const POST = asyncHandler(async (request: Request) => {
 
   const body = (await request.json()) as ResetPasswordSchema;
 
+  console.warn("body", body);
+
   const [validationError, validatedFields] = validateRequestBody(
     resetPasswordSchema,
     body

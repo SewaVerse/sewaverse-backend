@@ -31,15 +31,16 @@ export default function ServiceProvider() {
       name: "individual",
       label: "Individual",
       icon: "/images/individual.svg",
-      description: "Show Your Skills, Earn with Sewaverse ",
-      description2: "Find what you need for your life.",
+      description: "Share your Skills, Earn with Sewaverse.",
+      description2:"To be ..."
     },
     {
       name: "company",
       label: "Company",
       icon: "/images/company.svg",
-      description: "Expand Your Reach, Grow with Sewaverse.",
+      
       description2: "Find what you need for your business.",
+      description: "Expand your Reach, Grow with Sewaverse.",
     },
   ];
 
@@ -66,14 +67,14 @@ export default function ServiceProvider() {
     const role = searchParams.get("role");
     setUserAccountType(role!);
     if (!role || !allowedRoles.includes(role)) {
-      router.push("/");
+      // router.push("/");
     }
   }, [searchParams, router]);
 
   const [userAccountType, setUserAccountType] = useState<string>("");
 
   return (
-    <div className="flex items-center justify-center flex-1 py-6 px-4 sm:px-6 lg:px-8 ">
+    <div className="flex items-center justify-center flex-1 py-6 px-4 sm:px-6 lg:px-14">
       <div className="flex justify-center items-center w-full max-w-md ">
         <div className="text-center font-poppins">
           {/* Logo */}

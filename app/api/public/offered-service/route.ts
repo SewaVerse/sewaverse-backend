@@ -37,7 +37,11 @@ export const GET = asyncHandler(async (request: NextRequest) => {
     orderBy,
     include: {
       service: true,
-      serviceProvider: true,
+      serviceProvider: {
+        include: {
+          profiles: true,
+        },
+      },
     },
   };
 

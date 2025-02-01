@@ -215,14 +215,13 @@ import EditCard from "./EditCard/EditCard";
 
 type ProfileComponentProps = { name: string; createdAt: Date } & Pick<
   ProfileResponse,
-  "profile" | "workExperiences" | "serviceCategories"
+  "profile" | "serviceCategories"
 >;
 
 const ProfileComponent: React.FC<ProfileComponentProps> = ({
   name,
   createdAt,
   profile,
-  workExperiences,
   serviceCategories,
 }) => {
   const [imageSrc, setImageSrc] = useState<string>("");
@@ -299,11 +298,9 @@ const ProfileComponent: React.FC<ProfileComponentProps> = ({
               Experience
             </h1>
             <span className="flex flex-col gradient-text">
-              {workExperiences.map((experience, index) => (
-                <p key={index} className="text-xs sm:text-sm md:text-base">
-                  {experience.duration}
-                </p>
-              ))}
+              <p className="text-xs sm:text-sm md:text-base">
+                {profile.experience}
+              </p>
             </span>
           </span>
 

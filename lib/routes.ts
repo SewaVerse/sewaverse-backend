@@ -15,18 +15,18 @@ export const PUBLIC_ROUTES = [
   "/sewaprovidercontent",
   "/sewaproviderstep3",
   "/popup",
-  "/userprofile",
-  "/userprofile/Booking",
-  "/userprofile/myprofile",
-  "/userprofile/leadership",
-  "/userprofile/offers",
-  "/userprofile/review",
-  "/userprofile/wishlist",
- "/about-us",
+  // "/userprofile/Booking",
+  // "/userprofile/myprofile",
+  // "/userprofile/leadership",
+  // "/userprofile/offers",
+  // "/userprofile/review",
+  // "/userprofile/wishlist",
+  "/about-us",
   "/tryfooter",
   "/beasewaprovider",
   "/partner",
 
+  "/testroute",
 ];
 
 /**
