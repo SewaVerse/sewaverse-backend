@@ -1,10 +1,12 @@
 import clsx from "clsx";
 import { Edit } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 import useHash from "@/hooks/useHash";
 
 import { ProfileResponse } from "../page";
+import DescriptionModal from "./AboutMe/EditAbout";
 import AwardsAndAchievements from "./AwardsAndAchievements";
 import LicenseSection from "./License";
 import WorksSection from "./MyWorks";
@@ -89,6 +91,10 @@ export const ProfileDetails: React.FC<ProfileDetailsProps> = ({
   licenses,
   myWorks,
 }) => {
+  
+  const [openAbout, setOpenAbout] = useState(false)
+  
+ 
   return (
     <div className="px-[1.3rem]">
       <div className="sticky  bg-white top-0 z-20 py-0.5">
@@ -98,7 +104,7 @@ export const ProfileDetails: React.FC<ProfileDetailsProps> = ({
         <div id="about-me">
           <span className="flex justify-between items-center py-2 text-sm sm:text-sm md:text-lg">
             <h1 className="font-bold text-2xl">About Me</h1>
-            <Edit size={14} />
+            <Edit size={14} onClick={()=>setOpenAbout(true)} />
           </span>
 
           <p className="text-justify text-[12px] sm:text-[13px] md:text-base">
@@ -131,6 +137,7 @@ export const ProfileDetails: React.FC<ProfileDetailsProps> = ({
           <QuestionsList />
         </div>
       </div>
+      <DescriptionModal openAbout={openAbout} setOpenAbout={setOpenAbout}  />
     </div>
   );
 };

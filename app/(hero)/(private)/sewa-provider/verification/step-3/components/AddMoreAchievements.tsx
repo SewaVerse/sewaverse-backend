@@ -1,8 +1,11 @@
 "use client";
 
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, Edit } from "lucide-react";
 import * as React from "react";
+import { useState } from "react";
+import { MdDelete } from "react-icons/md";
 
+import EditAward from "@/app/(hero)/profile/_components/Awards/EditAwards";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,6 +13,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
+import AddAchievements from "./AddAchievements";
 
 interface Achievement {
   id: number;
@@ -36,6 +41,10 @@ export default function AddMoreAchievements({
     },
   ]);
 
+  //state for the award dialog open
+  const [awardOpen, setAwardOpen] = useState<boolean>(false);
+  const [openEdit, setOpenEdit] = React.useState(false)
+
   return (
     <Dialog open={openMoreAchievements} onOpenChange={setOpenMoreAchievements}>
       <DialogContent className="sm:max-w-[500px]">
@@ -49,12 +58,15 @@ export default function AddMoreAchievements({
 
         <div className="space-y-4">
           <button
-            className="w-full border-2 border-dashed rounded-lg p-4 hover:bg-gray-50 transition-colors"
+            className="w-full p-4 transition-colors border-2 border-dashed rounded-lg hover:bg-gray-50"
             onClick={() => {
               // Add more awards logic here
             }}
           >
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <div
+              onClick={() => setAwardOpen(true)}
+              className="flex items-center justify-center gap-2 text-sm text-muted-foreground"
+            >
               <span className="text-green-500">
                 <CirclePlus />
               </span>
@@ -66,10 +78,21 @@ export default function AddMoreAchievements({
             {achievements.map((achievement) => (
               <div
                 key={achievement.id}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border"
+                className="flex items-start justify-between p-4 border rounded-lg bg-gray-50"
               >
                 <span className="text-sm">{achievement.title}</span>
-                <div className="h-12 w-16 relative border"></div>
+                <div>
+                  <div className="relative w-24 h-12 border"></div>
+                  <div className="flex items-center gap-2 py-1 cursor-pointer">
+                  <p onClick={()=>setOpenEdit(true)} className="flex items-center gap-1 tex-xs">
+                    {" "}
+                    <Edit size="14" /> edit
+                  </p>
+                  <p className="flex items-center text-xs">
+                    <MdDelete size={"14"} /> delete
+                  </p>
+                </div>
+                </div>
               </div>
             ))}
           </div>
@@ -83,6 +106,12 @@ export default function AddMoreAchievements({
             </Button>
           </div>
         </div>
+        <AddAchievements
+          awardOpen={awardOpen}
+          onOpenChange={setAwardOpen}
+          onSave={() => {}}
+        />
+        <EditAward openEdit={openEdit} setOpenEdit={setOpenEdit}/>
       </DialogContent>
     </Dialog>
   );

@@ -1,8 +1,11 @@
+"use client"
 import { Edit } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 import { getImageUrl } from "@/lib/utils";
 
+import AddMoreLicense from "../../(private)/sewa-provider/verification/step-3/components/AddMoreLicense";
 import { ProfileResponse } from "../page";
 
 // interface License {
@@ -17,14 +20,30 @@ import { ProfileResponse } from "../page";
 //   imageUrl: "/images/image3.webp",
 // };
 
+const license =
+[
+{
+  id: "1",
+  title: "Beautician",
+  institute: "License from ABC Institute",
+},
+{
+  id: "2",
+  title: "Hair Dresser",
+  institute: "License from ABC Institute",
+},
+]
+
 type LicenseSectionProps = Pick<ProfileResponse, "licenses">;
 
 const LicenseSection: React.FC<LicenseSectionProps> = ({ licenses }) => {
+  const [open, setOpen] = useState(false)
+
   return (
     <section className="w-full max-w-8xl">
       <div className="flex justify-between items-center py-2 ">
         <h1 className="font-bold text-2xl">License</h1>
-        <Edit size={14} className="cursor-pointer" />
+        <Edit size={14} className="cursor-pointer"  onClick={()=>setOpen(true)}/>
       </div>
       {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {licenseData.name}
@@ -51,6 +70,8 @@ const LicenseSection: React.FC<LicenseSectionProps> = ({ licenses }) => {
           </div>
         ))}
       </div>
+      <AddMoreLicense open={open} onOpenChange={setOpen} license={license} />
+      
     </section>
   );
 };

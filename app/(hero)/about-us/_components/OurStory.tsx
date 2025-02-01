@@ -16,8 +16,8 @@ interface ourStoryProps {
 
 const OurStory = ({ ourStoryData }: ourStoryProps) => {
   return (
-    <div className="">
-      <div className="flex flex-col items-center p-6">
+    <div className="md:mt-12 ">
+      <div className="flex flex-col items-center ">
         <h1 className="gradient-text  md:text-4xl font-semibold">
           {ourStoryData.title}
         </h1>
@@ -45,7 +45,7 @@ const OurStory = ({ ourStoryData }: ourStoryProps) => {
         </div>
       </div>
       {/* signup button */}
-      <div className="flex justify-center py-3">
+      <div className="flex justify-center ">
         <Button variant={"brand"} size={"md"}>Sign In   </Button>
       </div>
     </div>
