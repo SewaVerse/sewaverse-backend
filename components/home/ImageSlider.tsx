@@ -3,12 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const images: string[] = [
-  "/images/1.webp",
-  "/images/2.webp",
-  "/images/3.webp",
-  "/images/4.webp",
-];
+const images: string[] = ["/images/immg.jpg"];
 
 const ImageSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -31,16 +26,16 @@ const ImageSlider = () => {
   }, [currentIndex]);
 
   return (
-    <div className="w-full h-[30rem] px-16">
-      <div className="relative h-80 rounded-lg  overflow-hidden">
-        <div className="h-[18rem] w-full relative">
+    <div className="w-full h-[25rem] px-16">
+      <div className="relative rounded-lg  overflow-hidden">
+        <div className="h-[23rem] w-full relative">
           <Image
             src={images[currentIndex]}
             alt="Slider Image"
             fill={true}
             priority={true}
             quality={100}
-            className="object-cover w-full h-full"
+            className="object-cover w-full h-full "
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw"
           />
         </div>

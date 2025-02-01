@@ -413,14 +413,14 @@ export function AddSewaModal() {
         </p>
 
         <div className="flex justify-end gap-4">
-          <Button
+          {/* <Button
             type="button"
             variant="outline"
             onClick={() => setOpen(false)}
             className="gradient-text"
           >
             Cancel
-          </Button>
+          </Button> */}
           <div className="flex justify-end gap-4">
             <Button
               type="button"
