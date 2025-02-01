@@ -38,7 +38,7 @@ const ImageContainer = ({ children }: { children: React.ReactNode }) => {
               {children}
 
               <p className="hidden md:block mb-5 text-xs text-gray-500 text-center">
-                ©2024 Sewaverse. All rights reserved. Terms of Service
+                ©2024 Sewaverse. All rights reserved.
               </p>
             </div>
           </div>

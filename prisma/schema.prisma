@@ -349,7 +349,7 @@ model OfferedService {
   price          Float
   priceType      PriceType
   discount       Float?
-  location       String?
+  location       String[]
   workExperience String?
   overallRating  Float     @default(0)
   published      Boolean   @default(true)
@@ -502,6 +502,7 @@ model Booking {
   status BookingStatus @default(PENDING)
 
   bookingDate DateTime
+  bookingTime String
 
   location  String
   createdAt DateTime @default(now())

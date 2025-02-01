@@ -13,10 +13,7 @@ interface Booking {
     month: string;
     year: number;
   };
-  time: {
-    start: string;
-    end: string;
-  };
+  time: string;
   service: {
     title: string;
     bookingId: string;
@@ -57,7 +54,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
             </div>
             <div className="text-start">
               <p className="md:text-base">{`${date.month} ${date.year}`}</p>
-              <p className="md:text-sm text-black">{`${time.start} - ${time.end}`}</p>
+              <p className="md:text-sm text-black">{`${time}`}</p>
             </div>
           </div>
           <div>

@@ -37,14 +37,15 @@ const SewaSection: React.FC<SewaSectionProps> = ({
     <>
       <div className="py-16 bg-white text-center">
         <h2 className="text-3xl font-bold mb-8">{name}</h2>
-        <div className="flex sm:flex-row flex-col justify-between items-center px-4 w-full">
-          <ChevronLeft style={{ color: "#D9D9D9" }} />
+        <div className="flex sm:flex-row flex-col justify-between items-center">
+          {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-items-center"> */}
+          <ChevronLeft style={{ color: "#D9D9D9" }} size={20} />
           {cateogryNames.map((category) => (
             <Button
               variant={"brand"}
               key={category.id}
               className={clsx(
-                "mt-2 shadow-md hover:shadow-lg px-8 py-4 w-48",
+                "mt-2 hover:shadow-lg px-8 py-4 w-48 border",
                 selectedCategory !== category.id && "bg-white text-black",
                 selectedCategory === category.id && "scale-y-110",
                 "sm:m-0 m-2"
@@ -54,13 +55,22 @@ const SewaSection: React.FC<SewaSectionProps> = ({
               {category.name}
             </Button>
           ))}
-          <ChevronRight style={{ color: "#D9D9D9" }} />
+          <ChevronRight style={{ color: "#D9D9D9" }} size={20} />
         </div>
       </div>
 
       <div className="flex items-center justify-between">
-        <ChevronLeft style={{ color: "#D9D9D9" }} />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-9 col-auto">
+        <div className=" hidden md:block bg-white rounded-full p-2 border mr-3">
+          {" "}
+          <ChevronLeft
+            // style={{ color: "#D9D9D9" }}/
+            color="gray"
+            size={20}
+            className="cursor-pointer"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 col-auto">
           {details.map((service, index) => (
             <div
               key={index}
@@ -124,7 +134,15 @@ const SewaSection: React.FC<SewaSectionProps> = ({
           ))}
         </div>
 
-        <ChevronRight style={{ color: "#D9D9D9" }} />
+        <div className=" bg-white hidden md:block  rounded-full p-2 border ml-3">
+          {" "}
+          <ChevronRight
+            // style={{ color: "#D9D9D9" }}/
+            color="gray"
+            size={20}
+            className="cursor-pointer"
+          />
+        </div>
       </div>
     </>
   );

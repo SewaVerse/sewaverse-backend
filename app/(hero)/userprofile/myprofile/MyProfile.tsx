@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { MailIcon, PhoneIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,16 @@ const fetchUserById = async (userId: string) => {
 };
 
 const MyProfile = ({ userData }: MyProfileProps) => {
+  const [open, setOpen] = useState(true);
+
+  // useEffect(() => {
+  //   const hasSeenModal = localStorage.getItem("hasSeenProfileModal");
+  //   if (!hasSeenModal) {
+  //     setOpen(true);
+  //     localStorage.setItem("hasSeenProfileModal", "true");
+  //   }
+  // }, []);
+
   const { data: session, status } = useSession();
   const sessionData = getSessionData(session);
   const {
@@ -106,7 +117,7 @@ const MyProfile = ({ userData }: MyProfileProps) => {
         </div>
       </CardContent>
       <CardFooter className="flex flex-col justify-between md:flex-row gap-4 md:gap-0">
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button variant={"brand"}>Edit Profile</Button>
           </DialogTrigger>

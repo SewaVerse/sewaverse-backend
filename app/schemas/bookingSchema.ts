@@ -6,6 +6,7 @@ export const bookingSchema = z.object({
   offeredServiceId: z.string().nonempty("offeredServiceId is required"),
   location: z.string().nonempty("location is required"),
   bookingDate: z.date(),
+  bookingTime: z.string().nonempty("bookingTime is required"),
   status: z
     .string()
     .refine(
