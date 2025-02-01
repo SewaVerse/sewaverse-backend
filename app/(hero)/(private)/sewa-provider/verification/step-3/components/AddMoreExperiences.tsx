@@ -1,8 +1,11 @@
 "use client";
 
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, Edit } from "lucide-react";
 import * as React from "react";
+import { useState } from "react";
+import { MdDelete } from "react-icons/md";
 
+import EditWorkExperience from "@/app/(hero)/profile/_components/WorkExperience.tsx/EditExperience";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,6 +13,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
+import AddWorkExperience from "./AddWorkExperience";
 
 interface Experience {
   id: number;
@@ -40,6 +45,8 @@ export default function AddMoreExperiences({
       duration: "More than 5 years",
     },
   ]);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <Dialog
@@ -50,17 +57,19 @@ export default function AddMoreExperiences({
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl font-bold text-center max-w-[300px] mx-auto">
-              Add your relevant experiences to stand out even more!
+              Work Experience
             </DialogTitle>
           </div>
         </DialogHeader>
 
-        <div className="space-y-4 mt-4">
+        <div className="mt-4 space-y-4">
           <button
-            className="w-full border-2 border-dashed rounded-lg p-4 hover:bg-gray-50 transition-colors"
-            onClick={() => {
+            className="w-full p-4 transition-colors border-2 border-dashed rounded-lg hover:bg-gray-50"
+            onClick={
+              () => setModalOpen(true)
+
               // Add experience logic here
-            }}
+            }
           >
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <span className="text-green-500">
@@ -83,17 +92,33 @@ export default function AddMoreExperiences({
                       {experience.category}
                     </p>
                   </div>
-                  <span className="text-sm text-indigo-600">
-                    {experience.duration}
-                  </span>
-                </div>
-                <div className="flex justify-end">
-                  <Button
-                    variant="link"
-                    className="h-auto p-0 text-sm text-muted-foreground hover:text-indigo-600"
-                  >
-                    View Document
-                  </Button>
+                  <div>
+                    <span className="text-sm gradient-text">
+                      {experience.duration}
+                    </span>
+                    <div className="flex flex-col items-end">
+                      <div>
+                        <Button
+                          variant="link"
+                          className="h-auto p-0 text-sm text-muted-foreground hover:text-indigo-600"
+                        >
+                          View Document
+                        </Button>
+                      </div>
+                      <div className="flex items-center gap-2 mt-2 cursor-pointer">
+                        <p
+                          onClick={() => setOpen(true)}
+                          className="flex items-center gap-1 tex-xs"
+                        >
+                          {" "}
+                          <Edit size="14" /> edit
+                        </p>
+                        <p className="flex items-center text-xs">
+                          <MdDelete size={"14"} /> delete
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -109,6 +134,16 @@ export default function AddMoreExperiences({
           </div>
         </div>
       </DialogContent>
+      <AddWorkExperience
+        modalOpen={modalOpen}
+        onOpenChange={setModalOpen}
+        onSave={() => {}}
+      />
+      <EditWorkExperience
+        open={open}
+        onOpenChange={setOpen}
+        onSave={() => {}}
+      />
     </Dialog>
   );
 }

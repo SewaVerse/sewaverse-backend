@@ -1,18 +1,37 @@
+"use client"
+import { Edit } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 import { getImageUrl } from "@/lib/utils";
 
 import { ProfileResponse } from "../page";
+import AddMoreWorks from "./MyWorks/AddMoreWorks";
+
+const works =
+[
+{
+  id: "1",
+  title: "Beautician",
+  description:"description"
+},
+{
+  id: "2",
+  title: "Hair Dresser",
+ description:"description"
+},
+]
 
 type WorkSectionProps = Pick<ProfileResponse, "myWorks">;
 
 const WorksSection: React.FC<WorkSectionProps> = ({ myWorks }) => {
+  const [open, setOpen] = useState(false)
+  
   return (
     <section>
-      <div className="py-2">
-        <h2 className="text-2xl font-bold  text-center sm:text-left">
-          My Works
-        </h2>
+      <div className="flex justify-between items-center py-2 ">
+        <h1 className="font-bold text-2xl">My Works</h1>
+        <Edit size={14} className="cursor-pointer" onClick={()=>setOpen(true)}  />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {myWorks.map((work) => (
@@ -35,6 +54,8 @@ const WorksSection: React.FC<WorkSectionProps> = ({ myWorks }) => {
           </div>
         ))}
       </div>
+      <AddMoreWorks open={open} onOpenChange={setOpen} works={works} />
+     
     </section>
   );
 };

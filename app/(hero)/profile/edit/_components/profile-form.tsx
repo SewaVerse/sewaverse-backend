@@ -123,7 +123,7 @@ export function ProfileForm({ data, onUpdate }: ProfileFormProps) {
           <Button className="w-full bg-brand-gradient">Next</Button>
         </div>
       </Card>
-      <Card className="mt-6 w-full flex items-center justify-center">
+      <Card className="mt-6 w-full flex items-center justify-center bg-red">
         <div className="">
           <div className="relative w-60 h-60">
             {data.profileImage ? (

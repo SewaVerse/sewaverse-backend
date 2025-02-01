@@ -5,13 +5,13 @@ const image2 = "/images/servicesImage/about-us2.svg";
 
 const WhatWeDo = () => {
   return (
-    <div>
-      <div className="flex flex-col items-center py-4  md:mx-52 mx-2">
+    <div className=" md:mt-12">
+      <div className="flex flex-col items-center  md:mx-52 mx-2">
         <h1 className="gradient-text md:text-4xl font-semibold">What We Do</h1>
         <Image src={"/images"} alt="redLine" width={170} height={30} />
         <p className="text-xl py-2">
           Sewaverse brings together a diverse range of services, all accessible
-          from a single digital platform. Here’s how we serve our community:
+          from a single digital platform. <br /> Here’s how we serve our community:
         </p>
       </div>
 

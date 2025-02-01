@@ -1,6 +1,5 @@
 import BottomSection from "./_components/BottomSection";
 import Hero from "./_components/Hero";
-import OurMission from "./_components/OurMission";
 import OurStory from "./_components/OurStory";
 import OurValues from "./_components/OurValues";
 import OurVision from "./_components/OurVision";
@@ -32,29 +31,27 @@ const ourStoryData = {
   ],
 };
 
-const ourVisionData ={
-  name:'Our Vision',
-  title:'To make life easier, better, and more fulfilling by providing instant and seamless access to the services people need.',
-  description:'We aim to enhance the quality of life by making services accessible, reliable, and tailored to the specific needs of every individual.'
-}
-const ourMissionData ={
-  name:'Our Mission',
-  title:'To revolutionize access to services through a community-driven platform that empowers both users and sewa providers.',
-  description:'For users, we offer a universe of services to meet their daily needs with ease. For sewa providers, we deliver a platform where their skills and expertise can be showcased, helping them grow their businesses and achieve success.'
-}
+const ourVisionData = {
+  name: "Our Vision",
+  title:
+    "To make life easier, better, and more fulfilling by providing instant and seamless access to the services people need.",
+  description:
+    "We aim to enhance the quality of life by making services accessible, reliable, and tailored to the specific needs of every individual.",
+};
 
 
 const Page = () => {
   return (
     <div>
       <Hero heroData={heroData} />
-      <div className="md:px-16 py-2">
+      <div className="md:px-16 ">
         <OurStory ourStoryData={ourStoryData} />
-        <OurVision  ourVisionData ={ourVisionData}/>
-        <OurMission ourMissionData={ourMissionData}/>
-        <OurValues/>
-        <WhatWeDo/>
-        <BottomSection/>
+
+        <OurVision ourVisionData={ourVisionData} />
+
+        <OurValues />
+        <WhatWeDo />
+        <BottomSection />
       </div>
     </div>
   );

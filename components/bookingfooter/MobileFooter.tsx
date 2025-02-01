@@ -1,11 +1,19 @@
+"use client"
+
 import { Heart } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { GrChatOption } from "react-icons/gr";
 
 import { Button } from "../ui/button";
 
 const sewaverseIcon = "/images/logo.svg";
+
+
+
 const MobileFooter = () => {
+  const pathName = usePathname()
+  console.log(pathName)
   return (
     <div className="block md:hidden fixed bottom-0 left-0 right-0 w-full bg-white border-t">
       <nav>
@@ -37,9 +45,17 @@ const MobileFooter = () => {
           </div>
 
           {/* Book Now Button */}
-          <div>
-            <Button variant={"brand"}>Book now</Button>
-          </div>
+          {
+            pathName === "/tryfooter" &&
+            (
+              <div>
+            
+              <Button variant={"brand"}>Book now</Button>
+            </div>
+
+            ) 
+          }
+          
         </div>
       </nav>
     </div>
