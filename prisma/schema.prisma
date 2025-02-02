@@ -50,6 +50,7 @@ model LedgerAccount {
   parent   LedgerAccount?  @relation("LedgerAccountHierarchy", fields: [parentId], references: [id], onDelete: Restrict, onUpdate: NoAction)
   children LedgerAccount[] @relation("LedgerAccountHierarchy")
   postings Posting[]
+  users    User[]
 }
 
 model JournalEntry {
@@ -107,6 +108,7 @@ model User {
   password      String?
   userProfileId String?   @db.ObjectId
   userType      UserType  @default(INDIVIDUAL)
+  ledgerAccountId String @db.ObjectId
 
   image       String?
   acceptTerms Boolean @default(false)
@@ -118,6 +120,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   userProfile UserProfile? @relation(fields: [userProfileId], references: [id])
+  ledgerAccount LedgerAccount @relation(fields: [ledgerAccountId], references: [id])
 
   roles            UserRoleMapping[]
   accounts         Account[]
@@ -556,6 +559,7 @@ model FileBinary {
 
 model Booking {
   id               String @id @default(auto()) @map("_id") @db.ObjectId
+  finYear          String
   userId           String @db.ObjectId
   offeredServiceId String @db.ObjectId
 
