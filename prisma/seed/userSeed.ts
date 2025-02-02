@@ -24,12 +24,26 @@ export default async function seedUser(
     },
   ];
 
+  const ledger = await tx?.ledgerAccount.findUnique({
+    where: {
+      name: "User Accounts",
+    },
+  });
+
+  if (!ledger) throw new Error("Ledger account not found");
+
   const userSeed = {
     name: "Super Admin",
     email: "admin@sewaverse.com",
     emailVerified: new Date(),
     password: await hash("Admin@123"),
     acceptTerms: true,
+    ledgerAccount: {
+      create: {
+        name: "Super Admin",
+        parentId: ledger.id,
+      },
+    },
     userProfile: {
       create: {
         gender: "MALE",
